@@ -1,0 +1,20 @@
+---
+repos:
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.33.0
+    hooks:
+      - id: yamllint
+        args:
+          - '-d {extends: default, rules: {line-length: {max: 180}}}'  # override to match .editorconfig
+          - -s
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+        args:
+          - --allow-multiple-documents
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+      - id: end-of-file-fixer

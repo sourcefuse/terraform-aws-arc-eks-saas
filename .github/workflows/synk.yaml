@@ -1,0 +1,41 @@
+---
+name: snyk
+
+on:              # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - "**"       # matches every branch
+      - "!main"    # excludes main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security:
+    runs-on:
+      - self-hosted
+      - arc
+    name: snyk
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Vulnerability scan
+        uses: snyk/actions/iac@master
+        with:
+          command: monitor
+          args: --severity-threshold=low
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: install Snyk CLI
+        run: npm install -g snyk
+
+      - name: snyk monitor
+        run: snyk iac test --report --severity-threshold=medium
+        env:
+          SNYK_TOKEN: ${{ secrets.ARC_SNYK_TOKEN }}
