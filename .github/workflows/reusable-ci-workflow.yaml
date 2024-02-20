@@ -109,6 +109,6 @@ jobs:
           message-path: "terraform/${{ inputs.working_directory }}/${{ inputs.environment }}-plan-output.txt"
       
       - name: Check AWS access
-        run: aws s3 ls
+        run: /usr/local/aws-cli/v2/current/aws s3 ls
         continue-on-error: false
       
