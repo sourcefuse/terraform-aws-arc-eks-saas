@@ -69,7 +69,6 @@ check_dir() {
 }
 
 init () {
-  aws sts get-caller-identity
   cd terraform/$DIRECTORY
   terraform init -backend-config config.$ENV.hcl $EXTRA_ARGS
   terraform workspace list
