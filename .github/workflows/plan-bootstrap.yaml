@@ -14,7 +14,7 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   ## run terraform plan
-  plan_dev:
+  plan_bootstrap:
     name: Bootstrap
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:

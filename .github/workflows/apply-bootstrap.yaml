@@ -1,0 +1,49 @@
+---
+name: Apply - Bootstrap
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - dev
+    paths:
+      - 'terraform/bootstrap/*'
+      - 'terraform/bootstrap/**'
+      - '.github/workflows/apply-bootstrap.yaml'
+      - '.github/workflows/reusable-cd-workflow.yaml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ## run terraform plan
+  plan_bootstrap:
+    name: Plan - Bootstrap
+    uses: "./.github/workflows/reusable-ci-workflow.yaml"
+    with:
+      working_directory: bootstrap
+      environment: dev
+      assume_role_name: arc-saas-assume-role
+      publish_plan_artifact: true  # only for apply step
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+  ## run terraform apply
+  apply_bootstrap:
+    name: Apply - bootstrap
+    uses: "./.github/workflows/reusable-cd-workflow.yaml"
+    needs: plan_bootstrap
+    with:
+      working_directory: bootstrap
+      environment: dev
+      assume_role_name: arc-saas-assume-role
+      plan_id: ${{ needs.plan_poc.outputs.plan_id }}
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write

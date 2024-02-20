@@ -1,0 +1,89 @@
+---
+on:  # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      working_directory:
+        required: true
+        type: string
+        description: "This is the path to your terraform configuration"
+      environment:
+        required: true
+        type: string
+        description: "The environment / workspace resources will be created in"
+      assume_role_name:
+        required: true
+        type: string
+        description: "The role name to assume against the target environment account"
+      aws_region:
+        required: false
+        type: string
+        default: us-east-1
+        description: "The AWS Region where the resources will be created in"
+      plan_id:
+        required: true
+        type: string
+        description: "The plan id for the tfplan to be downloaded from artifacts"
+
+env:
+  ## !!! required for the action-init-plan-apply.sh script !!!
+  DIRECTORY: ${{ inputs.working_directory }}
+  ENV: ${{ inputs.environment }}
+  ## END - !!! required for the action-init-plan-apply.sh script !!!
+
+jobs:
+  apply:
+    name: Apply - ${{ inputs.working_directory }}-${{ inputs.environment }}
+    runs-on:
+      - self-hosted
+      - arc
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    ## uncomment if the repo has environments enabled
+    #    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Make Executable tfenv
+        run: chmod +x ./scripts/dependencies/install-tfenv.sh
+        continue-on-error: false
+
+      - name: Install tfenv
+        run: ./scripts/dependencies/install-tfenv.sh
+        continue-on-error: false
+
+      - name: Make Executable AWS CLI
+        run: chmod +x ./scripts/dependencies/install-aws-cli.sh
+        continue-on-error: false
+        
+      - name: Install AWS CLI
+        run: ./scripts/dependencies/install-aws-cli.sh
+        continue-on-error: false
+
+      # Download tfplan artifact
+      - name: Download tfplan
+        uses: actions/download-artifact@v3
+        with:
+          name: "${{ inputs.environment }}-${{ inputs.working_directory }}-${{ inputs.plan_id }}.tfplan"
+          path: "terraform/${{ inputs.working_directory }}/"
+        continue-on-error: false
+
+      # configure iam /initialize backend
+      - name: Configure credentials for ${{ inputs.environment }}
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.assume_role_name }}"
+          aws-region: ${{ inputs.aws_region }}
+
+      - name: Initialize backend
+        run: |
+          source scripts/action-init-plan-apply.sh -i ${{ inputs.environment }} -d ${{ inputs.working_directory }}
+        continue-on-error: false
+
+      # running apply
+      - name: Apply against ${{ inputs.environment }}
+        id: environment_apply
+        run: |
+          source scripts/action-init-plan-apply.sh -a ${{ inputs.environment }} -d ${{ inputs.working_directory }}
