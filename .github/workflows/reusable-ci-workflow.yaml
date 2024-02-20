@@ -107,11 +107,3 @@ jobs:
         with:
           message-id: ${{ inputs.environment }}-${{ inputs.working_directory }}-tfplan
           message-path: "terraform/${{ inputs.working_directory }}/${{ inputs.environment }}-plan-output.txt"
-
-      - name: AWS STS
-        run: aws sts get-caller-identity
-        continue-on-error: false
-
-      - name: Check AWS Access
-        run: aws s3 ls
-        continue-on-error: false
