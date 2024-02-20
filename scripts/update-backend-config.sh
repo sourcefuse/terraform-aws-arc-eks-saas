@@ -9,6 +9,7 @@ TF_STATE_TABLE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/terr
 
 update_backend () {
     cd terraform/$DIRECTORY
+    
 }
 main() {
     if $UPDATE_BACKEND;
