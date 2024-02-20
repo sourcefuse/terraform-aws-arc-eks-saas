@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Grant execute permissions to the script itself
-chmod +x "$0"
 
 tfenv_path="$HOME/.tfenv"
 

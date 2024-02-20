@@ -52,6 +52,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Executable tfenv
+        run: chmod +x ./scripts/dependencies/install-tfenv.sh
+        continue-on-error: false
 
       - name: Install tfenv
         run: ./scripts/dependencies/install-tfenv.sh
