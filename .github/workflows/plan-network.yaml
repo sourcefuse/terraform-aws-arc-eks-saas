@@ -4,7 +4,7 @@ name: Plan - Network
 on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
-      - main
+      - dev
     paths:
       - 'terraform/network/*'
       - 'terraform/network/**'
