@@ -1,0 +1,30 @@
+---
+name: Plan - Bootstrap
+
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - dev
+    paths:
+      - 'terraform/bootstrap/*'
+      - 'terraform/bootstrap/**'
+      - '.github/workflows/plan-bootstrap.yaml'
+      - '.github/workflows/reusable-ci-workflow.yaml'
+  workflow_dispatch:
+
+jobs:
+  ## run terraform plan
+  plan_poc:
+    name: Bootstrap
+    uses: "./.github/workflows/reusable-ci-workflow.yaml"
+    with:
+      working_directory: bootstrap
+      environment: dev
+      assume_role_name: ""
+      aws_region: us-east-1
+      publish_plan_artifact: false  # only for apply step
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
