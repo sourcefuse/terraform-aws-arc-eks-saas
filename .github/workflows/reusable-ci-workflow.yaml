@@ -79,8 +79,9 @@ jobs:
       - name: Configure credentials for ${{ inputs.environment }}
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.assume_role_name }}"
+          role-to-assume: "arn:aws:iam::471112653618:role/arc-saas-assume-role"
           aws-region: ${{ inputs.aws_region }}
+          role-session-name: github-action-ci
 
       - name: Initialize backend
         run: |

@@ -76,7 +76,7 @@ jobs:
         with:
           role-to-assume: "arn:aws:iam::471112653618:role/arc-saas-assume-role"
           aws-region: ${{ inputs.aws_region }}
-          role-session-name: github-action
+          role-session-name: github-actions
 
       - name: Initialize backend
         run: |
