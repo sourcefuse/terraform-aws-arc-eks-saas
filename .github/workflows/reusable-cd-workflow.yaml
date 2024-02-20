@@ -33,9 +33,7 @@ env:
 jobs:
   apply:
     name: Apply - ${{ inputs.working_directory }}-${{ inputs.environment }}
-    runs-on:
-      - self-hosted
-      - arc
+    runs-on: [self-hosted, linux, codebuild]
     permissions:
       id-token: write
       contents: read

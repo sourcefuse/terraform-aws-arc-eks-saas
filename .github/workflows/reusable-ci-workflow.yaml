@@ -38,9 +38,10 @@ env:
 jobs:
   plan:
     name: Plan - ${{ inputs.working_directory }}-${{ inputs.environment }}
-    runs-on:
-      - self-hosted
-      - arc
+    runs-on: [self-hosted, linux, codebuild]
+    # runs-on:
+    #   - self-hosted
+    #   - arc
     outputs:
       plan_id: ${{ steps.workflow_vars.outputs.plan_id }}
     permissions:
