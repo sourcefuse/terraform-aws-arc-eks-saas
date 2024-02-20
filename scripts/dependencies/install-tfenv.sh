@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Grant execute permissions to the script itself
+chmod +x "$0"
+
 tfenv_path="$HOME/.tfenv"
 
 if ! command -v tfenv &> /dev/null; then
