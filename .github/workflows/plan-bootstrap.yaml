@@ -20,7 +20,7 @@ jobs:
     with:
       working_directory: bootstrap
       environment: dev
-      assume_role_name: ${{ secrets.ASSUME_ROLE }}
+      assume_role_name: arn:aws:iam::471112653618:role/arc-assume-role
       aws_region: us-east-1
       publish_plan_artifact: false  # only for apply step
     secrets: inherit
