@@ -57,7 +57,7 @@ jobs:
       - name: Make Executable AWS CLI
         run: chmod +x ./scripts/dependencies/install-aws-cli.sh
         continue-on-error: false
-        
+
       - name: Install AWS CLI
         run: ./scripts/dependencies/install-aws-cli.sh
         continue-on-error: false
@@ -76,6 +76,7 @@ jobs:
         with:
           role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.assume_role_name }}"
           aws-region: ${{ inputs.aws_region }}
+          role-session-name: github-role
 
       - name: Initialize backend
         run: |
