@@ -1,0 +1,30 @@
+---
+name: Plan - Network
+
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'terraform/network/*'
+      - 'terraform/network/**'
+      - '.github/workflows/plan-network.yaml'
+      - '.github/workflows/reusable-ci-workflow.yaml'
+  workflow_dispatch:
+
+jobs:
+  ## run terraform plan
+  plan_dev:
+    name: Network
+    uses: "./.github/workflows/reusable-ci-workflow.yaml"
+    with:
+      working_directory: network
+      environment: dev
+      assume_role_name: ${{ secrets.ASSUME_ROLE }}
+      aws_region: us-east-1
+      publish_plan_artifact: false  # only for apply step
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
