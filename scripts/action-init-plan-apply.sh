@@ -109,7 +109,7 @@ main () {
   return 1;
   fi
 
-  if [[ ! $ENV =~ ^(poc|prod)$ ]];
+  if [[ ! $ENV =~ ^(poc|dev|qa|stage|prod)$ ]];
   then
     echo "Invalid environment $ENV passed with plan/apply option"
   return

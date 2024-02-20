@@ -22,7 +22,8 @@ provider "aws" {
 ## Tag
 ################################################################
 module "tags" {
-  source = "git::https://github.com/sourcefuse/terraform-aws-refarch-tags?ref=1.2.5"
+  source  = "sourcefuse/arc-tags/aws"
+  version = "1.2.5"
 
   environment = var.environment
   project     = var.namespace

@@ -1,24 +1,24 @@
 ---
-name: Plan - Network
+name: Plan - DB
 
 on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - dev
     paths:
-      - 'terraform/network/*'
-      - 'terraform/network/**'
-      - '.github/workflows/plan-network.yaml'
+      - 'terraform/db/*'
+      - 'terraform/db/**'
+      - '.github/workflows/plan-db.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
 
 jobs:
   ## run terraform plan
   plan_dev:
-    name: Network
+    name: DB
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: network
+      working_directory: db
       environment: dev
       assume_role_name: arc-saas-assume-role
       aws_region: us-east-1
