@@ -97,7 +97,7 @@ plan () {
 apply () {
 
   cd terraform/$DIRECTORY
-  terraform workspace select $ENV
+  terraform workspace select $ENV || terraform workspace new $ENV
   terraform apply -auto-approve $EXTRA_ARGS $ENV-$DIRECTORY-$plan_id.tfplan
 
 }
