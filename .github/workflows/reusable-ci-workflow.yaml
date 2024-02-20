@@ -108,7 +108,4 @@ jobs:
           message-id: ${{ inputs.environment }}-${{ inputs.working_directory }}-tfplan
           message-path: "terraform/${{ inputs.working_directory }}/${{ inputs.environment }}-plan-output.txt"
       
-      - name: Check AWS access
-        run: /usr/local/aws-cli/v2/current/aws s3 ls
-        continue-on-error: false
       

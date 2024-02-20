@@ -4,7 +4,19 @@ NAMESPACE="arc-saas"
 ENVIRONMENT="dev"
 REGION="us-east-1"
 
-# if aws s3 ls "s3://$S3_BUCKET" 2>&1 | grep -q 'NoSuchBucket'; then
-#   sed -i '/^[^#]/ s/\(^.*  backend "s3" {}.*$\)/#\ \1/' skeleton/terraform/bootstrap/main.tf
-# #  sed -e '/  backend "s3" {}/ s/^#*/#/' -i skeleton/terraform/bootstrap/main.tf
-# fi
+TF_STATE_BUCKET=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/terraform-state-bucket" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)
+TF_STATE_TABLE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/terraform-state-dynamodb-table" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)
+
+update_backend () {
+    cd terraform/$DIRECTORY
+}
+main() {
+    if $UPDATE_BACKEND;
+  then
+    update_backend
+    return $?
+  fi
+}
+
+main
+cleanup
