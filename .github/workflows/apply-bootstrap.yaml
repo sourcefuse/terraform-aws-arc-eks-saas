@@ -41,7 +41,7 @@ jobs:
       working_directory: bootstrap
       environment: dev
       assume_role_name: arc-saas-assume-role
-      plan_id: ${{ needs.plan_poc.outputs.plan_id }}
+      plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
     secrets: inherit
     permissions:
       id-token: write
