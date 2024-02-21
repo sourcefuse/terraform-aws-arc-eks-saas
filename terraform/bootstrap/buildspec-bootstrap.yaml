@@ -1,0 +1,41 @@
+---
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip
+      - unzip /usr/local/bin/terraform.zip -d /usr/local/bin/
+      - terraform --version
+      - export PATH=$PWD/:$PATH
+      - apt-get update -y && apt-get install -y jq unzip
+
+  build:
+    commands:     
+      # For Bootstrap
+      # check if bootstrap need to be run or not
+      # Fetch the parameter value from AWS SSM
+      - PARAMETER_VALUE=$(aws ssm get-parameter --name /${namespace}/${environment}/terraform-state-bucket --query 'Parameter.Value' --region ${aws_region} --output text 2>/dev/null || echo "")
+      - # Check if the parameter exists
+      - if [ -z "$PARAMETER_VALUE" ]; then
+           is_bootstrap_creation=1;
+        else
+           is_bootstrap_creation=0;
+        fi
+      - # Export the variable
+      - export is_bootstrap_creation
+      - 
+      - # Print the value for verification
+      - echo "${is_bootstrap_creation}"
+
+      # Run Bootstrap
+      - ls -la
+      - cd terraform/bootstrap
+      - ls -al
+      - terraform init 
+      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
+      - cd ..
+     
+
+  post_build:
+    commands:
+      - echo "Terraform deployment complete!"
