@@ -3,5 +3,5 @@ data "aws_codestarconnections_connection" "existing_github_connection" {
 }
 
 data "aws_ssm_parameter" "artifact_bucket" {
-    name = "/${var.namespace}/${var.environment}/artifact-bucket"
+  name = "/${var.namespace}/${var.environment}/artifact-bucket"
 }

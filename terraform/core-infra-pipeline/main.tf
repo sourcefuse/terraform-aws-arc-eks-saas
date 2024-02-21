@@ -96,39 +96,39 @@ resource "aws_codepipeline" "deployment_pipeline" {
   }
 
   stage {
-       name = "Bootstrap"
-     
-       action {
-         name            = "Bootstrap"
-         category        = "Build"
-         owner           = "AWS"
-         provider        = "CodeBuild"
-         version         = "1"
-         input_artifacts = ["source_output"]
-         #output_artifacts = ["build_output"]
-     
-         configuration = {
-           ProjectName = aws_codebuild_project.initial_bootstrap.name
-         }
-       }
-     }
+    name = "Bootstrap"
 
-    stage {
-      name = "Networking"
-  
-      action {
-        name            = "Networking"
-        category        = "Build"
-        owner           = "AWS"
-        provider        = "CodeBuild"
-        version         = "1"
-        input_artifacts = ["source_output"]
-        #output_artifacts = ["build_output"]
-  
-        configuration = {
-          ProjectName = aws_codebuild_project.networking_module_build_step_codebuild_project.name
-        }
+    action {
+      name            = "Bootstrap"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      version         = "1"
+      input_artifacts = ["source_output"]
+      #output_artifacts = ["build_output"]
+
+      configuration = {
+        ProjectName = aws_codebuild_project.initial_bootstrap.name
       }
     }
-    tags = module.tags.tags
+  }
+
+  stage {
+    name = "Networking"
+
+    action {
+      name            = "Networking"
+      category        = "Build"
+      owner           = "AWS"
+      provider        = "CodeBuild"
+      version         = "1"
+      input_artifacts = ["source_output"]
+      #output_artifacts = ["build_output"]
+
+      configuration = {
+        ProjectName = aws_codebuild_project.networking_module_build_step_codebuild_project.name
+      }
+    }
+  }
+  tags = module.tags.tags
 }

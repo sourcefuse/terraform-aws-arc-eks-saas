@@ -18,3 +18,22 @@ variable "namespace" {
   description = "Namespace for the resources."
   default     = "arc-saas"
 }
+
+################################################################
+## Pipeline
+################################################################
+variable "github_connection_pipeline" {
+  description = "code star pipeline connect to the github repo"
+  type        = string
+}
+
+variable "github_FullRepositoryId" {
+  description = "role name of the code pipeline"
+  type        = string
+}
+
+variable "github_BranchName" {
+  description = "Github Branch Name"
+  type        = string
+  default     = "main"
+}
