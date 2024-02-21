@@ -1,15 +1,3 @@
-################################################################################
-## Tags
-################################################################################
-module "tags" {
-  source  = "sourcefuse/arc-tags/aws"
-  version = "1.2.5"
-
-  environment = var.environment
-  project     = var.namespace
-
-}
-
 resource "aws_iam_role" "networking_module_build_step_role" {
   name = "terraform-networking-module-build-step-role-${var.namespace}-${var.environment}"
 

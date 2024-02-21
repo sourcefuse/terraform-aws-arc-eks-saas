@@ -18,6 +18,18 @@ provider "aws" {
   region = var.region
 }
 
+
+################################################################################
+## Tags
+################################################################################
+module "tags" {
+  source  = "sourcefuse/arc-tags/aws"
+  version = "1.2.5"
+
+  environment = var.environment
+  project     = var.namespace
+
+}
 #######################################################################################
 ## CodePipeline Role
 #######################################################################################
@@ -118,5 +130,5 @@ resource "aws_codepipeline" "deployment_pipeline" {
         }
       }
     }
-
+    tags = module.tags.tags
 }
