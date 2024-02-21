@@ -75,6 +75,11 @@ jobs:
           role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.assume_role_name }}"
           aws-region: ${{ inputs.aws_region }}
           role-session-name: github-actions-cd
+      
+      - name: Update backend
+        if: ${{ inputs.update_backend_config }} == true
+        run: source scripts/update-backend-config.sh -u ${{ inputs.environment }} -d ${{ inputs.working_directory }}
+        continue-on-error: false
 
       - name: Initialize backend
         run: |

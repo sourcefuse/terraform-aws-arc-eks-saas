@@ -43,6 +43,7 @@ jobs:
       environment: dev
       assume_role_name: github
       plan_id: ${{ needs.plan_pipeline.outputs.plan_id }}
+      update_backend_config: true
     secrets: inherit
     permissions:
       id-token: write
