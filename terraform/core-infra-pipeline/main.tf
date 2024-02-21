@@ -70,7 +70,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
   role_arn = aws_iam_role.codepipeline_role.arn
 
   artifact_store {
-    location = data.aws_s3_bucket.artifact_bucket.id
+    location = data.aws_ssm_parameter.artifact_bucket.value
     type     = "S3"
   }
 

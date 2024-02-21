@@ -68,8 +68,8 @@ resource "aws_codebuild_project" "networking_module_build_step_codebuild_project
             "cd terraform/network",
             "rm config.${var.environment}.hcl",
             "sed -i 's/aws_region/${var.region}/g' config.txt",
-            "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.aws_region})",
-            "tf_state_table=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-dynamodb-table\" --query \"Parameter.Value\" --output text --region ${var.aws_region})",
+            "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.region})",
+            "tf_state_table=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-dynamodb-table\" --query \"Parameter.Value\" --output text --region ${var.region})",
             "envsubst < config.txt > config.${var.environment}.hcl",
           ]
         }

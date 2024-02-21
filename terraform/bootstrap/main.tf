@@ -180,3 +180,15 @@ resource "aws_s3_bucket_public_access_block" "public_access_block" {
 
   depends_on = [resource.aws_s3_bucket.artifact_bucket]
 }
+
+# store artifact bucket in parameter store 
+
+resource "aws_ssm_parameter" "artifact_bucket" {
+  name        = "/${var.namespace}/${var.environment}/artifact-bucket"
+  description = "Codepipeline Artifact Bucket"
+  type        = "String"
+  overwrite   = true
+  value       = resource.aws_s3_bucket.artifact_bucket.bucket
+  depends_on  = [aws_s3_bucket.artifact_bucket]
+  tags        = module.tags.tags
+}
