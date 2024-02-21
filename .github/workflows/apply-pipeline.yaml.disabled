@@ -1,14 +1,14 @@
 ---
-name: Apply - Bootstrap
+name: Apply - CodePipeline
 
 on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - dev
     paths:
-      - 'terraform/bootstrap/*'
-      - 'terraform/bootstrap/**'
-      - '.github/workflows/apply-bootstrap.yaml'
+      - 'terraform/core-infra-pipeline/*'
+      - 'terraform/core-infra-pipeline/**'
+      - '.github/workflows/apply-pipeline.yaml'
       - '.github/workflows/reusable-cd-workflow.yaml'
   workflow_dispatch:
 
@@ -18,14 +18,15 @@ concurrency:
 
 jobs:
   ## run terraform plan
-  plan_bootstrap:
-    name: Plan - Bootstrap
+  plan_pipeline:
+    name: Plan - Pipeline
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: bootstrap
+      working_directory: core-infra-pipeline
       environment: dev
       assume_role_name: github
       publish_plan_artifact: true  # only for apply step
+      update_backend_config: true
     secrets: inherit
     permissions:
       id-token: write
@@ -33,15 +34,16 @@ jobs:
       pull-requests: write
 
   ## run terraform apply
-  apply_bootstrap:
-    name: Apply - bootstrap
+  apply_pipeline:
+    name: Apply - Pipeline
     uses: "./.github/workflows/reusable-cd-workflow.yaml"
-    needs: plan_bootstrap
+    needs: plan_pipeline
     with:
-      working_directory: bootstrap
+      working_directory: core-infra-pipeline
       environment: dev
       assume_role_name: github
-      plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
+      plan_id: ${{ needs.plan_pipeline.outputs.plan_id }}
+      update_backend_config: true
     secrets: inherit
     permissions:
       id-token: write
