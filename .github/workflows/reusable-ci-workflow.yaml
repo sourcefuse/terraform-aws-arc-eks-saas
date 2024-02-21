@@ -24,6 +24,11 @@ on:  # yamllint disable-line rule:truthy
         type: boolean
         default: false
         description: "This option will allow to publish successful plan artifact"
+      update_backend_config:
+        required: false
+        type: boolean
+        default: false
+        description: "This option will allow to update backend config"
     outputs:
       plan_id:
         value: ${{ jobs.plan.outputs.plan_id }}
@@ -39,9 +44,6 @@ jobs:
   plan:
     name: Plan - ${{ inputs.working_directory }}-${{ inputs.environment }}
     runs-on: [self-hosted, linux, codebuild]
-    # runs-on:
-    #   - self-hosted
-    #   - arc
     outputs:
       plan_id: ${{ steps.workflow_vars.outputs.plan_id }}
     permissions:
@@ -83,10 +85,14 @@ jobs:
           role-to-assume: "arn:aws:iam::471112653618:role/github"
           aws-region: ${{ inputs.aws_region }}
           role-session-name: github-actions-ci
+      
+      - name: Update backend
+        if: ${{ inputs.update_backend_config }} == true
+        run: source scripts/update-backend-config.sh -u ${{ inputs.environment }} -d ${{ inputs.working_directory }}
 
       - name: Initialize backend
         run: |
-          source scripts/action-init-plan-apply.sh -i ${{ inputs.environment }} -d ${{ inputs.working_directory }}
+          source scripts/action-init-plan-apply.sh -u ${{ inputs.environment }} -d ${{ inputs.working_directory }}
         continue-on-error: false
 
       # running plan

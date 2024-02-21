@@ -26,6 +26,7 @@ jobs:
       environment: dev
       assume_role_name: arc-saas-assume-role
       publish_plan_artifact: true  # only for apply step
+      update_backend_config: true  
     secrets: inherit
     permissions:
       id-token: write

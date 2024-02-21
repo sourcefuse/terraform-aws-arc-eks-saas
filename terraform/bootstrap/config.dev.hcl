@@ -1,5 +1,5 @@
 region         = "us-east-1"
 key            = "bootstrap/terraform.tfstate"
-bucket         = "arc-saas-dev-terraform-state"
-dynamodb_table = "arc-saas-dev-terraform-state-lock"
+bucket         = "${TF_STATE_BUCKET}"
+dynamodb_table = "${TF_STATE_TABLE}"
 encrypt        = true
