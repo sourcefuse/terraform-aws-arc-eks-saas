@@ -86,7 +86,7 @@ variable "aurora_engine_mode" {
 variable "aurora_engine_version" {
   description = "The version of the database engine tocl use. See `aws rds describe-db-engine-versions` "
   type        = string
-  default     = "14.5" // "aurora-postgresql14.5"
+  default     = "14.7" // "aurora-postgresql14.5"
 }
 
 variable "aurora_allow_major_version_upgrade" {
