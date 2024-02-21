@@ -24,9 +24,9 @@ jobs:
     with:
       working_directory: bootstrap
       environment: dev
-      assume_role_name: arc-saas-assume-role
+      assume_role_name: github
       publish_plan_artifact: true  # only for apply step
-      update_backend_config: true  
+      update_backend_config: false  
     secrets: inherit
     permissions:
       id-token: write
@@ -41,7 +41,7 @@ jobs:
     with:
       working_directory: bootstrap
       environment: dev
-      assume_role_name: arc-saas-assume-role
+      assume_role_name: github
       plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
     secrets: inherit
     permissions:
