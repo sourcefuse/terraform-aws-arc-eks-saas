@@ -156,6 +156,12 @@ variable "enable_ecs_endpoint" {
   default     = true
 }
 
+variable "enable_sqs_endpoint" {
+  type        = bool
+  description = "Enable SQS endpoints"
+  default     = true
+}
+
 variable "enable_rds_endpoint" {
   type        = bool
   description = "Enable RDS endpoints"
