@@ -1,0 +1,50 @@
+---
+name: Apply - CodePipeline
+
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    branches:
+      - dev
+    paths:
+      - 'terraform/core-infra-pipeline/*'
+      - 'terraform/core-infra-pipeline/**'
+      - '.github/workflows/apply-pipeline.yaml'
+      - '.github/workflows/reusable-cd-workflow.yaml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ## run terraform plan
+  plan_pipeline:
+    name: Plan - Pipeline
+    uses: "./.github/workflows/reusable-ci-workflow.yaml"
+    with:
+      working_directory: core-infra-pipeline
+      environment: dev
+      assume_role_name: github
+      publish_plan_artifact: true  # only for apply step
+      update_backend_config: true
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+  ## run terraform apply
+  apply_pipeline:
+    name: Apply - Pipeline
+    uses: "./.github/workflows/reusable-cd-workflow.yaml"
+    needs: plan_pipeline
+    with:
+      working_directory: core-infra-pipeline
+      environment: dev
+      assume_role_name: github
+      plan_id: ${{ needs.plan_pipeline.outputs.plan_id }}
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write

@@ -1,4 +1,19 @@
 
+################################################################################
+## Tags
+################################################################################
+module "tags" {
+  source  = "sourcefuse/arc-tags/aws"
+  version = "1.2.5"
+
+  environment = var.environment
+  project     = var.namespace
+
+}
+
+################################################################################
+## Codebuild
+################################################################################
 resource "aws_codebuild_project" "initial_bootstrap" {
   name           = "initial-bootstrap-${var.namespace}-${var.environment}"
   description    = " Initial bootstrap"
@@ -41,6 +56,7 @@ resource "aws_codebuild_project" "initial_bootstrap" {
     buildspec = "terraform/bootstrap/buildspec-bootstrap.yaml"
   }
 
+  tags = module.tags.tags
 }
 
 

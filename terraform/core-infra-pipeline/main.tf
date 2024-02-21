@@ -58,7 +58,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
   role_arn = aws_iam_role.codepipeline_role.arn
 
   artifact_store {
-    location = var.artifact_location
+    location = data.aws_s3_bucket.artifact_bucket.id
     type     = "S3"
   }
 
@@ -82,4 +82,41 @@ resource "aws_codepipeline" "deployment_pipeline" {
       }
     }
   }
+
+  stage {
+       name = "Bootstrap"
+     
+       action {
+         name            = "Bootstrap"
+         category        = "Build"
+         owner           = "AWS"
+         provider        = "CodeBuild"
+         version         = "1"
+         input_artifacts = ["source_output"]
+         #output_artifacts = ["build_output"]
+     
+         configuration = {
+           ProjectName = aws_codebuild_project.initial_bootstrap.name
+         }
+       }
+     }
+
+    stage {
+      name = "Networking"
+  
+      action {
+        name            = "Networking"
+        category        = "Build"
+        owner           = "AWS"
+        provider        = "CodeBuild"
+        version         = "1"
+        input_artifacts = ["source_output"]
+        #output_artifacts = ["build_output"]
+  
+        configuration = {
+          ProjectName = aws_codebuild_project.networking_module_build_step_codebuild_project.name
+        }
+      }
+    }
+
 }
