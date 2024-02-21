@@ -78,6 +78,7 @@ plan () {
 
   cd terraform/$DIRECTORY
   PLAN_FILENAME=$ENV-$(basename $DIRECTORY)-$plan_id.tfplan
+  terraform workspace select $ENV || terraform workspace new $ENV
   terraform plan -var-file $ENV.tfvars $EXTRA_ARGS -out $PLAN_FILENAME
   PLAN_OUTPUT=$(terraform show -no-color $PLAN_FILENAME)
 
@@ -95,6 +96,7 @@ plan () {
 apply () {
 
   cd terraform/$DIRECTORY
+  terraform workspace select $ENV || terraform workspace new $ENV
   terraform apply -auto-approve $EXTRA_ARGS $ENV-$DIRECTORY-$plan_id.tfplan
 
 }
