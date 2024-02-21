@@ -5,11 +5,9 @@ phases:
     commands:
       - pwd
       - curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip
-      #- unzip terraform.zip
-      - cd /usr/local/bin/
-      - ls -al
+      - unzip /usr/local/bin/terraform.zip -d /usr/local/bin/
       - pwd
-      #- mv terraform /usr/local/bin/
+      - ls -la
       - terraform --version
       - export PATH=$PWD/:$PATH
       - apt-get update -y && apt-get install -y jq unzip
@@ -34,7 +32,7 @@ phases:
 
       # Run Bootstrap
       - ls -la
-      - cd bootstrap
+      - cd terraform/bootstrap
       - ls -al
       - terraform init 
       - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
