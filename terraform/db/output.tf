@@ -1,23 +1,17 @@
 ## aurora
 output "aurora_endpoints" {
-  value = [
-    for rds in module.aurora : rds.aurora_endpoint
-  ]
+  value       = module.aurora.aurora_endpoint
   description = "The DNS address of the Aurora instance"
 }
 
 output "aurora_arns" {
-  value = [
-    for rds in module.aurora : rds.aurora_arn
-  ]
+  value       = module.aurora.aurora_arn
   description = "Amazon Resource Name (ARN) of cluster"
 }
 
 
 output "aurora_reader_endpoint" {
-  value = [
-    for rds in module.aurora : rds.aurora_reader_endpoint
-  ]
+  value       = module.aurora.aurora_reader_endpoint
   description = "A read-only endpoint for the Aurora cluster, automatically load-balanced across replicas"
 }
 

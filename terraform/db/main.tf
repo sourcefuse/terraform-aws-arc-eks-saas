@@ -123,11 +123,9 @@ resource "aws_ssm_parameter" "host" {
   description = "Database host"
   type        = "SecureString"
   overwrite   = true
-  value = [
-    for rds in module.aurora : rds.aurora_endpoint
-  ]
-  depends_on = [module.aurora]
-  tags       = module.tags.tags
+  value       = module.aurora.aurora_endpoint
+  depends_on  = [module.aurora]
+  tags        = module.tags.tags
 }
 
 resource "aws_ssm_parameter" "port" {
