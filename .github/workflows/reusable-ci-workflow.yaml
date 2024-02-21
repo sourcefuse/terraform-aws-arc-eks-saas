@@ -89,6 +89,7 @@ jobs:
       - name: Update backend
         if: ${{ inputs.update_backend_config }} == true
         run: source scripts/update-backend-config.sh -u ${{ inputs.environment }} -d ${{ inputs.working_directory }}
+        continue-on-error: true
 
       - name: Initialize backend
         run: |
