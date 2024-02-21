@@ -77,8 +77,8 @@ resource "aws_codebuild_project" "networking_module_build_step_codebuild_project
         build = {
           commands = [
             "terraform init --backend-config=config.${var.environment}.hcl",
-            "terraform plan",
-            "terraform apply -auto-approve",
+            "terraform plan --var-file=${var.environment}.tfvars",
+            "terraform apply --var-file=${var.environment}.tfvars -auto-approve",
             # "export vpc_id=$(aws ec2 describe-vpcs --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-vpc\" --query \"Vpcs[].VpcId\" --output text)",
             # "export subnet_ids_first=$(aws ec2 describe-subnets --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-private-subnet-private-${var.aws_region}a\" --query \"Subnets[].SubnetId\" --output text)",
             # "export subnet_ids_second=$(aws ec2 describe-subnets --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-private-subnet-private-${var.aws_region}b\" --query \"Subnets[].SubnetId\" --output text)",
