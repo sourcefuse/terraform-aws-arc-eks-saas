@@ -69,7 +69,6 @@ check_dir() {
 }
 
 init () {
-
   cd terraform/$DIRECTORY
   terraform init -backend-config config.$ENV.hcl $EXTRA_ARGS
   terraform workspace list
@@ -97,7 +96,7 @@ plan () {
 apply () {
 
   cd terraform/$DIRECTORY
-  terraform workspace select $ENV
+  terraform workspace select $ENV || terraform workspace new $ENV
   terraform apply -auto-approve $EXTRA_ARGS $ENV-$DIRECTORY-$plan_id.tfplan
 
 }
