@@ -1,4 +1,4 @@
-region         = "us-east-1"
+region         = "${REGION}"
 key            = "bootstrap/terraform.tfstate"
 bucket         = "${TF_STATE_BUCKET}"
 dynamodb_table = "${TF_STATE_TABLE}"
