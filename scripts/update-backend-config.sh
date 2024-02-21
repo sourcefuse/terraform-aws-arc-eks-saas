@@ -23,13 +23,15 @@ done
 
 
 NAMESPACE="arc-saas"
-ENVIRONMENT="dev"
-REGION="us-east-1"
+# ENVIRONMENT="dev"
+# REGION="us-east-1"
 
-TF_STATE_BUCKET=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/terraform-state-bucket" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)
-TF_STATE_TABLE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/terraform-state-dynamodb-table" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)
+# TF_STATE_BUCKET=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/terraform-state-bucket" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)
+# TF_STATE_TABLE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/terraform-state-dynamodb-table" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)
 
 update_backend () {
+    TF_STATE_BUCKET=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENV}/terraform-state-bucket" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)
+    TF_STATE_TABLE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENV}/terraform-state-dynamodb-table" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)
     cd terraform/$DIRECTORY
     sed -i "s/^bucket *=.*/bucket = \"${TF_STATE_BUCKET}\"/" config.$ENV.hcl
     sed -i "s/^dynamodb_table *=.*/dynamodb_table = \"${TF_STATE_TABLE}\"/" config.$ENV.hcl
