@@ -26,7 +26,6 @@ jobs:
       environment: dev
       assume_role_name: github
       publish_plan_artifact: true  # only for apply step
-      update_backend_config: false
     secrets: inherit
     permissions:
       id-token: write
