@@ -22,3 +22,8 @@ output "aurora" {
   ]
   description = "Security groups that are allowed to access the RDS"
 }
+
+output "rds_instance_endpoint" {
+  value       = module.aurora.rds_instance_endpoint
+  description = "The DNS address to the RDS Instance."
+}
