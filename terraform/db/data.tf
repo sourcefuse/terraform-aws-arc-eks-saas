@@ -45,3 +45,17 @@ data "aws_subnets" "public" {
     values = ["public"]
   }
 }
+
+## security
+data "aws_security_groups" "aurora" {
+  depends_on = [module.aurora]
+  filter {
+    name   = "tag:Name"
+    values = ["aurora"]
+  }
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.vpc.id]
+  }
+}

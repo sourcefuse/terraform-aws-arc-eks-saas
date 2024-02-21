@@ -1,5 +1,5 @@
 region         = "${REGION}"
-key            = "db/terraform.tfstate"
+key            = "pipeline/terraform.tfstate"
 bucket         = "${TF_STATE_BUCKET}"
 dynamodb_table = "${TF_STATE_TABLE}"
 encrypt        = true

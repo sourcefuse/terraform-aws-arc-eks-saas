@@ -1,3 +1,9 @@
+################################################
+## imports
+################################################
+data "aws_partition" "current" {}
+
+data "aws_caller_identity" "current" {}
 ################################################################################
 ## defaults
 ################################################################################
@@ -73,4 +79,104 @@ resource "aws_ssm_parameter" "tf_state_table" {
   value       = module.bootstrap.dynamodb_name
   depends_on  = [module.bootstrap]
   tags        = module.tags.tags
+}
+
+################################################################################
+## Artifact S3 Bucket Creation
+################################################################################
+locals {
+  bucket_arn = "arn:${data.aws_partition.current.partition}:s3:::${var.namespace}-${var.environment}-artifact-bucket-${random_string.bucket_suffix.result}"
+  depends_on = [resource.random_string.bucket_suffix]
+}
+
+data "aws_iam_policy_document" "policy" {
+  ## Enforce SSL/TLS on all objects
+  statement {
+    sid    = "enforce-tls"
+    effect = "Deny"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = ["s3:*"]
+
+    resources = ["${local.bucket_arn}/*"]
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
+
+  statement {
+    sid    = "inventory-and-analytics"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["s3.amazonaws.com"]
+    }
+
+    actions   = ["s3:PutObject"]
+    resources = ["${local.bucket_arn}/*"]
+
+    condition {
+      test     = "ArnLike"
+      variable = "aws:SourceArn"
+      values   = [local.bucket_arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
+    }
+  }
+}
+
+resource "aws_s3_bucket" "artifact_bucket" {
+  bucket        = "${var.namespace}-${var.environment}-artifact-bucket-${resource.random_string.bucket_suffix.result}"
+  policy        = data.aws_iam_policy_document.policy.json
+  force_destroy = true
+
+  depends_on = [resource.random_string.random]
+  tags = merge(module.tags.tags, tomap({
+    type = "artifact"
+  }))
+}
+
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.artifact_bucket.id
+  versioning_configuration {
+    status     = "Enabled"
+    mfa_delete = "Disabled"
+  }
+  depends_on = [resource.aws_s3_bucket.artifact_bucket]
+}
+
+resource "aws_s3_bucket_public_access_block" "public_access_block" {
+  bucket = aws_s3_bucket.artifact_bucket.id
+
+  ## Block new public ACLs and uploading public objects
+  block_public_acls = true
+
+  ## Retroactively remove public access granted through public ACLs
+  ignore_public_acls = true
+
+  ## Block new public bucket policies
+  block_public_policy = true
+
+  ## Retroactivley block public and cross-account access if bucket has public policies
+  restrict_public_buckets = true
+
+  depends_on = [resource.aws_s3_bucket.artifact_bucket]
 }
