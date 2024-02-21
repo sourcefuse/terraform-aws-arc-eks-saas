@@ -148,7 +148,7 @@ resource "aws_s3_bucket" "artifact_bucket" {
   policy        = data.aws_iam_policy_document.policy.json
   force_destroy = true
 
-  depends_on = [resource.random_string.random]
+  depends_on = [resource.random_string.bucket_suffix]
   tags = merge(module.tags.tags, tomap({
     type = "artifact"
   }))
