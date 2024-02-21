@@ -4,10 +4,11 @@ phases:
   pre_build:
     commands:
       - pwd
-      #- cd /usr/local/bin/
-      #- curl -o terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip
-      - curl  https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip > /usr/local/bin/terraform.zip
-      - unzip /usr/local/bin/terraform.zip
+      - cd /usr/local/bin/
+      - curl -o terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip
+      - unzip terraform.zip
+      - cd ~
+      - pwd
       #- mv terraform /usr/local/bin/
       - terraform --version
       - export PATH=$PWD/:$PATH
