@@ -23,6 +23,11 @@ on:  # yamllint disable-line rule:truthy
         required: true
         type: string
         description: "The plan id for the tfplan to be downloaded from artifacts"
+      update_backend_config:
+        required: false
+        type: boolean
+        default: false
+        description: "This option will allow to update backend config"
 
 env:
   ## !!! required for the action-init-plan-apply.sh script !!!
