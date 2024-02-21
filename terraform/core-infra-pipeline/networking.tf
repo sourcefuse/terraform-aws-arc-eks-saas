@@ -55,9 +55,8 @@ resource "aws_codebuild_project" "networking_module_build_step_codebuild_project
       phases = {
         install = {
           commands = [
-            "curl -o terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip",
-            "unzip terraform.zip",
-            "mv terraform /usr/local/bin/",
+            "curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip",
+            "unzip /usr/local/bin/terraform.zip -d /usr/local/bin/",
             "terraform --version",
 
           ]
