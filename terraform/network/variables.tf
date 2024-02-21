@@ -138,7 +138,7 @@ variable "enable_dynamodb_endpoint" {
   default     = true
 }
 
-variable "enable_kms_endpoint" {
+variable "enable_ec2_endpoint" {
   type        = bool
   description = "Enable EC2 endpoints"
   default     = true
