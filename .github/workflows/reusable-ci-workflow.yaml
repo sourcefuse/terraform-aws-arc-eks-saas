@@ -92,7 +92,7 @@ jobs:
 
       - name: Initialize backend
         run: |
-          source scripts/action-init-plan-apply.sh -u ${{ inputs.environment }} -d ${{ inputs.working_directory }}
+          source scripts/action-init-plan-apply.sh -i ${{ inputs.environment }} -d ${{ inputs.working_directory }}
         continue-on-error: false
 
       # running plan
