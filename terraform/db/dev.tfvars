@@ -9,4 +9,5 @@ aurora_storage_type                   = "aurora-iopt1"
 performance_insights_enabled          = true
 performance_insights_retention_period = 7
 aurora_engine_version                 = "15.4"
+aurora_cluster_family                 = "aurora-postgresql15"
 

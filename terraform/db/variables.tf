@@ -67,7 +67,7 @@ variable "aurora_db_port" {
 
 variable "aurora_cluster_family" {
   type        = string
-  default     = "aurora-postgresql14"
+  default     = "aurora-postgresql15"
   description = "The family of the DB cluster parameter group"
 }
 
