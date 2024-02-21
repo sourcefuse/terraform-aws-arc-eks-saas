@@ -1,0 +1,119 @@
+---
+on:  # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      working_directory:
+        required: true
+        type: string
+        description: "This is the path to your terraform configuration"
+      environment:
+        required: true
+        type: string
+        description: "The environment / workspace resources will be created in"
+      assume_role_name:
+        required: true
+        type: string
+        description: "The role name to assume against the target environment account"
+      aws_region:
+        required: false
+        type: string
+        default: us-east-1
+        description: "The AWS Region where the resources will be created in"
+      publish_plan_artifact:
+        required: false
+        type: boolean
+        default: false
+        description: "This option will allow to publish successful plan artifact"
+      update_backend_config:
+        required: false
+        type: boolean
+        default: false
+        description: "This option will allow to update backend config"
+    outputs:
+      plan_id:
+        value: ${{ jobs.plan.outputs.plan_id }}
+        description: "The short commit sha for the plan id of the current run."
+
+env:
+  ## !!! required for the action-init-plan-apply.sh script !!!
+  DIRECTORY: ${{ inputs.working_directory }}
+  ENV: ${{ inputs.environment }}
+  ## END - !!! required for the action-init-plan-apply.sh script !!!
+
+jobs:
+  plan:
+    name: Plan - ${{ inputs.working_directory }}-${{ inputs.environment }}
+    runs-on: [self-hosted, linux, codebuild]
+    outputs:
+      plan_id: ${{ steps.workflow_vars.outputs.plan_id }}
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    ## uncomment if the repo has environments enabled
+    #    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Make Executable tfenv
+        run: chmod +x ./scripts/dependencies/install-tfenv.sh
+        continue-on-error: false
+
+      - name: Install tfenv
+        run: ./scripts/dependencies/install-tfenv.sh
+        continue-on-error: false
+
+      - name: Make Executable AWS CLI
+        run: chmod +x ./scripts/dependencies/install-aws-cli.sh
+        continue-on-error: false
+
+      - name: Install AWS CLI
+        run: ./scripts/dependencies/install-aws-cli.sh
+        continue-on-error: false
+
+      # Setup plan id for plan exports
+      - name: Set outputs
+        id: workflow_vars
+        run: |
+          echo "plan_id=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
+
+      # configure iam /initialize backend
+      - name: Configure credentials for ${{ inputs.environment }}
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: "arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ inputs.assume_role_name }}"
+          aws-region: ${{ inputs.aws_region }}
+          role-session-name: github-actions-ci
+      
+      - name: Update backend
+        if: ${{ inputs.update_backend_config }} == true
+        run: source scripts/update-backend-config.sh -u ${{ inputs.environment }} -d ${{ inputs.working_directory }}
+
+      - name: Initialize backend
+        run: |
+          source scripts/action-init-plan-apply.sh -i ${{ inputs.environment }} -d ${{ inputs.working_directory }}
+        continue-on-error: false
+
+      # running plan
+      - name: Plan against ${{ inputs.environment }}
+        id: environment_plan
+        run: |
+          source scripts/action-init-plan-apply.sh -p ${{ inputs.environment }} -d ${{ inputs.working_directory }}
+
+      # publish plan to artifacts
+      - name: Publish Terraform Plan
+        if: ${{ inputs.publish_plan_artifact }} == true  &&  ${{ steps.environment_plan.outcome}}  == success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ inputs.environment }}-${{inputs.working_directory}}-${{ steps.workflow_vars.outputs.plan_id }}.tfplan"
+          path: "terraform/${{ inputs.working_directory }}/${{ inputs.environment }}-${{ inputs.working_directory }}-${{ steps.workflow_vars.outputs.plan_id }}.tfplan"
+        continue-on-error: false
+
+      - name: Update plan output to pr
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-id: ${{ inputs.environment }}-${{ inputs.working_directory }}-tfplan
+          message-path: "terraform/${{ inputs.working_directory }}/${{ inputs.environment }}-plan-output.txt"
+      
+      
