@@ -15,15 +15,17 @@ output "aurora_reader_endpoint" {
   description = "A read-only endpoint for the Aurora cluster, automatically load-balanced across replicas"
 }
 
-output "aurora" {
-  value = [
-
-    data.aws_security_groups.aurora.ids
-  ]
+output "aurora_security_group" {
+  value = [data.aws_security_groups.aurora.ids]
   description = "Security groups that are allowed to access the RDS"
 }
 
-output "rds_instance_endpoint" {
-  value       = module.aurora.rds_instance_endpoint
-  description = "The DNS address to the RDS Instance."
+output "aurora_master_host" {
+  value       = module.aurora.aurora_master_host
+  description = "DB Master hostname"
+}
+
+output "aurora_replicas_host" {
+  value       = module.aurora.aurora_replicas_host
+  description = "Replicas hostname"
 }
