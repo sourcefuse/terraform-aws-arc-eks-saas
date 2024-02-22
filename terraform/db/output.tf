@@ -27,5 +27,5 @@ output "aurora_master_host" {
 
 output "aurora_replicas_host" {
   value       = module.aurora.aurora_replicas_host
-  description = "DB Master hostname"
+  description = "Replicas hostname"
 }
