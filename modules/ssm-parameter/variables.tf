@@ -39,12 +39,10 @@ variable "parameter_write_defaults" {
   type        = map(any)
   description = "Parameter write default settings"
   default = {
-    description     = null
-    type            = "SecureString"
-    tier            = "Standard"
-    overwrite       = "false"
-    allowed_pattern = null
-    data_type       = "text"
+    description = null
+    type        = "SecureString"
+    tier        = "Standard"
+    overwrite   = "false"
   }
 }
 
