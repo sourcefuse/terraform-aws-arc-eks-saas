@@ -60,30 +60,6 @@ module "bootstrap" {
   }))
 }
 
-################################################################################
-## Store terraform state bucket in parameter store
-################################################################################
-module "tf_state_bucket" {
-  source                    = "../../modules/ssm-parameter"
-  ssm_parameter_name        = "/${var.namespace}/${var.environment}/terraform-state-bucket"
-  ssm_parameter_description = "Terraform State Bucket Name"
-  ssm_parameter_type        = "String"
-  ssm_parameter_overwrite   = true
-  ssm_parameter_value       = module.bootstrap.bucket_name
-  tags                      = module.tags.tags
-  depends_on                = [module.bucket_suffix, module.bootstrap]
-}
-
-module "tf_state_table" {
-  source                    = "../../modules/ssm-parameter"
-  ssm_parameter_name        = "/${var.namespace}/${var.environment}/terraform-state-dynamodb-table"
-  ssm_parameter_description = "Terraform State Dynamodb Table"
-  ssm_parameter_type        = "String"
-  ssm_parameter_overwrite   = true
-  ssm_parameter_value       = module.bootstrap.dynamodb_name
-  tags                      = module.tags.tags
-  depends_on                = [module.bucket_suffix, module.bootstrap]
-}
 
 ################################################################################
 ## Artifact S3 Bucket Creation
@@ -184,14 +160,34 @@ resource "aws_s3_bucket_public_access_block" "public_access_block" {
   depends_on = [resource.aws_s3_bucket.artifact_bucket]
 }
 
-# store artifact bucket in parameter store 
-module "tf_state_table" {
-  source                    = "../../modules/ssm-parameter"
-  ssm_parameter_name        = "/${var.namespace}/${var.environment}/artifact-bucket"
-  ssm_parameter_description = "Codepipeline Artifact Bucket"
-  ssm_parameter_type        = "String"
-  ssm_parameter_overwrite   = true
-  ssm_parameter_value       = resource.aws_s3_bucket.artifact_bucket.bucket
-  tags                      = module.tags.tags
-  depends_on                = [aws_s3_bucket.artifact_bucket]
+#########################################################################################
+## Put Resource name in Parameter Store
+#########################################################################################
+module "bootstrap_ssm_parameters" {
+  source = "../../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/terraform-state-bucket"
+      value       = module.bootstrap.bucket_name
+      type        = "String"
+      overwrite   = "true"
+      description = "Terraform State Bucket Name"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/terraform-state-dynamodb-table"
+      value       = module.bootstrap.dynamodb_name
+      type        = "String"
+      overwrite   = "true"
+      description = "Terraform State Dynamodb Table"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/artifact-bucket"
+      value       = resource.aws_s3_bucket.artifact_bucket.bucket
+      type        = "String"
+      overwrite   = "true"
+      description = "Codepipeline Artifact Bucket"
+    }
+  ]
+  tags       = module.tags.tags
+  depends_on = [module.bootstrap, aws_s3_bucket.artifact_bucket, module.bucket_suffix]
 }
