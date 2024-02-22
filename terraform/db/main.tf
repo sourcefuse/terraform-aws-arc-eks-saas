@@ -2,11 +2,11 @@
 ## defaults
 ################################################################################
 terraform {
-  required_version = "~> 1.4"
+  required_version = "~> 1.3"
 
   required_providers {
     aws = {
-      version = "~> 5.0"
+      version = "~> 4.0"
       source  = "hashicorp/aws"
     }
   }
@@ -42,7 +42,7 @@ module "db_password" {
 
 module "aurora" {
   source  = "sourcefuse/arc-db/aws"
-  version = "2.0.5"
+  version = "2.0.3"
 
 
   environment = var.environment
