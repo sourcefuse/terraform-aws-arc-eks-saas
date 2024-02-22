@@ -16,10 +16,6 @@ resource "aws_codepipeline" "deployment_pipeline" {
   artifact_store {
     location = var.s3_bucket_name
     type     = "S3"
-    encryption_key {
-      id   = var.kms_key_arn
-      type = "KMS"
-    }
   }
 
   stage {
