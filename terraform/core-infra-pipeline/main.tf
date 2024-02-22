@@ -62,10 +62,11 @@ resource "aws_iam_role_policy_attachment" "admin_fullaccess" {
 ## Codepipeline
 ############################################################################################
 resource "aws_codepipeline" "deployment_pipeline" {
+
   depends_on = [aws_codebuild_project.initial_bootstrap,
     aws_codebuild_project.networking_module_build_step_codebuild_project,
     aws_codebuild_project.rds_module_build_step_codebuild_project,
-  aws_codebuild_project.elasticache_module_build_step_codebuild_project]
+    aws_codebuild_project.elasticache_module_build_step_codebuild_project]
 
   name     = "${var.namespace}-${var.environment}-terraform-pipeline"
   role_arn = aws_iam_role.codepipeline_role.arn
@@ -133,7 +134,7 @@ resource "aws_codepipeline" "deployment_pipeline" {
   }
 
   stage {
-    name = "Data Services"
+    name = "Data-Services"
 
     action {
       name            = "Database"

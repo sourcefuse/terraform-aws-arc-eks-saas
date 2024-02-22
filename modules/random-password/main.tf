@@ -1,13 +1,17 @@
+################################################################
+## defaults
+################################################################
 terraform {
-  required_providers {
-    required_version = "~> 1.4"
+  required_version = "~> 1.4"
 
+  required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
   }
 }
+
 
 resource "random_password" "password" {
   length           = var.length
