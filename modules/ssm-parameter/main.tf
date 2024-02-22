@@ -1,17 +1,6 @@
 ################################################################
-## defaults
+## SSM
 ################################################################
-terraform {
-  required_version = "~> 1.3"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.0"
-    }
-  }
-}
-
 
 resource "aws_ssm_parameter" "default" {
   for_each = local.ssm_parameters
