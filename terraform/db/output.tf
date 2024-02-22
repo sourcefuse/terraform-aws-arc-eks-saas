@@ -15,11 +15,8 @@ output "aurora_reader_endpoint" {
   description = "A read-only endpoint for the Aurora cluster, automatically load-balanced across replicas"
 }
 
-output "aurora" {
-  value = [
-
-    data.aws_security_groups.aurora.ids
-  ]
+output "aurora_security_group" {
+  value = data.aws_security_groups.aurora.ids
   description = "Security groups that are allowed to access the RDS"
 }
 
