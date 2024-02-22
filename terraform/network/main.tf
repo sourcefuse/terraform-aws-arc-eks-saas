@@ -82,3 +82,27 @@ module "network" {
   tags = module.tags.tags
 }
 
+#######################################################################
+## Security Group
+#######################################################################
+resource "aws_security_group" "allow_database_connection" {
+  name        = "${var.namespace}-${var.environment}-codebuild-db-access"
+  description = "Allow Database inbound traffic"
+  vpc_id      = module.network.vpc_id
+
+  # Allow inbound SSH from any IP
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_ipv4_primary_cidr_block]
+  }
+
+  # Allow all outbound traffic
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # -1 signifies all protocols
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
