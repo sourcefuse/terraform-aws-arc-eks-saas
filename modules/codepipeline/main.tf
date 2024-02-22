@@ -6,5 +6,9 @@ terraform {
       version = "5.4.0"
     }
   }
+}
 
+
+resource "aws_codepipeline" "deployment_pipeline" {
+  
 }
