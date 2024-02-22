@@ -23,7 +23,7 @@ resource "aws_ssm_parameter" "default" {
   value       = each.value.value
   overwrite   = each.value.overwrite
 
-  tags = module.this.tags
+  tags = var.tags
 }
 
 
