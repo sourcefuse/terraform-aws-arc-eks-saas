@@ -65,7 +65,7 @@ module "redis" {
   namespace                        = var.namespace
   environment                      = var.environment
   vpc_id                           = data.aws_vpc.vpc.id
-  associated_security_group_ids    = [module.ec_security_group.id]
+  associated_security_group_ids    = module.ec_security_group.id
   create_security_group            = false
   subnets                          = data.aws_subnets.private.ids
   maintenance_window               = var.maintenance_window
