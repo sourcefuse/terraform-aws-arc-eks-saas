@@ -1,8 +1,8 @@
 #############################################################################################
 ## Codebuild Role
 #############################################################################################
-resource "aws_iam_role" "rds_module_build_step_role" {
-  name = "terraform-rds-module-build-step-role-${var.namespace}-${var.environment}"
+resource "aws_iam_role" "elasticache_module_build_step_role" {
+  name = "terraform-elasticache-module-build-step-role-${var.namespace}-${var.environment}"
 
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
@@ -18,21 +18,21 @@ resource "aws_iam_role" "rds_module_build_step_role" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "rds_module_build_step_policy_attachment_admin" {
+resource "aws_iam_role_policy_attachment" "elasticache_module_build_step_policy_attachment_admin" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-  role       = aws_iam_role.rds_module_build_step_role.name
+  role       = aws_iam_role.elasticache_module_build_step_role.name
 }
 
 #############################################################################################
 ## Codebuild Project
 #############################################################################################
-resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
-  name           = "terraform-rds-module-build-step-code-build-${var.namespace}-${var.environment}"
+resource "aws_codebuild_project" "elasticache_module_build_step_codebuild_project" {
+  name           = "terraform-elasticache-module-build-step-code-build-${var.namespace}-${var.environment}"
   description    = "terraform iam module build step module code build project"
   build_timeout  = 480
   queued_timeout = 480
 
-  service_role = aws_iam_role.rds_module_build_step_role.arn
+  service_role = aws_iam_role.elasticache_module_build_step_role.arn
 
   artifacts {
     type = "CODEPIPELINE"
@@ -43,7 +43,6 @@ resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
     image                       = "aws/codebuild/standard:6.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
-
   }
 
   source {
@@ -52,6 +51,7 @@ resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
       version = "0.2"
 
       phases = {
+
         install = {
           commands = [
             "curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip",
@@ -64,15 +64,15 @@ resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
           commands = [
             "export PATH=$PWD/:$PATH",
             "apt-get update -y && apt-get install -y jq unzip",
-            "cd terraform/db",
+            "cd terraform/elasticache",
             "rm config.${var.environment}.hcl",
             "sed -i 's/aws_region/${var.region}/g' config.txt",
             "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.region})",
-            "tf_state_table=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-dynamodb-table\" --query \"Parameter.Value\" --output text --region ${var.region})",
             "envsubst < config.txt > config.${var.environment}.hcl",
 
           ]
         }
+
 
         build = {
           commands = [
@@ -84,8 +84,5 @@ resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
       }
     })
   }
-
-
   tags = module.tags.tags
 }
-
