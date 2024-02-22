@@ -78,12 +78,11 @@ resource "aws_codebuild_project" "networking_module_build_step_codebuild_project
             "terraform init --backend-config=config.${var.environment}.hcl",
             "terraform plan --var-file=${var.environment}.tfvars",
             "terraform apply --var-file=${var.environment}.tfvars -auto-approve",
-            # "export vpc_id=$(aws ec2 describe-vpcs --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-vpc\" --query \"Vpcs[].VpcId\" --output text)",
-            # "export subnet_ids_first=$(aws ec2 describe-subnets --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-private-subnet-private-${var.aws_region}a\" --query \"Subnets[].SubnetId\" --output text)",
-            # "export subnet_ids_second=$(aws ec2 describe-subnets --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-private-subnet-private-${var.aws_region}b\" --query \"Subnets[].SubnetId\" --output text)",
-            # "export sec_id=$(aws ec2 describe-security-groups --filters \"Name=group-name,Values=${var.namespace}-${var.environment}-codebuild-db-access\" --query \"SecurityGroups[*].{ID:GroupId}\" --output text)",
-            # "echo $sec_id",
-            # "aws codebuild update-project  --name \"terraform-rds-module-build-step-code-build-${var.namespace}\" --vpc-config \"vpcId=$vpc_id,subnets=[$subnet_ids_first,$subnet_ids_second],securityGroupIds=[$sec_id]\" --region \"${var.aws_region}\"",
+            "export vpc_id=$(aws ec2 describe-vpcs --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-vpc\" --query \"Vpcs[].VpcId\" --output text)",
+            "export subnet_ids_first=$(aws ec2 describe-subnets --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-private-subnet-private-${var.region}a\" --query \"Subnets[].SubnetId\" --output text)",
+            "export subnet_ids_second=$(aws ec2 describe-subnets --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-private-subnet-private-${var.region}b\" --query \"Subnets[].SubnetId\" --output text)",
+            "export sec_id=$(aws ec2 describe-security-groups --filters \"Name=group-name,Values=${var.namespace}-${var.environment}-codebuild-db-access\" --query \"SecurityGroups[*].{ID:GroupId}\" --output text)",
+            "aws codebuild update-project  --name \"terraform-rds-module-build-step-code-build-${var.namespace}-${var.environment}\" --vpc-config \"vpcId=$vpc_id,subnets=[$subnet_ids_first,$subnet_ids_second],securityGroupIds=[$sec_id]\" --region \"${var.region}\"",
           ]
         }
 
@@ -94,6 +93,7 @@ resource "aws_codebuild_project" "networking_module_build_step_codebuild_project
   }
 
   tags = module.tags.tags
+  depends_on = [aws_codebuild_project.rds_module_build_step_codebuild_project]
 }
 
 
