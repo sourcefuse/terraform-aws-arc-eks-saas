@@ -30,9 +30,9 @@ resource "aws_codepipeline" "deployment_pipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        RepositoryName = var.source_repo_name
-        BranchName     = var.source_repo_branch
-        ConnectionArn  = var.ConnectionArn
+        FullRepositoryId = var.source_repo_name
+        BranchName       = var.source_repo_branch
+        ConnectionArn    = var.ConnectionArn
       }
     }
   }
