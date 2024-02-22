@@ -36,7 +36,7 @@ variable "ssm_parameters" {
     type        = string
     value       = string
     overwrite   = bool
-    tags = map(strings)
+    tags = map(string)
   }))
   description = "configuration block for ssm parameter"
 }
