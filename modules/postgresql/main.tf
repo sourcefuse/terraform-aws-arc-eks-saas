@@ -6,10 +6,6 @@ terraform {
       version = "~> 1.21"
       source  = "cyrilgdn/postgresql"
     }
-    aws = {
-      version = "~> 5.0"
-      source  = "hashicorp/aws"
-    }
   }
 }
 

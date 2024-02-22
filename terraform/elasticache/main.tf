@@ -93,42 +93,44 @@ module "redis" {
 ## store redis endpoint in ssm parameter store
 ###########################################################################
 module "db_ssm_parameter" {
-  source     = "../../modules/ssm-parameter"
-  tags       = module.tags.tags
+  source = "../../modules/ssm-parameter"
+
   depends_on = [module.redis, module.redis_password]
   ssm_parameters = {
-    redis = {
-      "redis_host" = {
-        name        = "/${var.namespace}/${var.environment}/redis_host"
-        description = "Redis Host"
-        type        = "SecureString"
-        value       = module.redis.endpoint
-        overwrite   = true
-      },
+    "redis_host" = {
+      name        = "/${var.namespace}/${var.environment}/redis_host"
+      description = "Redis Host"
+      type        = "SecureString"
+      value       = module.redis.endpoint
+      overwrite   = true
+      tags        = module.tags.tags
+    },
 
-      "redis_port" = {
-        name        = "/${var.namespace}/${var.environment}/redis_port"
-        description = "Redis Port"
-        type        = "SecureString"
-        value       = var.redis_port
-        overwrite   = true
-      },
+    "redis_port" = {
+      name        = "/${var.namespace}/${var.environment}/redis_port"
+      description = "Redis Port"
+      type        = "SecureString"
+      value       = var.redis_port
+      overwrite   = true
+      tags        = module.tags.tags
+    },
 
-      "redis_database" = {
-        name        = "/${var.namespace}/${var.environment}/redis_database"
-        description = "Redis database"
-        type        = "SecureString"
-        value       = var.redis_database
-        overwrite   = true
-      },
+    "redis_database" = {
+      name        = "/${var.namespace}/${var.environment}/redis_database"
+      description = "Redis database"
+      type        = "SecureString"
+      value       = var.redis_database
+      overwrite   = true
+      tags        = module.tags.tags
+    },
 
-      "redis_password" = {
-        name        = "/${var.namespace}/${var.environment}/redis_password"
-        description = "Redis password"
-        type        = "SecureString"
-        value       = module.redis_password.result
-        overwrite   = true
-      }
+    "redis_password" = {
+      name        = "/${var.namespace}/${var.environment}/redis_password"
+      description = "Redis password"
+      type        = "SecureString"
+      value       = module.redis_password.result
+      overwrite   = true
+      tags        = module.tags.tags
     }
   }
 }

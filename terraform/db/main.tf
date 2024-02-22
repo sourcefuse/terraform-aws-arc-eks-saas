@@ -93,41 +93,42 @@ resource "aws_security_group_rule" "additional_inbound_rules" {
 ########################################################################
 module "db_ssm_parameter" {
   source     = "../../modules/ssm-parameter"
-  tags       = module.tags.tags
   depends_on = [module.aurora, module.db_password]
   ssm_parameters = {
-    db = {
-      "db_user" = {
-        name        = "/${var.namespace}/${var.environment}/db_user"
-        description = "Database user name"
-        type        = "SecureString"
-        value       = var.aurora_db_admin_username
-        overwrite   = true
-      },
+    "db_user" = {
+      name        = "/${var.namespace}/${var.environment}/db_user"
+      description = "Database user name"
+      type        = "SecureString"
+      value       = var.aurora_db_admin_username
+      overwrite   = true
+      tags        = module.tags.tags
+    },
 
-      "db_password" = {
-        name        = "/${var.namespace}/${var.environment}/db_password"
-        description = "Database Password"
-        type        = "SecureString"
-        value       = module.db_password.result
-        overwrite   = true
-      },
+    "db_password" = {
+      name        = "/${var.namespace}/${var.environment}/db_password"
+      description = "Database Password"
+      type        = "SecureString"
+      value       = module.db_password.result
+      overwrite   = true
+      tags        = module.tags.tags
+    },
 
-      "db_host" = {
-        name        = "/${var.namespace}/${var.environment}/db_host"
-        description = "Database Host"
-        type        = "SecureString"
-        value       = module.aurora.aurora_endpoint
-        overwrite   = true
-      },
+    "db_host" = {
+      name        = "/${var.namespace}/${var.environment}/db_host"
+      description = "Database Host"
+      type        = "SecureString"
+      value       = module.aurora.aurora_endpoint
+      overwrite   = true
+      tags        = module.tags.tags
+    },
 
-      "db_port" = {
-        name        = "/${var.namespace}/${var.environment}/db_port"
-        description = "Database Port"
-        type        = "SecureString"
-        value       = var.aurora_db_port
-        overwrite   = true
-      }
+    "db_port" = {
+      name        = "/${var.namespace}/${var.environment}/db_port"
+      description = "Database Port"
+      type        = "SecureString"
+      value       = var.aurora_db_port
+      overwrite   = true
+      tags        = module.tags.tags
     }
   }
 }

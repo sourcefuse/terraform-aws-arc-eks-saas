@@ -30,13 +30,13 @@
 # }
 
 variable "ssm_parameters" {
-  type = map(map(object({
+  type = map(object({
     name        = string
     description = string
     type        = string
     value       = string
     overwrite   = bool
-  })))
+  }))
   description = "configuration block for ssm parameter"
 }
 
