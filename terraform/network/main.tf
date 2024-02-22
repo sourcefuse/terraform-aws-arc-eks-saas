@@ -2,15 +2,6 @@
 ## defaults
 ################################################################
 terraform {
-  required_version = "~> 1.3"
-
-  required_providers {
-    aws = {
-      version = "~> 5.0"
-      source  = "hashicorp/aws"
-    }
-  }
-
   backend "s3" {}
 }
 
@@ -46,6 +37,7 @@ module "network" {
   client_vpn_authorization_rules = var.client_vpn_authorization_rules
   custom_subnets_enabled         = var.is_custom_subnet_enabled
   client_vpn_enabled             = var.client_vpn_enabled
+  vpc_endpoints_enabled          = var.vpc_endpoints_enabled
 
 
   vpc_endpoint_config = {
@@ -85,24 +77,29 @@ module "network" {
 #######################################################################
 ## Security Group
 #######################################################################
-resource "aws_security_group" "allow_database_connection" {
-  name        = "${var.namespace}-${var.environment}-codebuild-db-access"
-  description = "Allow Database inbound traffic"
-  vpc_id      = module.network.vpc_id
+module "allow_database_connection_security_group" {
+  source = "../../modules/security-group"
 
-  # Allow inbound SSH from any IP
-  ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = [var.vpc_ipv4_primary_cidr_block]
+  security_group_name        = "${var.namespace}-${var.environment}-codebuild-db-access"
+  security_group_description = "Allow Database inbound traffic"
+  vpc_id                     = module.network.vpc_id
+  ingress_rules = {
+    rule1 = {
+      description = "Rule to allow to access the data base"
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      cidr_blocks = [var.vpc_ipv4_primary_cidr_block]
+    }
   }
-
-  # Allow all outbound traffic
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1" # -1 signifies all protocols
-    cidr_blocks = ["0.0.0.0/0"]
+  egress_rules = {
+    rule1 = {
+      description = "outgoing traffic to anywhere"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1" # -1 signifies all protocols
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
+  tags = module.tags.tags
 }
