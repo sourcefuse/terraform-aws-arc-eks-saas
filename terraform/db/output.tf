@@ -16,7 +16,7 @@ output "aurora_reader_endpoint" {
 }
 
 output "aurora_security_group" {
-  value = [data.aws_security_groups.aurora.ids]
+  value       = [data.aws_security_groups.aurora.ids]
   description = "Security groups that are allowed to access the RDS"
 }
 

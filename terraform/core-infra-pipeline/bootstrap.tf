@@ -1,6 +1,6 @@
-################################################################################
-## Codebuild
-################################################################################
+########################################################################################
+## Codebuild Project
+########################################################################################
 resource "aws_codebuild_project" "initial_bootstrap" {
   name           = "initial-bootstrap-${var.namespace}-${var.environment}"
   description    = " Initial bootstrap"
@@ -46,6 +46,9 @@ resource "aws_codebuild_project" "initial_bootstrap" {
   tags = module.tags.tags
 }
 
+#############################################################################################
+## Codebuild Role
+#############################################################################################
 
 resource "aws_iam_role" "bootstrap_role" {
   name = "initial-bootstrap-role-${var.namespace}-${var.environment}"

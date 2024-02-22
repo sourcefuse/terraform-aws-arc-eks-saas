@@ -1,3 +1,6 @@
+#############################################################################################
+## Codebuild Role
+#############################################################################################
 resource "aws_iam_role" "networking_module_build_step_role" {
   name = "terraform-networking-module-build-step-role-${var.namespace}-${var.environment}"
 
@@ -23,7 +26,9 @@ resource "aws_iam_role_policy_attachment" "networking_module_build_step_policy_a
 }
 
 
-
+#############################################################################################
+## Codebuild Project
+#############################################################################################
 resource "aws_codebuild_project" "networking_module_build_step_codebuild_project" {
   name           = "terraform-networking-module-build-step-code-build-${var.namespace}-${var.environment}"
   description    = "terraform netwrking build step module code build project"
@@ -58,7 +63,6 @@ resource "aws_codebuild_project" "networking_module_build_step_codebuild_project
             "curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip",
             "unzip /usr/local/bin/terraform.zip -d /usr/local/bin/",
             "terraform --version",
-
           ]
         }
         pre_build = {
@@ -92,7 +96,7 @@ resource "aws_codebuild_project" "networking_module_build_step_codebuild_project
 
   }
 
-  tags = module.tags.tags
+  tags       = module.tags.tags
   depends_on = [aws_codebuild_project.rds_module_build_step_codebuild_project]
 }
 
