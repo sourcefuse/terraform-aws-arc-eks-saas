@@ -18,3 +18,12 @@ repos:
         args:
           - --markdown-linebreak-ext=md
       - id: end-of-file-fixer
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.77.1
+    hooks:
+      - id: terraform_validate
+      - id: terraform_tflint
+      - id: terraform_fmt
+        args:
+          - --args=-recursive
+      - id: terraform_docs

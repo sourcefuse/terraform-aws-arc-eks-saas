@@ -2,7 +2,7 @@
 ## defaults
 ################################################################################
 terraform {
-  required_version = "~> 1.3"
+  required_version = "~> 1.4"
 
   required_providers {
     aws = {
@@ -33,15 +33,16 @@ module "tags" {
 ################################################################################
 ## db
 ################################################################################
-resource "random_password" "db_password" {
+module "db_password" {
+  source           = "../../modules/random-password"
   length           = 16
-  special          = true
+  is_special       = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
 module "aurora" {
   source  = "sourcefuse/arc-db/aws"
-  version = "2.0.5"
+  version = "2.0.3"
 
 
   environment = var.environment
@@ -53,7 +54,7 @@ module "aurora" {
   aurora_cluster_name                       = "${var.namespace}-${var.environment}-aurora"
   enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-enhanced-monitoring"
   aurora_db_admin_username                  = var.aurora_db_admin_username
-  aurora_db_admin_password                  = random_password.db_password.result
+  aurora_db_admin_password                  = module.db_password.result
   aurora_db_name                            = var.aurora_db_name
   aurora_db_port                            = var.aurora_db_port
   aurora_cluster_family                     = var.aurora_cluster_family
@@ -99,44 +100,43 @@ resource "aws_security_group_rule" "additional_inbound_rules" {
 ########################################################################
 ## Store DB Configs in Parameter Store
 ########################################################################
-resource "aws_ssm_parameter" "user" {
-  name        = "/${var.namespace}/${var.environment}/db_user"
-  description = "Database user name"
-  type        = "SecureString"
-  overwrite   = true
-  value       = var.aurora_db_admin_username
-  tags        = module.tags.tags
+module "db_ssm_parameters" {
+  source = "../../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/db_user"
+      value       = var.aurora_db_admin_username
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database User Name"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/db_password"
+      value       = module.db_password.result
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database Password"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/db_host"
+      value       = module.aurora.aurora_endpoint
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database Host"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/db_port"
+      value       = var.aurora_db_port
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database Port"
+    }
+  ]
+  tags       = module.tags.tags
+  depends_on = [module.aurora, module.db_password]
 }
 
-resource "aws_ssm_parameter" "password" {
-  name        = "/${var.namespace}/${var.environment}/db_password"
-  description = "Database password"
-  type        = "SecureString"
-  overwrite   = true
-  value       = random_password.db_password.result
-  depends_on  = [random_password.db_password]
-  tags        = module.tags.tags
-}
 
-resource "aws_ssm_parameter" "host" {
-  name        = "/${var.namespace}/${var.environment}/db_host"
-  description = "Database host"
-  type        = "SecureString"
-  overwrite   = true
-  value       = module.aurora.aurora_endpoint
-  depends_on  = [module.aurora]
-  tags        = module.tags.tags
-}
-
-resource "aws_ssm_parameter" "port" {
-  name        = "/${var.namespace}/${var.environment}/db_port"
-  description = "Database port"
-  type        = "SecureString"
-  overwrite   = true
-  value       = var.aurora_db_port
-  depends_on  = [module.aurora]
-  tags        = module.tags.tags
-}
 
 # ############################################################################
 # ## Postgres provder to create DB & store in parameter store

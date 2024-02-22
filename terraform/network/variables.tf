@@ -99,7 +99,7 @@ variable "client_vpn_authorization_rules" {
 variable "vpc_endpoints_enabled" {
   type        = bool
   description = "Enable VPC endpoints."
-  default     = true
+  default     = false
 }
 
 variable "vpc_endpoint_type" {
