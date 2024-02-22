@@ -51,7 +51,7 @@ data "aws_security_groups" "aurora" {
   depends_on = [module.aurora]
   filter {
     name   = "tag:Name"
-    values = ["aurora"]
+    values = ["${var.namespace}-${var.environment}-aurora"]
   }
 
   filter {

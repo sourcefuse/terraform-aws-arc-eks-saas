@@ -16,11 +16,16 @@ output "aurora_reader_endpoint" {
 }
 
 output "aurora_security_group" {
-  value = data.aws_security_groups.aurora.ids
+  value = [data.aws_security_groups.aurora.ids]
   description = "Security groups that are allowed to access the RDS"
 }
 
 output "rds_instance_endpoint" {
   value       = module.aurora.rds_instance_endpoint
   description = "The DNS address to the RDS Instance."
+}
+
+output "aurora_master_host" {
+  value       = module.aurora.aurora_master_host
+  description = "DB Master hostname"
 }
