@@ -27,21 +27,26 @@ module "tags" {
 module "ec_security_group" {
   source = "../../modules/security-group"
 
-  security_group_name        = "${var.namespace}-${var.emvironment}-redis-security-group"
+  security_group_name        = "${var.namespace}-${var.environment}-redis-security-group"
   security_group_description = "Elasticache Redis Security Group"
   vpc_id                     = data.aws_vpc.vpc.id
   ingress_rules = {
-    description = "Rule to allow Redis users to access the Redis cluster"
-    from_port   = 6379
-    to_port     = 6379
-    protocol    = "tcp"
-    cidr_blocks = [data.aws_vpc.vpc.cidr_block]
+    rule1 = {
+      description = "Rule to allow Redis users to access the Redis cluster"
+      from_port   = 6379
+      to_port     = 6379
+      protocol    = "tcp"
+      cidr_blocks = [data.aws_vpc.vpc.cidr_block]
+    }
   }
   egress_rules = {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1" # -1 signifies all protocols
-    cidr_blocks = ["0.0.0.0/0"]
+    rule1 = {
+      description = "outgoing traffic to anywhere"
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1" # -1 signifies all protocols
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
   tags = merge(module.tags.tags, tomap({ Attribute = "redis" }))
 }
