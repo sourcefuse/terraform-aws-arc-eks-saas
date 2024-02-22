@@ -35,7 +35,7 @@ variable "tags" {
   description = "Tags to assign the security groups."
 }
 
-variable "parameter_write_defaults" {
+variable "parameter_defaults" {
   type        = map(any)
   description = "Parameter write default settings"
   default = {
