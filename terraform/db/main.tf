@@ -100,50 +100,43 @@ resource "aws_security_group_rule" "additional_inbound_rules" {
 ########################################################################
 ## Store DB Configs in Parameter Store
 ########################################################################
-
-module "ssm_db_user" {
-  source                    = "../../modules/ssm-parameter"
-  ssm_parameter_name        = "/${var.namespace}/${var.environment}/db_user"
-  ssm_parameter_description = "Database user name"
-  ssm_parameter_type        = "SecureString"
-  ssm_parameter_overwrite   = true
-  ssm_parameter_value       = var.aurora_db_admin_username
-  tags                      = module.tags.tags
-  depends_on                = [module.aurora]
+module "db_ssm_parameters" {
+  source = "../../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/db_user"
+      value       = var.aurora_db_admin_username
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database User Name"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/db_password"
+      value       = module.db_password.result
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database Password"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/db_host"
+      value       = module.aurora.aurora_endpoint
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database Host"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/db_port"
+      value       = var.aurora_db_port
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database Port"
+    }
+  ]
+  tags       = module.tags.tags
+  depends_on = [module.aurora, module.db_password]
 }
 
-module "ssm_db_password" {
-  source                    = "../../modules/ssm-parameter"
-  ssm_parameter_name        = "/${var.namespace}/${var.environment}/db_password"
-  ssm_parameter_description = "Database password"
-  ssm_parameter_type        = "SecureString"
-  ssm_parameter_overwrite   = true
-  ssm_parameter_value       = module.db_password.result
-  tags                      = module.tags.tags
-  depends_on                = [module.aurora, module.db_password]
-}
 
-module "ssm_db_host" {
-  source                    = "../../modules/ssm-parameter"
-  ssm_parameter_name        = "/${var.namespace}/${var.environment}/db_host"
-  ssm_parameter_description = "Database Host"
-  ssm_parameter_type        = "SecureString"
-  ssm_parameter_overwrite   = true
-  ssm_parameter_value       = module.aurora.aurora_endpoint
-  tags                      = module.tags.tags
-  depends_on                = [module.aurora]
-}
-
-module "ssm_db_port" {
-  source                    = "../../modules/ssm-parameter"
-  ssm_parameter_name        = "/${var.namespace}/${var.environment}/db_port"
-  ssm_parameter_description = "Database Port"
-  ssm_parameter_type        = "SecureString"
-  ssm_parameter_overwrite   = true
-  ssm_parameter_value       = var.aurora_db_port
-  tags                      = module.tags.tags
-  depends_on                = [module.aurora]
-}
 
 # ############################################################################
 # ## Postgres provder to create DB & store in parameter store

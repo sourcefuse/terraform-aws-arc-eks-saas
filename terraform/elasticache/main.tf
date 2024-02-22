@@ -136,46 +136,4 @@ module "redis_ssm_parameters" {
   tags       = module.tags.tags
   depends_on = [module.redis, module.redis_password]
 }
-# module "ssm_redis_host" {
-#   source                    = "../../modules/ssm-parameter"
-#   ssm_parameter_name        = "/${var.namespace}/${var.environment}/redis_host"
-#   ssm_parameter_description = "Redis host"
-#   ssm_parameter_type        = "SecureString"
-#   ssm_parameter_overwrite   = true
-#   ssm_parameter_value       = module.redis.endpoint
-#   tags                      = module.tags.tags
-#   depends_on                = [module.redis]
-# }
 
-# module "ssm_redis_port" {
-#   source                    = "../../modules/ssm-parameter"
-#   ssm_parameter_name        = "/${var.namespace}/${var.environment}/redis_port"
-#   ssm_parameter_description = "Redis Port"
-#   ssm_parameter_type        = "SecureString"
-#   ssm_parameter_overwrite   = true
-#   ssm_parameter_value       = var.redis_port
-#   tags                      = module.tags.tags
-#   depends_on                = [module.redis]
-# }
-
-# module "ssm_redis_password" {
-#   source                    = "../../modules/ssm-parameter"
-#   ssm_parameter_name        = "/${var.namespace}/${var.environment}/redis-password"
-#   ssm_parameter_description = "Redis Password"
-#   ssm_parameter_type        = "SecureString"
-#   ssm_parameter_overwrite   = true
-#   ssm_parameter_value       = module.redis_password.result
-#   tags                      = module.tags.tags
-#   depends_on                = [module.redis]
-# }
-
-# module "ssm_redis_database" {
-#   source                    = "../../modules/ssm-parameter"
-#   ssm_parameter_name        = "/${var.namespace}/${var.environment}/redis-database"
-#   ssm_parameter_description = "Redis Database"
-#   ssm_parameter_type        = "SecureString"
-#   ssm_parameter_overwrite   = true
-#   ssm_parameter_value       = var.redis_database
-#   tags                      = module.tags.tags
-#   depends_on                = [module.redis]
-# }
