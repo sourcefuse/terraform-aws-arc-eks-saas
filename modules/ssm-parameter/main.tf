@@ -7,7 +7,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = ">= 5.0"
     }
   }
 }
@@ -21,7 +21,7 @@ resource "aws_ssm_parameter" "this" {
       overwrite   = ssm.value.overwrite
       value       = ssm.value.value
       description = ssm.value.value
-      tags        = var.tags
+      tags = ssm.value.tags
     }
   }
   #   for_each = { for index, ssm_parameter in var.ssm_parameters :

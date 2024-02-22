@@ -36,11 +36,12 @@ variable "ssm_parameters" {
     type        = string
     value       = string
     overwrite   = bool
+    tags = map(strings)
   }))
   description = "configuration block for ssm parameter"
 }
 
-variable "tags" {
-  type        = map(string)
-  description = "Tags to assign the security groups."
-}
+# variable "tags" {
+#   type        = map(string)
+#   description = "Tags to assign the security groups."
+# }
