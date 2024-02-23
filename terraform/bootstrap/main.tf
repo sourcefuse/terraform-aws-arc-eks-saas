@@ -8,12 +8,12 @@ data "aws_caller_identity" "current" {}
 ## defaults
 ################################################################################
 terraform {
-  required_version = "~> 1.4"
+  required_version = "~> 1.0"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 4.0"
+      version = "3.76.0"
     }
   }
 
