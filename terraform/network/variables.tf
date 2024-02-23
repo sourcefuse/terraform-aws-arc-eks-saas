@@ -111,59 +111,59 @@ variable "vpc_endpoint_type" {
 variable "enable_s3_endpoint" {
   type        = bool
   description = "Enable S3 endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_kms_endpoint" {
   type        = bool
   description = "Enable KMS endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_cloudwatch_endpoint" {
   type        = bool
   description = "Enable CloudWatch endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_elb_endpoint" {
   type        = bool
   description = "Enable ELB endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_dynamodb_endpoint" {
   type        = bool
   description = "Enable DynamoDB endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_ec2_endpoint" {
   type        = bool
   description = "Enable EC2 endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_sns_endpoint" {
   type        = bool
   description = "Enable SNS endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_ecs_endpoint" {
   type        = bool
   description = "Enable ECS endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_sqs_endpoint" {
   type        = bool
   description = "Enable SQS endpoints"
-  default     = true
+  default     = false
 }
 
 variable "enable_rds_endpoint" {
   type        = bool
   description = "Enable RDS endpoints"
-  default     = true
+  default     = false
 }
