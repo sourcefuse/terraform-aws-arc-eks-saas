@@ -11,15 +11,24 @@ terraform {
 }
 
 provider "postgresql" {
-  host            = var.host
-  port            = var.port
-  database        = var.database
-  superuser       = var.superuser
-  username        = var.username
-  password        = var.password
-  sslmode         = var.sslmode
-  connect_timeout = var.connect_timeout
+  host     = var.postgresql_provider_config.host
+  port     = var.postgresql_provider_config.port
+  username = var.postgresql_provider_config.username
+  password = var.postgresql_provider_config.password
+  sslmode  = var.postgresql_provider_config.sslmode
+  superuser = var.postgresql_provider_config.superuser
 }
+
+# provider "postgresql" {
+#   host            = var.host
+#   port            = var.port
+#   database        = var.database
+#   superuser       = var.superuser
+#   username        = var.username
+#   password        = var.password
+#   sslmode         = var.sslmode
+#   connect_timeout = var.connect_timeout
+# }
 
 resource "postgresql_database" "pg_db" {
   for_each = var.postgresql_database
