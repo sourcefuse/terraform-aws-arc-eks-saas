@@ -61,10 +61,47 @@ resource "postgresql_schema" "pg_schema" {
   }
 }
 
+# locals {
+#   postgresql_users = { for e in var.postgresql_users : e.name => merge(var.postgresql_default_users, e) }
+# }
+
+# resource "random_password" "password" {
+#   for_each = local.og_random_passwords
+#   length   = each.value.length
+#   special  = each.value.special
+# }
+
 # resource "postgresql_role" "pg_role" {
-#   for_each = { for index, role in local.og_roles :
-#   role.postgres_role_name => role }
-#   name     = each.value.postgres_role_name
+#   for_each = local.postgresql_users
+#   name = each.key 
+
 #   login    = each.value.login
 #   password = each.value.password
+
 # }
+
+resource "random_password" "pg_user_passwords" {
+  count         = length(var.pg_users)
+  length        = 16
+  special       = true
+  special_lower = "-_?$*"
+}
+
+locals {
+  pg_user_roles = {
+    for user in var.pg_users : user.name => {
+      name     = user.name
+      login    = user.login
+      password = user.login ? random_password.pg_user_passwords[user.name].result : null
+    }
+  }
+}
+
+resource "postgres_role" "pg_users" {
+  for_each = local.pg_user_roles
+
+  name     = each.value.name
+  login    = each.value.login
+  password = each.value.password
+}
+
