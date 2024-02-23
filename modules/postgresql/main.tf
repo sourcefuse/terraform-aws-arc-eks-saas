@@ -65,10 +65,6 @@ resource "postgresql_schema" "pg_schema" {
 
 resource "null_resource" "trigger_password_generation" {
   count = local.generate_passwords ? 1 : 0
-  
-  triggers = {
-    password = random_password.pg_user_passwords[count.index].result
-  }
 
   provisioner "local-exec" {
     command = "echo Passwords will be generated."
