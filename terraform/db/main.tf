@@ -142,6 +142,7 @@ module "db_ssm_parameters" {
 # ## Postgres provder to create DB & store in parameter store
 ##############################################################################
 module "postgresql_provider" {
+  source = "../../modules/postgresql"
   host      = module.rds.aurora_endpoint
   port      = var.aurora_db_port
   database  = var.aurora_db_name
