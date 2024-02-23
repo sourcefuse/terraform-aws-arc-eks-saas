@@ -82,10 +82,10 @@ resource "postgresql_schema" "pg_schema" {
 # }
 
 resource "random_password" "pg_user_passwords" {
-  count         = length(var.pg_users)
-  length        = 16
-  special       = true
-  special_lower = "-_?$*"
+  count            = length(var.pg_users)
+  length           = 16
+  special          = true
+  override_special = "-_?$*"
 }
 
 locals {
