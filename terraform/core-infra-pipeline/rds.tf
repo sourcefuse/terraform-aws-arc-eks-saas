@@ -1,7 +1,7 @@
 #############################################################################################
 ## Codebuild Role
 #############################################################################################
-module "rds_role" {
+module "rds_module_build_step_role" {
   source           = "../../modules/iam-role"
   role_name        = "terraform-rds-module-build-step-role-${var.namespace}-${var.environment}"
   role_description = "terraform-rds-module-build-step-role"
@@ -47,7 +47,7 @@ module "rds_module_build_step_codebuild_project" {
   description                       = "terraform iam module build step module code build project"
   build_timeout                     = 480
   queued_timeout                    = 480
-  service_role                      = aws_iam_role.rds_module_build_step_role.arn
+  service_role                      = module.rds_module_build_step_role.arn
   artifact_type                     = "CODEPIPELINE"
   build_compute_type                = "BUILD_GENERAL1_SMALL"
   build_image                       = "aws/codebuild/standard:6.0"
