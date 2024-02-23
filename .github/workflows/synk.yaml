@@ -13,9 +13,7 @@ concurrency:
 
 jobs:
   security:
-    runs-on:
-      - self-hosted
-      - arc
+    runs-on: [self-hosted, linux, codebuild]
     name: snyk
     steps:
       - name: checkout
