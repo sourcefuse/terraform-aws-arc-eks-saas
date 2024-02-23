@@ -199,7 +199,7 @@ module "db_ssm_parameters" {
 ##############################################################################
 module "postgresql_provider" {
   source    = "../../modules/postgresql"
-  count = 0
+ count = var.enable_postgresql_provider ? 1 : 0
   # host      = module.aurora.aurora_endpoint
   # port      = var.aurora_db_port
   # database  = var.aurora_db_name
