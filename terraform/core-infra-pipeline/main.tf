@@ -83,7 +83,7 @@ module "deployment_pipeline" {
   depends_on = [module.initial_bootstrap,
     module.networking_module_build_step_codebuild_project,
     module.rds_module_build_step_codebuild_project,
- module.elasticache_module_build_step_codebuild_project]
+  module.elasticache_module_build_step_codebuild_project]
 }
 # resource "aws_codepipeline" "deployment_pipeline" {
 

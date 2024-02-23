@@ -62,18 +62,18 @@ resource "aws_codebuild_project" "codebuild_project" {
       }
     }
   }
-    logs_config {
-      cloudwatch_logs {
-        status      = var.cloudwatch_log_status
-        group_name  = var.cloudwatch_log_group_name
-        stream_name = var.cloudwatch_log_stream_name
-      }
-
-      s3_logs {
-        status   = var.s3_log_status
-        location = var.s3_log_location
-      }
+  logs_config {
+    cloudwatch_logs {
+      status      = var.cloudwatch_log_status
+      group_name  = var.cloudwatch_log_group_name
+      stream_name = var.cloudwatch_log_stream_name
     }
 
-    tags = var.tags
+    s3_logs {
+      status   = var.s3_log_status
+      location = var.s3_log_location
+    }
+  }
+
+  tags = var.tags
 }
