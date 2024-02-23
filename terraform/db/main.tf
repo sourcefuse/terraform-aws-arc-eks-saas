@@ -187,7 +187,7 @@ module "postgresql_provider" {
 
   }
 
-  postgresql_users = [
+  pg_users = [
     {
       name  = "test"
       login = true
