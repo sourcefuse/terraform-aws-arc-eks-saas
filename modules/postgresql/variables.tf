@@ -43,12 +43,12 @@ variable "sslmode" {
 variable "connect_timeout" {
   type        = number
   description = "connection timeout of the database"
-  default = 15
+  default     = 15
 }
 
 variable "postgresql_database" {
   type = map(object({
-    db_name           = string
+    db_name = string
     //db_owner          = string
     template          = optional(string, null)
     lc_collate        = optional(string, null)
@@ -56,6 +56,7 @@ variable "postgresql_database" {
     allow_connections = optional(string, null)
   }))
   description = "configuration block for postgresql database"
+  default     = {}
 }
 
 variable "postgresql_default_privileges" {
@@ -68,6 +69,7 @@ variable "postgresql_default_privileges" {
     privileges  = list(string)
   }))
   description = "configuration block for postgresql default privileges"
+  default     = {}
 }
 
 variable "postgresql_schema" {
@@ -84,4 +86,5 @@ variable "postgresql_schema" {
     })), [])
   }))
   description = "configuration block for postgresql schema"
+  default     = {}
 }

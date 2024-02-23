@@ -21,8 +21,8 @@ provider "postgresql" {
 }
 
 resource "postgresql_database" "pg_db" {
-  for_each          = var.postgresql_database
-  name              = each.value.db_name
+  for_each = var.postgresql_database
+  name     = each.value.db_name
   //owner             = each.value.db_owner
   template          = each.value.template
   lc_collate        = each.value.lc_collate

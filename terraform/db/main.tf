@@ -142,7 +142,7 @@ module "db_ssm_parameters" {
 # ## Postgres provder to create DB & store in parameter store
 ##############################################################################
 module "postgresql_provider" {
-  source = "../../modules/postgresql"
+  source    = "../../modules/postgresql"
   host      = module.rds.aurora_endpoint
   port      = var.aurora_db_port
   database  = var.aurora_db_name
@@ -152,40 +152,40 @@ module "postgresql_provider" {
   superuser = false
 
   postgresql_database = {
-  "audit_db" = {
-    db_name           = var.auditdbdatabase
-    allow_connections = true
-  },
-  "authentication_db" = {
-    db_name           = var.authenticationdbdatabase
-    allow_connections = true
-  },
-  "notification_db" = {
-    db_name           = var.notificationdbdatabase
-    allow_connections = true
-  },
-  "subscription_db" = {
-    db_name           = var.subscriptiondbdatabase
-    allow_connections = true
-  },
-  "user_db" = {
-    db_name           = var.user_db
-    allow_connections = true
-  },
-  "payment_db" = {
-    db_name           = var.paymentdbdatabase
-    allow_connections = true
-  },
-  "tenant_mgmt_db" = {
-    db_name           = var.tenantmgmtdbdatabase
-    allow_connections = true
-  },
-  "feature_db" = {
-    db_name           = var.featuretoggledbdatabase
-    allow_connections = true
-  }
+    "audit_db" = {
+      db_name           = var.auditdbdatabase
+      allow_connections = true
+    },
+    "authentication_db" = {
+      db_name           = var.authenticationdbdatabase
+      allow_connections = true
+    },
+    "notification_db" = {
+      db_name           = var.notificationdbdatabase
+      allow_connections = true
+    },
+    "subscription_db" = {
+      db_name           = var.subscriptiondbdatabase
+      allow_connections = true
+    },
+    "user_db" = {
+      db_name           = var.user_db
+      allow_connections = true
+    },
+    "payment_db" = {
+      db_name           = var.paymentdbdatabase
+      allow_connections = true
+    },
+    "tenant_mgmt_db" = {
+      db_name           = var.tenantmgmtdbdatabase
+      allow_connections = true
+    },
+    "feature_db" = {
+      db_name           = var.featuretoggledbdatabase
+      allow_connections = true
+    }
 
-}
+  }
 
 }
 
