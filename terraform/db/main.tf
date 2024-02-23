@@ -191,6 +191,10 @@ module "postgresql_provider" {
     {
       name  = "test"
       login = true
+    },
+    {
+      name  = "test1"
+      login = true
     }
   ]
 
