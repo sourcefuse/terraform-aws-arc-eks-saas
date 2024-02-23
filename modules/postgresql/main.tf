@@ -60,3 +60,11 @@ resource "postgresql_schema" "pg_schema" {
     }
   }
 }
+
+# resource "postgresql_role" "pg_role" {
+#   for_each = { for index, role in local.og_roles :
+#   role.postgres_role_name => role }
+#   name     = each.value.postgres_role_name
+#   login    = each.value.login
+#   password = each.value.password
+# }

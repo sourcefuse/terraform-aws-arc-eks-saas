@@ -143,10 +143,10 @@ module "db_ssm_parameters" {
 ##############################################################################
 module "postgresql_provider" {
   source    = "../../modules/postgresql"
-  host      = module.rds.aurora_endpoint
+  host      = module.aurora.aurora_endpoint
   port      = var.aurora_db_port
   database  = var.aurora_db_name
-  username  = var.aurora_db_user
+  username  = var.aurora_db_admin_username
   password  = module.db_password.result
   sslmode   = "require"
   superuser = false
@@ -169,7 +169,7 @@ module "postgresql_provider" {
       allow_connections = true
     },
     "user_db" = {
-      db_name           = var.user_db
+      db_name           = var.userdbdatabase
       allow_connections = true
     },
     "payment_db" = {
@@ -189,3 +189,6 @@ module "postgresql_provider" {
 
 }
 
+################################################################################
+## Create Postgres DB User
+################################################################################
