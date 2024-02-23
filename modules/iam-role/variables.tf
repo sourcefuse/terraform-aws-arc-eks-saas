@@ -68,3 +68,7 @@ variable "path" {
   default     = "/"
 }
 
+variable "tags" {
+  type        = map(string)
+  description = "Tags to assign the security groups."
+}

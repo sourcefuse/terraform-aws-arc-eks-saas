@@ -42,22 +42,12 @@ module "initial_bootstrap" {
 #############################################################################################
 ## Codebuild Role
 #############################################################################################
-data "aws_iam_policy_document" "resource_full_access" {
-
-  statement {
-    sid       = "FullAccess"
-    effect    = "Allow"
-    actions   = ["*"]
-    resources = ["*"]
-  }
-}
-
 module "bootstrap_role" {
   source           = "../../modules/iam-role"
   role_name        = "initial-bootstrap-role-${var.namespace}-${var.environment}"
   role_description = "initial-bootstrap-role"
   principals = {
-    "AWS" : ["*"]
+    "Service" : "codebuild.amazonaws.com"
   }
   policy_documents = [
     join("", data.aws_iam_policy_document.resource_full_access.*.json)

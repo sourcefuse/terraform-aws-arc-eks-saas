@@ -2,7 +2,7 @@
 ## IAM Role
 ################################################################################
 data "aws_iam_policy_document" "assume_role" {
-  count = length(keys(var.principals))
+  count = length(keys(var.principals)) > 0 ? length(keys(var.principals)) : 0
   statement {
     effect  = "Allow"
     actions = var.assume_role_actions
@@ -35,13 +35,7 @@ resource "aws_iam_role" "default" {
   max_session_duration = var.max_session_duration
   permissions_boundary = var.permissions_boundary
   path                 = var.path
-
-  #   inline_policy {
-  #     name = var.inline_policy_name
-
-  #     policy = var.inline_policy
-  #   }
-  tags = var.tags
+  tags                 = var.tags
 }
 
 data "aws_iam_policy_document" "default" {
@@ -59,9 +53,4 @@ resource "aws_iam_policy" "default" {
 resource "aws_iam_role_policy_attachment" "default" {
   role       = join("", aws_iam_role.default.*.name)
   policy_arn = join("", aws_iam_policy.default.*.arn)
-}
-
-variable "tags" {
-  type        = map(string)
-  description = "Tags to assign the security groups."
 }

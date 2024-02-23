@@ -1,27 +1,42 @@
 #############################################################################################
 ## Codebuild Role
 #############################################################################################
-resource "aws_iam_role" "elasticache_module_build_step_role" {
-  name = "terraform-elasticache-module-build-step-role-${var.namespace}-${var.environment}"
-
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "codebuild.amazonaws.com"
-        },
-        "Action" : "sts:AssumeRole"
-      }
-    ]
-  })
+module "elasticache_role" {
+  source           = "../../modules/iam-role"
+  role_name        = "terraform-elasticache-module-build-step-role-${var.namespace}-${var.environment}"
+  role_description = "terraform-elasticache-module-build-step-role"
+  principals = {
+    "Service" : "codebuild.amazonaws.com"
+  }
+  policy_documents = [
+    join("", data.aws_iam_policy_document.resource_full_access.*.json)
+  ]
+  policy_name        = "terraform-elasticache-module-build-step-policy-${var.namespace}-${var.environment}"
+  policy_description = "terraform-elasticache-module-build-step-policy"
+  tags               = module.tags.tags
 }
 
-resource "aws_iam_role_policy_attachment" "elasticache_module_build_step_policy_attachment_admin" {
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-  role       = aws_iam_role.elasticache_module_build_step_role.name
-}
+# resource "aws_iam_role" "elasticache_module_build_step_role" {
+#   name = "terraform-elasticache-module-build-step-role-${var.namespace}-${var.environment}"
+
+#   assume_role_policy = jsonencode({
+#     "Version" : "2012-10-17",
+#     "Statement" : [
+#       {
+#         "Effect" : "Allow",
+#         "Principal" : {
+#           "Service" : "codebuild.amazonaws.com"
+#         },
+#         "Action" : "sts:AssumeRole"
+#       }
+#     ]
+#   })
+# }
+
+# resource "aws_iam_role_policy_attachment" "elasticache_module_build_step_policy_attachment_admin" {
+#   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+#   role       = aws_iam_role.elasticache_module_build_step_role.name
+# }
 
 #############################################################################################
 ## Codebuild Project

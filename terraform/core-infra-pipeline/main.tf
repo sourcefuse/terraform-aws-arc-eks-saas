@@ -33,30 +33,44 @@ module "tags" {
 #######################################################################################
 ## CodePipeline Role
 #######################################################################################
-resource "aws_iam_role" "codepipeline_role" {
-  name = "TerraformCodePipelineRole-${var.namespace}-${var.environment}"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Action = "sts:AssumeRole",
-        Effect = "Allow",
-        Principal = {
-          Service = "codepipeline.amazonaws.com"
-        }
-      }
-    ]
-  })
+module "codepipeline_role" {
+  source           = "../../modules/iam-role"
+  role_name        = "TerraformCodePipelineRole-${var.namespace}-${var.environment}"
+  role_description = "TerraformCodePipelineRole"
+  principals = {
+    Service = "codepipeline.amazonaws.com"
+  }
+  policy_documents = [
+    join("", data.aws_iam_policy_document.resource_full_access.*.json)
+  ]
+  policy_name        = "TerraformCodePipelinePolicy-${var.namespace}-${var.environment}"
+  policy_description = "TerraformCodePipelinePolicy"
+  tags               = module.tags.tags
 }
+# resource "aws_iam_role" "codepipeline_role" {
+#   name = "TerraformCodePipelineRole-${var.namespace}-${var.environment}"
+
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Action = "sts:AssumeRole",
+#         Effect = "Allow",
+#         Principal = {
+#           Service = "codepipeline.amazonaws.com"
+#         }
+#       }
+#     ]
+#   })
+# }
 
 
-resource "aws_iam_role_policy_attachment" "admin_fullaccess" {
+# resource "aws_iam_role_policy_attachment" "admin_fullaccess" {
 
-  role = aws_iam_role.codepipeline_role.name
+#   role = aws_iam_role.codepipeline_role.name
 
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
+#   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+# }
 
 ############################################################################################
 ## Codepipeline
