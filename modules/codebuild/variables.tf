@@ -125,13 +125,13 @@ variable "cache_location" {
 ################################################################################
 variable "security_group_ids" {
   type        = list(string)
-  default     = ""
+  default     = []
   description = "Security group IDs to assign to running builds."
 }
 
 variable "subnets" {
   type        = list(string)
-  default     = ""
+  default     = []
   description = "Subnet IDs within which to run builds."
 }
 
