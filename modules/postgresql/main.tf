@@ -10,6 +10,7 @@ terraform {
   }
 }
 
+
 provider "postgresql" {
   host            = var.host
   port            = var.port

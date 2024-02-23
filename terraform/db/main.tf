@@ -195,7 +195,7 @@ module "db_ssm_parameters" {
 
 
 ##############################################################################
-# ## Postgres provder to create DB & store in parameter store
+# ## Postgres provider to create DB & store in parameter store
 ##############################################################################
 module "postgresql_provider" {
   source    = "../../modules/postgresql"
@@ -206,6 +206,7 @@ module "postgresql_provider" {
   password  = module.db_password.result
   sslmode   = "require"
   superuser = false
+
 
   postgresql_database = {
     "audit_db" = {
@@ -244,7 +245,7 @@ module "postgresql_provider" {
   }
   postgresql_default_privileges = {}
 
-  pg_users = []
+  pg_users              = []
   parameter_name_prefix = "${var.namespace}/${var.environment}" //To store user name and password for pg_users list
 }
 
