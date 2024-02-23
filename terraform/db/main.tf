@@ -198,6 +198,7 @@ module "db_ssm_parameters" {
 # ## Postgres provder to create DB & store in parameter store
 ##############################################################################
 module "postgresql_provider" {
+  count     = var.create_user_databases ? 1 : 0
   source    = "../../modules/postgresql"
   host      = module.aurora.aurora_endpoint
   port      = var.aurora_db_port
@@ -244,7 +245,7 @@ module "postgresql_provider" {
   }
   postgresql_default_privileges = {}
 
-  pg_users = []
+  pg_users              = []
   parameter_name_prefix = "${var.namespace}/${var.environment}" //To store user name and password for pg_users list
 }
 

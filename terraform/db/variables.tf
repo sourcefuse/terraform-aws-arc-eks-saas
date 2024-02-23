@@ -152,6 +152,12 @@ variable "aurora_iops" {
   default     = null
 }
 
+variable "create_user_databases" {
+  type        = bool
+  default     = false
+  description = "Enable to create application specific databases in postgresql DB"
+}
+
 ##################################################################################
 ## Security Group
 ##################################################################################
