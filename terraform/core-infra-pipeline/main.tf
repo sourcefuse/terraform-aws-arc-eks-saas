@@ -80,7 +80,7 @@ module "deployment_pipeline" {
 
 
   name           = "${var.namespace}-${var.environment}-terraform-pipeline"
-  role_arn       = aws_iam_role.codepipeline_role.arn
+  role_arn       = module.codepipeline_role.arn
   s3_bucket_name = data.aws_ssm_parameter.artifact_bucket.value
 
   ConnectionArn      = data.aws_codestarconnections_connection.existing_github_connection.arn
