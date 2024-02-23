@@ -1,17 +1,6 @@
 ################################################################
-## defaults
+## random
 ################################################################
-terraform {
-  required_version = "~> 1.3"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.0"
-    }
-  }
-}
-
-
 resource "random_password" "password" {
   length           = var.length
   special          = var.is_special

@@ -54,7 +54,6 @@ resource "aws_codepipeline" "deployment_pipeline" {
 
         configuration = {
           ProjectName = stage.value["project_name"]
-          //ProjectName = stage.value["provider"] == "CodeBuild" ? "${var.project_name}" : null
         }
       }
     }
