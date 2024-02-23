@@ -61,7 +61,7 @@ resource "aws_codebuild_project" "codebuild_project" {
         type  = environment_variable.value.type
       }
     }
-
+  }
     logs_config {
       cloudwatch_logs {
         status      = var.cloudwatch_log_status
@@ -76,5 +76,4 @@ resource "aws_codebuild_project" "codebuild_project" {
     }
 
     tags = var.tags
-  }
 }
