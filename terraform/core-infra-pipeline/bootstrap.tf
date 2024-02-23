@@ -1,50 +1,87 @@
 ########################################################################################
 ## Codebuild Project
 ########################################################################################
-resource "aws_codebuild_project" "initial_bootstrap" {
-  name           = "initial-bootstrap-${var.namespace}-${var.environment}"
-  description    = " Initial bootstrap"
-  build_timeout  = 480
-  queued_timeout = 480
-
-  service_role = aws_iam_role.bootstrap_role.arn
-
-  artifacts {
-    type = "CODEPIPELINE"
-  }
-
-
-
-  environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:6.0"
-    type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "CODEBUILD"
-
-    environment_variable {
+module "initial_bootstrap" {
+  source                            = "../../modules/codebuild"
+  name                              = "initial-bootstrap-${var.namespace}-${var.environment}"
+  description                       = " Initial bootstrap"
+  build_timeout                     = 480
+  queued_timeout                    = 480
+  service_role                      = aws_iam_role.bootstrap_role.arn
+  artifact_type                     = "CODEPIPELINE"
+  build_compute_type                = "BUILD_GENERAL1_SMALL"
+  build_image                       = "aws/codebuild/standard:6.0"
+  build_type                        = "LINUX_CONTAINER"
+  build_image_pull_credentials_type = "CODEBUILD"
+  environment_variables = [
+    {
       name  = "aws_region"
       value = var.region
-    }
-
-    environment_variable {
+      type  = "PLAINTEXT"
+    },
+    {
       name  = "namespace"
       value = var.namespace
-    }
-
-    environment_variable {
+      type  = "PLAINTEXT"
+    },
+    {
       name  = "environment"
       value = var.environment
+      type  = "PLAINTEXT"
     }
+  ]
 
-  }
-
-  source {
-    type      = "CODEPIPELINE"
-    buildspec = "terraform/bootstrap/buildspec-bootstrap.yaml"
-  }
+  source_type = "CODEPIPELINE"
+  buildspec   = "terraform/bootstrap/buildspec-bootstrap.yaml"
 
   tags = module.tags.tags
+
+
 }
+# resource "aws_codebuild_project" "initial_bootstrap" {
+#   name           = "initial-bootstrap-${var.namespace}-${var.environment}"
+#   description    = " Initial bootstrap"
+#   build_timeout  = 480
+#   queued_timeout = 480
+
+#   service_role = aws_iam_role.bootstrap_role.arn
+
+#   artifacts {
+#     type = "CODEPIPELINE"
+#   }
+
+
+
+#   environment {
+#     compute_type                = "BUILD_GENERAL1_SMALL"
+#     image                       = "aws/codebuild/standard:6.0"
+#     type                        = "LINUX_CONTAINER"
+#     image_pull_credentials_type = "CODEBUILD"
+
+#     environment_variable {
+#       name  = "aws_region"
+#       value = var.region
+#     }
+
+#     environment_variable {
+#       name  = "namespace"
+#       value = var.namespace
+#     }
+
+#     environment_variable {
+#       name  = "environment"
+#       value = var.environment
+#     }
+
+#   }
+
+#   source {
+#     type      = "CODEPIPELINE"
+#     buildspec = "terraform/bootstrap/buildspec-bootstrap.yaml"
+#   }
+
+#   tags = module.tags.tags
+# }
 
 #############################################################################################
 ## Codebuild Role
