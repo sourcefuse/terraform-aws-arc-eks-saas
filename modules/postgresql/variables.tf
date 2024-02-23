@@ -89,22 +89,16 @@ variable "postgresql_schema" {
   default     = {}
 }
 
-# variable "postgresql_default_users" {
-#   type        = map(any)
-#   description = "postgres default users"
-#   default = {}
-# }
-
-# variable "postgresql_users" {
-#   type        = list(map(string))
-#   description = "List of maps with the parameter values to write to SSM Parameter Store"
-#   default     = []
-# }
-
 variable "pg_users" {
   type = list(object({
     name  = string
     login = bool
   }))
   default = []
+}
+
+variable "parameter_name_prefix" {
+  description = "Prefix for the SSM parameter name"
+  type        = string
+  default  = ""
 }
