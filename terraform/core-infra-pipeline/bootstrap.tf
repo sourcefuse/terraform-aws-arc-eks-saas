@@ -7,7 +7,7 @@ module "initial_bootstrap" {
   description                       = " Initial bootstrap"
   build_timeout                     = 480
   queued_timeout                    = 480
-  service_role                      = aws_iam_role.bootstrap_role.arn
+  service_role                      = module.bootstrap_role.arn
   artifact_type                     = "CODEPIPELINE"
   build_compute_type                = "BUILD_GENERAL1_SMALL"
   build_image                       = "aws/codebuild/standard:6.0"
