@@ -244,16 +244,7 @@ module "postgresql_provider" {
   }
   postgresql_default_privileges = {}
 
-  pg_users = [
-    {
-      name  = "test"
-      login = true
-    },
-    {
-      name  = "test1"
-      login = true
-    }
-  ]
+  pg_users = []
   parameter_name_prefix = "${var.namespace}/${var.environment}" //To store user name and password for pg_users list
 }
 
