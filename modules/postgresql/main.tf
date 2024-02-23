@@ -81,28 +81,68 @@ resource "postgresql_schema" "pg_schema" {
 
 # }
 
+# resource "random_password" "pg_user_passwords" {
+#   count            = length(var.pg_users)
+#   length           = 16
+#   special          = true
+#   override_special = "-_?$*"
+# }
+
+# locals {
+#   pg_user_roles = {
+#     for user in var.pg_users : user.name => {
+#       name     = user.name
+#       login    = user.login
+#       password = user.login ? random_password.pg_user_passwords[user.name].result : null
+#     }
+#   }
+# }
+
+# resource "postgresql_role" "pg_users" {
+#   for_each = { for idx, user in var.pg_users : idx => user if user.login }
+
+#   name     = each.value.name
+#   login    = each.value.login
+#   password = random_password.pg_user_passwords[each.key].result
+# }
+
+# resource "postgresql_role" "pg_users" {
+#   for_each = local.pg_user_roles
+
+#   name     = each.value.name
+#   login    = each.value.login
+#   password = each.value.password
+# }
+
+locals {
+  generate_passwords = length(var.pg_users) > 0 ? true : false
+}
+
+resource "null_resource" "trigger_password_generation" {
+  count = local.generate_passwords ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "echo Passwords will be generated."
+  }
+}
 resource "random_password" "pg_user_passwords" {
-  count            = length(var.pg_users)
+  count = local.generate_passwords ? length(var.pg_users) : 0
+
   length           = 16
   special          = true
   override_special = "-_?$*"
-}
 
-locals {
-  pg_user_roles = {
-    for user in var.pg_users : user.name => {
-      name     = user.name
-      login    = user.login
-      password = user.login ? random_password.pg_user_passwords[user.name].result : null
-    }
+  depends_on = [null_resource.trigger_password_generation]
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
 resource "postgresql_role" "pg_users" {
-  for_each = local.pg_user_roles
+  for_each = local.generate_passwords ? { for idx, user in var.pg_users : idx => user } : {}
 
   name     = each.value.name
   login    = each.value.login
-  password = each.value.password
+  password = local.generate_passwords ? random_password.pg_user_passwords[each.key].result : null
 }
-
