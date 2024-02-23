@@ -1,4 +1,4 @@
-output "project_name" {
+output "name" {
   description = "Project name"
   value       = join("", aws_codebuild_project.codebuild_project[*].name)
 }

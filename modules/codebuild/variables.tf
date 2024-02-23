@@ -66,6 +66,12 @@ variable "buildspec" {
   description = "Optional buildspec declaration to use for building the project"
 }
 
+variable "source_location" {
+  type        = string
+  default     = ""
+  description = "The location of the source code from git or s3"
+}
+
 variable "git_clone_depth" {
   type        = number
   default     = 0
