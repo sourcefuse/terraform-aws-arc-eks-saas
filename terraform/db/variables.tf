@@ -168,3 +168,45 @@ variable "additional_inbound_rules" {
   }))
   default = []
 }
+##################################################################################
+## Postgres DBs
+##################################################################################
+variable "auditdbdatabase" {
+  type    = string
+  default = "audit"
+}
+
+variable "authenticationdbdatabase" {
+  type    = string
+  default = "auth"
+}
+
+variable "notificationdbdatabase" {
+  type    = string
+  default = "notification"
+}
+
+variable "subscriptiondbdatabase" {
+  type    = string
+  default = "subscription"
+}
+
+variable "userdbdatabase" {
+  type    = string
+  default = "user"
+}
+
+variable "paymentdbdatabase" {
+  type    = string
+  default = "payment"
+}
+
+variable "tenantmgmtdbdatabase" {
+  type    = string
+  default = "tenantmgmt"
+}
+
+variable "featuretoggledbdatabase" {
+  type    = string
+  default = "feature"
+}

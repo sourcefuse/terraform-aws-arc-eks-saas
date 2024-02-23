@@ -6,8 +6,10 @@ terraform {
       version = "~> 1.21"
       source  = "cyrilgdn/postgresql"
     }
+
   }
 }
+
 
 provider "postgresql" {
   host            = var.host
@@ -21,9 +23,9 @@ provider "postgresql" {
 }
 
 resource "postgresql_database" "pg_db" {
-  for_each          = var.postgresql_database
-  name              = each.value.db_name
-  owner             = each.value.db_owner
+  for_each = var.postgresql_database
+  name     = each.value.db_name
+  //owner             = each.value.db_owner
   template          = each.value.template
   lc_collate        = each.value.lc_collate
   connection_limit  = each.value.connection_limit
@@ -59,4 +61,56 @@ resource "postgresql_schema" "pg_schema" {
       role  = lookup(policy.value, "role", null)
     }
   }
+}
+
+##################################################################
+## Postgresql User 
+##################################################################
+
+resource "null_resource" "trigger_password_generation" {
+  count = local.generate_passwords ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "echo Passwords will be generated."
+  }
+}
+
+resource "random_password" "pg_user_passwords" {
+  count = local.generate_passwords ? length(var.pg_users) : 0
+
+  length           = 16
+  special          = true
+  override_special = "-_?$*"
+
+  depends_on = [null_resource.trigger_password_generation]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "postgresql_role" "pg_users" {
+  for_each = local.generate_passwords ? { for idx, user in var.pg_users : idx => user } : {}
+
+  name     = each.value.name
+  login    = each.value.login
+  password = local.generate_passwords ? random_password.pg_user_passwords[each.key].result : null
+}
+
+#### SSM parameter
+resource "aws_ssm_parameter" "pg_user_parameters" {
+  count = local.generate_passwords ? length(var.pg_users) : 0
+
+  name  = "/${var.parameter_name_prefix}/pg_db_user_${count.index + 1}"
+  type  = "SecureString"
+  value = random_password.pg_user_passwords[count.index].result
+}
+
+resource "aws_ssm_parameter" "pg_user_password_parameters" {
+  count = local.generate_passwords ? length(var.pg_users) : 0
+
+  name  = "/${var.parameter_name_prefix}/pg_db_user_password_${count.index + 1}"
+  type  = "SecureString"
+  value = var.pg_users[count.index].name
+
 }
