@@ -254,6 +254,6 @@ module "postgresql_provider" {
       login = true
     }
   ]
-  parameter_name_prefix = ${var.namespace}/${var.environment}
+  parameter_name_prefix = "${var.namespace}/${var.environment}" //To store user name and password for pg_users list
 }
 
