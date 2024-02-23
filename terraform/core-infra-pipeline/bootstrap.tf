@@ -56,25 +56,3 @@ module "bootstrap_role" {
   policy_description = "initial-bootstrap-policy"
   tags               = module.tags.tags
 }
-# resource "aws_iam_role" "bootstrap_role" {
-#   name = "initial-bootstrap-role-${var.namespace}-${var.environment}"
-
-#   assume_role_policy = jsonencode({
-#     "Version" : "2012-10-17",
-#     "Statement" : [
-#       {
-#         "Effect" : "Allow",
-#         "Principal" : {
-#           "Service" : "codebuild.amazonaws.com"
-#         },
-#         "Action" : "sts:AssumeRole"
-#       }
-#     ]
-#   })
-# }
-
-
-# resource "aws_iam_role_policy_attachment" "initial_bootstrap_policy_attachment" {
-#   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-#   role       = aws_iam_role.bootstrap_role.name
-# }
