@@ -254,6 +254,6 @@ module "postgresql_provider" {
       login = true
     }
   ]
-  parameter_name_prefix = "${var.namespace}/${var.environment}/pg_db_user"
+  parameter_name_prefix = ${var.namespace}/${var.environment}
 }
 
