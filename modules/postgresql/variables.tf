@@ -100,5 +100,5 @@ variable "pg_users" {
 variable "parameter_name_prefix" {
   description = "Prefix for the SSM parameter name"
   type        = string
-  default  = ""
+  default     = ""
 }

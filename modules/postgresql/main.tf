@@ -62,6 +62,9 @@ resource "postgresql_schema" "pg_schema" {
   }
 }
 
+##################################################################
+## Postgresql User 
+##################################################################
 
 resource "null_resource" "trigger_password_generation" {
   count = local.generate_passwords ? 1 : 0
@@ -94,10 +97,19 @@ resource "postgresql_role" "pg_users" {
 }
 
 #### SSM parameter
+resource "aws_ssm_parameter" "pg_user_parameters" {
+  count = local.generate_passwords ? length(var.pg_users) : 0
+
+  name  = "${var.parameter_name_prefix}/pg_db_user_${count.index + 1}"
+  type  = "SecureString"
+  value = random_password.pg_user_passwords[count.index].result
+}
+
 resource "aws_ssm_parameter" "pg_user_password_parameters" {
   count = local.generate_passwords ? length(var.pg_users) : 0
 
-  name  = "${var.parameter_name_prefix}/${var.pg_users[count.index].name}"
+  name  = "${var.parameter_name_prefix}/pg_db_password_${count.index + 1}"
   type  = "SecureString"
-  value = random_password.pg_user_passwords[count.index].result
+  value = var.pg_users[count.index].name
+
 }
