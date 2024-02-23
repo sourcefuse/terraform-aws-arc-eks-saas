@@ -108,7 +108,7 @@ resource "aws_ssm_parameter" "pg_user_parameters" {
 resource "aws_ssm_parameter" "pg_user_password_parameters" {
   count = local.generate_passwords ? length(var.pg_users) : 0
 
-  name  = "/${var.parameter_name_prefix}/pg_db_password_${count.index + 1}"
+  name  = "/${var.parameter_name_prefix}/pg_db_user_password_${count.index + 1}"
   type  = "SecureString"
   value = var.pg_users[count.index].name
 
