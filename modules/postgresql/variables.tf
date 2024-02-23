@@ -43,12 +43,13 @@ variable "sslmode" {
 variable "connect_timeout" {
   type        = number
   description = "connection timeout of the database"
+  default = 15
 }
 
 variable "postgresql_database" {
   type = map(object({
     db_name           = string
-    db_owner          = string
+    //db_owner          = string
     template          = optional(string, null)
     lc_collate        = optional(string, null)
     connection_limit  = optional(string, null)

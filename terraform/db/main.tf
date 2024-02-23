@@ -138,48 +138,53 @@ module "db_ssm_parameters" {
 
 
 
-# ############################################################################
+##############################################################################
 # ## Postgres provder to create DB & store in parameter store
-# ############################################################################
-# provider "postgresql" {
-#   host      = module.rds.instance_address
-#   port      = var.aurora_db_port
-#   database  = var.aurora_db_name
-#   username  = var.aurora_db_user
-#   password  = random_password.db_password.result
-#   sslmode   = "require"
-#   superuser = false
+##############################################################################
+module "postgresql_provider" {
+  host      = module.rds.aurora_endpoint
+  port      = var.aurora_db_port
+  database  = var.aurora_db_name
+  username  = var.aurora_db_user
+  password  = module.db_password.result
+  sslmode   = "require"
+  superuser = false
 
-# }
-# resource "postgresql_database" "audit_db" {
-#   name              = var.auditdbdatabase
-#   allow_connections = true
-# }
-# resource "postgresql_database" "authentication_db" {
-#   name              = var.authenticationdbdatabase
-#   allow_connections = true
-# }
-# resource "postgresql_database" "notification_db" {
-#   name              = var.notificationdbdatabase
-#   allow_connections = true
-# }
-# resource "postgresql_database" "subscription_db" {
-#   name              = var.subscriptiondbdatabase
-#   allow_connections = true
-# }
-# resource "postgresql_database" "user_db" {
-#   name              = var.userdbdatabase
-#   allow_connections = true
-# }
-# resource "postgresql_database" "payment_db" {
-#   name              = var.paymentdbdatabase
-#   allow_connections = true
-# }
-# resource "postgresql_database" "tenant_mgmt_db" {
-#   name              = var.tenantmgmtdbdatabase
-#   allow_connections = true
-# }
-# resource "postgresql_database" "feature_db" {
-#   name              = var.featuretoggledbdatabase
-#   allow_connections = true
-# }
+  postgresql_database = {
+  "audit_db" = {
+    db_name           = var.auditdbdatabase
+    allow_connections = true
+  },
+  "authentication_db" = {
+    db_name           = var.authenticationdbdatabase
+    allow_connections = true
+  },
+  "notification_db" = {
+    db_name           = var.notificationdbdatabase
+    allow_connections = true
+  },
+  "subscription_db" = {
+    db_name           = var.subscriptiondbdatabase
+    allow_connections = true
+  },
+  "user_db" = {
+    db_name           = var.user_db
+    allow_connections = true
+  },
+  "payment_db" = {
+    db_name           = var.paymentdbdatabase
+    allow_connections = true
+  },
+  "tenant_mgmt_db" = {
+    db_name           = var.tenantmgmtdbdatabase
+    allow_connections = true
+  },
+  "feature_db" = {
+    db_name           = var.featuretoggledbdatabase
+    allow_connections = true
+  }
+
+}
+
+}
+
