@@ -45,10 +45,10 @@ module "initial_bootstrap" {
 data "aws_iam_policy_document" "resource_full_access" {
 
   statement {
-    sid    = "FullAccess"
-    effect = "Allow"
-    actions = "*"
-    resources = "*"
+    sid       = "FullAccess"
+    effect    = "Allow"
+    actions   = ["*"]
+    resources = ["*"]
   }
 }
 
@@ -64,7 +64,7 @@ module "bootstrap_role" {
   ]
   policy_name        = "initial-bootstrap-policy-${var.namespace}-${var.environment}"
   policy_description = "initial-bootstrap-policy"
-  tags = module.tags.tags
+  tags               = module.tags.tags
 }
 # resource "aws_iam_role" "bootstrap_role" {
 #   name = "initial-bootstrap-role-${var.namespace}-${var.environment}"

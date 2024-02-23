@@ -2,7 +2,7 @@
 ## IAM Role
 ################################################################################
 data "aws_iam_policy_document" "assume_role" {
-
+  count = length(keys(var.principals))
   statement {
     effect  = "Allow"
     actions = var.assume_role_actions
