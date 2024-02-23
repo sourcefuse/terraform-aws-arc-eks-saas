@@ -199,23 +199,14 @@ module "db_ssm_parameters" {
 ##############################################################################
 module "postgresql_provider" {
   source    = "../../modules/postgresql"
- count = var.enable_postgresql_provider ? 1 : 0
-  # host      = module.aurora.aurora_endpoint
-  # port      = var.aurora_db_port
-  # database  = var.aurora_db_name
-  # username  = var.aurora_db_admin_username
-  # password  = module.db_password.result
-  # sslmode   = "require"
-  # superuser = false
-  postgresql_provider_config = {
-     host      = module.aurora.aurora_endpoint
-     port      = var.aurora_db_port
-     database  = var.aurora_db_name
-     username  = var.aurora_db_admin_username
-     password  = module.db_password.result
-     sslmode   = "require"
-     superuser = false
-  }
+  host      = module.aurora.aurora_endpoint
+  port      = var.aurora_db_port
+  database  = var.aurora_db_name
+  username  = var.aurora_db_admin_username
+  password  = module.db_password.result
+  sslmode   = "require"
+  superuser = false
+
 
   postgresql_database = {
     "audit_db" = {

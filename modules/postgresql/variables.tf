@@ -102,14 +102,3 @@ variable "parameter_name_prefix" {
   type        = string
   default     = ""
 }
-
-variable "postgresql_provider_config" {
-  type = object({
-    host     = string
-    port     = number
-    username = string
-    password = string
-    sslmode  = string
-    superuser = bool
-  })
-}

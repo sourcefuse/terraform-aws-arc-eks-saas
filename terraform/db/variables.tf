@@ -152,12 +152,6 @@ variable "aurora_iops" {
   default     = null
 }
 
-variable "enable_postgresql_provider" {
-  type        = bool
-  default     = false
-  description = "Enable to create application specific databases in postgresql DB"
-}
-
 ##################################################################################
 ## Security Group
 ##################################################################################
