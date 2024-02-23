@@ -6,6 +6,7 @@ terraform {
       version = "~> 1.21"
       source  = "cyrilgdn/postgresql"
     }
+
   }
 }
 
@@ -97,7 +98,7 @@ locals {
   }
 }
 
-resource "postgres_role" "pg_users" {
+resource "postgresql_role" "pg_users" {
   for_each = local.pg_user_roles
 
   name     = each.value.name
