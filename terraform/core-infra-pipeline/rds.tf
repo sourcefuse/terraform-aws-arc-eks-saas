@@ -6,7 +6,7 @@ module "rds_role" {
   role_name        = "terraform-rds-module-build-step-role-${var.namespace}-${var.environment}"
   role_description = "terraform-rds-module-build-step-role"
   principals = {
-    "Service" : "codebuild.amazonaws.com"
+    "Service" : ["codebuild.amazonaws.com"]
   }
   policy_documents = [
     join("", data.aws_iam_policy_document.resource_full_access.*.json)
