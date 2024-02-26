@@ -8,20 +8,6 @@ data "aws_caller_identity" "current" {}
 ################################################################################
 ## network
 ################################################################################
-# data "aws_ssm_parameter" "terraform_state_bucket" {
-#   name = "/${var.namespace}/${var.environment}/terraform-state-bucket"
-# }
-
-# data "terraform_remote_state" "network" {
-#   backend = "s3"
-
-#   config = {
-#     region = var.region
-#     key    = "network/terraform.tfstate"
-#     bucket = data.aws_ssm_parameter.terraform_state_bucket.value
-#   }
-
-# }
 
 data "aws_vpc" "vpc" {
   filter {
