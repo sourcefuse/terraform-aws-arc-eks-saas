@@ -197,55 +197,55 @@ module "db_ssm_parameters" {
 ##############################################################################
 # ## Postgres provider to create DB & store in parameter store
 ##############################################################################
-# module "postgresql_provider" {
-#   source    = "../../modules/postgresql"
-#   host      = module.aurora.aurora_endpoint
-#   port      = var.aurora_db_port
-#   database  = var.aurora_db_name
-#   username  = var.aurora_db_admin_username
-#   password  = module.db_password.result
-#   sslmode   = "require"
-#   superuser = false
+module "postgresql_provider" {
+  source    = "../../modules/postgresql"
+  host      = module.aurora.aurora_endpoint
+  port      = var.aurora_db_port
+  database  = var.aurora_db_name
+  username  = var.aurora_db_admin_username
+  password  = module.db_password.result
+  sslmode   = "require"
+  superuser = false
 
 
-#   postgresql_database = {
-#     "audit_db" = {
-#       db_name           = var.auditdbdatabase
-#       allow_connections = true
-#     },
-#     "authentication_db" = {
-#       db_name           = var.authenticationdbdatabase
-#       allow_connections = true
-#     },
-#     "notification_db" = {
-#       db_name           = var.notificationdbdatabase
-#       allow_connections = true
-#     },
-#     "subscription_db" = {
-#       db_name           = var.subscriptiondbdatabase
-#       allow_connections = true
-#     },
-#     "user_db" = {
-#       db_name           = var.userdbdatabase
-#       allow_connections = true
-#     },
-#     "payment_db" = {
-#       db_name           = var.paymentdbdatabase
-#       allow_connections = true
-#     },
-#     "tenant_mgmt_db" = {
-#       db_name           = var.tenantmgmtdbdatabase
-#       allow_connections = true
-#     },
-#     "feature_db" = {
-#       db_name           = var.featuretoggledbdatabase
-#       allow_connections = true
-#     }
+  postgresql_database = {
+    "audit_db" = {
+      db_name           = var.auditdbdatabase
+      allow_connections = true
+    },
+    "authentication_db" = {
+      db_name           = var.authenticationdbdatabase
+      allow_connections = true
+    },
+    "notification_db" = {
+      db_name           = var.notificationdbdatabase
+      allow_connections = true
+    },
+    "subscription_db" = {
+      db_name           = var.subscriptiondbdatabase
+      allow_connections = true
+    },
+    "user_db" = {
+      db_name           = var.userdbdatabase
+      allow_connections = true
+    },
+    "payment_db" = {
+      db_name           = var.paymentdbdatabase
+      allow_connections = true
+    },
+    "tenant_mgmt_db" = {
+      db_name           = var.tenantmgmtdbdatabase
+      allow_connections = true
+    },
+    "feature_db" = {
+      db_name           = var.featuretoggledbdatabase
+      allow_connections = true
+    }
 
-#   }
-#   postgresql_default_privileges = {}
+  }
+  postgresql_default_privileges = {}
 
-#   pg_users              = []
-#   parameter_name_prefix = "${var.namespace}/${var.environment}" //To store user name and password for pg_users list
-# }
+  pg_users              = []
+  parameter_name_prefix = "${var.namespace}/${var.environment}" //To store user name and password for pg_users list
+}
 
