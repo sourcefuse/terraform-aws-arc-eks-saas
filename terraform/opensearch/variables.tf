@@ -139,7 +139,7 @@ variable "generate_random_password" {
     Generate a random password for the OpenSearch Administrator.
     If this value is `true` and `var.custom_opensearch_password` is defined, `var.custom_opensearch_password` will be ignored.
   EOF
-  default     = false
+  default     = true
 }
 
 variable "custom_opensearch_password" {
