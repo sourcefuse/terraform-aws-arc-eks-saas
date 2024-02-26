@@ -32,10 +32,7 @@ module "rds_module_build_step_codebuild_project" {
   build_type                        = "LINUX_CONTAINER"
   build_image_pull_credentials_type = "CODEBUILD"
   environment_variables             = []
-  vpc_id = ""
-  subnets = []
-  security_group_ids = []
-
+  
   source_type = "CODEPIPELINE"
   buildspec = yamlencode({
     version = "0.2"

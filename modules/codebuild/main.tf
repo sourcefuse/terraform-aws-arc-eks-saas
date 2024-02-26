@@ -38,13 +38,13 @@ resource "aws_codebuild_project" "codebuild_project" {
     modes    = var.cache_mode
   }
 
-  vpc_config {
-    vpc_id = var.vpc_id
+  # vpc_config {
+  #   vpc_id = var.vpc_id
 
-    subnets = var.subnets
+  #   subnets = var.subnets
 
-    security_group_ids = var.security_group_ids
-  }
+  #   security_group_ids = var.security_group_ids
+  # }
 
   environment {
     compute_type                = var.build_compute_type
