@@ -117,4 +117,5 @@ module "os_ssm_parameters" {
       description = "OpenSearch Password"
     }
   ]
+  tags = module.tags.tags
 }
