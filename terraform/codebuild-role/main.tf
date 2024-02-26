@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "codebuild_policy" {
         "cognito-idp:*",
         "iam:*",
         "ssm:*"
-      ],
+      ]
     resources = ["*"]
   }
 }

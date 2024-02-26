@@ -1,31 +1,31 @@
 #############################################################################################
 ## Codebuild Role
 #############################################################################################
-module "opensearch_module_build_step_role" {
+module "iam_role_build_step_role" {
   source           = "../../modules/iam-role"
-  role_name        = "terraform-opensearch-module-build-step-role-${var.namespace}-${var.environment}"
-  role_description = "terraform opensearch module build step role"
+  role_name        = "terraform-iam-role-module-build-step-code-build-${var.namespace}-${var.environment}"
+  role_description = "terraform iam role modulebuild step module code build project"
   principals = {
     "Service" : ["codebuild.amazonaws.com"]
   }
   policy_documents = [
     join("", data.aws_iam_policy_document.resource_full_access.*.json)
   ]
-  policy_name        = "terraform-opensearch-module-build-step-policy-${var.namespace}-${var.environment}"
-  policy_description = "terraform opensearch module build step policy"
+  policy_name        = "terraform-iam-role-module-build-step-policy-${var.namespace}-${var.environment}"
+  policy_description = "terraform iam role module build step policy"
   tags               = module.tags.tags
 }
 
 #############################################################################################
 ## Codebuild Project
-############################################module#################################################
-module "opensearch_module_build_step_codebuild_project" {
+#############################################################################################
+module "iam_role_module_build_step_codebuild_project" {
   source                            = "../../modules/codebuild"
-  name                              = "terraform-opensearch-module-build-step-code-build-${var.namespace}-${var.environment}"
-  description                       = "terraform opensearch module build step module code build project"
+  name                              = "terraform-iam-role-module-build-step-code-build-${var.namespace}-${var.environment}"
+  description                       = "terraform iam-role module build step module code build project"
   build_timeout                     = 480
   queued_timeout                    = 480
-  service_role                      = module.opensearch_module_build_step_role.arn
+  service_role                      = module.iam_role_build_step_role.arn
   artifact_type                     = "CODEPIPELINE"
   build_compute_type                = "BUILD_GENERAL1_SMALL"
   build_image                       = "aws/codebuild/standard:6.0"
@@ -50,7 +50,7 @@ module "opensearch_module_build_step_codebuild_project" {
         commands = [
           "export PATH=$PWD/:$PATH",
           "apt-get update -y && apt-get install -y jq unzip",
-          "cd terraform/opensearch",
+          "cd terraform/codebuild-role",
           "rm config.${var.environment}.hcl",
           "sed -i 's/aws_region/${var.region}/g' config.txt",
           "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.region})",

@@ -247,5 +247,6 @@ module "postgresql_provider" {
 
   pg_users              = []
   parameter_name_prefix = "${var.namespace}/${var.environment}" //To store user name and password for pg_users list
+  depends_on = [module.aurora]
 }
 
