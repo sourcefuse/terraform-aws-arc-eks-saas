@@ -68,7 +68,7 @@ module "deployment_pipeline" {
     { name = "Database", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${aws_codebuild_project.rds_module_build_step_codebuild_project.name}" },
     { name = "Elasticache", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${module.elasticache_module_build_step_codebuild_project.name}" },
     { name = "Opensearch", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${module.opensearch_module_build_step_codebuild_project.name}" },
-    { name = "Codebuild IAM Role", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${module.iam_role_module_build_step_codebuild_project.name}" },
+    { name = "IAMRole", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${module.iam_role_module_build_step_codebuild_project.name}" }
   ]
   tags = module.tags.tags
 
