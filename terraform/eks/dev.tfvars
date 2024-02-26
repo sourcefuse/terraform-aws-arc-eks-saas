@@ -1,6 +1,6 @@
 region      = "us-east-1"
 namespace   = "arc-saas"
-stage = "dev"
+stage       = "dev"
 name        = "eks"
 
 # oidc_provider_enabled is required to be true for VPC CNI addon
