@@ -55,7 +55,7 @@ module "opensearch" {
 
   ## network / security
   vpc_id             = data.aws_vpc.vpc.id
-  subnet_ids         = local.private_subnet_ids
+  subnet_ids         = local.public_subnet_ids
   availability_zones = local.private_subnet_azs
 
   iam_actions              = var.os_iam_actions
@@ -94,28 +94,4 @@ resource "aws_security_group_rule" "additional" {
   protocol          = each.value.protocol
   cidr_blocks       = each.value.cidr_blocks
   type              = each.value.type
-}
-
-################################################################################
-## storing opensearch username and password in SSM paramter store
-################################################################################
-module "os_ssm_parameters" {
-  source = "../../modules/ssm-parameter"
-  ssm_parameters = [
-    {
-      name        = "/${var.namespace}/${var.environment}/os_user"
-      value       = var.admin_username
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "OpenSearch User Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/os_password"
-      value       = module.os_password.result
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "OpenSearch Password"
-    }
-  ]
-  tags = module.tags.tags
 }
