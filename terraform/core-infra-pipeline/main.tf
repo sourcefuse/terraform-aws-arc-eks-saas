@@ -65,6 +65,7 @@ module "deployment_pipeline" {
   stages = [
     { name = "Bootstrap", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = "2", project_name = "${module.initial_bootstrap.name}" },
     { name = "Networking", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = "3", project_name = "${module.networking_module_build_step_codebuild_project.name}" },
+    { name = "Opensearch", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = "4", project_name = "${module.opensearch_module_build_step_codebuild_project.name}" },
     { name = "Database", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = "4", project_name = "${module.rds_module_build_step_codebuild_project.name}" },
     { name = "Elasticache", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = "4", project_name = "${module.elasticache_module_build_step_codebuild_project.name}" }
   ]
@@ -73,5 +74,6 @@ module "deployment_pipeline" {
   depends_on = [module.initial_bootstrap,
     module.networking_module_build_step_codebuild_project,
     module.rds_module_build_step_codebuild_project,
-  module.elasticache_module_build_step_codebuild_project]
+    module.elasticache_module_build_step_codebuild_project,
+  module.opensearch_module_build_step_codebuild_project]
 }
