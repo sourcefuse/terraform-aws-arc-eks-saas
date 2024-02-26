@@ -113,7 +113,7 @@ module "eks_cluster" {
 
   # This is to test `allowed_security_group_ids` and `allowed_cidr_blocks`
   # In a real cluster, these should be some other (existing) Security Groups and CIDR blocks to allow access to the cluster
-  //allowed_security_group_ids = ["sg-04f0a3e5d878275d1"] //TODO: need to pass from network module
+  //allowed_security_group_ids = [] 
   allowed_cidr_blocks = [data.aws_vpc.vpc.cidr_block]
 
   # For manual testing. In particular, set `false` if local configuration/state
