@@ -38,19 +38,19 @@ data "aws_caller_identity" "this" {}
 data "aws_iam_policy_document" "codebuild_policy" {
 
   statement {
-    sid       = "CodeBuildPolicy"
-    effect    = "Allow"
-    actions   = [
-        "rds:*",
-        "elasticache:*",
-        "s3:*",
-        "es:*",
-        "ec2:*",
-        "eks:Describe*",
-        "cognito-idp:*",
-        "iam:*",
-        "ssm:*"
-      ]
+    sid    = "CodeBuildPolicy"
+    effect = "Allow"
+    actions = [
+      "rds:*",
+      "elasticache:*",
+      "s3:*",
+      "es:*",
+      "ec2:*",
+      "eks:Describe*",
+      "cognito-idp:*",
+      "iam:*",
+      "ssm:*"
+    ]
     resources = ["*"]
   }
 }
