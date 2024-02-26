@@ -74,7 +74,7 @@ module "eks_cluster" {
   source  = "cloudposse/eks-cluster/aws"
   version = "3.0.0"
 
-  stage              = var.environment
+  //stage              = var.environment
   vpc_id             = data.aws_vpc.vpc.id
   subnet_ids         = concat(data.aws_subnets.private.ids, data.aws_subnets.public.ids)
   kubernetes_version = var.kubernetes_version
@@ -131,7 +131,7 @@ module "eks_node_group" {
   source  = "cloudposse/eks-node-group/aws"
   version = "2.12.0"
 
-  stage             = var.environment
+  //stage             = var.environment
   subnet_ids        = data.aws_subnets.private.ids
   cluster_name      = module.eks_cluster.eks_cluster_id
   instance_types    = var.instance_types

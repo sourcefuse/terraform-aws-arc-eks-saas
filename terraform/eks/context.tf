@@ -28,7 +28,7 @@ module "this" {
   namespace   = var.namespace
   tenant      = var.tenant
   environment = var.environment
-  //stage               = var.environment
+  stage               = var.stage
   name                = var.name
   delimiter           = var.delimiter
   attributes          = var.attributes
@@ -54,7 +54,7 @@ variable "context" {
     namespace   = null
     tenant      = null
     environment = null
-    //stage               = null
+    stage               = null
     name                = null
     delimiter           = null
     attributes          = []
@@ -118,11 +118,11 @@ variable "tenant" {
 #   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 # }
 
-# variable "stage" {
-#   type        = string
-#   default     = null
-#   description = "ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release'"
-# }
+variable "stage" {
+  type        = string
+  default     = null
+  description = "ID element. Usually used to indicate role, e.g. 'prod', 'staging', 'source', 'build', 'test', 'deploy', 'release'"
+}
 
 variable "name" {
   type        = string
