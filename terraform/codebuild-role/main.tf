@@ -88,4 +88,5 @@ module "codebuild_role_ssm_parameters" {
       description = "Codebuild IAM Role"
     }
   ]
+  tags = module.tags.tags
 }
