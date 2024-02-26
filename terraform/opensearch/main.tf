@@ -95,3 +95,27 @@ resource "aws_security_group_rule" "additional" {
   cidr_blocks       = each.value.cidr_blocks
   type              = each.value.type
 }
+
+# ################################################################################
+# ## storing opensearch username and password in SSM paramter store
+# ################################################################################
+# module "os_ssm_parameters" {
+#   source = "../../modules/ssm-parameter"
+#   ssm_parameters = [
+#     {
+#       name        = "/${var.namespace}/${var.environment}/os_user"
+#       value       = var.admin_username
+#       type        = "SecureString"
+#       overwrite   = "true"
+#       description = "OpenSearch User Name"
+#     },
+#     {
+#       name        = "/${var.namespace}/${var.environment}/os_password"
+#       value       = module.os_password.result
+#       type        = "SecureString"
+#       overwrite   = "true"
+#       description = "OpenSearch Password"
+#     }
+#   ]
+#   tags = module.tags.tags
+# }
