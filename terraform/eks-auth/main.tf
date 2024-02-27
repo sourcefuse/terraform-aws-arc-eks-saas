@@ -27,6 +27,8 @@ provider "aws" {
 #############################################################################
 ## data lookup
 #############################################################################
+data "aws_caller_identity" "this" {}
+
 data "aws_ssm_parameter" "karpenter_role" {
   name = "/${var.namespace}/${var.environment}/karpenter_role"
 }
@@ -40,7 +42,7 @@ module "eks_auth" {
   add_extra_iam_roles = [
     {
       groups    = ["system:bootstrappers", "system:nodes"]
-      role_arn  = "${data.aws_ssm_parameter.karpenter_role.value}"
+      role_arn  = "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/${data.aws_ssm_parameter.karpenter_role.value}"
       user_name = "system:node:{{EC2PrivateDNSName}}"
     }
   ]
