@@ -39,22 +39,7 @@ data "aws_ssm_parameter" "karpenter_role" {
 module "eks_auth" {
   source           = "../../modules/eks-auth"
   eks_cluster_name = "${var.namespace}-${var.environment}-eks-cluster"
-#   add_extra_iam_roles = [
-#     {
-#       groups    = "system:nodes"
-#       role_arn  = "arn:aws:iam::${data.aws_caller_identity.this.account_id}:role/${data.aws_ssm_parameter.karpenter_role.value}"
-#       user_name = "system:node:{{EC2PrivateDNSName}}"
-#     }
-#   ]
 
   add_extra_iam_roles = concat(local.map_karpenter_iam_role, var.map_additional_iam_roles)
   add_extra_iam_users = var.map_additional_iam_users
-#   add_extra_iam_users = [
-#     {
-#       groups    = "system:masters"
-#       user_arn  = "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/harshit.kumar"
-#       user_name = "admin"
-#     }
-#   ]
-
 }
