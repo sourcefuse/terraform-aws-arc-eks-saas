@@ -16,16 +16,11 @@ phases:
   pre_build:
     commands:
       - cd terraform/eks-auth
-      - echo "${environment}"
-      - echo "${namespace}"
-      - echo "${aws_region}"
       - rm config.${environment}.hcl
       - sed -i 's/aws_region/'"$aws_region"'/g' config.txt
       - tf_state_bucket=$(aws ssm get-parameter --name "/${namespace}/${environment}/terraform-state-bucket" --query "Parameter.Value" --output text --region "$aws_region")
-      - echo "${tf_state_bucket}"
       - envsubst < config.txt > config.${environment}.hcl
       - CodeBuild_ARN=$(aws ssm get-parameter --name "/${namespace}/${environment}/codebuild_role"  --query "Parameter.Value" --output text --region "$aws_region")
-      - echo "${CodeBuild_ARN}"
       - CREDENTIALS=$(aws sts assume-role --role-arn $CodeBuild_ARN --role-session-name kubectl-codebuild --duration-seconds 900)
       - echo "${CREDENTIALS}"
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"

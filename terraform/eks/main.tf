@@ -246,7 +246,7 @@ module "karpenter_role_ssm_parameters" {
     {
       name        = "/${var.namespace}/${var.environment}/karpenter_role"
       value       = module.eks_blueprints_addons.karpenter.node_iam_role_name
-      type        = "SecureString"
+      type        = "String"
       overwrite   = "true"
       description = "Karpenter Role ARN"
     }

@@ -37,7 +37,7 @@ data "aws_ssm_parameter" "karpenter_role" {
 ## update aws-auth configmap
 #############################################################################
 module "eks_auth" {
-  source           = "../../eks-auth"
+  source           = "../../modules/eks-auth"
   eks_cluster_name = "${var.namespace}-${var.environment}-eks-cluster"
   add_extra_iam_roles = [
     {
