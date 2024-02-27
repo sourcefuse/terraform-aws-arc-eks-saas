@@ -700,3 +700,8 @@ variable "vpa" {
   type        = any
   default     = {}
 }
+
+variable "add_role" {
+  type = bool
+  default = false
+}
