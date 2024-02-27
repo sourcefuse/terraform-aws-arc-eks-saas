@@ -22,7 +22,7 @@ locals {
     for user in var.add_extra_iam_users : <<-EOF
       - groups:
         - ${user.groups}
-        rolearn: ${user.user_arn}
+        userarn: ${user.user_arn}
         username: ${user.user_name}
     EOF
   ])

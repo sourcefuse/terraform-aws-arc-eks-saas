@@ -18,3 +18,21 @@ variable "namespace" {
   description = "Namespace for the resources."
   default     = "arc-saas"
 }
+
+variable "map_additional_iam_roles" {
+  type = list(object({
+    groups    = string
+    role_arn  = string
+    user_name = string
+  }))
+  default = []
+}
+
+variable "map_additional_iam_users" {
+  type = list(object({
+    groups    = string
+    user_arn  = string
+    user_name = string
+  }))
+  default = []
+}

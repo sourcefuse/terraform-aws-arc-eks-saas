@@ -22,12 +22,10 @@ phases:
       - envsubst < config.txt > config.${environment}.hcl
       - CodeBuild_ARN=$(aws ssm get-parameter --name "/${namespace}/${environment}/codebuild_role"  --query "Parameter.Value" --output text --region "$aws_region")
       - CREDENTIALS=$(aws sts assume-role --role-arn $CodeBuild_ARN --role-session-name kubectl-codebuild --duration-seconds 900)
-      - echo "${CREDENTIALS}"
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
       - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
-      - echo "$AWS_SECRET_ACCESS_KEY"
       - aws eks update-kubeconfig --name ${namespace}-${environment}-eks-cluster 
       - kubectl version
 
