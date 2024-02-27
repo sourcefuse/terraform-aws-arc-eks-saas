@@ -28,11 +28,11 @@ variable "add_extra_iam_roles" {
   default = []
 }
 
-# variable "add_extra_iam_users" {
-#   type = list(object({
-#     groups    = list(string)
-#     user_arn  = string
-#     user_name = string
-#   }))
-#   default = []
-# }
+variable "add_extra_iam_users" {
+  type = list(object({
+    groups    = string
+    user_arn  = string
+    user_name = string
+  }))
+  default = []
+}

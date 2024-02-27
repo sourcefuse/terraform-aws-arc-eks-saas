@@ -18,12 +18,12 @@ locals {
     EOF
   ])
 
-#   new_user_yaml = join("", [
-#     for user in var.add_extra_iam_users : <<-EOF
-#       - groups:
-#         ${jsonencode(user.groups)}
-#         rolearn: ${user.user_arn}
-#         username: ${user.user_name}
-#     EOF
-#   ])
+  new_user_yaml = join("", [
+    for user in var.add_extra_iam_users : <<-EOF
+      - groups:
+        - ${user.groups}
+        rolearn: ${user.user_arn}
+        username: ${user.user_name}
+    EOF
+  ])
 }
