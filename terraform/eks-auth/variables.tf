@@ -21,7 +21,7 @@ variable "namespace" {
 
 variable "map_additional_iam_roles" {
   type = list(object({
-    groups    = string
+    groups    = list(string)
     role_arn  = string
     user_name = string
   }))
