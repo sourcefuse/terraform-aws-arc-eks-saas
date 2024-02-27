@@ -50,7 +50,7 @@ module "eks_auth" {
   add_extra_iam_users = [
     {
       groups    = "system:masters"
-      role_arn  = "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/harshit.kumar"
+      user_arn  = "arn:aws:iam::${data.aws_caller_identity.this.account_id}:user/harshit.kumar"
       user_name = "admin"
     }
   ]
