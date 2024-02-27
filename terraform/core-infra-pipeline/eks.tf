@@ -43,20 +43,22 @@ module "eks_module_build_step_codebuild_project" {
         commands = [
           "curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip",
           "unzip /usr/local/bin/terraform.zip -d /usr/local/bin/",
-          "terraform --version",
+          "export PATH=$PWD/:$PATH",
+          "apt-get update -y && apt-get install -y jq unzip",
+          "curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator",
+          "curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl",
+          "chmod +x ./kubectl ./aws-iam-authenticator"
         ]
       }
 
       pre_build = {
         commands = [
-          "export PATH=$PWD/:$PATH",
-          "apt-get update -y && apt-get install -y jq unzip",
+          
           "cd terraform/eks  ",
           "rm config.${var.environment}.hcl",
           "sed -i 's/aws_region/${var.region}/g' config.txt",
           "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.region})",
           "envsubst < config.txt > config.${var.environment}.hcl",
-
         ]
       }
 
