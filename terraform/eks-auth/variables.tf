@@ -30,7 +30,7 @@ variable "map_additional_iam_roles" {
 
 variable "map_additional_iam_users" {
   type = list(object({
-    groups    = string
+    groups    = list(string)
     user_arn  = string
     user_name = string
   }))

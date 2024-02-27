@@ -52,7 +52,7 @@ module "eks_auth_module_build_step_codebuild_project" {
   source_type = "CODEPIPELINE"
 
 
-  buildspec   = "terraform/eks-auth/buildspec.yaml"
+  buildspec = "terraform/eks-auth/buildspec.yaml"
 
   tags = module.tags.tags
 }

@@ -241,7 +241,7 @@ module "eks_blueprints_addons" {
 #################################################################################
 module "karpenter_role_ssm_parameters" {
   source = "../../modules/ssm-parameter"
-  count = var.add_role_to_ssm ? 1 : 0
+  count  = var.add_role_to_ssm ? 1 : 0
   ssm_parameters = [
     {
       name        = "/${var.namespace}/${var.environment}/karpenter_role"

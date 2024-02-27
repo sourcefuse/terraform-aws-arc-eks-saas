@@ -4,21 +4,6 @@ variable "eks_cluster_name" {
   type        = string
 }
 
-# variable "auth_map_group" {
-#   description = "The IAM group for authentication mapping"
-#   default     = ""
-# }
-
-# variable "aws_iam_role_arn" {
-#   description = "The ARN of the IAM role"
-#   default     = ""
-# }
-
-# variable "aws_iam_role_name" {
-#   description = "The name of the IAM role"
-#   default     = ""
-# }
-
 variable "add_extra_iam_roles" {
   type = list(object({
     groups    = list(string)
@@ -30,7 +15,7 @@ variable "add_extra_iam_roles" {
 
 variable "add_extra_iam_users" {
   type = list(object({
-    groups    = string
+    groups    = list(string)
     user_arn  = string
     user_name = string
   }))
