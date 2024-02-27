@@ -235,3 +235,21 @@ module "eks_blueprints_addons" {
 
   depends_on = [module.eks_cluster, module.eks_node_group]
 }
+
+#################################################################################
+## Store Karpenter Role ARN in SSM
+#################################################################################
+module "karpenter_role_ssm_parameters" {
+  source = "../../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/karpenter_role"
+      value       = module.eks_blueprints_addons.karpenter.node_iam_role_name
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Karpenter Role ARN"
+    }
+  ]
+  tags       = module.tags.tags
+  depends_on = [module.eks_cluster, module.eks_node_group, module.eks_blueprints_addons]
+}

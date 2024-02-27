@@ -24,10 +24,10 @@ module "this" {
   source  = "cloudposse/label/null"
   version = "0.25.0" # requires Terraform >= 0.13.0
 
-  enabled     = var.enabled
-  namespace   = var.namespace
-  tenant      = var.tenant
-  environment = var.environment
+  enabled             = var.enabled
+  namespace           = var.namespace
+  tenant              = var.tenant
+  environment         = var.environment
   stage               = var.stage
   name                = var.name
   delimiter           = var.delimiter
@@ -50,10 +50,10 @@ module "this" {
 variable "context" {
   type = any
   default = {
-    enabled     = true
-    namespace   = null
-    tenant      = null
-    environment = null
+    enabled             = true
+    namespace           = null
+    tenant              = null
+    environment         = null
     stage               = null
     name                = null
     delimiter           = null

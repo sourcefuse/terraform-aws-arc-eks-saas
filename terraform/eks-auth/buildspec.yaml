@@ -1,0 +1,44 @@
+
+---
+version: 0.2
+phases:
+  install:
+    commands:
+      - curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip
+      - unzip /usr/local/bin/terraform.zip -d /usr/local/bin/
+      - terraform --version
+      - export PATH=$PWD/:$PATH
+      - apt-get update -y && apt-get install -y jq unzip
+      - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
+      - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl ./aws-iam-authenticator
+
+  pre_build:
+    commands:
+      - cd terraform/eks-auth
+      - rm config.${environment}.hcl
+      - sed -i 's/aws_region/'"$aws_region"'/g' config.txt
+      - tf_state_bucket=$(aws ssm get-parameter --name "/${namespace}/${environment}/terraform-state-bucket" --query "Parameter.Value" --output text --region "$aws_region")
+      - envsubst < config.txt > config.${environment}.hcl
+      - CB_ARN=$(aws ssm get-parameter --name "/${namespace}/${environment}/codebuild_role"  --query "Parameter.Value" --output text --region "$aws_region")
+      - CREDENTIALS=$(aws sts assume-role --role-arn $CB_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
+      - echo "${CREDENTIALS}"
+      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - aws eks update-kubeconfig --name ${namespace}-${environment}-eks-cluster 
+      - kubectl version  
+
+  build:
+    commands:     
+      - terraform init --backend-config=config.${environment}.hcl
+      - terraform plan --var-file=${var.environment}.tfvars
+      - terraform apply --var-file=${var.environment}.tfvars --auto-approve
+
+
+     
+
+  post_build:
+    commands:
+      - echo "Terraform backend application complete!"

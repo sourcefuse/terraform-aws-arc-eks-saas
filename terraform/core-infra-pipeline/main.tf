@@ -67,10 +67,11 @@ module "deployment_pipeline" {
     { name = "Networking", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 3, project_name = "${module.networking_module_build_step_codebuild_project.name}" },
     { name = "IAMRole", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${module.iam_role_module_build_step_codebuild_project.name}" },
     { name = "EKS", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 5, project_name = "${module.eks_module_build_step_codebuild_project.name}" },
-    { name = "Database", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${aws_codebuild_project.rds_module_build_step_codebuild_project.name}" },
-    { name = "Elasticache", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${module.elasticache_module_build_step_codebuild_project.name}" },
-    { name = "Opensearch", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 4, project_name = "${module.opensearch_module_build_step_codebuild_project.name}" }
-     ]
+    { name = "EKS-Auth", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 5, project_name = "${module.eks_auth_module_build_step_codebuild_project.name}" },
+    { name = "Database", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 6, project_name = "${aws_codebuild_project.rds_module_build_step_codebuild_project.name}" },
+    { name = "Elasticache", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 6, project_name = "${module.elasticache_module_build_step_codebuild_project.name}" },
+    { name = "Opensearch", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 6, project_name = "${module.opensearch_module_build_step_codebuild_project.name}" }
+  ]
   tags = module.tags.tags
 
   depends_on = [module.initial_bootstrap,
@@ -79,5 +80,6 @@ module "deployment_pipeline" {
     module.elasticache_module_build_step_codebuild_project,
     module.opensearch_module_build_step_codebuild_project,
     module.iam_role_module_build_step_codebuild_project,
-  module.eks_module_build_step_codebuild_project]
+    module.eks_module_build_step_codebuild_project,
+  module.eks_auth_module_build_step_codebuild_project]
 }
