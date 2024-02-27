@@ -21,9 +21,18 @@ variable "eks_cluster_name" {
 
 variable "add_extra_iam_roles" {
   type = list(object({
-    groups    = list(string)
+    groups    = string
     role_arn  = string
     user_name = string
   }))
   default = []
 }
+
+# variable "add_extra_iam_users" {
+#   type = list(object({
+#     groups    = list(string)
+#     user_arn  = string
+#     user_name = string
+#   }))
+#   default = []
+# }
