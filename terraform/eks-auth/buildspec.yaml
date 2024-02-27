@@ -16,29 +16,30 @@ phases:
   pre_build:
     commands:
       - cd terraform/eks-auth
+      - echo "${environment}"
+      - echo "${namespace}"
+      - echo "${aws_region}"
       - rm config.${environment}.hcl
       - sed -i 's/aws_region/'"$aws_region"'/g' config.txt
       - tf_state_bucket=$(aws ssm get-parameter --name "/${namespace}/${environment}/terraform-state-bucket" --query "Parameter.Value" --output text --region "$aws_region")
+      - echo "${tf_state_bucket}"
       - envsubst < config.txt > config.${environment}.hcl
-      - CB_ARN=$(aws ssm get-parameter --name "/${namespace}/${environment}/codebuild_role"  --query "Parameter.Value" --output text --region "$aws_region")
-      - echo "${CB_ARN}"
-      - CREDENTIALS=$(aws sts assume-role --role-arn $CB_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
+      - CodeBuild_ARN=$(aws ssm get-parameter --name "/${namespace}/${environment}/codebuild_role"  --query "Parameter.Value" --output text --region "$aws_region")
+      - echo "${CodeBuild_ARN}"
+      - CREDENTIALS=$(aws sts assume-role --role-arn $CodeBuild_ARN --role-session-name kubectl-codebuild --duration-seconds 900)
       - echo "${CREDENTIALS}"
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
       - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${namespace}-${environment}-eks-cluster 
-      - kubectl version  
+      - kubectl version
 
   build:
     commands:     
       - terraform init --backend-config=config.${environment}.hcl
       - terraform plan --var-file=${var.environment}.tfvars
       - terraform apply --var-file=${var.environment}.tfvars --auto-approve
-
-
-     
 
   post_build:
     commands:

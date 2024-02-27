@@ -701,7 +701,8 @@ variable "vpa" {
   default     = {}
 }
 
-variable "add_role" {
+variable "add_role_to_ssm" {
   type = bool
   default = false
+  description = "Enable it to add karpenter role name to SSM Parameter"
 }
