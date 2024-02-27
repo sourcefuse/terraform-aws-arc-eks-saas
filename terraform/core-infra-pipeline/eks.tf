@@ -53,7 +53,6 @@ module "eks_module_build_step_codebuild_project" {
 
       pre_build = {
         commands = [
-          
           "cd terraform/eks  ",
           "rm config.${var.environment}.hcl",
           "sed -i 's/aws_region/${var.region}/g' config.txt",
