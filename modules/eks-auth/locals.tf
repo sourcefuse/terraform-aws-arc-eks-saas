@@ -11,7 +11,7 @@ locals {
   new_role_yaml = join("", [
     for role in var.add_extra_iam_roles : <<-EOF
       - groups:
-        ${join("\n  - ", role.groups)}
+        ${indent(10, join("\n", [for group in role.groups : "          - ${group}"]))}
         rolearn: ${role.role_arn}
         username: ${role.user_name}
     EOF
