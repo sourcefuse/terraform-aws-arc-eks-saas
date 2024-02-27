@@ -12,7 +12,7 @@ locals {
     for role in var.add_extra_iam_roles : <<-EOF
       - groups:
 ${join("\n", [for group in role.groups : "        - ${group}"])}
-        rolearn: ${role.role_arn}
+        rolearn: ${role.role_arn} 
         username: ${role.user_name}
     EOF
   ])
