@@ -27,6 +27,7 @@ phases:
       - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - echo "$AWS_SECRET_ACCESS_KEY"
       - aws eks update-kubeconfig --name ${namespace}-${environment}-eks-cluster 
       - kubectl version
 

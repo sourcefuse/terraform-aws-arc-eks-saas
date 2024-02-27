@@ -26,4 +26,5 @@ locals {
         username: ${user.user_name}
     EOF
   ])
+
 }
