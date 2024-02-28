@@ -1,20 +1,17 @@
 region      = "us-east-1"
 namespace   = "arc-saas"
 environment = "dev"
-name        = "eks"
 
 # oidc_provider_enabled is required to be true for VPC CNI addon
-oidc_provider_enabled                     = true
-apply_config_map_aws_auth                 = true
-enabled_cluster_log_types                 = ["audit", "api"]
-cluster_log_retention_period              = 7
-instance_types                            = ["t3.medium"]
-desired_size                              = 4
-max_size                                  = 6
-min_size                                  = 3
-cluster_encryption_config_enabled         = false
-kubernetes_config_map_ignore_role_changes = true
-create_security_group                     = true
+oidc_provider_enabled        = true
+apply_config_map_aws_auth    = true
+enabled_cluster_log_types    = ["audit", "api"]
+cluster_log_retention_period = 7
+instance_types               = ["t3.medium"]
+desired_size                 = 4
+max_size                     = 6
+min_size                     = 3
+
 
 # When updating the Kubernetes version, also update the API and client-go version in test/src/go.mod
 kubernetes_version = "1.28"

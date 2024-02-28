@@ -3,8 +3,20 @@
 ################################################################################
 variable "region" {
   type        = string
-  description = "AWS Region"
   default     = "us-east-1"
+  description = "AWS Region"
+}
+
+variable "namespace" {
+  type        = string
+  default     = "arc-saas"
+  description = "Namespace for the resources."
+}
+
+variable "environment" {
+  type        = string
+  default     = "dev"
+  description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 }
 
 ################################################################################
@@ -26,31 +38,6 @@ variable "cluster_log_retention_period" {
   type        = number
   default     = 0
   description = "Number of days to retain cluster logs. Requires `enabled_cluster_log_types` to be set. See https://docs.aws.amazon.com/en_us/eks/latest/userguide/control-plane-logs.html."
-}
-
-variable "endpoint_private_access" {
-  type        = bool
-  default     = false
-  description = "Indicates whether or not the Amazon EKS private API server endpoint is enabled. Default to AWS EKS resource and it is false"
-}
-
-variable "endpoint_public_access" {
-  type        = bool
-  default     = true
-  description = "Indicates whether or not the Amazon EKS public API server endpoint is enabled. Default to AWS EKS resource and it is true"
-}
-
-
-variable "map_additional_aws_accounts" {
-  description = "Additional AWS account numbers to add to `config-map-aws-auth` ConfigMap"
-  type        = list(string)
-  default     = []
-}
-
-variable "kubernetes_config_map_ignore_role_changes" {
-  type        = bool
-  description = "Set to `true` to ignore IAM role changes in the Kubernetes Auth ConfigMap"
-  default     = true
 }
 
 variable "map_additional_iam_roles" {
@@ -91,6 +78,7 @@ variable "local_exec_interpreter" {
 
 variable "instance_types" {
   type        = list(string)
+  default     = ["t3.medium"]
   description = "Set of instance types associated with the EKS Node Group. Defaults to [\"t3.medium\"]. Terraform will only perform drift detection if a configuration value is provided"
 }
 
@@ -102,30 +90,28 @@ variable "kubernetes_labels" {
 
 variable "desired_size" {
   type        = number
+  default     = 3
   description = "Desired number of worker nodes"
 }
 
 variable "max_size" {
   type        = number
+  default     = 3
   description = "The maximum size of the AutoScaling Group"
 }
 
 variable "min_size" {
   type        = number
+  default     = 3
   description = "The minimum size of the AutoScaling Group"
 }
 
 variable "cluster_encryption_config_enabled" {
   type        = bool
-  default     = true
+  default     = false
   description = "Set to `true` to enable Cluster Encryption Configuration"
 }
 
-variable "create_security_group" {
-  type        = bool
-  default     = false
-  description = "EKS kubernetes create additioanl security group"
-}
 
 variable "cluster_encryption_config_kms_key_id" {
   type        = string
@@ -567,7 +553,7 @@ variable "ingress_nginx" {
 variable "enable_karpenter" {
   description = "Enable Karpenter controller add-on"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "karpenter" {
@@ -703,6 +689,6 @@ variable "vpa" {
 
 variable "add_role_to_ssm" {
   type        = bool
-  default     = false
+  default     = true
   description = "Enable it to add karpenter role name to SSM Parameter"
 }
