@@ -66,8 +66,9 @@ module "eks_module_build_step_codebuild_project" {
         commands = [
           "terraform init --backend-config=config.${var.environment}.hcl",
           "terraform plan --var-file=${var.environment}.tfvars",
-          "terraform apply --var-file=${var.environment}.tfvars --var=\"enable_karpenter=false\" --var=\"add_role_to_ssm=false\" --auto-approve",
           "terraform apply --var-file=${var.environment}.tfvars --auto-approve",
+          "terraform apply --var-file=${var.environment}.tfvars --var=\"enable_karpenter=true\" --auto-approve",
+          "terraform apply --var-file=${var.environment}.tfvars --var=\"add_role_to_ssm=true\" --auto-approve",
         ]
       }
     }

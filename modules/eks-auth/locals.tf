@@ -18,9 +18,7 @@ ${join("\n", [for group in user.groups : "        - ${group}"])}
     EOF
   ])
 
-  new_account_yaml = join("", [
-    <<-EOF
-${join("\n", [for account in var.add_extra_aws_accounts : "        - ${account}"])}
-    EOF
-  ])
+  new_account_yaml = length(var.add_extra_aws_accounts) > 0 ? join("\n", [
+    for account in var.add_extra_aws_accounts : "        - ${account}"
+  ]) : ""
 }
