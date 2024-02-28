@@ -272,7 +272,7 @@ module "eks_blueprints_addons" {
   tags                                         = module.tags.tags
 
 
-  depends_on = [module.eks_cluster, module.eks_node_group]
+  depends_on = [module.eks_cluster]
 }
 
 #################################################################################
@@ -291,5 +291,5 @@ module "karpenter_role_ssm_parameters" {
     }
   ]
   tags       = module.tags.tags
-  depends_on = [module.eks_cluster, module.eks_node_group, module.eks_blueprints_addons]
+  depends_on = [module.eks_cluster, module.eks_blueprints_addons]
 }
