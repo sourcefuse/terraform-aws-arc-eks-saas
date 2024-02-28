@@ -1,31 +1,31 @@
 #############################################################################################
 ## Codebuild Role
 #############################################################################################
-module "rds_module_build_step_role" {
+module "cognito_module_build_step_role" {
   source           = "../../modules/iam-role"
-  role_name        = "terraform-rds-module-build-step-role-${var.namespace}-${var.environment}"
-  role_description = "terraform-rds-module-build-step-role"
+  role_name        = "terraform-cognito-module-build-step-role-${var.namespace}-${var.environment}"
+  role_description = "terraform cognito module build step role"
   principals = {
     "Service" : ["codebuild.amazonaws.com"]
   }
   policy_documents = [
     join("", data.aws_iam_policy_document.resource_full_access.*.json)
   ]
-  policy_name        = "terraform-rds-module-build-step-policy-${var.namespace}-${var.environment}"
-  policy_description = "terraform-rds-module-build-step-policy"
+  policy_name        = "terraform-cognito-module-build-step-policy-${var.namespace}-${var.environment}"
+  policy_description = "terraform cognito module build step policy"
   tags               = module.tags.tags
 }
 
 #############################################################################################
 ## Codebuild Project
 #############################################################################################
-resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
-  name           = "terraform-rds-module-build-step-code-build-${var.namespace}-${var.environment}"
-  description    = "terraform rds module build step module code build project"
+resource "aws_codebuild_project" "cognito_module_build_step_codebuild_project" {
+  name           = "terraform-cognito-module-build-step-code-build-${var.namespace}-${var.environment}"
+  description    = "terraform cognito module build step module code build project"
   build_timeout  = 480
   queued_timeout = 480
 
-  service_role = module.rds_module_build_step_role.arn
+  service_role = module.cognito_module_build_step_role.arn
 
   artifacts {
     type = "CODEPIPELINE"
@@ -56,7 +56,7 @@ resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
           commands = [
             "export PATH=$PWD/:$PATH",
             "apt-get update -y && apt-get install -y jq unzip",
-            "cd terraform/db",
+            "cd terraform/cognito-user-pool",
             "rm config.${var.environment}.hcl",
             "sed -i 's/aws_region/${var.region}/g' config.txt",
             "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.region})",
@@ -76,7 +76,6 @@ resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
       }
     })
   }
-
-
   tags = module.tags.tags
 }
+
