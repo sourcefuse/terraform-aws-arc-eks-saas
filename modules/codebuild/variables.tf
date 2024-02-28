@@ -235,3 +235,36 @@ variable "tags" {
   type        = map(string)
   description = "Tags to assign the security groups."
 }
+
+###############################################################################
+## Codebuild Authnetication
+###############################################################################
+variable "enable_codebuild_authentication" {
+  type        = bool
+  default     = false
+  description = "Enable codebuild authentication"
+}
+
+variable "source_credential_auth_type" {
+  type        = string
+  default     = "PERSONAL_ACCESS_TOKEN"
+  description = "The type of authentication used to connect to a GitHub, GitHub Enterprise, or Bitbucket repository. value can be PERSONAL_ACCESS_TOKEN or BASIC_AUTH"
+}
+
+variable "source_credential_server_type" {
+  type        = string
+  default     = "GITHUB"
+  description = "The source provider used for this project."
+}
+
+variable "source_credential_token" {
+  type        = string
+  default     = ""
+  description = "For GitHub or GitHub Enterprise, this is the personal access token. For Bitbucket, this is the app password."
+}
+
+variable "source_credential_user_name" {
+  type        = string
+  default     = ""
+  description = "The Bitbucket username when the authType is BASIC_AUTH. This parameter is not valid for other types of source providers or connections."
+}

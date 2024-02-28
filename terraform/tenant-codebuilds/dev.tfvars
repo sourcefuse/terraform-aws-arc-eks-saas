@@ -1,0 +1,11 @@
+region                   = "us-east-1"
+namespace                = "arc-saas"
+environment              = "dev"
+concurrent_build_limit   = 2
+premium_source_version   = "main"
+standard_source_version  = "main"
+premium_buildspec        = "buildspec.yaml"
+standard_buildspec       = "buildspec.yaml"
+premium_source_location  = "https://github.com/sourcefuse/tata-elxsi-premiumplan-poc.git"
+standard_source_location = "https://github.com/sourcefuse/tata-elxsi-standard-poc.git"
+domain_name              = "arc-saas.net"
