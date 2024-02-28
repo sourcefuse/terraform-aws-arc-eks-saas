@@ -1,24 +1,24 @@
 ---
-name: Plan - EKS
+name: Plan - Cognito
 
 on:  # yamllint disable-line rule:truthy
   pull_request:
     branches:
       - dev
     paths:
-      - 'terraform/eks/*'
-      - 'terraform/eks/**'
-      - '.github/workflows/plan-eks.yaml'
+      - 'terraform/cognito-user-pool/*'
+      - 'terraform/cognito-user-pool/**'
+      - '.github/workflows/plan-cognito.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
 
 jobs:
   ## run terraform plan
   plan_dev:
-    name: EKS
+    name: Cognito
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: eks
+      working_directory: cognito-user-pool
       environment: dev
       assume_role_name: arc-saas-assume-role
       aws_region: us-east-1

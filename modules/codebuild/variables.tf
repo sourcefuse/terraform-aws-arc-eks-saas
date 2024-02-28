@@ -247,7 +247,7 @@ variable "source_credential_auth_type" {
 
 variable "source_credential_server_type" {
   type        = string
-  default     = ""
+  default     = "GITHUB"
   description = "The source provider used for this project."
 }
 

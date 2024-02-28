@@ -83,5 +83,6 @@ module "deployment_pipeline" {
     module.iam_role_module_build_step_codebuild_project,
     module.eks_module_build_step_codebuild_project,
     module.eks_auth_module_build_step_codebuild_project,
-  module.tenant_codebuild_module_build_step_codebuild_project]
+  module.tenant_codebuild_module_build_step_codebuild_project,
+  module.cognito_module_build_step_codebuild_project]
 }

@@ -113,6 +113,7 @@ module "tenant_ssm_parameters" {
       description = "Tenant Client Secret for pooled application plane"
     }
   ]
+  tags = module.tags.tags
 }
 ################################################################################
 ## Codebuild Projects
