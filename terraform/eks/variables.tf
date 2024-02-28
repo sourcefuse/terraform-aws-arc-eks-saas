@@ -162,7 +162,11 @@ variable "apply_config_map_aws_auth" {
   description = "Whether to apply the ConfigMap to allow worker nodes to join the EKS cluster and allow additional users, accounts and roles to acces the cluster"
 }
 
-
+variable "kubernetes_namespace" {
+  description = "Default k8s namespace to create"
+  type        = string
+  default     = "arc"
+}
 ################################################################################
 # Argo Rollouts
 ################################################################################
