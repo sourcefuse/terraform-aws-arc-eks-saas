@@ -186,7 +186,7 @@ module "premium_plan_codebuild_project" {
       type  = "PLAINTEXT"
     },
     {
-      name  = "CODEBUILD_ROLE"
+      name  = "CB_ROLE"
       value = data.aws_ssm_parameter.codebuild_role.value
       type  = "PLAINTEXT"
     },
@@ -308,7 +308,7 @@ module "standard_plan_codebuild_project" {
       type  = "PLAINTEXT"
     },
     {
-      name  = "CODEBUILD_ROLE"
+      name  = "CB_ROLE"
       value = data.aws_ssm_parameter.codebuild_role.value
       type  = "PLAINTEXT"
     },
