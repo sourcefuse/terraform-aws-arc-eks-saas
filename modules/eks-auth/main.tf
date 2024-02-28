@@ -43,7 +43,7 @@ resource "kubernetes_config_map_v1_data" "aws_auth" {
     # Distinct() only applies the change once, not append every run.
     mapRoles    = replace(yamlencode(distinct(concat(yamldecode(data.kubernetes_config_map.aws_auth.data.mapRoles), yamldecode(local.new_role_yaml)))), "\"", "")
     mapUsers    = replace(yamlencode(distinct(concat(yamldecode(data.kubernetes_config_map.aws_auth.data.mapUsers), yamldecode(local.new_user_yaml)))), "\"", "")
-    mapAccounts = length(local.new_account_yaml) > 0 ? replace(yamlencode(distinct(concat(yamldecode(data.kubernetes_config_map.aws_auth.data.mapAccounts), yamldecode(local.new_account_yaml)))), "\"", "") : ""
+    mapAccounts = length(local.new_account_yaml) > 0 ? replace(yamlencode(distinct(concat(yamldecode(coalesce(data.kubernetes_config_map.aws_auth.data.mapAccounts, "[]")), yamldecode(local.new_account_yaml)))), "\"", "") : ""
   }
 
   lifecycle {
