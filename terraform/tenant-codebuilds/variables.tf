@@ -147,3 +147,4 @@ variable "cloudwatch_log_stream_name" {
   default     = "log-stream"
   description = "Stream name of the logs in CloudWatch Logs."
 }
+

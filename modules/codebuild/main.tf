@@ -82,6 +82,7 @@ resource "aws_codebuild_project" "codebuild_project" {
 ## codebuild auth
 #############################################################################
 resource "aws_codebuild_source_credential" "authorization" {
+  count = var.enable_codebuild_authentication ? 1 : 0
   auth_type   = var.source_credential_auth_type
   server_type = var.source_credential_server_type
   token       = var.source_credential_token

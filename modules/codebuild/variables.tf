@@ -239,6 +239,12 @@ variable "tags" {
 ###############################################################################
 ## Codebuild Authnetication
 ###############################################################################
+variable "enable_codebuild_authentication" {
+  type = bool
+  default = false
+  description = "Enable codebuild authentication"
+}
+
 variable "source_credential_auth_type" {
   type        = string
   default     = "PERSONAL_ACCESS_TOKEN"
