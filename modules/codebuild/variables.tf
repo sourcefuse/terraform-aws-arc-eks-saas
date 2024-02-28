@@ -240,8 +240,8 @@ variable "tags" {
 ## Codebuild Authnetication
 ###############################################################################
 variable "enable_codebuild_authentication" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "Enable codebuild authentication"
 }
 
