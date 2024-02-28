@@ -83,7 +83,7 @@ module "codebuild_role_ssm_parameters" {
     {
       name        = "/${var.namespace}/${var.environment}/codebuild_role"
       value       = module.codebuild_role.arn
-      type        = "SecureString"
+      type        = "String"
       overwrite   = "true"
       description = "Codebuild IAM Role"
     }
