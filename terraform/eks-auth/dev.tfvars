@@ -9,3 +9,4 @@ map_additional_iam_users = [
     user_name = "admin"
   }
 ]
+map_aws_accounts = ["471112653618", "359891663945"]
