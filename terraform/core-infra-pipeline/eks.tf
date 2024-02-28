@@ -68,7 +68,7 @@ module "eks_module_build_step_codebuild_project" {
           "terraform plan --var-file=${var.environment}.tfvars",
           "terraform apply --var-file=${var.environment}.tfvars --auto-approve",
           "terraform apply --var-file=${var.environment}.tfvars --var=\"enable_karpenter=true\" --auto-approve",
-          "terraform apply --var-file=${var.environment}.tfvars --var=\"add_role_to_ssm=true\" --auto-approve",
+          "terraform apply --var-file=${var.environment}.tfvars --var=\"enable_karpenter=true\" --var=\"add_role_to_ssm=true\" --auto-approve",
         ]
       }
     }
