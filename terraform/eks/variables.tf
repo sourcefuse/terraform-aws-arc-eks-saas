@@ -652,9 +652,13 @@ variable "secrets_store_csi_driver_provider_aws" {
   type        = any
   default = {
     set = [
-      {
+    {
         name  = "tolerations[0].operator"
         value = "Exists"
+    },
+    {
+      name  = "cloudWatchLogs.autoCreateGroup"
+      value = true
     }]
   }
 }
