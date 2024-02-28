@@ -37,6 +37,7 @@ module "cognito_domain_string" {
   source     = "../../modules/random-password"
   length     = 6
   is_special = false
+  is_upper   = false
 }
 
 ######################################################################
