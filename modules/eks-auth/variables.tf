@@ -21,3 +21,8 @@ variable "add_extra_iam_users" {
   }))
   default = []
 }
+
+variable "add_extra_aws_accounts" {
+  type    = list(string)
+  default = []
+}

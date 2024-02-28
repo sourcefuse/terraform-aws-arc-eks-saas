@@ -557,7 +557,7 @@ variable "ingress_nginx" {
 variable "enable_karpenter" {
   description = "Enable Karpenter controller add-on"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "karpenter" {
@@ -693,6 +693,6 @@ variable "vpa" {
 
 variable "add_role_to_ssm" {
   type        = bool
-  default     = true
+  default     = false
   description = "Enable it to add karpenter role name to SSM Parameter"
 }

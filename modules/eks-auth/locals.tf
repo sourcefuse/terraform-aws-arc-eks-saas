@@ -18,4 +18,9 @@ ${join("\n", [for group in user.groups : "        - ${group}"])}
     EOF
   ])
 
+  new_account_yaml = join("", [
+    for acct in var.add_extra_aws_accounts : <<-EOF
+${join("\n", [for group in acct.accounts : "        - ${group}"])}
+    EOF
+  ])
 }
