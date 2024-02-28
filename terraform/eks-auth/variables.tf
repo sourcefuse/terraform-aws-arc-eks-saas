@@ -36,3 +36,8 @@ variable "map_additional_iam_users" {
   }))
   default = []
 }
+
+variable "map_aws_accounts" {
+  type    = list(string)
+  default = []
+}
