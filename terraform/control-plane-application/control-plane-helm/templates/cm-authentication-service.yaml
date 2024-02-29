@@ -1,0 +1,15 @@
+{{- if .Values.authenticationService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-authentication-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+data:
+      PORT: '{{ .Values.authenticationService.port }}'
+      NODE_ENV: '{{ .Values.authenticationService.node_env }}'
+      LOG_LEVEL: '{{ .Values.authenticationService.log_level }}'
+      BASE_PATH: '{{ .Values.authenticationService.base_path }}'
+      COGNITO_AUTH_REGION: '{{ .Values.region }}'
+      COGNITO_AUTH_CALLBACK_URL: 'https://{{ .Values.controlPlaneHost }}/authentication-service/auth/cognito-auth-redirect'
+{{- end}}

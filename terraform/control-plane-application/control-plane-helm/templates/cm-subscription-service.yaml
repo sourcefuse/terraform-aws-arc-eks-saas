@@ -1,0 +1,13 @@
+{{- if .Values.subscriptionService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-subscription-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+data:
+      PORT: '{{ .Values.subscriptionService.port }}'
+      NODE_ENV: '{{ .Values.subscriptionService.node_env }}'
+      LOG_LEVEL: '{{ .Values.subscriptionService.log_level }}'
+      BASE_PATH: '{{ .Values.subscriptionService.base_path }}'
+{{- end}}

@@ -1,0 +1,445 @@
+# Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+strategy:
+  type: RollingUpdate
+  maxUnavailable: 0
+  maxSurge: 1
+app:
+  url: ""
+  basePath: ""
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 7
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+  
+frontend:
+  enabled: true
+  repository: sourcefuse/tata-elxsi-control-plane
+  pullPolicy: Always
+  tag: "0.0.6"
+  log_level: "info"
+  home_path: "/main/home"
+  replicaCount: 1
+  affinity: {}
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "2"
+  Service:
+    type: NodePort
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  extraAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+    sidecar.istio.io/inject: "true"
+    enabled: "1"
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+
+#tenantMgmtFacade
+tenantMgmtFacade:
+  enabled: true
+  repository: sourcefuse/tatalx-ctrl-tenant-mgmt-facade
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  from_email: demo@arc-saas.net
+  csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /tenant-mgmt-facade
+
+#Services
+#auditService
+auditService:
+  enabled: true
+  repository: sourcefuse/tatalx-ctrl-audit-service
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /audit-service
+
+#authenticationService
+authenticationService:
+  enabled: true
+  repository: sourcefuse/tatalx-ctrl-authentication-service
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /authentication-service
+
+
+  
+#notificationService
+notificationService:
+  enabled: true
+  repository: sourcefuse/tatalx-ctrl-notification-service
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  smtp_host: email-smtp.us-west-2.amazonaws.com
+  smtp_port: "587"
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /notification-service
+
+#subscriptionService
+subscriptionService:
+  enabled: true
+  repository: sourcefuse/tatalx-ctrl-subscription-service
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /subscription-service
+
+#userTenantService
+userTenantService:
+  enabled: true
+  repository: sourcefuse/tatalx-ctrl-user-tenant-service
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /user-tenant-service
+  
+#tenantMgmtService
+tenantMgmtService:
+  enabled: true
+  repository: sourcefuse/tatalx-ctrl-tenant-mgmt-service
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  from_email: demo@arc-saas.net
+  system_user_id: ""
+  app_login_url: ""
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /tenant-mgmt-service
+
+
+#migrationJob
+migrationJob:
+#enable it when correct image has been provided
+  enabled: true
+  repository: sourcefuse/tatalx-ctrl-migrations
+  pullPolicy: Always
+  tag: "1.0.0"
+  replicaCount: 1
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+
+
+imagePullSecret:
+#enable it and pass the correct parameters below
+  enabled: true
+  name: regcred
+  registry: https://index.docker.io/v1/
+  username: sourcefuse
+  password: Docker2@31
+  email: devops@sourcefuse.com
+
+nameOverride: ""
+
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+# fsGroup: 2000
+
+securityContext: {}
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
+
+
+resources: {}
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+# limits:
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
+
+extraAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "3000"
+  sidecar.istio.io/inject: "true"
+  enabled: "1"
+
+nodeSelector: {}
+
+tolerations:
+  - effect: NoSchedule
+    key: type
+    operator: Equal
+    value: ""
+
+affinity: {}
+
+##Migration env variable
+tenantName: ${TENANT_NAME}
+tenantKey: "sourcefuse"
+tenantSecret: "ac21f52a1056de6dfc003653e508bytr"
+tenantEmail: ${TENANT_EMAIL}
+adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca97127"
+cognitoUser: ${COGNITO_USER}
+cognitoSub: ${COGNITO_USER_SUB}
+
+clientId: "tata-elxsi-control-plane"
+publicKey: "TrPbi0xJT"
+          
+
+saname: "control-plane"
+siloPipeline: ${SILO_PIPELINE}
+pooledPipeline: ${POOLED_PIPELINE}
+region: ${REGION}
+controlPlaneHost: ${CONTROL_PLANE_HOST_DOMAIN}
+arn: ${WEB_IDENTITY_ROLE_ARN}
+# ssm parameter name
+dbhost: ${DB_HOST}
+dbport: ${DB_PORT}
+dbuser: ${DB_USER}
+dbpassword: ${DB_PASSWORD}
+dbschema: ${DB_SCHEMA}
+redishost: ${REDIS_HOST}
+redisport: ${REDIS_PORT}
+redispassword: ${REDIS_PASSWORD}
+redisdatabase: ${REDIS_DATABASE}
+jwtsecret: ${JWT_SECRET}
+jwtissuer: ${JWT_ISSUER}
+authenticationdbdatabase: ${AUTH_DATABASE}
+auditdbdatabase: ${AUDIT_DATABASE}
+notificationdbdatabase: ${NOTIFICATION_DATABASE}
+subscriptiondbdatabase: ${SUBSCRIPTION_DATABASE}
+userdbdatabase: ${USER_DATABASE}
+tenantmgmtdbdatabase: ${TENANT_MGMT_DATABASE}
+cognitodomain: ${COGNITO_DOMAIN}
+cognitoid: ${COGNITO_ID}
+cognitosecret: ${COGNITO_SECRET}

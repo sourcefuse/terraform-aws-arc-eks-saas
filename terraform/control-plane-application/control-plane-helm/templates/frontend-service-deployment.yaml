@@ -1,0 +1,101 @@
+---
+#Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-frontend
+  labels:
+    app: {{ include "helm.fullname" . }}
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+    rollingUpdate:
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
+      maxSurge: {{ .Values.strategy.maxSurge }}
+  selector:
+    matchLabels:
+     app: {{ include "helm.fullname" . }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/cm-frontend-service.yaml") . | sha256sum }}
+        prometheus.io/path: {{ .Values.app.basePath }}/frontend/obf/metrics
+{{- if .Values.frontend.extraAnnotations }} 
+{{ toYaml .Values.frontend.extraAnnotations | indent 8 }} 
+{{- end }}
+      labels:
+        app: {{ include "helm.fullname" . }}
+        component: frontend
+    spec:
+      serviceAccountName: {{ .Values.saname }}
+      containers:
+        - imagePullPolicy: {{ .Values.frontend.pullPolicy }}
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+{{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.app.basePath }}/frontend
+              port: 80
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+{{- end }}
+{{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.app.basePath }}/frontend
+              port: 80
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+{{- end }}
+          name: {{ include "helm.fullname" . }}-frontend
+          image: {{ .Values.frontend.repository }}:{{ .Values.frontend.tag }}
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: env-var
+            mountPath: /usr/share/nginx/html/assets/json/environment.json
+            subPath: environment.json
+{{- if .Values.imagePullSecret.enabled }}            
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret.name }}
+{{- end }}
+
+{{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+      volumes:
+        - name: env-var
+          configMap:
+            name: {{ include "helm.fullname" . }}-cm-frontend
+            items:
+            - key: env
+              path: environment.json
+{{- with .Values.frontend.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+{{- end }}
+  
+---
+#Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "helm.fullname" . }}-frontend
+  labels:
+    app: {{ include "helm.fullname" . }}
+spec:
+  type: {{ .Values.frontend.Service.type }}
+  ports:
+    - port: {{ .Values.frontend.Service.port }}
+      targetPort: {{ .Values.frontend.Service.targetPort }}
+      protocol: {{ .Values.frontend.Service.protocol }}
+      name: web
+  selector:
+    app: {{ include "helm.fullname" . }}
+    component: frontend
+---

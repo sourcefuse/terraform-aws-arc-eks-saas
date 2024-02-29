@@ -1,0 +1,20 @@
+{{- if .Values.tenantMgmtFacade.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-tenant-mgmt-facade
+  labels:
+    app: {{ include "helm.fullname" . }}
+data:
+      PORT: '{{ .Values.tenantMgmtFacade.port }}'
+      NODE_ENV: '{{ .Values.tenantMgmtFacade.node_env }}'
+      LOG_LEVEL: '{{ .Values.tenantMgmtFacade.log_level }}'
+      BASE_PATH: '{{ .Values.tenantMgmtFacade.base_path }}'
+      CSP_SCRIPT_SRC_HASH: '{{ .Values.tenantMgmtFacade.csp_script_src_hash }}'
+      FROM_EMAIL: '{{ .Values.tenantMgmtFacade.from_email }}'
+      NOTIFICATION_SERVICE_URL: 'https://{{ .Values.controlPlaneHost }}/notification-service'
+      SUBSCRIPTION_SERVICE_URL: 'https://{{ .Values.controlPlaneHost }}/subscription-service'
+      TENANT_MGMT_URL: 'https://{{ .Values.controlPlaneHost }}/tenant-mgmt-service'
+      APP_NAME: '{{ .Values.tenantKey}}'
+{{- end}}
+

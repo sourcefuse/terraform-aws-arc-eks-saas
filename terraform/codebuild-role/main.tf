@@ -49,7 +49,10 @@ data "aws_iam_policy_document" "codebuild_policy" {
       "eks:Describe*",
       "cognito-idp:*",
       "iam:*",
-      "ssm:*"
+      "ssm:*",
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:DeleteItem"
     ]
     resources = ["*"]
   }

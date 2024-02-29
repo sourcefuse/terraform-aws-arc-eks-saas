@@ -1,0 +1,202 @@
+{{- if .Values.auditService.enabled }}
+---
+#Deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-audit-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+spec:
+  replicas: {{ .Values.auditService.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+    rollingUpdate:
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
+      maxSurge: {{ .Values.strategy.maxSurge }}
+  selector:
+    matchLabels:
+      app: {{ include "helm.fullname" . }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/cm-audit-service.yaml") . | sha256sum }}
+        prometheus.io/path: {{ .Values.app.basePath }}/audit-service/obf/metrics
+{{- if .Values.extraAnnotations }} 
+{{ toYaml .Values.extraAnnotations | indent 8 }} 
+{{- end }}
+      labels:
+        app: {{ include "helm.fullname" . }}
+        component: audit-service
+    spec:
+      serviceAccountName: {{ .Values.saname }}
+      containers:
+        - imagePullPolicy: {{ .Values.auditService.pullPolicy }}
+          resources:
+            {{- toYaml .Values.auditService.resources | nindent 12 }}
+{{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.app.basePath }}/audit-service
+              port: 3000
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+{{- end }}
+{{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.app.basePath }}/audit-service
+              port: 3000
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+{{- end }}
+          name: {{ include "helm.fullname" . }}-audit-service
+          image: {{ .Values.auditService.repository }}:{{ .Values.auditService.tag }}
+          volumeMounts:
+          - name: saas-api-token
+            mountPath: /mnt/api-token
+            readOnly: true
+          envFrom:
+          - configMapRef:
+              name: {{ include "helm.fullname" . }}-cm-audit-service
+          env:
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUDIT-SERVICE_DB_DATABASE
+          - name: DB_SCHEMA
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_SCHEMA
+          - name: REDIS_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: REDIS_HOST
+          - name: REDIS_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: REDIS_PORT
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: REDIS_PASSWORD
+          - name: REDIS_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: REDIS_DATABASE
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: JWT_SECRET
+          - name: JWT_ISSUER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: JWT_ISSUER
+{{- if .Values.imagePullSecret.enabled }}            
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret.name }}
+{{- end }}
+
+{{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+      volumes:
+        - name: saas-api-token
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ .Values.saname }}-aws-secrets
+{{- with .Values.auditService.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+{{- end }}
+  
+---
+#HPA
+
+{{- if .Values.auditService.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "helm.fullname" . }}-audit-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+    component: audit-service
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "helm.fullname" . }}-audit-service
+  minReplicas: {{ .Values.auditService.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.auditService.autoscaling.maxReplicas }}
+  metrics:
+  {{- with .Values.auditService.autoscaling.targetCPUUtilizationPercentage }}
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ . }}
+  {{- end }}
+  {{- with .Values.auditService.autoscaling.targetMemoryUtilizationPercentage }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: {{ . }}
+  {{- end }}
+{{- end }}
+---
+#Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "helm.fullname" . }}-audit-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+spec:
+  type: {{ .Values.auditService.service.type }}
+  ports:
+    - port: {{ .Values.auditService.service.port }}
+      targetPort: {{ .Values.auditService.service.targetPort }}
+      protocol: {{ .Values.auditService.service.protocol }}
+      name: web
+  selector:
+    app: {{ include "helm.fullname" . }}
+    component: audit-service
+---
+{{- end }}
