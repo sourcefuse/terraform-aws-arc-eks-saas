@@ -41,15 +41,9 @@ variable "common_name" {
 ################################################################################
 ## VPN configuration
 ################################################################################
-variable "enable_self_signed_cert" {
-  type        = bool
-  description = "Set to false to prevent the module from creating any resources"
-  default     = true
-}
-
 variable "enable_client_vpn" {
   type        = bool
-  description = "Set to false to prevent the module from creating any resources. If this is true then 'enable_self_signed_cert' must be set true"
+  description = "Set to false to prevent the module from creating any resources."
   default     = true
 }
 

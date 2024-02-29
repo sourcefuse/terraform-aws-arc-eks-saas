@@ -36,7 +36,7 @@ module "tags" {
 module "self_signed_cert_ca" {
   source = "git::https://github.com/cloudposse/terraform-aws-ssm-tls-self-signed-cert.git?ref=1.3.0"
 
-  enabled    = var.enable_self_signed_cert
+  enabled    = true
   attributes = ["self", "signed", "cert", "ca"]
 
   namespace = var.namespace
@@ -73,7 +73,7 @@ data "aws_ssm_parameter" "ca_key" {
 module "self_signed_cert_root" {
   source = "git::https://github.com/cloudposse/terraform-aws-ssm-tls-self-signed-cert.git?ref=1.3.0"
 
-  enabled = var.enable_self_signed_cert
+  enabled = true
 
   attributes = ["self", "signed", "cert", "root"]
 
