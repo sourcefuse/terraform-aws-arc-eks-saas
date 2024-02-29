@@ -13,7 +13,6 @@ data "aws_ssm_parameter" "db_user" {
 
 data "aws_ssm_parameter" "db_password" {
   name = "/${var.namespace}/${var.environment}/db_password"
-  with_decryption = true
 }
 
 data "aws_ssm_parameter" "db_port" {
