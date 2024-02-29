@@ -51,7 +51,8 @@ data "aws_iam_policy_document" "codebuild_policy" {
       "iam:*",
       "ssm:*",
       "dynamodb:PutItem",
-      "dynamodb:GetItem"
+      "dynamodb:GetItem",
+      "dynamodb:DeleteItem"
     ]
     resources = ["*"]
   }
