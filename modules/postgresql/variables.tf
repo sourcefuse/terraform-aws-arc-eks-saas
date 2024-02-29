@@ -1,47 +1,47 @@
 variable "host" {
-  type        = any
+  type        = string
   description = "Database host"
   default     = ""
 }
 
 variable "database" {
-  type        = any
+  type        = string
   description = "Name of the database"
   default     = "postgres"
 }
 
 variable "port" {
-  type        = any
+  type        = number
   description = "Database port"
   default     = 5432
 }
 
 variable "password" {
-  type        = any
+  type        = string
   description = "Database password"
   default     = ""
 }
 
 variable "username" {
-  type        = any
+  type        = string
   description = "User name of the database"
   default     = "is_root"
 }
 
 variable "superuser" {
-  type        = any
+  type        = string
   description = "Defines whether the role is a superuser, and therefore can override all access restrictions within the database"
   default     = false
 }
 
 variable "sslmode" {
-  type        = any
+  type        = string
   description = "sslmode of the database"
   default     = "require"
 }
 
 variable "connect_timeout" {
-  type        = any
+  type        = number
   description = "connection timeout of the database"
   default     = 15
 }

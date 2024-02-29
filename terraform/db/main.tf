@@ -106,7 +106,7 @@ module "db_ssm_parameters" {
     {
       name        = "/${var.namespace}/${var.environment}/db_user"
       value       = var.aurora_db_admin_username
-      type        = "SecureString"
+      type        = "String"
       overwrite   = "true"
       description = "Database User Name"
     },
@@ -120,7 +120,7 @@ module "db_ssm_parameters" {
     {
       name        = "/${var.namespace}/${var.environment}/db_host"
       value       = module.aurora.aurora_endpoint
-      type        = "SecureString"
+      type        = "String"
       overwrite   = "true"
       description = "Database Host"
     },
