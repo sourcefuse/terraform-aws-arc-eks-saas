@@ -36,11 +36,11 @@ module "tags" {
 ################################################################################
 module "postgresql_provider" {
   source    = "../../modules/postgresql"
-  host      = data.aws_ssm_parameter.db_host
-  port      = data.aws_ssm_parameter.db_port
+  host      = "${data.aws_ssm_parameter.db_host}"
+  port      = 5432
   database  = var.aurora_db_name
-  username  = data.aws_ssm_parameter.db_user
-  password  = data.aws_ssm_parameter.db_password
+  username  = "${data.aws_ssm_parameter.db_user}"
+  password  = "${data.aws_ssm_parameter.db_password}"
   sslmode   = "require"
   superuser = false
 
