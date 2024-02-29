@@ -130,62 +130,6 @@ module "db_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Database Port"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/auditdbdatabase"
-      value       = var.auditdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Audit Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/authenticationdbdatabase"
-      value       = var.authenticationdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Authentication Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/notificationdbdatabase"
-      value       = var.notificationdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Notification Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/subscriptiondbdatabase"
-      value       = var.subscriptiondbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Subscription Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/userdbdatabase"
-      value       = var.userdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "User Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/paymentdbdatabase"
-      value       = var.paymentdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Payment Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/tenantmgmtdbdatabase"
-      value       = var.tenantmgmtdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Tenant Management Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/featuretoggledbdatabase"
-      value       = var.featuretoggledbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Feature Toggle Database Name"
     }
   ]
   tags       = module.tags.tags
