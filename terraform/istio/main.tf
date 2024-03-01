@@ -37,11 +37,6 @@ resource "null_resource" "apply_manifests" {
   triggers = {
     always_run = timestamp()
   }
-  
-  provisioner "local-exec" {
-   // when    = create
-    command = "ls -la"
-  }
 
   provisioner "local-exec" {
     //when    = create
