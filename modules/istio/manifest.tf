@@ -18,7 +18,7 @@ metadata:
     app: alb-external-ingress
 spec:
   rules:
-    - host: "*"
+    - host: "${var.domain_name}"
     - http:
         paths:
           - path: /
@@ -56,7 +56,7 @@ spec:
         protocol: HTTP
         name: http
       hosts:
-        - "${var.domain_name}"
+        - "*"
     - port:
         number: 443
         protocol: HTTPS
@@ -65,7 +65,7 @@ spec:
         mode: SIMPLE
         credentialName: istio-cred
       hosts:
-        - "${var.domain_name}"
+        - "*"
     EOT
   filename = "${path.module}/manifest-files/istio_gateway.yaml"
 }
