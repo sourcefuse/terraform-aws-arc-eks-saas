@@ -1,0 +1,15 @@
+{{- if .Values.notificationService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-notification-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+data:
+      PORT: '{{ .Values.notificationService.port }}'
+      NODE_ENV: '{{ .Values.notificationService.node_env }}'
+      LOG_LEVEL: '{{ .Values.notificationService.log_level }}'
+      BASE_PATH: '{{ .Values.notificationService.base_path }}'
+      SMTP_HOST: '{{ .Values.notificationService.smtp_host }}'
+      SMTP_PORT: '{{ .Values.notificationService.smtp_port }}'
+{{- end}}

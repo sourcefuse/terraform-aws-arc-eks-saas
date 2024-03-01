@@ -1,0 +1,13 @@
+{{- if .Values.userTenantService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-user-tenant-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+data:
+      PORT: '{{ .Values.userTenantService.port }}'
+      NODE_ENV: '{{ .Values.userTenantService.node_env }}'
+      LOG_LEVEL: '{{ .Values.userTenantService.log_level }}'
+      BASE_PATH: '{{ .Values.userTenantService.base_path }}'
+{{- end}}
