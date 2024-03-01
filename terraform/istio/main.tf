@@ -43,6 +43,11 @@ resource "null_resource" "apply_manifests" {
   }
   
   provisioner "local-exec" {
+   // when    = create
+    command = "ls -la"
+  }
+
+  provisioner "local-exec" {
     //when    = create
     command = "kubectl apply -f ${path.module}/manifest-files/istio_gateway.yaml"
   }
