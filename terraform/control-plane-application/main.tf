@@ -162,7 +162,7 @@ data "template_file" "helm_values_template" {
     WEB_IDENTITY_ROLE_ARN     = module.control_plane_iam_role.arn
     DB_HOST                   = data.aws_ssm_parameter.db_host.name
     DB_PORT                   = data.aws_ssm_parameter.db_port.name
-    DB_USER                   = data.aws_ssm_parameter.db_user.name
+    DB_USER                   = data.aws_ssm_parameter.db_username.name
     DB_PASSWORD               = data.aws_ssm_parameter.db_password.name
     DB_SCHEMA                 = data.aws_ssm_parameter.db_schema.name
     REDIS_HOST                = data.aws_ssm_parameter.redis_host.name
