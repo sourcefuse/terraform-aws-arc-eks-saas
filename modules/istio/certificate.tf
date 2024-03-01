@@ -61,19 +61,6 @@ resource "kubernetes_secret" "istio-certificate-secret" {
 }
 
 
-resource "null_resource" "apply_manifests" {
-  depends_on = [local_file.istio_gateway, local_file.k8s_ingress, helm_release.istiod]
-
-  provisioner "local-exec" {
-    when    = create
-    command = "kubectl apply -f ${path.module}/manifest-files/istio_gateway.yaml"
-  }
-
-  provisioner "local-exec" {
-    when    = create
-    command = "kubectl apply -f ${path.module}/manifest-files/k8s_ingress.yaml"
-  }
-}
 
 
 
