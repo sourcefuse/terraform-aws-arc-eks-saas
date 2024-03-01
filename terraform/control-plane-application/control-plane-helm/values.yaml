@@ -403,7 +403,7 @@ tolerations:
 
 affinity: {}
 
-## if ses is enabled then generate smtp creds and store in ssm parameter in format of /${namespace}/${environment}/ses/access_key & /${namespace}/${environment}/ses/secret_access_key 
+## if ses is enabled then generate smtp creds and store in ssm parameter 
 ses:
   enabled: false
 
