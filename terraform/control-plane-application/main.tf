@@ -105,6 +105,7 @@ module "jwt_ssm_parameters" {
       description = "DB Schema"
     }
   ]
+  tags = module.tags.tags
 }
 ################################################################################
 ## Create Congito User
