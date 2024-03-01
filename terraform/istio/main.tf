@@ -28,10 +28,6 @@ module "istio" {
   common_name  = var.common_name
   organization = var.organization
 
-  alb_ingress_name    = var.alb_ingress_name
-  acm_certificate_arn = var.acm_certificate_arn
-  domain_name         = var.domain_name
-
 }
 
 
