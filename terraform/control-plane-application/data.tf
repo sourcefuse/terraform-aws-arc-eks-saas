@@ -37,7 +37,7 @@ data "terraform_remote_state" "cognito" {
 ## SSM Parameter data
 ############################################################################
 data "aws_ssm_parameter" "db_username" {
-  name = "/${var.namespace}/${var.environment}/db_username"
+  name = "/${var.namespace}/${var.environment}/db_user"
 }
 data "aws_ssm_parameter" "db_password" {
   name = "/${var.namespace}/${var.environment}/db_password"
@@ -50,6 +50,7 @@ data "aws_ssm_parameter" "db_port" {
 }
 data "aws_ssm_parameter" "db_schema" {
   name = "/${var.namespace}/${var.environment}/db_schema"
+  depends_on = [module.jwt_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "jwt_issuer" {
