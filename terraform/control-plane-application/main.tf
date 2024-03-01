@@ -198,6 +198,6 @@ resource "helm_release" "backend_app" {
   recreate_pods    = true
   values           = [data.template_file.helm_values_template.rendered]
   depends_on = [
-    aws_iam_role.web_identity_role
+    module.control_plane_iam_role
   ]
 }
