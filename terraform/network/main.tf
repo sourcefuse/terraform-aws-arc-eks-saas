@@ -110,5 +110,5 @@ module "allow_database_connection_security_group" {
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
-  tags = module.tags.tags
+  tags = merge(module.tags.tags, tomap({ Name = "${var.namespace}-${var.environment}-codebuild-db-access" }))
 }
