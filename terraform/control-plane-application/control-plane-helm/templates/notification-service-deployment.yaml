@@ -123,6 +123,7 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
+{{- if .Values.ses.enabled }}
           - name: SMTP_USER
             valueFrom:
               secretKeyRef:
@@ -133,6 +134,7 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: SMTP_PASSWORD
+{{- end }}
             
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
