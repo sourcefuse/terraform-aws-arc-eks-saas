@@ -36,7 +36,7 @@ data "terraform_remote_state" "cognito" {
 ############################################################################
 ## SSM Parameter data
 ############################################################################
-data "aws_ssm_parameter" "db_username" {
+data "aws_ssm_parameter" "db_user" {
   name = "/${var.namespace}/${var.environment}/db_user"
 }
 data "aws_ssm_parameter" "db_password" {
