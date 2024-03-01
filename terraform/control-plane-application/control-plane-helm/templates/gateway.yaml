@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: backend-plane
+  name: control-plane
   labels:
     app: {{ include "helm.name" . }}
 spec:

@@ -2,14 +2,14 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: backend-plane
+  name: control-plane
   labels:
     app: {{ include "helm.name" . }}
 spec:
   hosts:
     - {{ .Values.controlPlaneHost }}
   gateways:
-    - backend-plane 
+    - control-plane 
   http:
     - match:
         - uri:
