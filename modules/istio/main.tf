@@ -205,7 +205,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "*"
+    - "kiali.${var.common_name}"
 YAML
 
 
