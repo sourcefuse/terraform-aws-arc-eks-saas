@@ -1,0 +1,10 @@
+region              = "us-east-1"
+environment         = "dev"
+namespace           = "arc-saas"
+min_pods            = 1
+max_pods            = 9
+common_name         = "arc-saas.net"
+organization        = "Sourcefuse, Inc."
+alb_ingress_name    = "alb-external-ingress-devv"
+acm_certificate_arn = "arn:aws:acm:us-west-1:471112653618:certificate/4515f38d-6f45-4ee4-a96c-4ff126f37f40"
+domain_name         = "*.arc-saas.net" #should always start with wildcard
