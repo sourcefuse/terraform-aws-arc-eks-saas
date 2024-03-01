@@ -403,6 +403,9 @@ tolerations:
 
 affinity: {}
 
+## if ses is enabled then generate smtp creds and store in ssm parameter
+ses:
+  enabled: false
 ##Migration env variable
 tenantName: ${TENANT_NAME}
 tenantKey: "sourcefuse"
