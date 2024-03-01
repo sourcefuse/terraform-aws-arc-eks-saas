@@ -49,7 +49,7 @@ data "aws_ssm_parameter" "db_port" {
   name = "/${var.namespace}/${var.environment}/db_port"
 }
 data "aws_ssm_parameter" "db_schema" {
-  name = "/${var.namespace}/${var.environment}/db_schema"
+  name       = "/${var.namespace}/${var.environment}/db_schema"
   depends_on = [module.jwt_ssm_parameters]
 }
 
