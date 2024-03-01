@@ -86,8 +86,11 @@ jobs:
           aws-region: ${{ inputs.aws_region }}
           role-session-name: github-actions-ci
       
+      - name: Debug
+        run: echo "${{ inputs.update_backend_config }}"
+
       - name: Update backend
-        if: ${{ inputs.update_backend_config == 'true' }}
+        if: ${{ inputs.update_backend_config }} == true
         run: source scripts/update-backend-config.sh -u ${{ inputs.environment }} -d ${{ inputs.working_directory }}
         continue-on-error: false
 
