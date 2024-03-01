@@ -73,27 +73,6 @@ variable "kiali_virtual_service_host" {
   default     = "kiali.k8s.raj.ninja"
 }
 
-##############################################################################
-## ALB INGRESS CONFIGURATIONS 
-##############################################################################
-
-variable "alb_ingress_name" {
-  type        = string
-  description = " The ALB Ingress name by which the load balancer will be created."
-  default     = ""
-}
-
-variable "acm_certificate_arn" {
-  type        = string
-  description = " AWS CertificateMmanager Certificate ARN for the AWS LoadBalancer."
-  default     = ""
-}
-
-variable "domain_name" {
-  type        = string
-  description = "Domain  with wildcard   example >>   *.domain.in "
-  default     = ""
-}
 
 ##############################################################################
 ## SELF SIGNED VARIABLE
