@@ -67,7 +67,7 @@ resource "aws_iam_role_policy_attachment" "prometheus_managed_role_attachment" {
   depends_on = [module.web_identity_iam_role]
 }
 
-resource "aws_iam_role_policy_attachment" "prometheus_managed_role_attachment" {
+resource "aws_iam_role_policy_attachment" "worker_node_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
   role       = "${var.namespace}-${var.environment}-eks-workers"
 }
