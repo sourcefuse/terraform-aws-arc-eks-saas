@@ -1,0 +1,23 @@
+{{- if .Values.tenantMgmtService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-tenant-mgmt-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+data:
+      PORT: '{{ .Values.tenantMgmtService.port }}'
+      NODE_ENV: '{{ .Values.tenantMgmtService.node_env }}'
+      LOG_LEVEL: '{{ .Values.tenantMgmtService.log_level }}'
+      BASE_PATH: '{{ .Values.tenantMgmtService.base_path }}'
+      SYSTEM_USER_ID: '{{ .Values.tenantMgmtService.system_user_id }}'
+      APP_LOGIN_URL: '{{ .Values.tenantMgmtService.app_login_url }}'
+      FROM_EMAIL: '{{ .Values.tenantMgmtService.from_email }}'
+      NOTIFICATION_SERVICE_URL: 'https://{{ .Values.hostname }}/notification-service'
+      SUBSCRIPTION_SERVICE_URL: 'https://{{ .Values.hostname }}/subscription-service'
+      APP_VALIDATE_URL: 'https://{{ .Values.hostname }}/tenant/verify'
+      APP_NAME: '{{ .Values.tenantKey}}'
+      SILOED_PIPELINE: '{{ .Values.siloPipeline }}' 
+      POOLED_PIPELINE: '{{ .Values.pooledPipeline }}'
+      SYSTEM_USER_ID: '{{ .Values.adminUserTenantId }}'
+{{- end}}

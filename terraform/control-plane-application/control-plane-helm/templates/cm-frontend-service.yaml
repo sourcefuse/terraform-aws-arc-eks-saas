@@ -1,0 +1,22 @@
+{{- if .Values.frontend.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-frontend
+  labels:
+    app: {{ include "helm.fullname" . }}
+data:
+  env: |-
+      {
+        "baseApiUrl": "https://{{ .Values.controlPlaneHost }}",
+        "authServiceUrl": "{{ .Values.authenticationService.base_path }}",
+        "userServiceUrl": "{{ .Values.userTenantService.base_path }}",
+        "homePath": "{{ .Values.frontend.home_path }}",
+        "logLevel": "{{ .Values.frontend.log_level }}",
+        "clientId": "{{ .Values.clientId }}",
+        "publicKey": "{{ .Values.publicKey }}",
+        "tenantMgmtFacadeUrl": "{{ .Values.tenantMgmtFacade.base_path }}",
+        "tenantmgmtServiceUrl": "{{ .Values.tenantMgmtService.base_path }}",
+        "subscriptionServiceUrl": "{{ .Values.subscriptionService.base_path }}"
+      }
+{{- end}}
