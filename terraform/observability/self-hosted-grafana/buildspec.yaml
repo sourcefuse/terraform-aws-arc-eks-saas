@@ -34,8 +34,8 @@ phases:
     commands:     
       - terraform init --backend-config=config.${environment}.hcl
       - terraform plan --var-file=${environment}.tfvars
-      - terraform apply --var-file=${environment}.tfvars --auto-approve
       - terraform destroy --var-file=${environment}.tfvars --auto-approve
+      - terraform apply --var-file=${environment}.tfvars --auto-approve
 
   post_build:
     commands:
