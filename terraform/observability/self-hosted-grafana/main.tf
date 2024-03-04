@@ -117,6 +117,8 @@ module "grafana_ssm_parameters" {
 }
 
 resource "helm_release" "grafana" {
+
+  depends_on       = [module.prometheus]
   name             = "grafana"
   repository       = "https://grafana.github.io/helm-charts"
   chart            = "grafana"

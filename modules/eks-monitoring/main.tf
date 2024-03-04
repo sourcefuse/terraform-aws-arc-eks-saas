@@ -227,6 +227,7 @@ module "helm_addon" {
   }
 
   addon_context = local.context
+  depends_on    = [module.operator]
 
 }
 
