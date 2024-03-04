@@ -5,14 +5,14 @@ resource "aws_prometheus_workspace" "this" {
   tags  = var.tags
 }
 
-module "operator" {
-  source = "./add-ons/adot-operator"
-  count  = var.enable_amazon_eks_adot ? 1 : 0
+# module "operator" {
+#   source = "./add-ons/adot-operator"
+#   count  = var.enable_amazon_eks_adot ? 1 : 0
 
-  enable_cert_manager = var.enable_cert_manager
-  kubernetes_version  = local.eks_cluster_version
-  addon_context       = local.context
-}
+#   enable_cert_manager = var.enable_cert_manager
+#   kubernetes_version  = local.eks_cluster_version
+#   addon_context       = local.context
+# }
 
 resource "helm_release" "kube_state_metrics" {
   count            = var.enable_kube_state_metrics ? 1 : 0

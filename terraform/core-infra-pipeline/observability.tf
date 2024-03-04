@@ -52,7 +52,7 @@ module "eks_obervability_module_build_step_codebuild_project" {
   source_type = "CODEPIPELINE"
 
 
-  buildspec = "terraform/obervability/self-hosted-grafana/buildspec.yaml"
+  buildspec = "terraform/observability/self-hosted-grafana/buildspec.yaml"
 
   tags = module.tags.tags
 }

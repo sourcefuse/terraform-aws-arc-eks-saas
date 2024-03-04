@@ -2,9 +2,9 @@
 name: Apply - CodePipeline
 
 on:  # yamllint disable-line rule:truthy
-  pull_request:
+  push:
     branches:
-      - dev
+      - feature/observability
     paths:
       - 'terraform/core-infra-pipeline/*'
       - 'terraform/core-infra-pipeline/**'

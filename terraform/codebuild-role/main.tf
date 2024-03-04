@@ -52,7 +52,9 @@ data "aws_iam_policy_document" "codebuild_policy" {
       "ssm:*",
       "dynamodb:PutItem",
       "dynamodb:GetItem",
-      "dynamodb:DeleteItem"
+      "dynamodb:DeleteItem",
+      "aps:*",
+      "kms:*"
     ]
     resources = ["*"]
   }
