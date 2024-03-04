@@ -229,7 +229,7 @@ metadata:
   namespace: ${var.istio_kiali_namespace}
 spec:
   hosts:
-  - "*"
+  - "kiali.${var.common_name}"
   gateways:
   - kiali-gateway
   http:
