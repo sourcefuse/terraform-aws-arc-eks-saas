@@ -1,0 +1,5 @@
+region         =  "aws_region"
+key            = "eks-self-hosted-grafana/terraform.tfstate"
+bucket         = "${tf_state_bucket}"
+dynamodb_table = "${tf_state_table}"
+encrypt        = true

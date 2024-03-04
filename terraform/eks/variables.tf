@@ -469,7 +469,7 @@ variable "external_dns_route53_zone_arns" {
 variable "enable_external_secrets" {
   description = "Enable External Secrets operator add-on"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "external_secrets" {
