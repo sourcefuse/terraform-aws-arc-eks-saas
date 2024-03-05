@@ -33,6 +33,8 @@ phases:
   build:
     commands:     
       - terraform init --backend-config=config.${environment}.hcl
+      - ls -la 
+      - cat main.tf
       - terraform plan --var-file=${environment}.tfvars
       #- terraform apply --var-file=${environment}.tfvars --auto-approve
 
