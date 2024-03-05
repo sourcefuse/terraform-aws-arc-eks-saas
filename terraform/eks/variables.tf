@@ -269,23 +269,23 @@ variable "aws_for_fluentbit" {
     {
       name = "cloudWatchLogs.autoCreateGroup"
       value = true
-    },
-    {
-      name = "volumes[2].name"
-      value = "fluentbits-config"
-    },
-    {
-      name = "volumes[2].configMap.name"
-      value = "fluent-bit-config"
-    },
-    {
-      name = "volumeMounts[2].name"
-      value = "fluentbits-config"
-    },
-    {
-      name = "volumeMounts[2].mountPath"
-      value = "/fluent-bit/etc/"
-    }]
+    }
+    # {
+    #   name = "volumes[2].name"
+    #   value = "fluentbits-config"
+    # },
+    # {
+    #   name = "volumes[2].configMap.name"
+    #   value = "fluent-bit-config"
+    # },
+    # {
+    #   name = "volumeMounts[2].name"
+    #   value = "fluentbits-config"
+    # },
+    # {
+    #   name = "volumeMounts[2].mountPath"
+    #   value = "/fluent-bit/etc/"
+    # }]
   }
 }
 
