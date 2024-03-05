@@ -277,6 +277,10 @@ variable "aws_for_fluentbit" {
     {
       name = "opensearch.host"
       value = "vpc-arc-saas-dev-opensearch-fxi4vbtsv2x5ppfbvgke72heoa.us-east-1.es.amazonaws.com"
+    },
+    {
+      name = "opensearch.awsRoleArn"
+      value = "arn:aws:iam::471112653618:role/aws-for-fluent-bit-20240305022556740000000011"
     }]
   }
 }
