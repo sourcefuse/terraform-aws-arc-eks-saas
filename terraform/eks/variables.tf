@@ -262,30 +262,14 @@ variable "aws_for_fluentbit" {
   type        = any
   default = {
     set = [
-      {
+    {
         name  = "tolerations[0].operator"
         value = "Exists"
     },
     {
       name = "cloudWatchLogs.autoCreateGroup"
       value = true
-    }
-    # {
-    #   name = "volumes[2].name"
-    #   value = "fluentbits-config"
-    # },
-    # {
-    #   name = "volumes[2].configMap.name"
-    #   value = "fluent-bit-config"
-    # },
-    # {
-    #   name = "volumeMounts[2].name"
-    #   value = "fluentbits-config"
-    # },
-    # {
-    #   name = "volumeMounts[2].mountPath"
-    #   value = "/fluent-bit/etc/"
-    # }]
+    }]
   }
 }
 
