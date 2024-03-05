@@ -12,7 +12,7 @@ locals {
   helm_settings = {
        serviceAccount = {
           annotations = {
-            "eks.amazonaws.com/role-arn" = var.service_account_role_arn
+            "eks.amazonaws.com/role-arn" = "${var.service_account_role_arn}"
           }
         }
       }

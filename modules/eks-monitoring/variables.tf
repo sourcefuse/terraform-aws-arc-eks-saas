@@ -174,7 +174,7 @@ variable "enable_node_exporter" {
 }
 
 variable "service_account_role_arn" {
-  description = "The ARN of the IAM role associated with the Kubernetes ServiceAccount"
+  description = "The ARN of the IAM role associated with the Kubernetes Prometheus ServiceAccount"
   type        = string
   default     = ""
 }
