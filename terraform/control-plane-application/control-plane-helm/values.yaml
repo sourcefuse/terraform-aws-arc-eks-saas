@@ -447,3 +447,4 @@ tenantmgmtdbdatabase: ${TENANT_MGMT_DATABASE}
 cognitodomain: ${COGNITO_DOMAIN}
 cognitoid: ${COGNITO_ID}
 cognitosecret: ${COGNITO_SECRET}
+opensearchDoamin: ${OS_DOMAIN_ENDPOINT}
