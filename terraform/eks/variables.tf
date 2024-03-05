@@ -269,6 +269,14 @@ variable "aws_for_fluentbit" {
     {
       name = "cloudWatchLogs.autoCreateGroup"
       value = true
+    },
+    {
+      name = "opensearch.enabled"
+      value = true
+    },
+    {
+      name = "opensearch.host"
+      value = "vpc-arc-saas-dev-opensearch-fxi4vbtsv2x5ppfbvgke72heoa.us-east-1.es.amazonaws.com"
     }]
   }
 }
