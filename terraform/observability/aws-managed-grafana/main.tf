@@ -96,7 +96,7 @@ module "tags" {
 
 module "grafana" {
     source =  "../../../modules/aws-managed-grafana"
-    aws_region = var.region   
+    region = var.region   
     grafana_version        = var.grafana_version
     workspace_api_keys_keyname = var.workspace_api_keys_keyname
     workspace_api_keys_keyrole = var.workspace_api_keys_keyrole
