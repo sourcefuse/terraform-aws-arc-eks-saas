@@ -191,7 +191,7 @@ variable "ne_config" {
     helm_settings      = optional(map(string), {
        serviceAccount = {
         annotations = {
-          "eks.amazonaws.com/role-arn" = "${var.service_account_role_arn}"
+          "eks.amazonaws.com/role-arn" = var.service_account_role_arn
         }
       }
     })
