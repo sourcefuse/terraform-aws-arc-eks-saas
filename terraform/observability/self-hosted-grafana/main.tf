@@ -110,6 +110,13 @@ module "grafana_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Grafana Password"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/grafana_username"
+      value       = var.grafana_admin_username
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Grafana UserName"
     }
   ]
   tags = module.tags.tags
