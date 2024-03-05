@@ -188,13 +188,7 @@ variable "ne_config" {
     helm_chart_version = optional(string, "4.24.0")
     helm_release_name  = optional(string, "prometheus-node-exporter")
     helm_repo_url      = optional(string, "https://prometheus-community.github.io/helm-charts")
-    helm_settings      = optional(map(string), {
-       serviceAccount = {
-        annotations = {
-          "eks.amazonaws.com/role-arn" = var.service_account_role_arn
-        }
-      }
-    })
+    helm_settings      = optional(map(string), {})
     helm_values        = optional(map(any), {})
 
     scrape_interval = optional(string, "60s")

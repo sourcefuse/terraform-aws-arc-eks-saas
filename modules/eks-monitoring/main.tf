@@ -42,7 +42,7 @@ resource "helm_release" "prometheus_node_exporter" {
   repository       = var.ne_config.helm_repo_url
 
   dynamic "set" {
-    for_each = var.ne_config.helm_settings
+    for_each = local.helm_settings
     content {
       name  = set.key
       value = set.value

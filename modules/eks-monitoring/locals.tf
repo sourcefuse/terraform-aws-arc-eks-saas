@@ -9,6 +9,15 @@ data "aws_eks_cluster" "eks_cluster" {
 }
 
 locals {
+  helm_settings = {
+       serviceAccount = {
+          annotations = {
+            "eks.amazonaws.com/role-arn" = var.service_account_role_arn
+          }
+        }
+      }
+}
+locals {
   # if region is not passed, we assume the current one
   managed_prometheus_workspace_id       = var.enable_managed_prometheus ? aws_prometheus_workspace.this[0].id : var.managed_prometheus_workspace_id
   managed_prometheus_workspace_region   = coalesce(var.managed_prometheus_workspace_region, data.aws_region.current.name)
