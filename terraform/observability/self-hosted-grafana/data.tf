@@ -58,10 +58,7 @@ data "aws_iam_policy_document" "prometheus_sa_policy" {
     sid    = "PrometheusServiceAccountPolicy"
     effect = "Allow"
     actions = [
-      "aps:RemoteWrite", 
-      "aps:GetSeries", 
-      "aps:GetLabels",
-      "aps:GetMetricMetadata"
+      "aps:*"
     ]
     resources = ["*"]
   }
