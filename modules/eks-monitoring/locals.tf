@@ -10,7 +10,7 @@ data "aws_eks_cluster" "eks_cluster" {
 
 locals {
   helm_settings = {
-       "serviceAccount.annotations.eks.amazonaws.com/role-arn" = var.service_account_role_arn
+       "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn" = var.service_account_role_arn
       }
 }
 locals {
