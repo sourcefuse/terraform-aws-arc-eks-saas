@@ -36,6 +36,18 @@ provider "aws" {
   region = var.region
 }
 ################################################################################
+## tags
+################################################################################
+module "tags" {
+  source  = "sourcefuse/arc-tags/aws"
+  version = "1.2.5"
+
+  environment = var.environment
+  project     = var.namespace
+
+}
+
+################################################################################
 ## IAM Roles
 ################################################################################
 module "web_identity_iam_role" {
@@ -79,17 +91,6 @@ module "prometheus" {
   eks_cluster_id = "${var.namespace}-${var.environment}-eks-cluster"
 }
 
-################################################################################
-## tags
-################################################################################
-module "tags" {
-  source  = "sourcefuse/arc-tags/aws"
-  version = "1.2.5"
-
-  environment = var.environment
-  project     = var.namespace
-
-}
 
 ############################################################################
 ## grafana

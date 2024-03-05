@@ -84,7 +84,7 @@ module "opensearch" {
 ## Store Domain Endpoint in SSM
 ################################################################################
 module "os_ssm_parameters" {
-  source = "../../../modules/ssm-parameter"
+  source = "../../modules/ssm-parameter"
   ssm_parameters = [
     {
       name        = "/${var.namespace}/${var.environment}/opensearch/domain_endpoint"

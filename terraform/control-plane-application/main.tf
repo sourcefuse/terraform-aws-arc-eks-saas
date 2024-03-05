@@ -180,6 +180,7 @@ data "template_file" "helm_values_template" {
     COGNITO_DOMAIN            = data.aws_ssm_parameter.cognito_domain.name
     COGNITO_ID                = data.aws_ssm_parameter.cognito_id.name
     COGNITO_SECRET            = data.aws_ssm_parameter.cognito_secret.name
+    OS_DOMAIN_ENDPOINT        = data.aws_ssm_parameter.opensearch_domain_endpoint.value
   }
 }
 

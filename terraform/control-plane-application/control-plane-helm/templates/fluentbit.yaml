@@ -69,7 +69,7 @@ data:
     [OUTPUT]
         Name                 es
         Match                *
-        Host                 search-eksworkshop-logging-nny4hxb5lq4mil5imzdrgqvi6q.us-west-2.es.amazonaws.com
+        Host                 {{ .Values.opensearchDoamin }}
         Port                 443
         TLS                  On
         Replace_Dots         On

@@ -11,8 +11,6 @@ data "aws_eks_cluster_auth" "cluster_auth" {
   name = "${var.namespace}-${var.environment}-eks-cluster"
 }
 
-
-
 provider "helm" {
   kubernetes {
     host                   = data.aws_eks_cluster.eks_cluster.endpoint
@@ -33,36 +31,3 @@ provider "kubectl" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks_cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster_auth.token
 }
-
-################################################################################
-## iam policy data
-################################################################################
-data "aws_iam_policy_document" "grafana_eks_policy" {
-
-  statement {
-    sid    = "GrafanaEKSPolicy"
-    effect = "Allow"
-    actions = [
-      "aps:RemoteWrite",
-      "aps:GetSeries",
-      "aps:GetLabels",
-      "aps:GetMetricMetadata"
-    ]
-    resources = ["*"]
-  }
-}
-
-# data "aws_iam_policy_document" "prometheus_eks_policy" {
-
-#   statement {
-#     sid    = "PrometheusEKSPolicy"
-#     effect = "Allow"
-#     actions = [
-#       "aps:*",
-#       "eks:DescribeCluster",
-#       "ec2:DescribeSubnets",
-#       "ec2:DescribeSecurityGroups"
-#     ]
-#     resources = ["*"]
-#   }
-# }
