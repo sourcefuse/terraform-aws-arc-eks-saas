@@ -101,8 +101,8 @@ module "prometheus" {
 
   source          = "../../../modules/eks-monitoring"
   eks_cluster_id  = "${var.namespace}-${var.environment}-eks-cluster"
-  grafana_url     = module.grafana.grafana_workspace_endpoint
-  grafana_api_key = tostring(module.grafana.granafa_workspace_api_key.viewer.key)
+  grafana_url     = module.managed_grafana.grafana_workspace_endpoint
+  grafana_api_key = tostring(module.managed_grafana.granafa_workspace_api_key.viewer.key)
 
   depends_on = [module.managed_grafana]
 }
