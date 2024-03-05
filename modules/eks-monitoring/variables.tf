@@ -173,6 +173,12 @@ variable "enable_node_exporter" {
   default     = true
 }
 
+variable "service_account_role_arn" {
+  description = "The ARN of the IAM role associated with the Kubernetes ServiceAccount"
+  type        = string
+  default     = ""
+}
+
 variable "ne_config" {
   description = "Node exporter configuration"
   type = object({
@@ -182,7 +188,13 @@ variable "ne_config" {
     helm_chart_version = optional(string, "4.24.0")
     helm_release_name  = optional(string, "prometheus-node-exporter")
     helm_repo_url      = optional(string, "https://prometheus-community.github.io/helm-charts")
-    helm_settings      = optional(map(string), {})
+    helm_settings      = optional(map(string), {
+       serviceAccount = {
+        annotations = {
+          "eks.amazonaws.com/role-arn" = "${var.service_account_role_arn}"
+        }
+      }
+    })
     helm_values        = optional(map(any), {})
 
     scrape_interval = optional(string, "60s")

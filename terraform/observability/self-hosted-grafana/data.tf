@@ -52,17 +52,17 @@ data "aws_iam_policy_document" "grafana_eks_policy" {
   }
 }
 
-# data "aws_iam_policy_document" "prometheus_eks_policy" {
+data "aws_iam_policy_document" "prometheus_sa_policy" {
 
-#   statement {
-#     sid    = "PrometheusEKSPolicy"
-#     effect = "Allow"
-#     actions = [
-#       "aps:*",
-#       "eks:DescribeCluster",
-#       "ec2:DescribeSubnets",
-#       "ec2:DescribeSecurityGroups"
-#     ]
-#     resources = ["*"]
-#   }
-# }
+  statement {
+    sid    = "PrometheusServiceAccountPolicy"
+    effect = "Allow"
+    actions = [
+      "aps:RemoteWrite", 
+      "aps:GetSeries", 
+      "aps:GetLabels",
+      "aps:GetMetricMetadata"
+    ]
+    resources = ["*"]
+  }
+}

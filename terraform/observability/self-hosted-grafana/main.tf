@@ -86,8 +86,32 @@ resource "aws_iam_role_policy_attachment" "worker_node_role_attachment" {
 ################################################################################
 ## prometheus
 ################################################################################
+module "prometheus_service_account_role" {
+  source              = "../../../modules/iam-role"
+  role_name           = "${var.namespace}-${var.environment}-prometheus-service-account-role"
+  role_description    = "Service Account Role for prometheus"
+  assume_role_actions = ["sts:AssumeRoleWithWebIdentity"]
+  principals = {
+    "Federated" : ["arn:aws:iam::${local.sts_caller_arn}:oidc-provider/${local.oidc_arn}"]
+  }
+  policy_documents = [
+    join("", data.aws_iam_policy_document.prometheus_sa_policy.*.json)
+  ]
+  assume_role_conditions = [
+    {
+      test     = "StringEquals"
+      variable = "${local.oidc_arn}:sub"
+      values   = ["system:serviceaccount:prometheus-node-exporter:prometheus-node-exporter"]
+    }
+  ]
+  policy_name        = "${var.namespace}-${var.environment}-prometheus-service-account-policy"
+  policy_description = "Service Account Policy for prometheus"
+  tags               = module.tags.tags
+}
+
 module "prometheus" {
   source         = "../../../modules/eks-monitoring"
+  service_account_role_arn = module.prometheus_service_account_role.arn
   eks_cluster_id = "${var.namespace}-${var.environment}-eks-cluster"
 }
 
