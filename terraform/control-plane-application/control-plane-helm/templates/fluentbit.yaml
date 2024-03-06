@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: fluent-bit-config
+  name: aws-for-fluent-bit
   namespace: kube-system
   labels:
     k8s-app: fluent-bit
@@ -80,6 +80,7 @@ data:
         Logstash_Format      On
         Logstash_Prefix_Key  index_name
         Type                 _doc  
+        suppress_type_name   On
 
  
 
