@@ -213,7 +213,7 @@ resource "helm_release" "control_plane_app" {
 }
 
 resource "helm_release" "fluent_bit" {
-  name             = "aws-for-fluent-bit1"
+  name             = "aws-for-fluent-bits"
   chart            = "fluent-bit-helm" 
   namespace        = "kube-system"
   create_namespace = false
