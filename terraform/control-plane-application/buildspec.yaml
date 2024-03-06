@@ -12,6 +12,9 @@ phases:
       - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
       - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
       - chmod +x ./kubectl ./aws-iam-authenticator
+      - wget https://storage.googleapis.com/kubernetes-helm/helm-v2.14.0-linux-amd64.tar.gz -O helm.tar.gz; tar -xzf helm.tar.gz
+      - chmod +x ./linux-amd64/helm
+      - mv ./linux-amd64/helm /usr/local/bin/helm
 
   pre_build:
     commands:
@@ -29,6 +32,7 @@ phases:
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${namespace}-${environment}-eks-cluster       
       - kubectl delete cm aws-for-fluent-bit --namespace kube-system --ignore-not-found
+      - helm delete aws-for-fluent-bits --ignore-not-found
 
   build:
     commands:     
