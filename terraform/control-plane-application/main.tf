@@ -200,7 +200,7 @@ resource "local_file" "helm_values" {
 
 # Helm chart deployment
 resource "helm_release" "control_plane_app" {
-  name             = "aws-for-fluent-bit"
+  name             = "control-plane"
   chart            = "control-plane-helm" #Local Path of helm chart
   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
   create_namespace = true
@@ -213,7 +213,7 @@ resource "helm_release" "control_plane_app" {
 }
 
 resource "helm_release" "fluent_bit" {
-  name             = "kube-system"
+  name             = "aws-for-fluent-bit"
   chart            = "fluent-bit-helm" 
   namespace        = "kube-system"
   create_namespace = false
