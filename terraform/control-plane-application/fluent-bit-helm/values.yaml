@@ -1,0 +1,2 @@
+region: ${REGION}
+opensearchDoamin: ${OS_DOMAIN_ENDPOINT}

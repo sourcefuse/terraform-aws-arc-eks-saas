@@ -6,7 +6,7 @@ metadata:
   namespace: grafana
 spec:
   hosts:
-    - "grafana.{{ .Values.controlPlaneHost }}"
+    - "grafana.{{ .Values.domain }}"
   gateways:
     - grafana 
   http:

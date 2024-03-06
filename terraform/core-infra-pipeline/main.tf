@@ -74,6 +74,7 @@ module "deployment_pipeline" {
     { name = "EKS-Auth", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${module.eks_auth_module_build_step_codebuild_project.name}" },
     { name = "EKS-Istio", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${module.istio_module_build_step_codebuild_project.name}" },
     { name = "Observability", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${module.eks_obervability_module_build_step_codebuild_project.name}" },
+    { name = "Opensearch-Ops", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${aws_codebuild_project.os_ops_module_build_step_codebuild_project.name}" },
     { name = "Cognito", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.cognito_module_build_step_codebuild_project.name}" },
     { name = "ControlPlaneApplication", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.control_plane_module_build_step_codebuild_project.name}" },
     { name = "TenantCodebuilds", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.tenant_codebuild_module_build_step_codebuild_project.name}" }
@@ -85,6 +86,7 @@ module "deployment_pipeline" {
     aws_codebuild_project.rds_module_build_step_codebuild_project,
     module.elasticache_module_build_step_codebuild_project,
     module.opensearch_module_build_step_codebuild_project,
+    aws_codebuild_project.os_ops_module_build_step_codebuild_project,
     module.iam_role_module_build_step_codebuild_project,
     module.eks_module_build_step_codebuild_project,
     module.eks_auth_module_build_step_codebuild_project,

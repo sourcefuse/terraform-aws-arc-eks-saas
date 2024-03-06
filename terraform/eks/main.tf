@@ -217,3 +217,36 @@ module "karpenter_role_ssm_parameters" {
   tags       = module.tags.tags
   depends_on = [module.eks_cluster, module.eks_blueprints_addons]
 }
+
+###################################################################################
+## Provide Access to fluentbit role
+###################################################################################
+resource "aws_iam_role_policy_attachment" "fluentbit_role_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonOpenSearchServiceFullAccess"
+  role       = module.eks_blueprints_addons.aws_for_fluentbit.iam_role_name
+}
+
+module "fluentbit_role_ssm_parameters" {
+  source = "../../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/fluentbit_role"
+      value       = module.eks_blueprints_addons.aws_for_fluentbit.iam_role_arn
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "FluentBit Role ARN"
+    }
+  ]
+  tags       = module.tags.tags
+  depends_on = [module.eks_cluster, module.eks_blueprints_addons]
+}
+
+###################################################################################
+## Attach Policy to worker node Role
+###################################################################################
+resource "aws_iam_role_policy_attachment" "worker_node_role_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = "${var.namespace}-${var.environment}-eks-workers"
+
+  depends_on = [module.eks_cluster, module.eks_blueprints_addons]
+}

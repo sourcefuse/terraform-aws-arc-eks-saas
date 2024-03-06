@@ -31,3 +31,18 @@ provider "kubectl" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks_cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster_auth.token
 }
+
+################################################################################
+## prometheus service account policy
+################################################################################
+data "aws_iam_policy_document" "prometheus_sa_policy" {
+
+  statement {
+    sid    = "PrometheusServiceAccountPolicy"
+    effect = "Allow"
+    actions = [
+      "aps:*"
+    ]
+    resources = ["*"]
+  }
+}

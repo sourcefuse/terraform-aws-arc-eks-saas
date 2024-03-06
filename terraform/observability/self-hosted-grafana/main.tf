@@ -78,11 +78,6 @@ resource "aws_iam_role_policy_attachment" "prometheus_managed_role_attachment" {
   role       = "${var.namespace}-${var.environment}-web-identity-role"
   depends_on = [module.web_identity_iam_role]
 }
-
-resource "aws_iam_role_policy_attachment" "worker_node_role_attachment" {
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-  role       = "${var.namespace}-${var.environment}-eks-workers"
-}
 ################################################################################
 ## prometheus
 ################################################################################
@@ -110,9 +105,9 @@ module "prometheus_service_account_role" {
 }
 
 module "prometheus" {
-  source         = "../../../modules/eks-monitoring"
+  source                   = "../../../modules/eks-monitoring"
   service_account_role_arn = module.prometheus_service_account_role.arn
-  eks_cluster_id = "${var.namespace}-${var.environment}-eks-cluster"
+  eks_cluster_id           = "${var.namespace}-${var.environment}-eks-cluster"
 }
 
 

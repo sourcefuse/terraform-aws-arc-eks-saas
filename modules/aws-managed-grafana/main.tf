@@ -29,7 +29,7 @@ module "managed_grafana" {
   })
 
   grafana_version = var.grafana_version
-  
+
   workspace_api_keys = {
     viewer = {
       key_name        = var.workspace_api_keys_keyname

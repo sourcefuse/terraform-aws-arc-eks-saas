@@ -15,6 +15,6 @@ output "grafana_workspace_iam_role_arn" {
 
 
 output "granafa_workspace_api_key" {
-  value = module.managed_grafana.workspace_api_keys
+  value     = module.managed_grafana.workspace_api_keys
   sensitive = true
 }
