@@ -230,13 +230,19 @@ module "premium_plan_codebuild_project" {
   cloudwatch_log_group_name  = var.premium_cloudwatch_log_group_name
   cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
 
-  enable_codebuild_authentication = true
-  source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
-  source_credential_server_type   = "GITHUB"
-  source_credential_token         = data.aws_ssm_parameter.github_token.value
+  enable_codebuild_authentication = false
+  # source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
+  # source_credential_server_type   = "GITHUB"
+  # source_credential_token         = data.aws_ssm_parameter.github_token.value
 
   tags       = module.tags.tags
-  depends_on = [module.tenant_ssm_parameters]
+  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.premium_repo]
+}
+
+resource "aws_codecommit_repository" "premium_repo" {
+  repository_name = var.premium_source_location
+  description     = "${var.namespace}-${var.environment}-premium-repository."
+  default_branch  = var.premium_source_version
 }
 
 # standard
@@ -352,13 +358,17 @@ module "standard_plan_codebuild_project" {
   cloudwatch_log_group_name  = var.standard_cloudwatch_log_group_name
   cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
 
-  enable_codebuild_authentication = true
-  source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
-  source_credential_server_type   = "GITHUB"
-  source_credential_token         = data.aws_ssm_parameter.github_token.value
+  enable_codebuild_authentication = false
+  # source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
+  # source_credential_server_type   = "GITHUB"
+  # source_credential_token         = data.aws_ssm_parameter.github_token.value
 
   tags       = module.tags.tags
-  depends_on = [module.tenant_ssm_parameters]
+  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.standard_repo]
 }
 
-
+resource "aws_codecommit_repository" "standard_repo" {
+  repository_name = var.standard_source_location
+  description     = "${var.namespace}-${var.environment}-standard-repository."
+  default_branch  = var.standard_source_version
+}
