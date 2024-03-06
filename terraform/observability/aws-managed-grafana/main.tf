@@ -52,12 +52,12 @@ module "tags" {
 ## Grafana
 ############################################################################
 module "grafana" {
-    source =  "../../../modules/aws-managed-grafana"
-    region = var.region   
-    grafana_version        = var.grafana_version
-    workspace_api_keys_keyname = var.workspace_api_keys_keyname
-    workspace_api_keys_keyrole = var.workspace_api_keys_keyrole
-    workspace_api_keys_ttl = var.workspace_api_keys_ttl
+  source                     = "../../../modules/aws-managed-grafana"
+  region                     = var.region
+  grafana_version            = var.grafana_version
+  workspace_api_keys_keyname = var.workspace_api_keys_keyname
+  workspace_api_keys_keyrole = var.workspace_api_keys_keyrole
+  workspace_api_keys_ttl     = var.workspace_api_keys_ttl
 
 }
 ############################################################################
@@ -88,10 +88,10 @@ module "prometheus_service_account_role" {
 
 module "prometheus" {
 
-  source          = "../../../modules/eks-monitoring"
-  eks_cluster_id  = "${var.namespace}-${var.environment}-eks-cluster"
-  grafana_url     = module.grafana.grafana_workspace_endpoint
-  grafana_api_key = tostring(module.grafana.granafa_workspace_api_key.viewer.key)
+  source                   = "../../../modules/eks-monitoring"
+  eks_cluster_id           = "${var.namespace}-${var.environment}-eks-cluster"
+  grafana_url              = module.grafana.grafana_workspace_endpoint
+  grafana_api_key          = tostring(module.grafana.granafa_workspace_api_key.viewer.key)
   service_account_role_arn = module.prometheus_service_account_role.arn
 
   depends_on = [module.grafana]

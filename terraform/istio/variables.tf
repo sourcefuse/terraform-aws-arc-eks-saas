@@ -56,7 +56,7 @@ variable "acm_certificate_arn" {
   default     = ""
 }
 
-variable "domain_name" {
+variable "full_domain_name" {
   type        = string
   description = "Domain  with wildcard   example >>   *.domain.in "
   default     = ""

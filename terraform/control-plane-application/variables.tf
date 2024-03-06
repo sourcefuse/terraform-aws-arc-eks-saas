@@ -46,6 +46,11 @@ variable "tenant_email" {
   default     = "harshit.kumar+1@sourcefuse.com"
 }
 
+variable "domain" {
+  type        = string
+  description = "Enter Registered Domain Name"
+  default     = "arc-saas.net"
+}
 
 variable "control_plane_host" {
   type        = string

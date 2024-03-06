@@ -18,7 +18,7 @@ metadata:
     app: alb-external-ingress
 spec:
   rules:
-    - host: "${var.domain_name}"
+    - host: "${var.full_domain_name}"
     - http:
         paths:
           - path: /

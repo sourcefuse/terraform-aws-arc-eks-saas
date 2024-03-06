@@ -151,8 +151,8 @@ resource "kubernetes_namespace" "my_namespace" {
 data "template_file" "fluentbit_helm_value_template" {
   template = file("${path.module}/fluent-bit-helm/values.yaml")
   vars = {
-    REGION                    = var.region
-    OS_DOMAIN_ENDPOINT        = data.aws_ssm_parameter.opensearch_domain_endpoint.value
+    REGION             = var.region
+    OS_DOMAIN_ENDPOINT = data.aws_ssm_parameter.opensearch_domain_endpoint.value
   }
 }
 
@@ -167,6 +167,7 @@ data "template_file" "helm_values_template" {
     POOLED_PIPELINE           = "${var.namespace}-${var.environment}-standard-codebuild-project"
     REGION                    = var.region
     CONTROL_PLANE_HOST_DOMAIN = var.control_plane_host
+    DOMAIN                    = var.domain
     WEB_IDENTITY_ROLE_ARN     = module.control_plane_iam_role.arn
     DB_HOST                   = data.aws_ssm_parameter.db_host.name
     DB_PORT                   = data.aws_ssm_parameter.db_port.name
@@ -214,7 +215,7 @@ resource "helm_release" "control_plane_app" {
 
 resource "helm_release" "fluent_bit" {
   name             = "aws-for-fluent-bits"
-  chart            = "fluent-bit-helm" 
+  chart            = "fluent-bit-helm"
   namespace        = "kube-system"
   create_namespace = false
   force_update     = true

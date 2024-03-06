@@ -262,13 +262,13 @@ variable "aws_for_fluentbit" {
   type        = any
   default = {
     set = [
-    {
+      {
         name  = "tolerations[0].operator"
         value = "Exists"
-    },
-    {
-      name = "cloudWatchLogs.autoCreateGroup"
-      value = true
+      },
+      {
+        name  = "cloudWatchLogs.autoCreateGroup"
+        value = true
     }]
   }
 }

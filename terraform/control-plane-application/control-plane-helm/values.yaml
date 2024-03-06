@@ -425,6 +425,7 @@ siloPipeline: ${SILO_PIPELINE}
 pooledPipeline: ${POOLED_PIPELINE}
 region: ${REGION}
 controlPlaneHost: ${CONTROL_PLANE_HOST_DOMAIN}
+domain: ${DOMAIN}
 arn: ${WEB_IDENTITY_ROLE_ARN}
 # ssm parameter name
 dbhost: ${DB_HOST}

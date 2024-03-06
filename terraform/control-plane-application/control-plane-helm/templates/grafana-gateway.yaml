@@ -12,4 +12,4 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "grafana.{{ .Values.controlPlaneHost }}"
+    - "grafana.{{ .Values.domain }}"
