@@ -116,11 +116,11 @@ module "allow_database_connection_security_group" {
 #################################################################################
 ## Tag public subnets, Required for load balancer controller addon
 #################################################################################
-data "aws_subnets" "private" {
+data "aws_subnets" "public" {
   filter {
     name = "tag:Type"
 
-    values = ["private"]
+    values = ["public"]
   }
   depends_on = [module.network]
 }
