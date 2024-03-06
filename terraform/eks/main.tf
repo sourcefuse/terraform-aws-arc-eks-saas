@@ -57,15 +57,15 @@ module "tags" {
 
 }
 
-# #################################################################################
-# ## Tag public subnets, Required for load balancer controller addon
-# #################################################################################
-# resource "aws_ec2_tag" "alb_tag" {
-#   for_each    = toset(data.aws_subnets.public.ids)
-#   resource_id = each.value
-#   key         = "kubernetes.io/role/elb"
-#   value       = "1"
-# }
+#################################################################################
+## Tag public subnets, Required for load balancer controller addon
+#################################################################################
+resource "aws_ec2_tag" "alb_tag" {
+  for_each    = toset(data.aws_subnets.public.ids)
+  resource_id = each.value
+  key         = "kubernetes.io/role/elb"
+  value       = "1"
+}
 
 #################################################################################
 ## EKS cluster
@@ -238,5 +238,15 @@ module "fluentbit_role_ssm_parameters" {
     }
   ]
   tags       = module.tags.tags
+  depends_on = [module.eks_cluster, module.eks_blueprints_addons]
+}
+
+###################################################################################
+## Attach Policy to worker node Role
+###################################################################################
+resource "aws_iam_role_policy_attachment" "worker_node_role_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = "${var.namespace}-${var.environment}-eks-workers"
+
   depends_on = [module.eks_cluster, module.eks_blueprints_addons]
 }
