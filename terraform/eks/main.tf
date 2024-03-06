@@ -217,3 +217,11 @@ module "karpenter_role_ssm_parameters" {
   tags       = module.tags.tags
   depends_on = [module.eks_cluster, module.eks_blueprints_addons]
 }
+
+###################################################################################
+## Provide Access to fluentbit role
+###################################################################################
+resource "aws_iam_role_policy_attachment" "fluentbit_role_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = module.eks_blueprints_addons.aws_for_fluentbit.iam_role_arn
+}
