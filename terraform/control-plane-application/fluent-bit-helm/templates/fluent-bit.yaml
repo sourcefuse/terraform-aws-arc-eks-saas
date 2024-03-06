@@ -5,9 +5,6 @@ metadata:
   namespace: kube-system
   labels:
     k8s-app: fluent-bit
-  annotation: 
-    meta.helm.sh/release-name: kube-system
-    meta.helm.sh/release-namespace: kube-system
 data:
   # Configuration files: server, input, filters and output
   # ======================================================
