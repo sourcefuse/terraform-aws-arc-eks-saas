@@ -219,5 +219,6 @@ resource "helm_release" "fluent_bit" {
   namespace        = "kube-system"
   create_namespace = false
   force_update     = true
+  replace = true
   values           = [data.template_file.fluentbit_helm_value_template.rendered]
 }
