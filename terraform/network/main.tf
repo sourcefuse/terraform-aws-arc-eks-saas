@@ -130,4 +130,5 @@ resource "aws_ec2_tag" "alb_tag" {
   resource_id = each.value
   key         = "kubernetes.io/role/elb"
   value       = "1"
+  depends_on = [module.network]
 }
