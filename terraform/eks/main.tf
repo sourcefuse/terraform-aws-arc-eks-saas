@@ -222,6 +222,6 @@ module "karpenter_role_ssm_parameters" {
 ## Provide Access to fluentbit role
 ###################################################################################
 resource "aws_iam_role_policy_attachment" "fluentbit_role_attachment" {
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonOpenSearchServiceFullAccess"
   role       = module.eks_blueprints_addons.aws_for_fluentbit.iam_role_name
 }
