@@ -214,11 +214,12 @@ resource "helm_release" "control_plane_app" {
 }
 
 resource "helm_release" "fluent_bit" {
+  count =   1
   name             = "aws-for-fluent-bits"
   chart            = "fluent-bit-helm"
   namespace        = "kube-system"
   create_namespace = false
   force_update     = true
-  replace = true
+  replace          = true
   values           = [data.template_file.fluentbit_helm_value_template.rendered]
 }
