@@ -31,5 +31,5 @@ output "karpenter_role_name" {
 
 output "fluentbit_role_name" {
   description = "EKS Karpenter Role Name"
-  value       = module.eks_blueprints_addons.aws_for_fluentbit
+  value       = module.eks_blueprints_addons.aws_for_fluentbit.iam_role_arn
 }
