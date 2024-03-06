@@ -112,3 +112,22 @@ module "allow_database_connection_security_group" {
   }
   tags = merge(module.tags.tags, tomap({ Name = "${var.namespace}-${var.environment}-codebuild-db-access" }))
 }
+
+#################################################################################
+## Tag public subnets, Required for load balancer controller addon
+#################################################################################
+data "aws_subnets" "private" {
+  filter {
+    name = "tag:Type"
+
+    values = ["private"]
+  }
+  depends_on = [module.network]
+}
+
+resource "aws_ec2_tag" "alb_tag" {
+  for_each    = toset(data.aws_subnets.public.ids)
+  resource_id = each.value
+  key         = "kubernetes.io/role/elb"
+  value       = "1"
+}
