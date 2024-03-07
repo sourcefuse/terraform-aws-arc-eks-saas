@@ -130,6 +130,12 @@ variable "domain_name" {
   description = "Domain name of the control plane"
 }
 
+variable "control_plane_host" {
+  type        = string
+  default     = ""
+  description = "Host Name of the control plane"
+}
+
 variable "premium_cloudwatch_log_group_name" {
   type        = string
   default     = "premium-codebuild-log-group"

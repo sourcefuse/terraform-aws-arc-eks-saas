@@ -22,10 +22,10 @@ readinessProbe:
   timeoutSeconds: 5
   successThreshold: 1
   failureThreshold: 5
-  
+
 frontend:
   enabled: true
-  repository: sourcefuse/tata-elxsi-control-plane
+  repository: sourcefuse/tata-elxsi-application-plane
   pullPolicy: Always
   tag: "0.0.6"
   log_level: "info"
@@ -47,7 +47,7 @@ frontend:
   extraAnnotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "3000"
-    sidecar.istio.io/inject: "true"
+    sidecar.istio.io/inject: "false"
     enabled: "1"
   autoscaling:
     enabled: false
@@ -56,48 +56,12 @@ frontend:
     targetCPUUtilizationPercentage: 75
     targetMemoryUtilizationPercentage: 80
 
-#tenantMgmtFacade
-tenantMgmtFacade:
-  enabled: true
-  repository: sourcefuse/tatalx-ctrl-tenant-mgmt-facade
-  pullPolicy: Always
-  tag: "0.0.1"
-  replicaCount: 1
-  port: 3000
-  node_env: "production"
-  log_level: "info"
-  from_email: demo@arc-saas.net
-  csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
-  affinity: {}
-  allowed_origins: "*"
-  imagePullPolicy:
-    enabled: "yes"
-    name: regcred
-  resources:
-    requests:
-      memory: "128Mi"
-      cpu: "100m"
-    limits:
-      memory: "2048Mi"
-      cpu: "1"
-  service:
-    type: NodePort
-    port: 3000
-    targetPort: 3000
-    protocol: TCP
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 1
-    targetCPUUtilizationPercentage: 75
-    targetMemoryUtilizationPercentage: 80
-  base_path: /tenant-mgmt-facade
 
 #Services
 #auditService
 auditService:
   enabled: true
-  repository: sourcefuse/tatalx-ctrl-audit-service
+  repository: sourcefuse/tata-elxsi-poc-app-plane-audit-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -132,7 +96,7 @@ auditService:
 #authenticationService
 authenticationService:
   enabled: true
-  repository: sourcefuse/tatalx-ctrl-authentication-service
+  repository: sourcefuse/tata-elxsi-poc-app-plane-authentication-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -164,20 +128,16 @@ authenticationService:
     targetMemoryUtilizationPercentage: 80
   base_path: /authentication-service
 
-
-  
 #notificationService
 notificationService:
   enabled: true
-  repository: sourcefuse/tatalx-ctrl-notification-service
+  repository: sourcefuse/tata-elxsi-poc-app-plane-notification-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
   log_level: "info"
-  smtp_host: email-smtp.us-west-2.amazonaws.com
-  smtp_port: "587"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -203,10 +163,10 @@ notificationService:
     targetMemoryUtilizationPercentage: 80
   base_path: /notification-service
 
-#subscriptionService
-subscriptionService:
+#schedulerService
+schedulerService:
   enabled: true
-  repository: sourcefuse/tatalx-ctrl-subscription-service
+  repository: sourcefuse/tata-elxsi-poc-app-plane-scheduler-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -236,12 +196,12 @@ subscriptionService:
     maxReplicas: 1
     targetCPUUtilizationPercentage: 75
     targetMemoryUtilizationPercentage: 80
-  base_path: /subscription-service
+  base_path: /scheduler-service
 
 #userTenantService
 userTenantService:
   enabled: true
-  repository: sourcefuse/tatalx-ctrl-user-tenant-service
+  repository: sourcefuse/tata-elxsi-poc-app-plane-user-tenant-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -272,20 +232,17 @@ userTenantService:
     targetCPUUtilizationPercentage: 75
     targetMemoryUtilizationPercentage: 80
   base_path: /user-tenant-service
-  
-#tenantMgmtService
-tenantMgmtService:
+
+#videConferencingService
+videoConferencingService:
   enabled: true
-  repository: sourcefuse/tatalx-ctrl-tenant-mgmt-service
+  repository: sourcefuse/tata-elxsi-poc-app-plane-video-conferencing-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
   log_level: "info"
-  from_email: demo@arc-saas.net
-  system_user_id: ""
-  app_login_url: ""
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -309,35 +266,33 @@ tenantMgmtService:
     maxReplicas: 1
     targetCPUUtilizationPercentage: 75
     targetMemoryUtilizationPercentage: 80
-  base_path: /tenant-mgmt-service
-
+  base_path: /video-conferencing-service
 
 #migrationJob
 migrationJob:
 #enable it when correct image has been provided
   enabled: true
-  repository: sourcefuse/tatalx-ctrl-migrations
+  repository: sourcefuse/tata-elxsi-poc-app-plane-migrations
   pullPolicy: Always
   tag: "1.0.0"
   replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
     enabled: "yes"
     name: regcred
-  resources:
-    requests:
-      memory: "128Mi"
-      cpu: "100m"
-    limits:
-      memory: "2048Mi"
-      cpu: "1"
   service:
     type: NodePort
     port: 3000
     targetPort: 3000
     protocol: TCP
 
+##Common env's
+
+#Common URL'S
 
 imagePullSecret:
 #enable it and pass the correct parameters below
@@ -374,7 +329,6 @@ securityContext: {}
 # runAsNonRoot: true
 # runAsUser: 1000
 
-
 resources: {}
 # We usually recommend not to specify default resources and to leave this as a conscious
 # choice for the user. This also increases chances charts run on environments with little
@@ -397,37 +351,36 @@ nodeSelector: {}
 
 tolerations:
   - effect: NoSchedule
-    key: type
+    key: silo-node
     operator: Equal
-    value: ""
+    value: ${TENANT_KEY}
 
 affinity: {}
 
-## if ses is enabled then generate smtp creds and store in ssm parameter 
-ses:
-  enabled: true
-
-##Migration env variable
+#Migration Job Variable
+tenantKey: ${TENANT_KEY}
 tenantName: ${TENANT_NAME}
-tenantKey: "sourcefuse"
-tenantSecret: "ac21f52a1056de6dfc003653e508bytr"
+tenantSecret: ${TENANT_SECRET}
 tenantEmail: ${TENANT_EMAIL}
-adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca97127"
 cognitoUser: ${COGNITO_USER}
 cognitoSub: ${COGNITO_USER_SUB}
+adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
+userCallbackSecret: "yugeyifgweyfgy"
 
-clientId: "tata-elxsi-control-plane"
-publicKey: "TrPbi0xJT"
-          
+# Frontend variable
+clientId: ${TENANT_CLIENT_ID}
+publicKey: ${TENANT_CLIENT_SECRET}
 
-saname: "control-plane"
-siloPipeline: ${SILO_PIPELINE}
-pooledPipeline: ${POOLED_PIPELINE}
 region: ${REGION}
-controlPlaneHost: ${CONTROL_PLANE_HOST_DOMAIN}
-domain: ${DOMAIN}
+cognitodomain: ${COGNITO_DOMAIN}
+cognitoid: ${COGNITO_ID}
+cognitosecret: ${COGNITO_SECRET}
+karpenterRoleName: ${KARPENTER_ROLE}
+eksClusterName: ${EKS_CLUSTER_NAME}
+hostname: ${TENANT_HOST_NAME}
+tenant: ${TENANT_KEY}
+saname: ${TENANT_KEY}
 arn: ${WEB_IDENTITY_ROLE_ARN}
-# ssm parameter name
 dbhost: ${DB_HOST}
 dbport: ${DB_PORT}
 dbuser: ${DB_USER}
@@ -435,16 +388,12 @@ dbpassword: ${DB_PASSWORD}
 dbschema: ${DB_SCHEMA}
 redishost: ${REDIS_HOST}
 redisport: ${REDIS_PORT}
-redispassword: ${REDIS_PASSWORD}
 redisdatabase: ${REDIS_DATABASE}
 jwtsecret: ${JWT_SECRET}
 jwtissuer: ${JWT_ISSUER}
 authenticationdbdatabase: ${AUTH_DATABASE}
 auditdbdatabase: ${AUDIT_DATABASE}
 notificationdbdatabase: ${NOTIFICATION_DATABASE}
-subscriptiondbdatabase: ${SUBSCRIPTION_DATABASE}
+schedulerdbdatabase: ${SCHEDULER_DATABASE}
 userdbdatabase: ${USER_DATABASE}
-tenantmgmtdbdatabase: ${TENANT_MGMT_DATABASE}
-cognitodomain: ${COGNITO_DOMAIN}
-cognitoid: ${COGNITO_ID}
-cognitosecret: ${COGNITO_SECRET}
+videodbdatabase: ${VIDEO_DATABASE}

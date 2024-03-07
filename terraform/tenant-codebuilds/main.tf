@@ -201,6 +201,11 @@ module "premium_plan_codebuild_project" {
       type  = "PLAINTEXT"
     },
     {
+      name  = "CONTROL_PLANE_HOST"
+      value = var.control_plane_host
+      type  = "PLAINTEXT"
+    },
+    {
       name  = "ACCESS_TOKEN_EXPIRATION"
       value = 3600
       type  = "PLAINTEXT"
@@ -326,6 +331,11 @@ module "standard_plan_codebuild_project" {
     {
       name  = "DOMAIN_NAME"
       value = var.domain_name
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "CONTROL_PLANE_HOST"
+      value = var.control_plane_host
       type  = "PLAINTEXT"
     },
     {
