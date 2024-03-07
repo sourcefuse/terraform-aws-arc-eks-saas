@@ -344,8 +344,8 @@ imagePullSecret:
   enabled: true
   name: regcred
   registry: https://index.docker.io/v1/
-  username: sourcefuse
-  password: Docker2@31
+  username: ${DOCKER_USERNAME}
+  password: ${DOCKER_PASSWORD}
   email: devops@sourcefuse.com
 
 nameOverride: ""
@@ -425,6 +425,7 @@ siloPipeline: ${SILO_PIPELINE}
 pooledPipeline: ${POOLED_PIPELINE}
 region: ${REGION}
 controlPlaneHost: ${CONTROL_PLANE_HOST_DOMAIN}
+domain: ${DOMAIN}
 arn: ${WEB_IDENTITY_ROLE_ARN}
 # ssm parameter name
 dbhost: ${DB_HOST}

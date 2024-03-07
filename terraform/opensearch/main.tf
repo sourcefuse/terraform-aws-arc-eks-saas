@@ -81,6 +81,24 @@ module "opensearch" {
 }
 
 ################################################################################
+## Store Domain Endpoint in SSM
+################################################################################
+module "os_ssm_parameters" {
+  source = "../../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/opensearch/domain_endpoint"
+      value       = module.opensearch.domain_endpoint
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "OpenSearch Domain Endpoint"
+    }
+  ]
+  tags = module.tags.tags
+
+}
+
+################################################################################
 ## security group
 ################################################################################
 resource "aws_security_group_rule" "additional" {
