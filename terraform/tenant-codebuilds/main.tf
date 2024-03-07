@@ -132,7 +132,7 @@ module "premium_plan_codebuild_project" {
   source_version  = var.premium_source_version
   source_type     = var.source_type
   buildspec       = var.premium_buildspec
-  source_location = var.premium_source_location
+  source_location = aws_codecommit_repository.premium_repo.clone_url_http
 
   vpc_id             = data.aws_vpc.vpc.id
   subnets            = data.aws_subnets.private.ids
@@ -247,7 +247,11 @@ module "premium_plan_codebuild_project" {
 resource "aws_codecommit_repository" "premium_repo" {
   repository_name = "${var.namespace}-${var.environment}-premium-plan-repository"
   description     = "${var.namespace}-${var.environment}-premium-repository."
-  default_branch  = var.premium_source_version
+  default_branch  = "main"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # standard
@@ -265,7 +269,7 @@ module "standard_plan_codebuild_project" {
   source_version  = var.standard_source_version
   source_type     = var.source_type
   buildspec       = var.standard_buildspec
-  source_location = var.standard_source_location
+  source_location = aws_codecommit_repository.standard_repo.clone_url_http
 
   vpc_id             = data.aws_vpc.vpc.id
   subnets            = data.aws_subnets.private.ids
@@ -380,5 +384,9 @@ module "standard_plan_codebuild_project" {
 resource "aws_codecommit_repository" "standard_repo" {
   repository_name = "${var.namespace}-${var.environment}-standard-plan-repository"
   description     = "${var.namespace}-${var.environment}-standard-repository."
-  default_branch  = var.standard_source_version
+  default_branch  = "main"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }

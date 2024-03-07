@@ -176,7 +176,7 @@ notificationService:
   port: 3000
   node_env: "production"
   log_level: "info"
-  smtp_host: email-smtp.us-west-2.amazonaws.com
+  smtp_host: email-smtp.us-east-1.amazonaws.com
   smtp_port: "587"
   affinity: {}
   allowed_origins: "*"
