@@ -61,14 +61,6 @@ module "tenant_codebuild_module_build_step_codebuild_project" {
           "terraform init --backend-config=config.${var.environment}.hcl",
           "terraform plan --var-file=${var.environment}.tfvars",
           "terraform apply --var-file=${var.environment}.tfvars -auto-approve",
-          "ls -la"
-          "pwd"
-          "cd .."
-          "ls -la"
-          "pwd"
-          "cd .."
-          "ls -la"
-          "pwd"
         ]
       }
 
