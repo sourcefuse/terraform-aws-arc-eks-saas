@@ -245,7 +245,7 @@ module "premium_plan_codebuild_project" {
 }
 
 resource "aws_codecommit_repository" "premium_repo" {
-  repository_name = var.premium_source_location
+  repository_name = "${var.namespace}-${var.environment}-premium-plan-repository"
   description     = "${var.namespace}-${var.environment}-premium-repository."
   default_branch  = var.premium_source_version
 }
@@ -378,7 +378,7 @@ module "standard_plan_codebuild_project" {
 }
 
 resource "aws_codecommit_repository" "standard_repo" {
-  repository_name = var.standard_source_location
+  repository_name = "${var.namespace}-${var.environment}-standard-plan-repository"
   description     = "${var.namespace}-${var.environment}-standard-repository."
   default_branch  = var.standard_source_version
 }

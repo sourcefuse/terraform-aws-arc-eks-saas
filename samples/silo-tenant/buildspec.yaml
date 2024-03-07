@@ -64,7 +64,7 @@ phases:
       - cd terraform/bootstrap
       - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
       - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
-      - cd ../..
+      - cd ..
 
       # Configuing S3 backend
       - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
