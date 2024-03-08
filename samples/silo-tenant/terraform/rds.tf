@@ -13,13 +13,15 @@ module "aurora" {
   version = "2.0.3"
 
 
-  environment = var.environment
+  environment = "${var.environment}-${var.tenant}"
   namespace   = var.namespace
   region      = var.region
   vpc_id      = data.aws_vpc.vpc.id
 
-  aurora_cluster_enabled                    = var.aurora_cluster_enabled
-  aurora_cluster_name                       = "${var.namespace}-${var.environment}-${var.tenant}-aurora"
+  aurora_cluster_enabled = var.aurora_cluster_enabled
+  #aurora_cluster_name                       = "${var.namespace}-${var.environment}-${var.tenant}-aurora"
+  #enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-${var.tenant}-enhanced-monitoring"
+  aurora_cluster_name                       = "${var.tenant}-aurora"
   enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-${var.tenant}-enhanced-monitoring"
   aurora_db_admin_username                  = var.tenant
   aurora_db_admin_password                  = module.db_password.result
@@ -81,26 +83,32 @@ provider "postgresql" {
 resource "postgresql_database" "audit_db" {
   name              = var.auditdbdatabase
   allow_connections = true
+  depends_on        = [module.aurora]
 }
 resource "postgresql_database" "authentication_db" {
   name              = var.authenticationdbdatabase
   allow_connections = true
+  depends_on        = [module.aurora]
 }
 resource "postgresql_database" "notification_db" {
   name              = var.notificationdbdatabase
   allow_connections = true
+  depends_on        = [module.aurora]
 }
 resource "postgresql_database" "scheduler_db" {
   name              = var.schedulerdbdatabase
   allow_connections = true
+  depends_on        = [module.aurora]
 }
 resource "postgresql_database" "user_db" {
   name              = var.userdbdatabase
   allow_connections = true
+  depends_on        = [module.aurora]
 }
 resource "postgresql_database" "video_db" {
   name              = var.videodbdatabase
   allow_connections = true
+  depends_on        = [module.aurora]
 }
 
 ########################################################################

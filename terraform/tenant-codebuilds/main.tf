@@ -206,6 +206,11 @@ module "premium_plan_codebuild_project" {
       type  = "PLAINTEXT"
     },
     {
+      name  = "USERNAME"
+      value = "test"
+      type  = "PLAINTEXT"
+    },
+    {
       name  = "ACCESS_TOKEN_EXPIRATION"
       value = 3600
       type  = "PLAINTEXT"
@@ -335,6 +340,11 @@ module "standard_plan_codebuild_project" {
     {
       name  = "DOMAIN_NAME"
       value = var.domain_name
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "USERNAME"
+      value = "test"
       type  = "PLAINTEXT"
     },
     {

@@ -21,7 +21,7 @@ module "aws_cognito_user_pool" {
   auto_verified_attributes                              = var.auto_verified_attributes
   sms_authentication_message                            = var.sms_authentication_message
   sms_verification_message                              = var.sms_verification_message
-  deletion_protection                                   = var.deletion_protection
+  deletion_protection                                   = var.cognito_deletion_protection
   mfa_configuration                                     = var.mfa_configuration
   software_token_mfa_configuration                      = var.software_token_mfa_configuration
   admin_create_user_config                              = var.admin_create_user_config

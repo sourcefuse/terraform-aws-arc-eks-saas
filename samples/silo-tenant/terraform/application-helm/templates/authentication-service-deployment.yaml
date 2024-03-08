@@ -107,7 +107,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: REDIS_URL
+                key: REDIS_HOST
           - name: REDIS_PASSWORD
             value: ""
           - name: REDIS_DATABASE

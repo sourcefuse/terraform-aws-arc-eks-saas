@@ -53,13 +53,13 @@ module "tenant_iam_role" {
 ## Store JWT secrets and issuer in parameter store
 ################################################################################
 module "jwt_secret" {
-  source     = "../../modules/random-password"
+  source     = "../modules/random-password"
   length     = 16
   is_special = false
 }
 
 module "jwt_ssm_parameters" {
-  source = "../../modules/ssm-parameter"
+  source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_issuer"
