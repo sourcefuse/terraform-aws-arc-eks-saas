@@ -132,7 +132,7 @@ module "premium_plan_codebuild_project" {
   source_version  = var.premium_source_version
   source_type     = var.source_type
   buildspec       = var.premium_buildspec
-  source_location = var.premium_source_location
+  source_location = aws_codecommit_repository.premium_repo.clone_url_http
 
   vpc_id             = data.aws_vpc.vpc.id
   subnets            = data.aws_subnets.private.ids
@@ -198,6 +198,16 @@ module "premium_plan_codebuild_project" {
     {
       name  = "DOMAIN_NAME"
       value = var.domain_name
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "CONTROL_PLANE_HOST"
+      value = var.control_plane_host
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "USERNAME"
+      value = "test"
       type  = "PLAINTEXT"
     },
     {
@@ -230,13 +240,23 @@ module "premium_plan_codebuild_project" {
   cloudwatch_log_group_name  = var.premium_cloudwatch_log_group_name
   cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
 
-  enable_codebuild_authentication = true
-  source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
-  source_credential_server_type   = "GITHUB"
-  source_credential_token         = data.aws_ssm_parameter.github_token.value
+  enable_codebuild_authentication = false
+  # source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
+  # source_credential_server_type   = "GITHUB"
+  # source_credential_token         = data.aws_ssm_parameter.github_token.value
 
   tags       = module.tags.tags
-  depends_on = [module.tenant_ssm_parameters]
+  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.premium_repo]
+}
+
+resource "aws_codecommit_repository" "premium_repo" {
+  repository_name = "${var.namespace}-${var.environment}-premium-plan-repository"
+  description     = "${var.namespace}-${var.environment}-premium-repository."
+  default_branch  = "main"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 # standard
@@ -254,7 +274,7 @@ module "standard_plan_codebuild_project" {
   source_version  = var.standard_source_version
   source_type     = var.source_type
   buildspec       = var.standard_buildspec
-  source_location = var.standard_source_location
+  source_location = aws_codecommit_repository.standard_repo.clone_url_http
 
   vpc_id             = data.aws_vpc.vpc.id
   subnets            = data.aws_subnets.private.ids
@@ -323,6 +343,16 @@ module "standard_plan_codebuild_project" {
       type  = "PLAINTEXT"
     },
     {
+      name  = "USERNAME"
+      value = "test"
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "CONTROL_PLANE_HOST"
+      value = var.control_plane_host
+      type  = "PLAINTEXT"
+    },
+    {
       name  = "ACCESS_TOKEN_EXPIRATION"
       value = 3600
       type  = "PLAINTEXT"
@@ -352,13 +382,21 @@ module "standard_plan_codebuild_project" {
   cloudwatch_log_group_name  = var.standard_cloudwatch_log_group_name
   cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
 
-  enable_codebuild_authentication = true
-  source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
-  source_credential_server_type   = "GITHUB"
-  source_credential_token         = data.aws_ssm_parameter.github_token.value
+  enable_codebuild_authentication = false
+  # source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
+  # source_credential_server_type   = "GITHUB"
+  # source_credential_token         = data.aws_ssm_parameter.github_token.value
 
   tags       = module.tags.tags
-  depends_on = [module.tenant_ssm_parameters]
+  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.standard_repo]
 }
 
+resource "aws_codecommit_repository" "standard_repo" {
+  repository_name = "${var.namespace}-${var.environment}-standard-plan-repository"
+  description     = "${var.namespace}-${var.environment}-standard-repository."
+  default_branch  = "main"
 
+  lifecycle {
+    prevent_destroy = true
+  }
+}

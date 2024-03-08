@@ -66,7 +66,7 @@ variable "standard_source_version" {
 
 variable "source_type" {
   type        = string
-  default     = "GITHUB"
+  default     = "CODECOMMIT"
   description = "The type of repository that contains the source code to be built. Valid values for this parameter are: CODECOMMIT, CODEPIPELINE, GITHUB, GITHUB_ENTERPRISE, BITBUCKET or S3"
 }
 
@@ -128,6 +128,12 @@ variable "domain_name" {
   type        = string
   default     = ""
   description = "Domain name of the control plane"
+}
+
+variable "control_plane_host" {
+  type        = string
+  default     = ""
+  description = "Host Name of the control plane"
 }
 
 variable "premium_cloudwatch_log_group_name" {

@@ -3,9 +3,9 @@
 ################################################################################
 data "aws_caller_identity" "this" {}
 
-data "aws_ssm_parameter" "github_token" {
-  name = "GITHUB_TOKEN"
-}
+# data "aws_ssm_parameter" "github_token" {
+#   name = "GITHUB_TOKEN"
+# }
 
 data "aws_ssm_parameter" "terraform_state_bucket" {
   name = "/${var.namespace}/${var.environment}/terraform-state-bucket"
@@ -86,6 +86,7 @@ data "aws_iam_policy_document" "tenant_codebuild_policy" {
       "codebuild:CreateReport",
       "codebuild:CreateReportGroup",
       "codebuild:UpdateReport",
+      "codecommit:*",
       "ec2:CreateNetworkInterface",
       "ec2:DescribeDhcpOptions",
       "ec2:DescribeNetworkInterfaces",
