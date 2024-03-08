@@ -43,13 +43,19 @@ git config --global user.email 'devops@sourcefuse.com' || { echo "Failed to conf
 # Configure user name
 git config --global user.name 'sfdevops' || { echo "Failed to configure user name"; exit 1; }
 
-# Add all files
-git add . || { echo "Failed to add files"; exit 1; }
+if [ -n "$(git status --porcelain)" ]; then
+    # Add all files
+    git add . || { echo "Failed to add files"; exit 1; }
 
-# Commit changes
-git commit -m 'Committing sample silo-tenant' || { echo "Failed to commit changes"; exit 1; }
+    # Commit changes
+    git commit -m 'Initial Commit' || { echo "Failed to commit changes"; exit 1; }
 
-# Push changes to origin main
-git push origin main || { echo "Failed to push changes"; exit 1; }
+    # Push changes to origin main
+    git push origin main || { echo "Failed to push changes"; exit 1; }
+
+    echo "Changes committed and pushed successfully"
+else
+    echo "Nothing to commit, working tree clean. Exiting..."
+fi
 
 echo "Script executed successfully"
