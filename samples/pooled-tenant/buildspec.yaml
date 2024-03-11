@@ -14,6 +14,8 @@ phases:
       - export PATH=$PWD/:$PATH
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
+    finally:
+      - ls -la
   pre_build:
     on-failure: ABORT  
     commands:
@@ -24,6 +26,8 @@ phases:
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
+    finally:
+      - ls -la
   build:
     on-failure: ABORT
     commands:
@@ -86,7 +90,6 @@ phases:
       - terraform apply -auto-approve
     finally:
       - ls -la
-     
 
   post_build:
     commands:
