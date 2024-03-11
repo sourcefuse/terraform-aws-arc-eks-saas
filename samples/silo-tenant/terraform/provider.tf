@@ -2,7 +2,7 @@
 ## defaults
 ################################################################################
 terraform {
-  required_version = "~> 1.3"
+  required_version = "~> 1.4"
 
   required_providers {
     aws = {
@@ -13,6 +13,11 @@ terraform {
     postgresql = {
       source  = "cyrilgdn/postgresql"
       version = "1.12.0"
+    }
+
+    opensearch = {
+      source  = "opensearch-project/opensearch"
+      version = "2.2.0"
     }
   }
 
