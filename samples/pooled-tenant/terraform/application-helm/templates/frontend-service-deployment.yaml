@@ -65,7 +65,7 @@ spec:
 {{- end }}
 
       nodeSelector:
-        silo-node: {{ .Values.tenant }}
+        pooled-node: "pooled"
 {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
