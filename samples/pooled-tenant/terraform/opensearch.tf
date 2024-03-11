@@ -53,14 +53,14 @@ resource "opensearch_roles_mapping" "user_role_mapping1" {
   depends_on = [opensearch_user.tenant_user]
 
   role_name = "opensearch_dashboards_user"
-  users     = [var.tenant_name]
+  users     = [var.tenant]
 }
 
 resource "opensearch_roles_mapping" "user_role_mapping2" {
   depends_on = [opensearch_user.tenant_user]
 
   role_name = "index_management_read_access"
-  users     = [var.tenant_name]
+  users     = [var.tenant]
 }
 
 resource "opensearch_dashboard_object" "test_index_pattern_v7" {
@@ -72,7 +72,7 @@ resource "opensearch_dashboard_object" "test_index_pattern_v7" {
     "_source" : {
       "type" : "index-pattern",
       "index-pattern" : {
-        "title" : "logs-${each.value}*",
+        "title" : "logs-pooled-${each.value}*",
         "timeFieldName" : "timestamp"
       }
     }

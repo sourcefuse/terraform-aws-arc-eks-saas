@@ -3,6 +3,6 @@ locals {
   oidc_arn       = replace(data.aws_eks_cluster.EKScluster.identity[0].oidc[0].issuer, "https://", "")
   kubernetes_ns  = "pooled-${var.tenant}"
   users = {
-    user1 = var.tenant_name
+    user1 = var.tenant
   }
 }
