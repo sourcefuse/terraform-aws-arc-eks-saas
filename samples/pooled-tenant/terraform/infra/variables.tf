@@ -505,3 +505,10 @@ variable "identity_providers" {
   default     = []
   sensitive   = true
 }
+
+
+variable "recovery_mechanisms" {
+  description = "The list of Account Recovery Options"
+  type        = list(any)
+  default     = []
+}
