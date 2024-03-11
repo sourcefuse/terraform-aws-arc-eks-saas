@@ -76,20 +76,6 @@ module "cognito_ssm_parameters" {
       description = "Pooled Tenant Cognito Domain Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/cognito_id"
-      value       = module.aws_cognito_user_pool.client_ids[0]
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Pooled Tenant Cognito Domain ID"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/pooled/cognito_secret"
-      value       = module.aws_cognito_user_pool.client_secrets[0]
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Pooled Tenant Cognito Domain Secret"
-    },
-    {
       name        = "/${var.namespace}/${var.environment}/pooled/cognito_user_pool_id"
       value       = module.aws_cognito_user_pool.id
       type        = "SecureString"
