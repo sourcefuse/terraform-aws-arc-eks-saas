@@ -16,11 +16,6 @@ variable "namespace" {
   description = "Namespace for the resources."
 }
 
-variable "tenant" {
-  type        = string
-  description = "tenant name"
-}
-
 ##################################################################################
 ## database
 ##################################################################################
@@ -195,6 +190,7 @@ variable "videodbdatabase" {
   type    = string
   default = "video"
 }
+
 ###################################################################################
 ## Redis Elasticache
 ###################################################################################
@@ -510,72 +506,9 @@ variable "identity_providers" {
   sensitive   = true
 }
 
+
 variable "recovery_mechanisms" {
   description = "The list of Account Recovery Options"
   type        = list(any)
   default     = []
-}
-
-variable "domain_name" {
-  description = "Enter Defeault Redirect URL"
-  type        = string
-  default     = ""
-}
-
-#################################################################################
-## Helm
-#################################################################################
-variable "tenant_email" {
-  type        = string
-  description = "tenant Email"
-}
-
-variable "user_name" {
-  type        = string
-  description = "cognito user"
-}
-
-variable "tenant_name" {
-  type        = string
-  description = "Tenant Name"
-}
-
-variable "tenant_secret" {
-  type        = string
-  description = "tenant secret"
-}
-
-variable "tenant_client_id" {
-  type        = string
-  description = "tenant Client ID"
-}
-
-variable "tenant_client_secret" {
-  type        = string
-  description = "tenant Client Secret"
-}
-
-variable "karpenter_role" {
-  type        = string
-  description = "EKS Karpenter Role"
-}
-
-variable "cluster_name" {
-  type        = string
-  description = "EKS Cluster Name"
-}
-
-variable "tenant_host_domain" {
-  type        = string
-  description = "tenant Host"
-}
-
-variable "jwt_issuer" {
-  type        = string
-  description = "jwt issuer"
-}
-
-variable "alb_url" {
-  type        = string
-  description = "ALB DNS Record"
 }

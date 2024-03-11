@@ -10,38 +10,13 @@ module "route53-record" {
   ttl     = "60"
   values  = var.alb_url
 }
-######################################################################
-## Create Cognito User
-######################################################################
-module "cognito_password" {
-  source      = "../modules/random-password"
-  length      = 12
-  is_special  = true
-  min_upper   = 1
-  min_numeric = 1
-
-}
-
-resource "aws_cognito_user" "cognito_user" {
-  user_pool_id = module.aws_cognito_user_pool.id
-  username     = var.user_name
-
-  attributes = {
-    email          = var.tenant_email
-    email_verified = true
-  }
-  temporary_password = module.cognito_password.result
-
-  depends_on = [module.aws_cognito_user_pool]
-}
-
 ###############################################################################
 ## Tenant IAM Role
 ###############################################################################
 module "tenant_iam_role" {
   source              = "../modules/iam-role"
-  role_name           = "${var.namespace}-${var.environment}-${var.tenant}-iam-role"
-  role_description    = "IAM role for ${var.tenant} application"
+  role_name           = "${var.namespace}-${var.environment}-pooled-${var.tenant}-iam-role"
+  role_description    = "IAM role for pooled ${var.tenant} application"
   assume_role_actions = ["sts:AssumeRoleWithWebIdentity"]
   principals = {
     "Federated" : ["arn:aws:iam::${local.sts_caller_arn}:oidc-provider/${local.oidc_arn}"]
@@ -53,11 +28,11 @@ module "tenant_iam_role" {
     {
       test     = "StringEquals"
       variable = "${local.oidc_arn}:sub"
-      values   = ["system:serviceaccount:${local.kubernetes_ns}:${var.tenant}"]
+      values   = ["system:serviceaccount:${local.kubernetes_ns}:pooled-${var.tenant}"]
     }
   ]
-  policy_name        = "${var.namespace}-${var.environment}-${var.tenant}-iam-policy"
-  policy_description = "IAM policy for ${var.tenant} application"
+  policy_name        = "${var.namespace}-${var.environment}-pooled-${var.tenant}-iam-policy"
+  policy_description = "IAM policy for pooled ${var.tenant} application"
   tags               = module.tags.tags
 }
 
@@ -74,18 +49,18 @@ module "jwt_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_issuer"
+      name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_issuer"
       value       = var.jwt_issuer
       type        = "SecureString"
       overwrite   = "true"
-      description = "${var.tenant} JWT Issuer"
+      description = "pooled ${var.tenant} JWT Issuer"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_secret"
+      name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_secret"
       value       = module.jwt_secret.result
       type        = "SecureString"
       overwrite   = "true"
-      description = "${var.tenant} JWT Secret"
+      description = "pooled ${var.tenant} JWT Secret"
     }
   ]
   tags = module.tags.tags
@@ -159,6 +134,6 @@ resource "helm_release" "application_helm" {
   recreate_pods    = true
   values           = [data.template_file.helm_values_template.rendered]
   depends_on = [
-    module.tenant_iam_role, module.aurora, module.redis, module.aws_cognito_user_pool
+    module.tenant_iam_role, module.jwt_ssm_parameters, aws_cognito_user_pool_client.app_client
   ]
 }

@@ -12,23 +12,23 @@ cd ../../samples/ || { echo "Failed to change directory"; exit 1; }
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
 
 # Clone codecommit repo
-git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-premium-plan-repository || { echo "Failed to clone repository"; exit 1; }
+git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to clone repository"; exit 1; }
 
 # Change directory 
-cd ${NAMESPACE}-${ENVIRONMENT}-premium-plan-repository || { echo "Failed to change directory"; exit 1; }
+cd ${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to change directory"; exit 1; }
 
-
-# Copy contents from ../silo-tenant/ to current directory
-cp -r ../silo-tenant/* . || { echo "Failed to copy files"; exit 1; }
+# Copy contents from ../pooled-tenant/ to current directory
+cp -r ../pooled-tenant/* . || { echo "Failed to copy files"; exit 1; }
 
 
 # Set origin URL
-git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-premium-plan-repository || { echo "Failed to set remote URL"; exit 1; }
+git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to set remote URL"; exit 1; }
 
 # Check if main branch already exists
 if git show-ref --verify --quiet refs/heads/main; then
     echo "Main branch already exists. Skipping branch creation."
 else
+    # Create and switch to main branch
     git checkout -b main || { echo "Failed to create and switch to main branch"; exit 1; }
 fi
 

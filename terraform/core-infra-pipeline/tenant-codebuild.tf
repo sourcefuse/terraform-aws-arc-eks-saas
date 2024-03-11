@@ -63,6 +63,8 @@ module "tenant_codebuild_module_build_step_codebuild_project" {
           "terraform apply --var-file=${var.environment}.tfvars -auto-approve",
           "chmod +x silo-codecommit.sh",
           "./silo-codecommit.sh",
+          "chmod +x pooled-codecommit.sh",
+          "./pooled-codecommit.sh",
         ]
       }
 

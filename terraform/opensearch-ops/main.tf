@@ -49,5 +49,5 @@ resource "opensearch_roles_mapping" "mapper" {
   description   = "Mapping AWS IAM roles to ES role"
   backend_roles = concat(var.backend_roles, local.fluentbit_role)
 
-  users = ["os_admin"]
+  users = ["${data.aws_ssm_parameter.opensearch_username.value}"]
 }

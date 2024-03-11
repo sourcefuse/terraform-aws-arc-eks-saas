@@ -2,7 +2,7 @@
 ## db
 ################################################################################
 module "db_password" {
-  source           = "../modules/random-password"
+  source           = "../../modules/random-password"
   length           = 16
   is_special       = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
@@ -13,15 +13,15 @@ module "aurora" {
   version = "2.0.3"
 
 
-  environment = "${var.environment}-${var.tenant}"
+  environment = "${var.environment}-pooled"
   namespace   = var.namespace
   region      = var.region
   vpc_id      = data.aws_vpc.vpc.id
 
   aurora_cluster_enabled                    = var.aurora_cluster_enabled
   aurora_cluster_name                       = "aurora"
-  enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-${var.tenant}-enhanced-monitoring"
-  aurora_db_admin_username                  = var.tenant
+  enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-pooled-enhanced-monitoring"
+  aurora_db_admin_username                  = "dbpooleduser"
   aurora_db_admin_password                  = module.db_password.result
   aurora_db_name                            = var.aurora_db_name
   aurora_db_port                            = var.aurora_db_port
@@ -72,7 +72,7 @@ provider "postgresql" {
   host      = module.aurora.aurora_endpoint
   port      = var.aurora_db_port
   database  = var.aurora_db_name
-  username  = var.tenant
+  username  = "dbpooleduser"
   password  = module.db_password.result
   sslmode   = "require"
   superuser = false
@@ -113,87 +113,87 @@ resource "postgresql_database" "video_db" {
 ## Store DB Configs in Parameter Store
 ########################################################################
 module "db_ssm_parameters" {
-  source = "../modules/ssm-parameter"
+  source = "../../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_user"
-      value       = var.tenant
+      name        = "/${var.namespace}/${var.environment}/pooled/db_user"
+      value       = "dbpooleduser"
       type        = "String"
       overwrite   = "true"
       description = "Database User Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_password"
+      name        = "/${var.namespace}/${var.environment}/pooled/db_password"
       value       = module.db_password.result
       type        = "SecureString"
       overwrite   = "true"
       description = "Database Password"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_host"
+      name        = "/${var.namespace}/${var.environment}/pooled/db_host"
       value       = module.aurora.aurora_endpoint
       type        = "String"
       overwrite   = "true"
       description = "Database Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_port"
+      name        = "/${var.namespace}/${var.environment}/pooled/db_port"
       value       = var.aurora_db_port
       type        = "SecureString"
       overwrite   = "true"
       description = "Database Port"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_database"
+      name        = "/${var.namespace}/${var.environment}/pooled/db_database"
       value       = var.aurora_db_name
       type        = "SecureString"
       overwrite   = "true"
       description = "Default Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_schema"
+      name        = "/${var.namespace}/${var.environment}/pooled/db_schema"
       value       = "main"
       type        = "SecureString"
       overwrite   = "true"
       description = "Default Database Schema"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/auditdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/pooled/auditdbdatabase"
       value       = var.auditdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Audit Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/authenticationdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/pooled/authenticationdbdatabase"
       value       = var.authenticationdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Authentication Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/notificationdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/pooled/notificationdbdatabase"
       value       = var.notificationdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Notification Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/schedulerdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/pooled/schedulerdbdatabase"
       value       = var.schedulerdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Scheduler Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/userdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/pooled/userdbdatabase"
       value       = var.userdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "User Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/videodbdatabase"
+      name        = "/${var.namespace}/${var.environment}/pooled/videodbdatabase"
       value       = var.videodbdatabase
       type        = "SecureString"
       overwrite   = "true"
