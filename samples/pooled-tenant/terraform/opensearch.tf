@@ -2,9 +2,9 @@
 ## opensearch operations
 #####################################################################################
 provider "opensearch" {
-  url               = "https://${data.aws_ssm_parameter.opensearch_domain.value}"
-  username          = data.aws_ssm_parameter.opensearch_username.value
-  password          = data.aws_ssm_parameter.opensearch_password.value
+  url               = "https://vpc-arc-saas-dev-opensearch-fxi4vbtsv2x5ppfbvgke72heoa.us-east-1.es.amazonaws.com"
+  username          = "os_admin"
+  password          = "FrHhCi)+JbAR%[4fawqtinq8gJE=O+1r"
   sign_aws_requests = false
 }
 
@@ -77,4 +77,24 @@ resource "opensearch_dashboard_object" "test_index_pattern_v7" {
       }
     }
   }])
+}
+
+module "tenant_opensearch_parameters" {
+  source = "../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/opensearch_user"
+      value       = var.tenant_name
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Pooled Tenant Opensearch Username"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/opensearch_password"
+      value       = module.tenant_opensearch_password.result
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Pooled Tenant Opensearch Password"
+    }
+  ]
 }
