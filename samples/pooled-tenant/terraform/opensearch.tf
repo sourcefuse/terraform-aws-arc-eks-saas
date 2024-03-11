@@ -12,6 +12,10 @@ module "tenant_opensearch_password" {
   source           = "../modules/random-password"
   length           = 16
   is_special       = true
+  min_special      = 1
+  min_lower        = 1
+  min_upper        = 1
+  min_numeric      = 1
   override_special = "!_%@"
 }
 
