@@ -1,3 +1,15 @@
+###############################################################################
+## Register domain name in Route53
+###############################################################################
+module "route53-record" {
+  source  = "clouddrove/route53-record/aws"
+  version = "1.0.1"
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "${var.tenant}.${var.domain_name}"
+  type    = "CNAME"
+  ttl     = "60"
+  values  = var.alb_url
+}
 ######################################################################
 ## Create Cognito User
 ######################################################################

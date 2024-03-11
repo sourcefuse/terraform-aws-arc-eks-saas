@@ -51,6 +51,8 @@ phases:
       - export TF_VAR_jwt_issuer="${KEY}"
       - export TF_VAR_tenant_client_id="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
       - export TF_VAR_tenant_client_secret=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
+      - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
+      - export TF_VAR_alb_url="${ALB_DNS}"
 
       # check if bootstrap need to be run or not
       - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")

@@ -71,6 +71,11 @@ data "aws_iam_policy_document" "ssm_policy" {
 ######################################################################################
 ## SSM Data
 ######################################################################################
+data "aws_route53_zone" "selected" {
+  name         = var.domain_name
+  private_zone = false
+}
+
 data "aws_ssm_parameter" "docker_username" {
   name = "/${var.namespace}/${var.environment}/docker_username"
 }

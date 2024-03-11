@@ -574,3 +574,8 @@ variable "jwt_issuer" {
   type        = string
   description = "jwt issuer"
 }
+
+variable "alb_url" {
+  type        = string
+  description = "ALB DNS Record"
+}
