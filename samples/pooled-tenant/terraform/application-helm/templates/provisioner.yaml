@@ -1,14 +1,14 @@
 apiVersion: karpenter.sh/v1beta1
 kind: NodePool
 metadata:
-  name: {{ .Values.tenant }}
+  name: {{ .Values.tenant }}-pooled
   annotations:
     kubernetes.io/description: "NodePool to restrict the number of cpus provisioned to 100"
 spec:
   template:
     metadata:
       labels:
-        silo-node: {{ .Values.tenant }}
+        pooled-node: "pooled"
     spec:
       requirements:
         - key: kubernetes.io/arch
@@ -27,10 +27,10 @@ spec:
           operator: Gt
           values: ["2"]
       nodeClassRef:
-        name: {{ .Values.tenant }}
+        name: {{ .Values.tenant }}-pooled
       taints:
-        - key: silo-node
-          value: {{ .Values.tenant }}
+        - key: pooled-node
+          value: "pooled"
           effect: NoSchedule
 
   limits:
@@ -40,7 +40,7 @@ spec:
 apiVersion: karpenter.k8s.aws/v1beta1
 kind: EC2NodeClass
 metadata:
-  name: {{ .Values.tenant }}
+  name: {{ .Values.tenant }}-pooled
   annotations:
     kubernetes.io/description: "General purpose EC2NodeClass for running Amazon Linux 2 nodes"
 spec:
