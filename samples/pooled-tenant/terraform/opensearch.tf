@@ -2,9 +2,9 @@
 ## opensearch operations
 #####################################################################################
 provider "opensearch" {
-  url               = "https://vpc-arc-saas-dev-opensearch-fxi4vbtsv2x5ppfbvgke72heoa.us-east-1.es.amazonaws.com"
-  username          = "os_admin"
-  password          = "FrHhCi)+JbAR%[4fawqtinq8gJE=O+1r"
+  url               = "https://${data.aws_ssm_parameter.opensearch_domain.value}"
+  username          = data.aws_ssm_parameter.opensearch_username.value
+  password          = data.aws_ssm_parameter.opensearch_password.value
   sign_aws_requests = false
 }
 

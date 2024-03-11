@@ -15,7 +15,8 @@ phases:
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
     finally:
-      - ls -la
+      - cd pooled-tenant
+      - node webhook.js
   pre_build:
     on-failure: ABORT  
     commands:
@@ -27,7 +28,8 @@ phases:
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
     finally:
-      - ls -la
+      - cd pooled-tenant
+      - node webhook.js
   build:
     on-failure: ABORT
     commands:
@@ -89,12 +91,15 @@ phases:
       - terraform init --backend-config=config.hcl
       - terraform apply -auto-approve
     finally:
-      - ls -la
+      - cd pooled-tenant
+      - node webhook.js
 
   post_build:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - sleep 30
+      - cd pooled-tenant
+      - node webhook.js
 
 
 
