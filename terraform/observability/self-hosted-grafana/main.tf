@@ -121,7 +121,7 @@ module "grafana_password" {
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
-module "grafana_ssm_parameters" {
+module "observability_ssm_parameters" {
   source = "../../../modules/ssm-parameter"
   ssm_parameters = [
     {
@@ -137,6 +137,13 @@ module "grafana_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Grafana UserName"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/prometheus_workspace_id"
+      value       = module.prometheus.managed_prometheus_workspace_id
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Amazon Managed Prometheus Workspace ID"
     }
   ]
   tags = module.tags.tags
