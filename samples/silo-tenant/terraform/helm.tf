@@ -111,6 +111,7 @@ resource "kubernetes_namespace" "my_namespace" {
 data "template_file" "helm_values_template" {
   template = file("${path.module}/application-helm/values.yaml")
   vars = {
+    NAMESPACE        = local.kubernetes_ns
     TENANT_NAME      = var.tenant_name
     TENANT_KEY       = var.tenant
     TENANT_EMAIL     = var.tenant_email

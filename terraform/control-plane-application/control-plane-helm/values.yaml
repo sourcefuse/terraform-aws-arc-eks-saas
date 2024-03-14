@@ -427,6 +427,7 @@ region: ${REGION}
 controlPlaneHost: ${CONTROL_PLANE_HOST_DOMAIN}
 domain: ${DOMAIN}
 arn: ${WEB_IDENTITY_ROLE_ARN}
+namespace: ${NAMESPACE}
 # ssm parameter name
 dbhost: ${DB_HOST}
 dbport: ${DB_PORT}
