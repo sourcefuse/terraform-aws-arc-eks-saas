@@ -137,14 +137,14 @@ module "grafana_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Grafana UserName"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/prometheus_workspace_id"
-      value       = module.prometheus.managed_prometheus_workspace_id
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Amazon Managed Prometheus Workspace ID"
     }
+    # {
+    #   name        = "/${var.namespace}/${var.environment}/prometheus_workspace_id"
+    #   value       = module.prometheus.managed_prometheus_workspace_id
+    #   type        = "SecureString"
+    #   overwrite   = "true"
+    #   description = "Amazon Managed Prometheus Workspace ID"
+    # }
   ]
   tags = module.tags.tags
 
