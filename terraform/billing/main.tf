@@ -74,16 +74,16 @@ resource "helm_release" "kubecost" {
 
   set {
     name  = "upgrade.toV2"
-    value = true
+    value = false
   }
 
   set {
-    name  = "global.sigV4Proxy.region"
+    name  = "sigV4Proxy.region"
     value = var.region
   }
 
   set {
-    name  = "global.sigV4Proxy.host"
+    name  = "sigV4Proxy.host"
     value = "aps-workspaces.${var.region}.amazonaws.com"
   }
 
