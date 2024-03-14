@@ -12,5 +12,5 @@ data "aws_eks_cluster_auth" "cluster_auth" {
 }
 
 data "aws_ssm_parameter" "prometheus_workspace_id" {
-    name = "/${var.namespace}/${var.environment}/prometheus_workspace_id"
+  name = "/${var.namespace}/${var.environment}/prometheus_workspace_id"
 }

@@ -121,7 +121,7 @@ module "grafana_password" {
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
-module "observability_ssm_parameters" {
+module "grafana_ssm_parameters" {
   source = "../../../modules/ssm-parameter"
   ssm_parameters = [
     {
