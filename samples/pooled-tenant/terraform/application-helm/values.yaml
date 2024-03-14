@@ -371,6 +371,7 @@ userCallbackSecret: "yugeyifgweyfgy"
 clientId: ${TENANT_CLIENT_ID}
 publicKey: ${TENANT_CLIENT_SECRET}
 
+namespace: ${NAMESPACE}
 region: ${REGION}
 cognitodomain: ${COGNITO_DOMAIN}
 cognitoid: ${COGNITO_ID}
