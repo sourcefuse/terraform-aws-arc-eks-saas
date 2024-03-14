@@ -18,10 +18,13 @@ resource "helm_release" "kubecost" {
   name             = "kubecost"
   repository       = "https://kubecost.github.io/cost-analyzer"
   chart            = "cost-analyzer"
-  version          = "2.0.0"
+  version          = "1.104.4"
   namespace        = "kubecost"
   create_namespace = true
 
+# values = [
+#     file("values.yaml")
+#   ]
   set {
     name  = "global.prometheus.enabled"
     value = false
