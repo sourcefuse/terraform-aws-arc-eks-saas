@@ -128,10 +128,6 @@ module "eks_blueprints_addons" {
       most_recent = true
     }
 
-    kubecost_kubecost = {
-      most_recent = true
-    }
-    
   }
 
 
