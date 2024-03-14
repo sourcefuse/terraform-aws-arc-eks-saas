@@ -73,8 +73,8 @@ resource "helm_release" "kubecost" {
   }
 
   set {
-    name  = "global.upgrade.toV2"
-    value = false
+    name  = "upgrade.toV2"
+    value = true
   }
 
   set {
