@@ -127,6 +127,11 @@ module "eks_blueprints_addons" {
     coredns = {
       most_recent = true
     }
+
+    kubecost_kubecost = {
+      most_recent = true
+    }
+    
   }
 
 
