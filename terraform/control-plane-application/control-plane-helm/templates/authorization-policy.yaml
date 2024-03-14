@@ -1,0 +1,14 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: deny-traffic-from-cross-namespace
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "helm.fullname" . }}
+  action: DENY
+  rules:
+  - from:
+    - source:
+       notNamespaces: ["{{ .Values.namespace }}","kube-system","prometheus-node-exporter", "adot-collector-kubeprometheus"]
