@@ -67,27 +67,27 @@ resource "helm_release" "kubecost" {
 
   set {
     name  = "global.prometheus.enabled"
-    value = false
+    value = true
   }
 
-  set {
-    name  = "global.prometheus.fqdn"
-    value = ""
-  }
+ # set {
+ #   name  = "global.prometheus.fqdn"
+ #   value = ""
+#  }
 
   set {
     name  = "global.grafana.enabled"
-    value = false
+    value = true
   }
 
-  set {
-    name  = "global.grafana.domainName"
-    value = ""
-  }
+ # set {
+  #  name  = "global.grafana.domainName"
+  #  value = ""
+ # }
 
   set {
     name  = "global.amp.enabled"
-    value = true
+    value = false
   }
 
   set {
