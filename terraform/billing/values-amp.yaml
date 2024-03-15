@@ -2,6 +2,12 @@ global:
   grafana:
     enabled: false
     proxy: false
+  
+  savedReports:
+    enabled: true
+  
+  cloudCostReports:
+    enabled: true
 
   amp:
     enabled: true
@@ -25,7 +31,7 @@ prometheus:
   nodeExporter:
     enabled: false
   kube-state-metrics:
-    disabled: true
+    disabled: false
 
 networkCosts:
   enabled: true
