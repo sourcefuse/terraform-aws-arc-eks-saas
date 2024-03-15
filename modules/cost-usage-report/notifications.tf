@@ -24,7 +24,7 @@ resource "aws_lambda_function" "run_crawler" {
 
   role = aws_iam_role.lambda.arn
 
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs18.x"
   handler          = "index.handler"
   filename         = data.archive_file.lambda.output_path
   source_code_hash = data.archive_file.lambda.output_base64sha256

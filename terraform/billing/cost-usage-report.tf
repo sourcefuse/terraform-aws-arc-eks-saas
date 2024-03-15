@@ -9,32 +9,32 @@ module "bucket_suffix" {
 }
 
 
-module "cur_bucket" {
-   source  = "terraform-aws-modules/s3-bucket/aws"
-   version = "~> 3.0"
+# module "cur_bucket" {
+#    source  = "terraform-aws-modules/s3-bucket/aws"
+#    version = "~> 3.0"
 
-   bucket = "${var.namespace}-${var.environment}-cur-bucket-${module.bucket_suffix.result}"
-   acl    = "private"
+#    bucket = "${var.namespace}-${var.environment}-cur-bucket-${module.bucket_suffix.result}"
+#    acl    = "private"
 
-   force_destroy = true
+#    force_destroy = true
 
-   # Bucket policies
-   attach_policy           = true
-   policy                  = data.aws_iam_policy_document.bucket_policy.json
+#    # Bucket policies
+#    attach_policy           = true
+#    policy                  = data.aws_iam_policy_document.bucket_policy.json
 
-   block_public_acls       = true
-   block_public_policy     = true
-   ignore_public_acls      = true
-   restrict_public_buckets = true
+#    block_public_acls       = true
+#    block_public_policy     = true
+#    ignore_public_acls      = true
+#    restrict_public_buckets = true
 
-   tags = module.tags.tags
- }
+#    tags = module.tags.tags
+#  }
 
 
 module "cur" {
   source = "../../modules/cost-usage-report"
 
-  use_existing_s3_bucket  = true
+  use_existing_s3_bucket  = false
   s3_bucket_name          = "${var.namespace}-${var.environment}-cur-bucket-${module.bucket_suffix.result}"
   s3_bucket_prefix        = "reports"
   s3_use_existing_kms_key = true
