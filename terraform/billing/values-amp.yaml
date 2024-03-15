@@ -2,9 +2,6 @@ global:
   grafana:
     enabled: false
     proxy: false
-  
-  prometheus:
-    enabled: false
 
   amp:
     enabled: true
@@ -27,6 +24,8 @@ prometheus:
         cluster_id: arc-saas-dev-eks-cluster
   nodeExporter:
     enabled: false
+  kube-state-metrics:
+    disabled: true
 
 networkCosts:
   enabled: true
