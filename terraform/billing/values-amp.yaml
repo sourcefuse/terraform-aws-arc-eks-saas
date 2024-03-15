@@ -2,8 +2,10 @@ global:
   grafana:
     enabled: false
     proxy: false
+  
   prometheus:
     enabled: false
+
   amp:
     enabled: true
     prometheusServerEndpoint: http://localhost:8005/workspaces/ws-6f1e2c8f-c6b2-439c-8442-a5e8a6ba1dad
@@ -23,3 +25,8 @@ prometheus:
     global:
       external_labels:
         cluster_id: arc-saas-dev-eks-cluster
+  nodeExporter:
+    enabled: false
+
+networkCosts:
+  enabled: true
