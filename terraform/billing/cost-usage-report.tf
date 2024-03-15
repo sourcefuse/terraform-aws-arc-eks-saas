@@ -28,6 +28,5 @@ module "cur" {
   report_versioning  = "OVERWRITE_REPORT"
 
   tags = module.tags.tags
-  
-  provider = aws.cur
+
 }

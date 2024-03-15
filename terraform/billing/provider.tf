@@ -37,7 +37,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "cur"
+  alias  = "cur"
   region = "us-east-1"
 }
 
