@@ -2,6 +2,9 @@ global:
   grafana:
     enabled: false
     proxy: false
+
+  prometheus:
+    enabled: false
   
   savedReports:
     enabled: true
