@@ -10,6 +10,47 @@ module "tags" {
 
 }
 
+################################################################################
+## IAM Roles
+################################################################################
+module "kubecost_iam_role" {
+  source              = "../../modules/iam-role"
+  role_name           = "${var.namespace}-${var.environment}-kubecost-role"
+  role_description    = "Kubecost IAM role"
+  assume_role_actions = ["sts:AssumeRoleWithWebIdentity"]
+  principals = {
+    "Federated" : ["arn:aws:iam::${local.sts_caller_arn}:oidc-provider/${local.oidc_arn}"]
+  }
+  policy_documents = []
+  assume_role_conditions = [
+    {
+      test     = "StringEquals"
+      variable = "${local.oidc_arn}:sub"
+      values   = ["system:serviceaccount:kubecost:kubecost-cost-analyzer"]
+    },
+    {
+      test     = "StringEquals"
+      variable = "${local.oidc_arn}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+  ]
+  policy_name        = "${var.namespace}-${var.environment}-kubecost-policy"
+  policy_description = "Kubecost IAM policy"
+  tags               = module.tags.tags
+}
+
+resource "aws_iam_role_policy_attachment" "kubecost_role_attachment1" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonPrometheusQueryAccess"
+  role       = "${var.namespace}-${var.environment}-kubecost-role"
+  depends_on = [module.kubecost_iam_role]
+}
+
+resource "aws_iam_role_policy_attachment" "kubecost_role_attachment2" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess"
+  role       = "${var.namespace}-${var.environment}-kubecost-role"
+  depends_on = [module.kubecost_iam_role]
+}
+
 ######################################################################
 ## KubeCost
 ######################################################################
@@ -93,8 +134,23 @@ resource "helm_release" "kubecost" {
   }
 
   set {
-    name = "kubecostFrontend.enabled"
+    name  = "kubecostFrontend.enabled"
     value = false
   }
 
+}
+
+resource "kubernetes_annotations" "service_account" {
+  api_version = "v1"
+  kind        = "ServiceAccount"
+  metadata {
+    name      = "kubecost-cost-analyzer"
+    namespace = "kubecost"
+  }
+
+  annotations = {
+    "eks.amazonaws.com/role-arn" = "${module.kubecost_iam_role.arn}"
+  }
+
+  depends_on = [module.kubecost_iam_role, helm_release.kubecost]
 }
