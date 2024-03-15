@@ -38,3 +38,13 @@ prometheus:
 
 networkCosts:
   enabled: true
+
+pricingCsv:
+  enabled: false
+  location:
+    provider: "AWS"
+    region: "us-east-1"
+    URI: s3://kc-csv-test/pricing_schema.csv  # a valid file URI
+    csvAccessCredentials: pricing-schema-access-secret
+
+kubecostToken: "aGFyc2hpdC5rdW1hckBzb3VyY2VmdXNlLmNvbQ==xm343yadf98"
