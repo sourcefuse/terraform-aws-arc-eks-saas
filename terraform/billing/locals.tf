@@ -3,5 +3,5 @@ locals {
   eks_oidc_arn   = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")}"
   oidc_arn       = replace(data.aws_eks_cluster.eks_cluster.identity[0].oidc[0].issuer, "https://", "")
 
-  cur_report_name = "cur-name-${var.region}"                                      
+  cur_report_name = "cur-report-${var.region}"                                      
 }

@@ -8,29 +8,6 @@ module "bucket_suffix" {
   is_upper   = false
 }
 
-
-# module "cur_bucket" {
-#    source  = "terraform-aws-modules/s3-bucket/aws"
-#    version = "~> 3.0"
-
-#    bucket = "${var.namespace}-${var.environment}-cur-bucket-${module.bucket_suffix.result}"
-#    acl    = "private"
-
-#    force_destroy = true
-
-#    # Bucket policies
-#    attach_policy           = true
-#    policy                  = data.aws_iam_policy_document.bucket_policy.json
-
-#    block_public_acls       = true
-#    block_public_policy     = true
-#    ignore_public_acls      = true
-#    restrict_public_buckets = true
-
-#    tags = module.tags.tags
-#  }
-
-
 module "cur" {
   source = "../../modules/cost-usage-report"
 
