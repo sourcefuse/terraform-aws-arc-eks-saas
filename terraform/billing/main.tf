@@ -67,7 +67,7 @@ resource "helm_release" "kubecost" {
 
   set {
     name  = "global.prometheus.enabled"
-    value = true
+    value = false
   }
 
  # set {
@@ -77,7 +77,7 @@ resource "helm_release" "kubecost" {
 
   set {
     name  = "global.grafana.enabled"
-    value = true
+    value = false
   }
 
  # set {
