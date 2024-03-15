@@ -137,7 +137,7 @@ resource "helm_release" "kubecost" {
 
   set {
     name  = "kubecostFrontend.enabled"
-    value = false
+    value = true
   }
 
 }
