@@ -21,7 +21,8 @@ data "aws_iam_policy_document" "kubecost_sa_policy" {
     sid    = "PrometheusPolicy"
     effect = "Allow"
     actions = [
-      "aps:*"
+      "aps:*",
+      "ec2:*"
     ]
     resources = ["*"]
   }
