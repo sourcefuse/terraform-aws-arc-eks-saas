@@ -1,3 +1,4 @@
+# Refer https://github.com/kubecost/cost-analyzer-helm-chart/blob/develop/cost-analyzer/values.yaml for more options
 global:
   grafana:
     enabled: false
@@ -41,6 +42,9 @@ networkCosts:
   tolerations:
   - operator: Exists
 
+upgrade:
+  toV2: true
+
 pricingCsv:
   enabled: false
   location:
@@ -49,4 +53,4 @@ pricingCsv:
     URI: s3://kc-csv-test/pricing_schema.csv  # a valid file URI
     csvAccessCredentials: pricing-schema-access-secret
 
-kubecostToken: "aGFyc2hpdC5rdW1hckBzb3VyY2VmdXNlLmNvbQ==xm343yadf98"
+kubecostToken: "aGFyc2hpdC5rdW1hckBzb3VyY2VmdXNlLmNvbQ==xm343yadf98" # generated at http://kubecost.com/install, used for alerts tracking and free trials
