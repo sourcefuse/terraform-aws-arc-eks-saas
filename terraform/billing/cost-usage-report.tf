@@ -31,7 +31,7 @@ module "cur_bucket" {
  }
 
 
-module "this" {
+module "cur" {
   source = "../../modules/cost-usage-report"
 
   use_existing_s3_bucket  = true

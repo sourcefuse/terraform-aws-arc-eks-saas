@@ -15,7 +15,7 @@ resource "aws_cur_report_definition" "this" {
     aws_s3_bucket_policy.cur,
   ]
 
-  provider = aws.cur
+  #provider = aws.cur
 }
 
 data "aws_s3_bucket" "cur" {
