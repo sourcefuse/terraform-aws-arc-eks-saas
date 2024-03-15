@@ -43,7 +43,7 @@ networkCosts:
   - operator: Exists
 
 upgrade:
-  toV2: false
+  toV2: true
 
 pricingCsv:
   enabled: false
