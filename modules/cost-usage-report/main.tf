@@ -1,4 +1,18 @@
 # provider
+terraform {
+  required_providers {
+    aws = {
+      source  = "aws"
+      version = "5.4.0"
+    }
+
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.0"
+    }
+  }
+}
+
 provider "aws" {
   alias  = "cur"
   region = "us-east-1"
