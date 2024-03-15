@@ -60,7 +60,7 @@ resource "aws_s3_bucket" "cur" {
   acl    = "private"
 
   versioning {
-    enabled = false
+    enabled = true
   }
 
   server_side_encryption_configuration {
