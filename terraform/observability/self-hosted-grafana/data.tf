@@ -48,7 +48,8 @@ data "aws_iam_policy_document" "grafana_eks_policy" {
       "aps:GetLabels",
       "aps:GetMetricMetadata",
       "athena:*",
-      "glue:*"
+      "glue:*",
+      "s3:*"
     ]
     resources = ["*"]
   }
