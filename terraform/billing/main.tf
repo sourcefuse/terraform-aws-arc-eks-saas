@@ -87,7 +87,7 @@ resource "helm_release" "kubecost" {
 
   set {
     name  = "global.amp.enabled"
-    value = false
+    value = true
   }
 
   set {
