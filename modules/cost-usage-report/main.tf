@@ -1,18 +1,4 @@
 # provider
-# terraform {
-#   required_providers {
-#     aws = {
-#       source  = "aws"
-#       version = "5.4.0"
-#     }
-
-#     archive = {
-#       source  = "hashicorp/archive"
-#       version = "~> 2.0"
-#     }
-#   }
-# }
-
 provider "aws" {
   alias  = "cur"
   region = "us-east-1"
@@ -56,7 +42,6 @@ resource "aws_kms_key" "s3" {
   description = "For server-side encryption in the '${var.s3_bucket_name}' S3 bucket."
 
   tags     = var.tags
-  provider = aws.cur
 }
 
 resource "aws_kms_alias" "s3" {
@@ -64,7 +49,6 @@ resource "aws_kms_alias" "s3" {
 
   name          = "alias/${trimprefix(var.s3_kms_key_alias, "alias/")}"
   target_key_id = aws_kms_key.s3[0].key_id
-  provider     = aws.cur
 }
 
 # Versioning and logging disabled.
@@ -89,7 +73,6 @@ resource "aws_s3_bucket" "cur" {
   }
 
   tags     = var.tags
-  provider = aws.cur
 }
 
 resource "aws_s3_bucket_public_access_block" "cur" {
@@ -101,7 +84,6 @@ resource "aws_s3_bucket_public_access_block" "cur" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
-  provider               = aws.cur
 }
 
 resource "aws_s3_bucket_policy" "cur" {
@@ -111,7 +93,6 @@ resource "aws_s3_bucket_policy" "cur" {
   policy = data.aws_iam_policy_document.s3_cur[0].json
 
   depends_on = [aws_s3_bucket_public_access_block.cur]
-  provider  = aws.cur
 }
 
 data "aws_iam_policy_document" "s3_cur" {
