@@ -183,7 +183,7 @@ data "template_file" "ingress_template" {
   }
 }
 
-resource "helm_release" "kubecost" {
+resource "helm_release" "kubecost_ingress" {
   name             = "kubecost-ingress"
   chart            = "kubecost-helm"
   namespace        = "kubecost"
