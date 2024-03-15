@@ -1,3 +1,8 @@
+# provider
+provider "aws" {
+  alias  = "cur"
+  region = "us-east-1"
+}
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cur_report_definition.html
 resource "aws_cur_report_definition" "this" {
   report_name                = var.report_name

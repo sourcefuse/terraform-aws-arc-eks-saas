@@ -36,10 +36,7 @@ provider "aws" {
   region = var.region
 }
 
-provider "aws" {
-  alias  = "cur"
-  region = "us-east-1"
-}
+
 
 
 provider "helm" {
