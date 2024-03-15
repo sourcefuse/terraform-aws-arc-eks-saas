@@ -38,6 +38,8 @@ prometheus:
 
 networkCosts:
   enabled: true
+  tolerations:
+  - operator: Exists
 
 pricingCsv:
   enabled: false
