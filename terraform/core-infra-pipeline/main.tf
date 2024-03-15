@@ -73,11 +73,12 @@ module "deployment_pipeline" {
     { name = "EKS", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 6, project_name = "${module.eks_module_build_step_codebuild_project.name}" },
     { name = "EKS-Auth", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${module.eks_auth_module_build_step_codebuild_project.name}" },
     { name = "EKS-Istio", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${module.istio_module_build_step_codebuild_project.name}" },
-    { name = "Observability", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${module.eks_obervability_module_build_step_codebuild_project.name}" },
+    { name = "Observability", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${module.eks_observability_module_build_step_codebuild_project.name}" },
     { name = "Opensearch-Ops", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 7, project_name = "${aws_codebuild_project.os_ops_module_build_step_codebuild_project.name}" },
     { name = "Cognito", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.cognito_module_build_step_codebuild_project.name}" },
     { name = "ControlPlaneApplication", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.control_plane_module_build_step_codebuild_project.name}" },
-    { name = "TenantCodebuilds", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.tenant_codebuild_module_build_step_codebuild_project.name}" }
+    { name = "TenantCodebuilds", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.tenant_codebuild_module_build_step_codebuild_project.name}" },
+    { name = "Billing", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.billing_module_build_step_codebuild_project.name}" }
   ]
   tags = module.tags.tags
 
@@ -95,5 +96,6 @@ module "deployment_pipeline" {
     module.vpn_module_build_step_codebuild_project,
     module.control_plane_module_build_step_codebuild_project,
     module.istio_module_build_step_codebuild_project,
-  module.eks_obervability_module_build_step_codebuild_project]
+    module.eks_observability_module_build_step_codebuild_project,
+  module.billing_module_build_step_codebuild_project]
 }

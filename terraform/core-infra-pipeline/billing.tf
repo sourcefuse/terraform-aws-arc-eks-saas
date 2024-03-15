@@ -1,31 +1,31 @@
 #############################################################################################
 ## Codebuild Role
 #############################################################################################
-module "eks_observability_module_build_step_role" {
+module "billing_module_build_step_role" {
   source           = "../../modules/iam-role"
-  role_name        = "terraform-eks-observability-module-build-step-role-${var.namespace}-${var.environment}"
-  role_description = "terraform eks observability module build step role"
+  role_name        = "terraform-billing-module-build-step-role-${var.namespace}-${var.environment}"
+  role_description = "terraform billing module build step role"
   principals = {
     "Service" : ["codebuild.amazonaws.com"]
   }
   policy_documents = [
     join("", data.aws_iam_policy_document.resource_full_access.*.json)
   ]
-  policy_name        = "terraform-eks-observability-module-build-step-policy-${var.namespace}-${var.environment}"
-  policy_description = "terraform eks observability module build step role"
+  policy_name        = "terraform-billing-module-build-step-policy-${var.namespace}-${var.environment}"
+  policy_description = "terraform billing module build step role"
   tags               = module.tags.tags
 }
 
 #############################################################################################
 ## Codebuild Project
 #############################################################################################
-module "eks_observability_module_build_step_codebuild_project" {
+module "billing_module_build_step_codebuild_project" {
   source                            = "../../modules/codebuild"
-  name                              = "terraform-eks-observability-module-build-step-code-build-${var.namespace}-${var.environment}"
-  description                       = "terraform eks observability build step module code build project"
+  name                              = "terraform-billing-module-build-step-code-build-${var.namespace}-${var.environment}"
+  description                       = "terraform billing build step module code build project"
   build_timeout                     = 480
   queued_timeout                    = 480
-  service_role                      = module.eks_observability_module_build_step_role.arn
+  service_role                      = module.billing_module_build_step_role.arn
   artifact_type                     = "CODEPIPELINE"
   build_compute_type                = "BUILD_GENERAL1_SMALL"
   build_image                       = "aws/codebuild/standard:6.0"
@@ -52,7 +52,7 @@ module "eks_observability_module_build_step_codebuild_project" {
   source_type = "CODEPIPELINE"
 
 
-  buildspec = "terraform/observability/self-hosted-grafana/buildspec.yaml"
+  buildspec = "terraform/billing/buildspec.yaml"
 
   tags = module.tags.tags
 }
