@@ -32,8 +32,8 @@ module "cur_bucket" {
 
 
 module "this" {
-  source = "nuuday/terraform-aws-cur"
-  version = "0.1.3"
+  source = "../../modules/cost-usage-report"
+
   use_existing_s3_bucket  = true
   s3_bucket_name          = "${var.namespace}-${var.environment}-cur-bucket-${module.bucket_suffix.result}"
   s3_bucket_prefix        = "reports"
