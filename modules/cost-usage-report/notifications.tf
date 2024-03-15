@@ -17,7 +17,7 @@ resource "aws_s3_bucket_notification" "cur" {
     aws_lambda_permission.allow_bucket,
     aws_s3_bucket_policy.cur,
   ]
-  provider = aws.cur
+  #provider= aws.cur
 }
 
 resource "aws_lambda_function" "run_crawler" {
@@ -41,7 +41,7 @@ resource "aws_lambda_function" "run_crawler" {
     aws_iam_role_policy.lambda,
     aws_cloudwatch_log_group.lambda,
   ]
-  provider = aws.cur
+  #provider= aws.cur
 }
 
 data "archive_file" "lambda" {
@@ -57,19 +57,19 @@ resource "aws_lambda_permission" "allow_bucket" {
   source_account = data.aws_caller_identity.current.account_id
   principal      = "s3.amazonaws.com"
   source_arn     = var.use_existing_s3_bucket ? data.aws_s3_bucket.cur[0].arn : aws_s3_bucket.cur[0].arn
-  provider       = aws.cur
+  #provider      = aws.cur
 }
 
 resource "aws_iam_role" "lambda" {
   name               = "${var.report_name}-crawler-trigger"
   assume_role_policy = data.aws_iam_policy_document.crawler_trigger_assume.json
-  provider           = aws.cur
+  #provider          = aws.cur
 }
 
 resource "aws_iam_role_policy" "lambda" {
   role     = aws_iam_role.lambda.name
   policy   = data.aws_iam_policy_document.crawler_trigger.json
-  provider = aws.cur
+  #provider= aws.cur
 }
 
 data "aws_iam_policy_document" "crawler_trigger_assume" {
@@ -120,5 +120,5 @@ data "aws_iam_policy_document" "crawler_trigger" {
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${local.lambda_function_name}"
   retention_in_days = var.lambda_log_group_retention_days
-  provider          = aws.cur
+  #provider         = aws.cur
 }
