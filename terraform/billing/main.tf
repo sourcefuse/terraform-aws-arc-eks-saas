@@ -21,7 +21,9 @@ module "kubecost_iam_role" {
   principals = {
     "Federated" : ["arn:aws:iam::${local.sts_caller_arn}:oidc-provider/${local.oidc_arn}"]
   }
-  policy_documents = []
+  policy_documents = [
+    join("", data.aws_iam_policy_document.kubecost_sa_policy.*.json)
+  ]
   assume_role_conditions = [
     {
       test     = "StringEquals"
