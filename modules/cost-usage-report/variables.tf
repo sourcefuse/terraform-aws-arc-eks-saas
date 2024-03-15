@@ -30,7 +30,7 @@ variable "report_frequency" {
 }
 
 variable "report_versioning" {
-  description = "Whether reports should be overwritten or new ones should be created."
+  description = "Whether reports should be overwritten or new ones should be created. CREATE_NEW_REPORT or OVERWRITE_REPORT"
   type        = string
 }
 

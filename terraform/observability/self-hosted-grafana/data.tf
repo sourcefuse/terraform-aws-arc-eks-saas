@@ -46,7 +46,9 @@ data "aws_iam_policy_document" "grafana_eks_policy" {
       "aps:RemoteWrite",
       "aps:GetSeries",
       "aps:GetLabels",
-      "aps:GetMetricMetadata"
+      "aps:GetMetricMetadata",
+      "athena:*",
+      "glue:*"
     ]
     resources = ["*"]
   }

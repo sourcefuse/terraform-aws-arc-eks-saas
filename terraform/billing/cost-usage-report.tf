@@ -18,7 +18,7 @@ module "cur" {
   s3_kms_key_alias        = "aws/s3"
 
   report_name      = local.cur_report_name
-  report_frequency = "HOURLY"
+  report_frequency = "DAILY"
   report_additional_artifacts = [
     "ATHENA",
   ]
@@ -28,4 +28,6 @@ module "cur" {
   report_versioning  = "OVERWRITE_REPORT"
 
   tags = module.tags.tags
+  
+  provider = aws.cur
 }
