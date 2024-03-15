@@ -65,6 +65,10 @@ resource "helm_release" "kubecost" {
   namespace        = "kubecost"
   create_namespace = true
 
+  values = [
+      file(values.yaml)
+    ]
+
   set {
     name  = "global.prometheus.enabled"
     value = false
@@ -135,10 +139,10 @@ resource "helm_release" "kubecost" {
     value = true
   }
 
-  set {
-    name  = "kubecostFrontend.enabled"
-    value = false
-  }
+  # set {
+  #   name  = "kubecostFrontend.enabled"
+  #   value = false
+  # }
 
 }
 
