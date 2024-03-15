@@ -20,7 +20,7 @@ resource "aws_cur_report_definition" "this" {
   depends_on = [
     aws_s3_bucket_policy.cur,
   ]
-   provider = aws.cur
+  provider = aws.cur
 }
 
 data "aws_s3_bucket" "cur" {
@@ -41,7 +41,7 @@ resource "aws_kms_key" "s3" {
 
   description = "For server-side encryption in the '${var.s3_bucket_name}' S3 bucket."
 
-  tags     = var.tags
+  tags = var.tags
 }
 
 resource "aws_kms_alias" "s3" {
@@ -72,7 +72,7 @@ resource "aws_s3_bucket" "cur" {
     }
   }
 
-  tags     = var.tags
+  tags = var.tags
 }
 
 resource "aws_s3_bucket_public_access_block" "cur" {

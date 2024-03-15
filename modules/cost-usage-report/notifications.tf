@@ -63,8 +63,8 @@ resource "aws_iam_role" "lambda" {
 }
 
 resource "aws_iam_role_policy" "lambda" {
-  role     = aws_iam_role.lambda.name
-  policy   = data.aws_iam_policy_document.crawler_trigger.json
+  role   = aws_iam_role.lambda.name
+  policy = data.aws_iam_policy_document.crawler_trigger.json
 }
 
 data "aws_iam_policy_document" "crawler_trigger_assume" {
