@@ -31,7 +31,7 @@ prometheus:
   nodeExporter:
     enabled: false
   kube-state-metrics:
-    disabled: false
+    disabled: true
 
 networkCosts:
   enabled: true
