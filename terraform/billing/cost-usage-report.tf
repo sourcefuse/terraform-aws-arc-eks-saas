@@ -11,7 +11,7 @@ module "bucket_suffix" {
 
 module "cur_bucket" {
    source  = "terraform-aws-modules/s3-bucket/aws"
-   version = "4.1.1"
+   version = "~> 3.0"
 
    bucket = "${var.namespace}-${var.environment}-cur-bucket-${module.bucket_suffix.result}"
    acl    = "private"
