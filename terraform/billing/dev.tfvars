@@ -5,9 +5,9 @@ domain_name = "arc-saas.net"
 
 budgets = [
     {
-    name         = "total-monthly-500"
+    name         = "total-monthly-budget"
     budget_type  = "COST"
-    limit_amount = "500"
+    limit_amount = "300"
     limit_unit   = "USD"
     time_unit    = "MONTHLY"
 
@@ -16,7 +16,7 @@ budgets = [
       threshold                  = "100"
       threshold_type             = "PERCENTAGE"
       notification_type          = "ACTUAL"
-      subscriber_email_addresses = ["harshit.kumar@sourcefuse.com"]
+      subscriber_email_addresses = ["example@example-email.com"]
     }
   }
 ]
