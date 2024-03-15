@@ -138,5 +138,5 @@ resource "aws_cloudwatch_log_group" "crawler" {
 
   name              = local.glue_log_group_default_name
   retention_in_days = var.glue_crawler_log_group_retention_days
-  provider          = aws.cur
+  provider         = aws.cur
 }
