@@ -18,3 +18,9 @@ variable "namespace" {
   description = "Namespace for the resources."
   default     = "arc-saas"
 }
+
+variable "domain_name" {
+  type        = string
+  description = "Domain Name for the SAAS Application"
+  default     = "arc-saas.net"
+}

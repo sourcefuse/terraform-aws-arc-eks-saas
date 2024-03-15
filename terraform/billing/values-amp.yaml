@@ -11,23 +11,23 @@ global:
 
   amp:
     enabled: true
-    prometheusServerEndpoint: http://localhost:8005/workspaces/ws-6f1e2c8f-c6b2-439c-8442-a5e8a6ba1dad
-    remoteWriteService: https://aps-workspaces.us-east-1.amazonaws.com/workspaces/ws-6f1e2c8f-c6b2-439c-8442-a5e8a6ba1dad/api/v1/remote_write
+    prometheusServerEndpoint: http://localhost:8005/workspaces/${WORKSPACE_ID}
+    remoteWriteService: https://aps-workspaces.${REGION}.amazonaws.com/workspaces/${WORKSPACE_ID}/api/v1/remote_write
     sigv4:
-      region: us-east-1
+      region: ${REGION}
 
 sigV4Proxy:
-  region: us-east-1
-  host: aps-workspaces.us-east-1.amazonaws.com
+  region: ${REGION}
+  host: aps-workspaces.${REGION}.amazonaws.com
 
 kubecostProductConfigs:
-  clusterName: "arc-saas-dev-eks-cluster"
+  clusterName: "${EKS_CLUSTER_NAME}"
 
 prometheus:
   server:
     global:
       external_labels:
-        cluster_id: arc-saas-dev-eks-cluster
+        cluster_id: ${EKS_CLUSTER_NAME}
   nodeExporter:
     enabled: false
   kube-state-metrics:
