@@ -75,7 +75,7 @@ resource "helm_release" "kubecost" {
   name             = "kubecost"
   repository       = "https://kubecost.github.io/cost-analyzer"
   chart            = "cost-analyzer"
-  version          = "2.1.1"
+  version          = "1.108.1"
   namespace        = "kubecost"
   create_namespace = true
 
