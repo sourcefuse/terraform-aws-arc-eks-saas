@@ -212,7 +212,7 @@ module "budgets" {
   slack_channel     = var.slack_channel
   slack_username    = var.slack_username
 
-  billing_alerts_sns_subscribers = local.billing_alerts_sns_subscribers
+  billing_alerts_sns_subscribers = var.billing_alerts_sns_subscribers
 
   tags = module.tags.tags
 }
