@@ -24,7 +24,7 @@ resource "aws_lambda_function" "run_crawler" {
 
   role = aws_iam_role.lambda.arn
 
-  runtime          = "nodejs18.x"
+  runtime          = "Python3.12"
   handler          = "index.handler"
   filename         = data.archive_file.lambda.output_path
   source_code_hash = data.archive_file.lambda.output_base64sha256
@@ -44,7 +44,7 @@ resource "aws_lambda_function" "run_crawler" {
 
 data "archive_file" "lambda" {
   type        = "zip"
-  source_file = "${path.module}/src/index.js"
+  source_file = "${path.module}/src/index.py"
   output_path = "${path.module}/lambda.zip"
 }
 
