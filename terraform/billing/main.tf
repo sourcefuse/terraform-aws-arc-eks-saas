@@ -80,6 +80,7 @@ resource "helm_release" "kubecost" {
   create_namespace = true
 
   values = [data.template_file.kubecost_helm_value_template.rendered]
+ 
 
 }
 
@@ -115,6 +116,7 @@ resource "helm_release" "kubecost_ingress" {
   create_namespace = false
   force_update     = true
   values           = [data.template_file.ingress_template.rendered]
+  depends_on = [helm_release.kubecost]
 
 }
 
