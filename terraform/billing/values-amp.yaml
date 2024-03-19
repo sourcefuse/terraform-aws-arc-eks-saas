@@ -5,7 +5,7 @@ global:
     proxy: false
 
   prometheus:
-    enabled: false
+    enabled: true
   
   savedReports:
     enabled: true
