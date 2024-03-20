@@ -147,6 +147,7 @@ module "grafana_ssm_parameters" {
     }
   ]
   tags = module.tags.tags
+  depends_on = [module.prometheus]
 
 }
 
@@ -237,7 +238,7 @@ spec:
     - "grafana.${var.domain_name}"
 YAML
 
-
+ count = 1
 
   depends_on = [
     helm_release.grafana,
@@ -268,6 +269,8 @@ spec:
             port:
               number: 80
 YAML
+
+  count = 1 
 
   depends_on = [
     helm_release.grafana,
@@ -406,8 +409,8 @@ spec:
           - name: PASSING
             value: "80"
 YAML
-
-
+    
+  count = 1
   depends_on = [module.prometheus, helm_release.grafana, helm_release.kuberhealthy]
 
 }

@@ -169,6 +169,7 @@ module "observability_ssm_parameters" {
     }
   ]
   tags = module.tags.tags
+  depends_on = [module.prometheus]
 
 }
 
