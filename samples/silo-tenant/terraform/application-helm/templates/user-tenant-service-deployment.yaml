@@ -8,7 +8,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-user-tenant-service
   labels:
     app: {{ include "helm.fullname" . }}
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   replicas: {{ .Values.userTenantService.replicaCount }}
@@ -31,7 +31,7 @@ spec:
       labels:
         app: {{ include "helm.fullname" . }}
         component: user-tenant-service
-        Tenant: {{ .Values.tenant }} 
+        Tenant: {{ .Values.tenant }}
         Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
@@ -198,7 +198,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-user-tenant-service
   labels:
     app: {{ include "helm.fullname" . }}
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   type: {{ .Values.userTenantService.service.type }}

@@ -8,7 +8,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-authentication-service
   labels:
     app: {{ include "helm.fullname" . }}
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   replicas: {{ .Values.authenticationService.replicaCount }}
@@ -31,7 +31,7 @@ spec:
       labels:
         app: {{ include "helm.fullname" . }}
         component: authentication-service
-        Tenant: {{ .Values.tenant }} 
+        Tenant: {{ .Values.tenant }}
         Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
@@ -178,7 +178,7 @@ metadata:
   labels:
     app: {{ include "helm.fullname" . }}
     component: authentication-service
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   scaleTargetRef:
@@ -213,7 +213,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-authentication-service
   labels:
     app: {{ include "helm.fullname" . }}
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   type: {{ .Values.authenticationService.service.type }}

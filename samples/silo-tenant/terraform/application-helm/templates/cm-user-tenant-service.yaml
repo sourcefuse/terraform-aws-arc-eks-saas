@@ -5,7 +5,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-cm-user-tenant-service
   labels:
     app: {{ include "helm.fullname" . }}
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 data:
       PORT: '{{ .Values.userTenantService.port }}'

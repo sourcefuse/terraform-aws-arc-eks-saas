@@ -4,7 +4,7 @@ metadata:
   name: deny-traffic-from-cross-namespace
   namespace: {{ .Values.namespace }}
   labels:
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   action: ALLOW

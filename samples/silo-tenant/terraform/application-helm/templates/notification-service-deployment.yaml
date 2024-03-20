@@ -8,7 +8,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-notification-service
   labels:
     app: {{ include "helm.fullname" . }}
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   replicas: {{ .Values.notificationService.replicaCount }}
@@ -31,7 +31,7 @@ spec:
       labels:
         app: {{ include "helm.fullname" . }}
         component: notification-service
-        Tenant: {{ .Values.tenant }} 
+        Tenant: {{ .Values.tenant }}
         Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
@@ -163,7 +163,7 @@ metadata:
   labels:
     app: {{ include "helm.fullname" . }}
     component: notification-service
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   scaleTargetRef:
@@ -198,7 +198,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-notification-service
   labels:
     app: {{ include "helm.fullname" . }}
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   type: {{ .Values.notificationService.service.type }}

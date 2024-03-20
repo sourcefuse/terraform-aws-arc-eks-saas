@@ -198,7 +198,7 @@ metadata:
   name: {{ include "helm.fullname" . }}-scheduler-service
   labels:
     app: {{ include "helm.fullname" . }}
-    Tenant: {{ .Values.tenant }} 
+    Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   type: {{ .Values.schedulerService.service.type }}

@@ -6,6 +6,8 @@ metadata:
   name: {{ include "helm.fullname" . }}-frontend
   labels:
     app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   strategy:
@@ -27,6 +29,8 @@ spec:
       labels:
         app: {{ include "helm.fullname" . }}
         component: frontend
+        Tenant: {{ .Values.tenant }}
+        Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
       containers:
@@ -90,6 +94,8 @@ metadata:
   name: {{ include "helm.fullname" . }}-frontend
   labels:
     app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   type: {{ .Values.frontend.Service.type }}
   ports:

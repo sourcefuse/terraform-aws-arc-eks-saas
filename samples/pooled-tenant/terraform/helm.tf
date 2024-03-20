@@ -91,6 +91,7 @@ data "template_file" "helm_values_template" {
     TENANT_KEY       = var.tenant
     TENANT_EMAIL     = var.tenant_email
     TENANT_SECRET    = var.tenant_secret
+    TENANT_ID        = var.tenant_id
     COGNITO_USER     = var.user_name
     COGNITO_USER_SUB = aws_cognito_user.cognito_user.sub
 
