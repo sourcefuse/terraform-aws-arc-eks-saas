@@ -47,7 +47,8 @@ module "tags" {
   project     = var.namespace
 
   extra_tags = {
-    Tenant = "pooled-${var.tenant}"
+    Tenant    = "pooled-${var.tenant}"
+    Tenant_ID = var.tenant_id
   }
 
 }

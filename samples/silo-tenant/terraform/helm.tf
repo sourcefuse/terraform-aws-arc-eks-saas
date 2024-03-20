@@ -163,3 +163,39 @@ resource "helm_release" "application_helm" {
     module.tenant_iam_role, module.aurora, module.redis, module.aws_cognito_user_pool
   ]
 }
+
+#####################################################################################
+## Kuberhealthy http checker
+#####################################################################################
+resource "kubectl_manifest" "http_checker" {
+  yaml_body = <<YAML
+apiVersion: comcast.github.io/v1
+kind: KuberhealthyCheck
+metadata:
+  name: ${var.tenant}-http-check
+  namespace: kuberhealthy
+spec:
+  runInterval: 5m
+  timeout: 10m
+  podSpec:
+    containers:
+      - name: main
+        image: kuberhealthy/http-check:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: CHECK_URL
+            value: "https://${var.tenant_host_domain}/"
+          - name: COUNT
+            value: "5"
+          - name: SECONDS
+            value: "1"
+          - name: REQUEST_TYPE
+            value: "GET"
+          - name: PASSING
+            value: "80"
+YAML
+
+
+  depends_on = [module.tenant_iam_role, module.aurora, module.redis, module.aws_cognito_user_pool, helm_release.application_helm]
+
+}

@@ -57,3 +57,9 @@ variable "grafana_service_type" {
   type        = string
   default     = "Loadbalancer"
 }
+
+variable "domain_name" {
+  description = "Domain Name "
+  type        = string
+  default     = "arc-saas.net"
+}

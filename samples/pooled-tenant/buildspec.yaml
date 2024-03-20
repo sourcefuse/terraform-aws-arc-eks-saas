@@ -49,6 +49,7 @@ phases:
       - export TF_VAR_domain_name="${DOMAIN_NAME}"
       - export TF_VAR_tenant_name="${TENANT}"
       - export TF_VAR_tenant_secret="${SECRET}"
+      - export TF_VAR_tenant_id="${TENANT_ID}"
       - export TF_VAR_cluster_name="${EKS_CLUSTER_NAME}"
       - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"
       - export TF_VAR_tenant_host_domain="${KEY}.${DOMAIN_NAME}"

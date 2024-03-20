@@ -137,14 +137,14 @@ module "grafana_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Grafana UserName"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/prometheus_workspace_id"
+      value       = module.prometheus.managed_prometheus_workspace_id
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Amazon Managed Prometheus Workspace ID"
     }
-    # {
-    #   name        = "/${var.namespace}/${var.environment}/prometheus_workspace_id"
-    #   value       = module.prometheus.managed_prometheus_workspace_id
-    #   type        = "SecureString"
-    #   overwrite   = "true"
-    #   description = "Amazon Managed Prometheus Workspace ID"
-    # }
   ]
   tags = module.tags.tags
 
@@ -213,5 +213,201 @@ VALUES
     name  = "serviceAccount.name"
     value = var.service_account_name
   }
+
+}
+
+resource "kubectl_manifest" "grafana_gateway" {
+
+
+  yaml_body = <<YAML
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: grafana
+  namespace: ${var.grafana_namespace}
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "grafana.${var.domain_name}"
+YAML
+
+
+
+  depends_on = [
+    helm_release.grafana,
+    module.prometheus
+  ]
+
+}
+
+resource "kubectl_manifest" "grafana_virtual_service" {
+  yaml_body = <<YAML
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: grafana
+  namespace: ${var.grafana_namespace}
+spec:
+  hosts:
+    - "grafana.${var.domain_name}"
+  gateways:
+    - grafana 
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: "grafana"
+            port:
+              number: 80
+YAML
+
+  depends_on = [
+    helm_release.grafana,
+    module.prometheus
+  ]
+
+}
+
+#####################################################################################
+## Kuberhealthy Addon
+#####################################################################################
+resource "helm_release" "kuberhealthy" {
+  name             = "kuberhealthy"
+  repository       = "https://kuberhealthy.github.io/kuberhealthy/helm-repos"
+  chart            = "kuberhealthy"
+  version          = "104"
+  namespace        = "kuberhealthy" # Specify the namespace where you want to deploy
+  create_namespace = true
+
+  set {
+    name  = "checkReaper.maxKHJobAge"
+    value = "1h"
+  }
+
+  set {
+    name  = "checkReaper.maxCheckPodAge"
+    value = "24h"
+  }
+
+  set {
+    name  = "checkReaper.maxCompletedPodCount"
+    value = 2
+  }
+
+  dynamic "set" {
+    for_each = local.helm_settings
+    content {
+      name  = set.key
+      value = set.value
+    }
+  }
+
+
+  set {
+    name  = "deployment.replicas"
+    value = 1
+  }
+
+  set {
+    name  = "prometheus.enabled"
+    value = true
+  }
+
+  set {
+    name  = "prometheus.prometheusRule.enabled"
+    value = false
+  }
+
+  set {
+    name  = "promtheus.serviceMonitor.enabled"
+    value = false
+  }
+
+  set {
+    name  = "check.daemonset.enabled"
+    value = false
+  }
+
+  set {
+    name  = "check.daemonset.tolerations[0].operator"
+    value = "Exists"
+  }
+
+  set {
+    name  = "check.deployment.enabled"
+    value = false
+  }
+
+  set {
+    name  = "check.dnsInternal.enabled"
+    value = true
+  }
+
+  set {
+    name  = "check.dnsExternal.enabled"
+    value = true
+  }
+
+  set {
+    name  = "check.dnsExternal.extraEnvs.HOSTNAME"
+    value = var.domain_name
+  }
+
+  set {
+    name  = "check.podRestarts.enabled"
+    value = false
+  }
+
+  set {
+    name  = "check.podRestarts.allNamespaces"
+    value = true
+  }
+
+  set {
+    name  = "check.podStatus.enabled"
+    value = false
+  }
+
+  depends_on = [module.prometheus, helm_release.grafana]
+}
+
+resource "kubectl_manifest" "http_checker" {
+  yaml_body = <<YAML
+apiVersion: comcast.github.io/v1
+kind: KuberhealthyCheck
+metadata:
+  name: http-check
+  namespace: kuberhealthy
+spec:
+  runInterval: 5m
+  timeout: 10m
+  podSpec:
+    containers:
+      - name: main
+        image: kuberhealthy/http-check:latest
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: CHECK_URL
+            value: "https://${var.domain_name}/"
+          - name: COUNT
+            value: "5"
+          - name: SECONDS
+            value: "1"
+          - name: REQUEST_TYPE
+            value: "GET"
+          - name: PASSING
+            value: "80"
+YAML
+
+
+  depends_on = [module.prometheus, helm_release.grafana, helm_release.kuberhealthy]
 
 }
