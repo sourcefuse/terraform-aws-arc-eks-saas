@@ -8,6 +8,8 @@ metadata:
   name: {{ include "helm.fullname" . }}-authentication-service
   labels:
     app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }} 
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   replicas: {{ .Values.authenticationService.replicaCount }}
   strategy:
@@ -29,6 +31,8 @@ spec:
       labels:
         app: {{ include "helm.fullname" . }}
         component: authentication-service
+        Tenant: {{ .Values.tenant }} 
+        Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
       containers:
@@ -174,6 +178,8 @@ metadata:
   labels:
     app: {{ include "helm.fullname" . }}
     component: authentication-service
+    Tenant: {{ .Values.tenant }} 
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -207,6 +213,8 @@ metadata:
   name: {{ include "helm.fullname" . }}-authentication-service
   labels:
     app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }} 
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   type: {{ .Values.authenticationService.service.type }}
   ports:

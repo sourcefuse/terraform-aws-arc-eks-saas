@@ -3,6 +3,9 @@ kind: KuberhealthyCheck
 metadata:
   name: {{ .Values.tenant }}-http-check
   namespace: kuberhealthy
+  labels:
+    Tenant: {{ .Values.tenant }} 
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   runInterval: 5m
   timeout: 10m

@@ -5,6 +5,8 @@ metadata:
   name: {{ include "helm.fullname" . }}-cm-audit-service
   labels:
     app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }} 
+    Tenant_ID: {{ .Values.tenantID }}
 data:
       PORT: '{{ .Values.auditService.port }}'
       NODE_ENV: '{{ .Values.auditService.node_env }}'
