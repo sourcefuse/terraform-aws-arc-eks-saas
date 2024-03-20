@@ -1386,6 +1386,22 @@ spec:
                   action: drop
             {{ end }}
 
+            {{ if .Values.enableKuberhealthy }}   
+            - job_name: 'kuberhealthy'
+              scrape_interval: 1m
+              honor_labels: true
+              metrics_path: /metrics
+              kubernetes_sd_configs:
+              - role: service
+                namespaces:
+                  names:
+                    - kuberhealthy
+              relabel_configs:
+                - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+                  action: keep
+                  regex: true
+            {{ end }}
+
             {{ if .Values.enableNginx }}
             - job_name: 'kubernetes-nginx'
               sample_limit: {{ .Values.nginxScrapeSampleLimit }}

@@ -21,6 +21,11 @@ variable "tenant" {
   description = "tenant name"
 }
 
+variable "tenant_id" {
+  type        = string
+  description = "Tenat unique ID"
+}
+
 variable "domain_name" {
   description = "Enter Defeault Redirect URL"
   type        = string

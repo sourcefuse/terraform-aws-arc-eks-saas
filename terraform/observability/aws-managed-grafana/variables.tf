@@ -46,3 +46,8 @@ variable "workspace_api_keys_ttl" {
   default     = 9000
 }
 
+variable "domain_name" {
+  description = "Domain Name "
+  type        = string
+  default     = "arc-saas.net"
+}

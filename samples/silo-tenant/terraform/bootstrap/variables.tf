@@ -17,3 +17,8 @@ variable "tenant" {
   type        = string
   description = "tenant name"
 }
+
+variable "tenant_id" {
+  type        = string
+  description = "Tenat unique ID"
+}
