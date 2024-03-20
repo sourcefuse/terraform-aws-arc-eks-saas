@@ -146,7 +146,7 @@ module "grafana_ssm_parameters" {
       description = "Amazon Managed Prometheus Workspace ID"
     }
   ]
-  tags = module.tags.tags
+  tags       = module.tags.tags
   depends_on = [module.prometheus]
 
 }
@@ -217,68 +217,21 @@ VALUES
 
 }
 
-resource "kubectl_manifest" "grafana_gateway" {
+resource "null_resource" "apply_manifests" {
+  depends_on = [helm_release.grafana]
 
+  triggers = {
+    always_run = timestamp()
+  }
 
-  yaml_body = <<YAML
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: grafana
-  namespace: ${var.grafana_namespace}
-spec:
-  selector:
-    istio: ingressgateway # use istio default controller
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "grafana.${var.domain_name}"
-YAML
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${path.module}/grafana-manifest-files/grafana_gateway.yaml"
+  }
 
- count = 1
-
-  depends_on = [
-    helm_release.grafana,
-    module.prometheus
-  ]
-
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${path.module}/grafana-manifest-files/grafana_virtual_service.yaml"
+  }
 }
-
-resource "kubectl_manifest" "grafana_virtual_service" {
-  yaml_body = <<YAML
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: grafana
-  namespace: ${var.grafana_namespace}
-spec:
-  hosts:
-    - "grafana.${var.domain_name}"
-  gateways:
-    - grafana 
-  http:
-    - match:
-        - uri:
-            prefix: /
-      route:
-        - destination:
-            host: "grafana"
-            port:
-              number: 80
-YAML
-
-  count = 1 
-
-  depends_on = [
-    helm_release.grafana,
-    module.prometheus
-  ]
-
-}
-
 #####################################################################################
 ## Kuberhealthy Addon
 #####################################################################################
@@ -380,37 +333,4 @@ resource "helm_release" "kuberhealthy" {
   }
 
   depends_on = [module.prometheus, helm_release.grafana]
-}
-
-resource "kubectl_manifest" "http_checker" {
-  yaml_body = <<YAML
-apiVersion: comcast.github.io/v1
-kind: KuberhealthyCheck
-metadata:
-  name: http-check
-  namespace: kuberhealthy
-spec:
-  runInterval: 5m
-  timeout: 10m
-  podSpec:
-    containers:
-      - name: main
-        image: kuberhealthy/http-check:latest
-        imagePullPolicy: IfNotPresent
-        env:
-          - name: CHECK_URL
-            value: "https://${var.domain_name}/"
-          - name: COUNT
-            value: "5"
-          - name: SECONDS
-            value: "1"
-          - name: REQUEST_TYPE
-            value: "GET"
-          - name: PASSING
-            value: "80"
-YAML
-    
-  count = 1
-  depends_on = [module.prometheus, helm_release.grafana, helm_release.kuberhealthy]
-
 }
