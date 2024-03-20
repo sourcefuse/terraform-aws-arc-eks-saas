@@ -51,7 +51,7 @@ module "aurora" {
   vpc_id      = data.aws_vpc.vpc.id
 
   aurora_cluster_enabled                    = var.aurora_cluster_enabled
-  aurora_cluster_name                       = "${var.namespace}-${var.environment}-aurora"
+  aurora_cluster_name                       = "aurora"
   enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-enhanced-monitoring"
   aurora_db_admin_username                  = var.aurora_db_admin_username
   aurora_db_admin_password                  = module.db_password.result
