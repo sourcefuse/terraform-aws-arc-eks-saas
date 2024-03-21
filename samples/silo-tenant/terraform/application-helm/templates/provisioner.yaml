@@ -4,6 +4,9 @@ metadata:
   name: {{ .Values.tenant }}
   annotations:
     kubernetes.io/description: "NodePool to restrict the number of cpus provisioned to 100"
+  labels:
+    Tenant: {{ .Values.tenant }} 
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   template:
     metadata:
@@ -52,6 +55,9 @@ spec:
   securityGroupSelectorTerms:
     - tags:
         "aws:eks:cluster-name": {{ .Values.eksClusterName }} 
+  tags:
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
 
 
 

@@ -361,6 +361,7 @@ affinity: {}
 tenantKey: ${TENANT_KEY}
 tenantName: ${TENANT_NAME}
 tenantSecret: ${TENANT_SECRET}
+tenantID: ${TENANT_ID}
 tenantEmail: ${TENANT_EMAIL}
 cognitoUser: ${COGNITO_USER}
 cognitoSub: ${COGNITO_USER_SUB}

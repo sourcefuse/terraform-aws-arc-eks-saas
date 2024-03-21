@@ -5,6 +5,8 @@ metadata:
   name: {{ include "helm.fullname" . }}-cm-notification-service
   labels:
     app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
 data:
       PORT: '{{ .Values.notificationService.port }}'
       NODE_ENV: '{{ .Values.notificationService.node_env }}'

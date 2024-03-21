@@ -1,0 +1,56 @@
+# Refer https://github.com/kubecost/cost-analyzer-helm-chart/blob/develop/cost-analyzer/values.yaml for more options
+global:
+  grafana:
+    enabled: false
+    proxy: false
+
+  prometheus:
+    enabled: true
+  
+  savedReports:
+    enabled: true
+  
+  cloudCostReports:
+    enabled: true
+
+  amp:
+    enabled: true
+    prometheusServerEndpoint: http://localhost:8005/workspaces/${WORKSPACE_ID}
+    remoteWriteService: https://aps-workspaces.${REGION}.amazonaws.com/workspaces/${WORKSPACE_ID}/api/v1/remote_write
+    sigv4:
+      region: ${REGION}
+
+sigV4Proxy:
+  region: ${REGION}
+  host: aps-workspaces.${REGION}.amazonaws.com
+
+kubecostProductConfigs:
+  clusterName: "${EKS_CLUSTER_NAME}"
+
+prometheus:
+  server:
+    global:
+      external_labels:
+        cluster_id: ${EKS_CLUSTER_NAME}
+  nodeExporter:
+    enabled: false
+  kube-state-metrics:
+    disabled: true
+
+networkCosts:
+  enabled: true
+  tolerations:
+  - operator: Exists
+
+upgrade:
+  toV2: true
+
+pricingCsv:
+  enabled: false
+  location:
+    provider: "AWS"
+    region: "us-east-1"
+    URI: s3://kc-csv-test/pricing_schema.csv  # a valid file URI
+    csvAccessCredentials: pricing-schema-access-secret
+
+kubecostToken: "aGFyc2hpdC5rdW1hckBzb3VyY2VmdXNlLmNvbQ==xm343yadf98" # generated at http://kubecost.com/install, used for alerts tracking and free trials

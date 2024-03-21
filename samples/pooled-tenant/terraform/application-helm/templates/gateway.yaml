@@ -4,6 +4,8 @@ metadata:
   name: {{ .Values.tenant }}
   labels:
     app: {{ include "helm.name" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   selector:
     istio: ingressgateway # use istio default controller

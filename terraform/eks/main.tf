@@ -127,6 +127,7 @@ module "eks_blueprints_addons" {
     coredns = {
       most_recent = true
     }
+
   }
 
 

@@ -8,6 +8,8 @@ metadata:
   name: {{ include "helm.fullname" . }}-user-tenant-service
   labels:
     app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   replicas: {{ .Values.userTenantService.replicaCount }}
   strategy:
@@ -29,6 +31,8 @@ spec:
       labels:
         app: {{ include "helm.fullname" . }}
         component: user-tenant-service
+        Tenant: {{ .Values.tenant }}
+        Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
       containers:
@@ -159,6 +163,8 @@ metadata:
   labels:
     app: {{ include "helm.fullname" . }}
     component: user-tenant-service
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -192,6 +198,8 @@ metadata:
   name: {{ include "helm.fullname" . }}-user-tenant-service
   labels:
     app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
 spec:
   type: {{ .Values.userTenantService.service.type }}
   ports:

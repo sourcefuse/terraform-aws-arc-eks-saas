@@ -61,6 +61,21 @@ module "grafana" {
 
 }
 
+resource "null_resource" "apply_manifests" {
+  depends_on = [module.grafana]
+
+  triggers = {
+    always_run = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${path.module}/grafana-manifest-files/grafana_gateway.yaml"
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl apply -f ${path.module}/grafana-manifest-files/grafana_virtual_service.yaml"
+  }
+}
 ############################################################################
 ## Prometheus
 ############################################################################
@@ -96,4 +111,123 @@ module "prometheus" {
   service_account_role_arn = module.prometheus_service_account_role.arn
 
   depends_on = [module.grafana]
+}
+
+module "observability_ssm_parameters" {
+  source = "../../../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/prometheus_workspace_id"
+      value       = module.prometheus.managed_prometheus_workspace_id
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Amazon Managed Prometheus Workspace ID"
+    }
+  ]
+  tags       = module.tags.tags
+  depends_on = [module.prometheus]
+
+}
+
+#####################################################################################
+## Kuberhealthy Addon
+#####################################################################################
+resource "helm_release" "kuberhealthy" {
+  name             = "kuberhealthy"
+  repository       = "https://kuberhealthy.github.io/kuberhealthy/helm-repos"
+  chart            = "kuberhealthy"
+  version          = "104"
+  namespace        = "kuberhealthy" # Specify the namespace where you want to deploy
+  create_namespace = true
+
+  set {
+    name  = "checkReaper.maxKHJobAge"
+    value = "1h"
+  }
+
+  set {
+    name  = "checkReaper.maxCheckPodAge"
+    value = "24h"
+  }
+
+  set {
+    name  = "checkReaper.maxCompletedPodCount"
+    value = 2
+  }
+
+  dynamic "set" {
+    for_each = local.helm_settings
+    content {
+      name  = set.key
+      value = set.value
+    }
+  }
+
+
+  set {
+    name  = "deployment.replicas"
+    value = 1
+  }
+
+  set {
+    name  = "prometheus.enabled"
+    value = true
+  }
+
+  set {
+    name  = "prometheus.prometheusRule.enabled"
+    value = false
+  }
+
+  set {
+    name  = "promtheus.serviceMonitor.enabled"
+    value = false
+  }
+
+  set {
+    name  = "check.daemonset.enabled"
+    value = false
+  }
+
+  set {
+    name  = "check.daemonset.tolerations[0].operator"
+    value = "Exists"
+  }
+
+  set {
+    name  = "check.deployment.enabled"
+    value = false
+  }
+
+  set {
+    name  = "check.dnsInternal.enabled"
+    value = true
+  }
+
+  set {
+    name  = "check.dnsExternal.enabled"
+    value = true
+  }
+
+  set {
+    name  = "check.dnsExternal.extraEnvs.HOSTNAME"
+    value = var.domain_name
+  }
+
+  set {
+    name  = "check.podRestarts.enabled"
+    value = false
+  }
+
+  set {
+    name  = "check.podRestarts.allNamespaces"
+    value = true
+  }
+
+  set {
+    name  = "check.podStatus.enabled"
+    value = false
+  }
+
+  depends_on = [module.prometheus, module.grafana]
 }

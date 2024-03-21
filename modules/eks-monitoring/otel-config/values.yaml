@@ -38,3 +38,5 @@ enableAdotcollectorMetrics: ${enable_adotcollector_metrics}
 
 serviceAccount: ${service_account}
 namespace: ${namespace}
+
+enableKuberhealthy: true
