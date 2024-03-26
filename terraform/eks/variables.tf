@@ -206,7 +206,7 @@ variable "argo_workflows" {
 variable "enable_argocd" {
   description = "Enable Argo CD Kubernetes add-on"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "argocd" {
