@@ -1,4 +1,5 @@
 
+ # Add annotation - alb.ingress.kubernetes.io/wafv2-acl-arn for adding WAF - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.1/guide/ingress/annotations/#addons
 resource "local_file" "k8s_ingress" {
   content  = <<-EOT
 apiVersion: networking.k8s.io/v1
@@ -13,7 +14,7 @@ metadata:
     alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/certificate-arn: ${var.acm_certificate_arn}
+    alb.ingress.kubernetes.io/certificate-arn: ${var.acm_certificate_arn} 
   labels:
     app: alb-external-ingress
 spec:
