@@ -21,6 +21,7 @@ cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to
 cp -r ../silo-tenant/terraform/application-helm/* . || { echo "Failed to copy files"; exit 1; }
 
 rm -rf values.yaml
+rm -rf argocd.yaml
 
 
 # Set origin URL

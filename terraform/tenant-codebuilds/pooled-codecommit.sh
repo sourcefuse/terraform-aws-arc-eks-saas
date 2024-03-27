@@ -17,6 +17,7 @@ git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-standard-plan-
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to change directory"; exit 1; }
 
+rm -rf *
 # Copy contents from ../pooled-tenant/ to current directory
 cp -r ../pooled-tenant/* . || { echo "Failed to copy files"; exit 1; }
 
