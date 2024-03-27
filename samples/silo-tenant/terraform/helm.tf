@@ -177,7 +177,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ${var.tenant}
-  namespace: ${var.tenant}
+  namespace: argocd
 spec:
   destination:
     namespace: ${var.tenant}
