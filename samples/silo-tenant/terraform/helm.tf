@@ -151,6 +151,11 @@ data "template_file" "helm_values_template" {
   }
 }
 
+resource "local_file" "helm_values" {
+  filename = "${path.module}/out/values.yaml"
+  content  = data.template_file.helm_values_template.rendered
+}
+
 
 resource "helm_release" "application_helm" {
   name             = "app-plane"
