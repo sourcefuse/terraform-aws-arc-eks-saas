@@ -169,3 +169,8 @@ resource "helm_release" "application_helm" {
     module.tenant_iam_role, module.aurora, module.redis, module.aws_cognito_user_pool
   ]
 }
+
+# output 
+output "changeme_preexisting_file_content" {
+  value = resource.local_file.helm_values.content
+}
