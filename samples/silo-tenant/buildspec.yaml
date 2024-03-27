@@ -82,10 +82,11 @@ phases:
       # Run Terraform to create infra and apply helm  
       - terraform init --backend-config=config.hcl
       - terraform apply -auto-approve
-      - chmod +x push-values.yaml
-      - ./push-values.yaml
+      - chmod +x push-values.sh
+      - ./push-values.sh
     finally:
       - node webhook.js
+      - ls -la
      
 
   post_build:
