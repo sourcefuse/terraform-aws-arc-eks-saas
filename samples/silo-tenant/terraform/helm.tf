@@ -123,7 +123,6 @@ data "template_file" "helm_values_template" {
     TENANT_CLIENT_ID      = var.tenant_client_id
     TENANT_CLIENT_SECRET  = var.tenant_client_secret
     REGION                = var.region
-    APPLICATION_NAMESPACE = var.namespace
     COGNITO_DOMAIN        = data.aws_ssm_parameter.cognito_domain.name
     COGNITO_ID            = data.aws_ssm_parameter.cognito_id.name
     COGNITO_SECRET        = data.aws_ssm_parameter.cognito_secret.name

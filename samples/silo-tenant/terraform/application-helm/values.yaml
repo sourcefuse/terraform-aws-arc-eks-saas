@@ -374,7 +374,6 @@ publicKey: ${TENANT_CLIENT_SECRET}
 
 namespace: ${NAMESPACE}
 region: ${REGION}
-applicationNamespace: ${APPLICATION_NAMESPACE}
 cognitodomain: ${COGNITO_DOMAIN}
 cognitoid: ${COGNITO_ID}
 cognitosecret: ${COGNITO_SECRET}
