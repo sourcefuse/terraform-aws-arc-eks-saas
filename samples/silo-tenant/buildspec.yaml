@@ -91,6 +91,7 @@ phases:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - sleep 30
       - node webhook.js
+      - ls -la
 
 
 
