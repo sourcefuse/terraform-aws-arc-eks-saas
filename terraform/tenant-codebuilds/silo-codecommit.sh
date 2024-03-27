@@ -17,7 +17,7 @@ git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-premium-plan-r
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-premium-plan-repository || { echo "Failed to change directory"; exit 1; }
 
-
+rm -rf *
 # Copy contents from ../silo-tenant/ to current directory
 cp -r ../silo-tenant/* . || { echo "Failed to copy files"; exit 1; }
 
