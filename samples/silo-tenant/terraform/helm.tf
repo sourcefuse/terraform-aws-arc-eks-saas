@@ -171,7 +171,40 @@ resource "helm_release" "application_helm" {
   ]
 }
 
-# output 
-output "changeme_preexisting_file_content" {
-  value = resource.local_file.helm_values.content
+
+resource "local_file" "argocd_application" {
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${var.tenant}
+spec:
+  destination:
+    name: ''
+    namespace: ${var.tenant}
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: .
+    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-helm-chart-repository'
+    targetRevision: main
+    helm:
+      valueFiles:
+        - ${var.tenant}-values.yaml
+  project: ${var.tenant}
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        maxDuration: 3m0s
+        factor: 2
+    EOT
+  filename = "${path.module}/argocd-application.yaml"
 }
+
+# output 
+# output "changeme_preexisting_file_content" {
+  # value = resource.local_file.helm_values.content
+# }
