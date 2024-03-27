@@ -9,7 +9,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: .
-    repoURL: 'https://git-codecommit.{{ .Values.region }}.amazonaws.com/v1/repos/{{ .Values.namespace }}-{{ .Values.region }}-tenant-helm-chart-repository'
+    repoURL: 'https://git-codecommit.{{ .Values.region }}.amazonaws.com/v1/repos/{{ .Values.applicationNamespace }}-{{ .Values.environment }}-tenant-helm-chart-repository'
     targetRevision: main
     helm:
       valueFiles:
