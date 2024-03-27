@@ -177,9 +177,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ${var.tenant}
+  namespace: ${var.tenant}
 spec:
   destination:
-    name: ''
     namespace: ${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
@@ -189,7 +189,7 @@ spec:
     helm:
       valueFiles:
         - ${var.tenant}-values.yaml
-  project: ${var.tenant}
+  project: default  
   syncPolicy:
     syncOptions:
       - ApplyOutOfSyncOnly=true

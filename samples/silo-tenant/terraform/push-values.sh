@@ -16,7 +16,6 @@ git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-ch
 cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to change directory"; exit 1; }
 
 # Copy tenant values.yaml to current directory
-#cp -r ../out/* . || { echo "Failed to copy files"; exit 1; }
 if [ -d "../out" ]; then
     cp -r ../out/* . || { echo "Failed to copy files"; exit 1; }
 else
