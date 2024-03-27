@@ -14,11 +14,13 @@ pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codec
 # Clone codecommit repo
 git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to clone repository"; exit 1; }
 ls -la
+pwd
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to change directory"; exit 1; }
 
+pwd
 # Copy contents from ../pooled-tenant/ to current directory
-cp -r out/* . || { echo "Failed to copy files"; exit 1; }
+cp -r ../out/* . || { echo "Failed to copy files"; exit 1; }
 
 
 # Set origin URL
