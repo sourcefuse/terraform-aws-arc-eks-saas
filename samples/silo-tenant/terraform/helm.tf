@@ -152,7 +152,7 @@ data "template_file" "helm_values_template" {
 }
 
 resource "local_file" "helm_values" {
-  filename = "${path.module}/out/values.yaml"
+  filename = "${path.module}/out/${var.tenant}-values.yaml"
   content  = data.template_file.helm_values_template.rendered
 }
 
