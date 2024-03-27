@@ -84,7 +84,7 @@ phases:
       - terraform apply -auto-approve
       - chmod +x push-values.sh
       - ./push-values.sh
-      - kubectl apply -f argocd-application.yaml --namespace ${KEY} --ignore-not-found
+      - kubectl apply -f argocd-application.yaml --namespace ${KEY} || true
     finally:
       - node webhook.js
      
