@@ -5,23 +5,18 @@ export AWS_REGION=us-east-1
 export NAMESPACE=arc-saas
 export ENVIRONMENT=dev
 
-# Change directory
-#cd ../../samples/ || { echo "Failed to change directory"; exit 1; }
-ls -la
+
 # Install git-remote-codecommit
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
 
 # Clone codecommit repo
 git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to clone repository"; exit 1; }
-ls -la
-pwd
+
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to change directory"; exit 1; }
 
-pwd
-# Copy contents from ../pooled-tenant/ to current directory
+# Copy tenant values.yaml to current directory
 cp -r ../out/* . || { echo "Failed to copy files"; exit 1; }
-
 
 # Set origin URL
 git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to set remote URL"; exit 1; }
