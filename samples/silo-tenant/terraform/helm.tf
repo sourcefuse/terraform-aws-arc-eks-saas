@@ -178,6 +178,9 @@ kind: Application
 metadata:
   name: ${var.tenant}
   namespace: argocd
+  labels:
+    Tenant: ${var.tenant} 
+    Tenant_ID: ${var.tenant_id}
 spec:
   destination:
     namespace: ${var.tenant}

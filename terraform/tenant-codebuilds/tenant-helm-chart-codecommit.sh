@@ -17,11 +17,32 @@ git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-ch
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to change directory"; exit 1; }
 
-# Copy base helm chart to current directory
-cp -r ../silo-tenant/terraform/application-helm/* . || { echo "Failed to copy files"; exit 1; }
+# Check if the silo-helm folder already exists
+if [ ! -d "silo-helm" ]; then
+    # If it doesn't exist, create the silo-helm folder
+    mkdir silo-helm || { echo "Failed to create 'silo-helm' folder"; exit 1; }
+else
+    echo "The 'silo-helm' folder already exists."
+fi
 
-rm -rf values.yaml
+# Check if the pooled-helm folder already exists
+if [ ! -d "pooled-helm" ]; then
+    # If it doesn't exist, create the pooled-helm folder
+    mkdir pooled-helm || { echo "Failed to create 'pooled-helm' folder"; exit 1; }
+else
+    echo "The 'pooled-helm' folder already exists."
+fi
 
+# Copy silo base helm chart to silo-helm directory
+cp -r ../silo-tenant/terraform/application-helm/* silo-helm/ || { echo "Failed to copy files"; exit 1; }
+
+rm -rf silo-helm/values.yaml
+
+
+# Copy pooled base helm chart to pooled-helm directory
+cp -r ../pooled-tenant/terraform/application-helm/* pooled-helm/ || { echo "Failed to copy files"; exit 1; }
+
+rm -rf pooled-helm/values.yaml
 
 # Set origin URL
 git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to set remote URL"; exit 1; }
