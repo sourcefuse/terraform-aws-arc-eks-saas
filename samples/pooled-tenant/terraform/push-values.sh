@@ -15,9 +15,9 @@ git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-ch
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to change directory"; exit 1; }
 
-# Copy tenant values.yaml to silo-helm directory
+# Copy tenant values.yaml to pooled-helm directory
 if [ -d "../output" ]; then
-    cp -r ../output/* silo-helm/ || { echo "Failed to copy files"; exit 1; }
+    cp -r ../output/* pooled-helm/ || { echo "Failed to copy files"; exit 1; }
 else
     echo "'output' folder does not exist. Skipping file copy."
 fi

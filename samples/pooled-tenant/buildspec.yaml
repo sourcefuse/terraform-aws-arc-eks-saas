@@ -89,6 +89,9 @@ phases:
       - envsubst < config.txt > config.hcl
       - terraform init --backend-config=config.hcl
       - terraform apply -auto-approve
+      - chmod +x push-values.sh
+      - ./push-values.sh
+      - kubectl apply -f argocd-application.yaml --namespace argocd || true
     finally:
       - node webhook.js
 

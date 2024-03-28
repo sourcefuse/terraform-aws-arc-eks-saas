@@ -36,12 +36,14 @@ fi
 # Copy silo base helm chart to silo-helm directory
 cp -r ../silo-tenant/terraform/application-helm/* silo-helm/ || { echo "Failed to copy files"; exit 1; }
 
+# removing the values.yaml as will push tenant values.yaml on tenant on-boarding
 rm -rf silo-helm/values.yaml
 
 
 # Copy pooled base helm chart to pooled-helm directory
 cp -r ../pooled-tenant/terraform/application-helm/* pooled-helm/ || { echo "Failed to copy files"; exit 1; }
 
+# removing the values.yaml as will push tenant values.yaml on tenant on-boarding
 rm -rf pooled-helm/values.yaml
 
 # Set origin URL

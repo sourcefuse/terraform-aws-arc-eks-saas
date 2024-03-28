@@ -152,7 +152,7 @@ data "template_file" "helm_values_template" {
 }
 
 resource "local_file" "helm_values" {
-  filename = "${path.module}/out/${var.tenant}-values.yaml"
+  filename = "${path.module}/output/${var.tenant}-values.yaml"
   content  = data.template_file.helm_values_template.rendered
 }
 
@@ -202,11 +202,9 @@ spec:
         duration: 5s
         maxDuration: 3m0s
         factor: 2
+    automated:
+      prune: false
+      selfHeal: true
     EOT
   filename = "${path.module}/argocd-application.yaml"
 }
-
-# output 
-# output "changeme_preexisting_file_content" {
-  # value = resource.local_file.helm_values.content
-# }
