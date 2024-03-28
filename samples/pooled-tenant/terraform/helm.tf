@@ -160,7 +160,7 @@ spec:
     namespace: ${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: silo-helm
+    path: pooled-helm
     repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-helm-chart-repository'
     targetRevision: main
     helm:
