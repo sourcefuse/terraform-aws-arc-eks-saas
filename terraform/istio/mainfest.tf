@@ -1,5 +1,5 @@
 
- # Add annotation - alb.ingress.kubernetes.io/wafv2-acl-arn for adding WAF - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.1/guide/ingress/annotations/#addons
+# Add annotation - alb.ingress.kubernetes.io/wafv2-acl-arn for adding WAF - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.1/guide/ingress/annotations/#addons
 resource "local_file" "k8s_ingress" {
   content  = <<-EOT
 apiVersion: networking.k8s.io/v1

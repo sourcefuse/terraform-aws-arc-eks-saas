@@ -151,9 +151,14 @@ data "template_file" "helm_values_template" {
   }
 }
 
+resource "local_file" "helm_values" {
+  filename = "${path.module}/output/${var.tenant}-values.yaml"
+  content  = data.template_file.helm_values_template.rendered
+}
+
 
 resource "helm_release" "application_helm" {
-  name             = "app-plane"
+  name             = var.tenant
   chart            = "application-helm" #Local Path of helm chart
   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
   create_namespace = true
@@ -163,4 +168,43 @@ resource "helm_release" "application_helm" {
   depends_on = [
     module.tenant_iam_role, module.aurora, module.redis, module.aws_cognito_user_pool
   ]
+}
+
+
+resource "local_file" "argocd_application" {
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${var.tenant}
+  namespace: argocd
+  labels:
+    Tenant: ${var.tenant} 
+    Tenant_ID: ${var.tenant_id}
+spec:
+  destination:
+    namespace: ${var.tenant}
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: silo-helm
+    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-helm-chart-repository'
+    targetRevision: main
+    helm:
+      valueFiles:
+        - ${var.tenant}-values.yaml
+  project: default  
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        maxDuration: 3m0s
+        factor: 2
+    automated:
+      prune: false
+      selfHeal: true
+    EOT
+  filename = "${path.module}/argocd-application.yaml"
 }
