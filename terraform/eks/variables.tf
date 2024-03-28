@@ -18,7 +18,6 @@ variable "environment" {
   default     = "dev"
   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 }
-
 ################################################################################
 ## EKS
 ################################################################################
@@ -212,8 +211,15 @@ variable "enable_argocd" {
 variable "argocd" {
   description = "ArgoCD addon configuration values"
   type        = any
-  default     = {}
+  default = {
+    set = [
+      {
+        name  = "server.extraArgs"
+        value = "{--insecure}"
+      }
+  ] }
 }
+
 
 ################################################################################
 # AWS Cloudwatch Metrics
