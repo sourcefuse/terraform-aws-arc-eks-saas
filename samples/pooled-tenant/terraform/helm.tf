@@ -157,7 +157,7 @@ metadata:
     Tenant_ID: ${var.tenant_id}
 spec:
   destination:
-    namespace: ${var.tenant}
+    namespace: pooled-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
     path: pooled-helm
