@@ -42,6 +42,7 @@ phases:
       - terraform apply --var-file=${environment}.tfvars --auto-approve
       - PASSWORD=$(kubectl --namespace argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
       - aws ssm put-parameter --name "/${namespace}/${environment}/argocd/admin-password" --value "$PASSWORD" --type SecureString --overwrite
+      - kubectl apply -f argocd-repo-secret.yaml --namespace argocd || true
 
   post_build:
     commands:

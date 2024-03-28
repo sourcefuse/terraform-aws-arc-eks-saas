@@ -126,6 +126,13 @@ data "aws_ssm_parameter" "docker_password" {
   name = "/${var.namespace}/${var.environment}/docker_password"
 }
 
+data "aws_ssm_parameter" "https_connection_user" {
+  name = "/${var.namespace}/${var.environment}/https_connection_user"
+}
+
+data "aws_ssm_parameter" "https_connection_password" {
+  name = "/${var.namespace}/${var.environment}/https_connection_password"
+}
 ################################################################################
 ## iam policy data
 ################################################################################
