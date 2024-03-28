@@ -98,6 +98,6 @@ module "deployment_pipeline" {
     module.control_plane_module_build_step_codebuild_project,
     module.istio_module_build_step_codebuild_project,
     module.eks_observability_module_build_step_codebuild_project,
-  module.billing_module_build_step_codebuild_project,
+    module.billing_module_build_step_codebuild_project,
   module.waf_module_build_step_codebuild_project]
 }

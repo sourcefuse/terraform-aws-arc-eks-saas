@@ -133,7 +133,7 @@ resource "local_file" "helm_values" {
 
 
 resource "helm_release" "application_helm" {
-  name             = "${var.tenant}"
+  name             = var.tenant
   chart            = "application-helm" #Local Path of helm chart
   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
   create_namespace = true
