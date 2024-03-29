@@ -71,8 +71,8 @@ phases:
 
       # Run Bootstrap to create terraform state s3 bucket
       - cd terraform/bootstrap
-      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
-      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
+      # - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
+      # - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
       - cd ..
 
       # Configuing S3 backend
@@ -82,11 +82,11 @@ phases:
       - envsubst < config.txt > config.hcl
 
       # Run Terraform to create infra and apply helm  
-      - terraform init --backend-config=config.hcl
-      - terraform apply -auto-approve
-      - chmod +x push-values.sh
-      - ./push-values.sh
-      - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      # - terraform init --backend-config=config.hcl
+      # - terraform apply -auto-approve
+      # - chmod +x push-values.sh
+      # - ./push-values.sh
+      # - kubectl apply -f argocd-application.yaml --namespace argocd || true
       - python update_dynamodb.py
     finally:
       - node webhook.js
