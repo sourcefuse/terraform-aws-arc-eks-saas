@@ -36,16 +36,19 @@ environment_variables = {
     'DOMAIN_NAME': os.environ.get('DOMAIN_NAME')
 }
 
+# Get the TENANT_ID or use 'unknown' if not present
+tenant_id = environment_variables.get('TENANT_ID', 'unknown')
+
 # Push data to DynamoDB
 table = dynamodb.Table(table_name)
-tenant_id = environment_variables.get('TENANT_ID', 'unknown')  # Assuming you want to use the environment variable 'TENANT_ID' as the primary key
 for key, value in environment_variables.items():
-    response = table.put_item(
-        Item={
-            'TENANT_ID': tenant_id,
-            'variable_name': key,
-            'value': value
-        }
-    )
+    if value is not None:  # Only push non-empty values
+        response = table.put_item(
+            Item={
+                'TENANT_ID': tenant_id,
+                'variable_name': key,
+                'value': value
+            }
+        )
 
-    print(response)
+        print(response)
