@@ -1,16 +1,20 @@
 ---
 name: Plan - OpenSearch
 
-on:  # yamllint disable-line rule:truthy
+on:
   pull_request:
     branches:
-      - dev
+      - main
     paths:
       - 'terraform/opensearch/*'
       - 'terraform/opensearch/**'
       - '.github/workflows/plan-opensearch.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Plan - Elasticache"]
+    types:
+      - completed
 
 jobs:
   ## run terraform plan

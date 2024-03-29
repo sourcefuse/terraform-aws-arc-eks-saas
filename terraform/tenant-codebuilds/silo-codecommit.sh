@@ -14,6 +14,9 @@ pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codec
 # Clone codecommit repo
 git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-premium-plan-repository || { echo "Failed to clone repository"; exit 1; }
 
+# Removing old content from the repository
+rm -rf ${NAMESPACE}-${ENVIRONMENT}-premium-plan-repository/*
+
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-premium-plan-repository || { echo "Failed to change directory"; exit 1; }
 

@@ -1,29 +1,33 @@
 ---
-name: Plan - Bootstrap
+name: Plan - Cognito
 
-on:  # yamllint disable-line rule:truthy
+on:
   pull_request:
     branches:
-      - dev
+      - main
     paths:
-      - 'terraform/bootstrap/*'
-      - 'terraform/bootstrap/**'
-      - '.github/workflows/plan-bootstrap.yaml'
+      - 'terraform/cognito-user-pool/*'
+      - 'terraform/cognito-user-pool/**'
+      - '.github/workflows/plan-cognito.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Plan - CodeBuildRole"]
+    types:
+      - completed
 
 jobs:
   ## run terraform plan
-  plan_bootstrap:
-    name: Bootstrap
+  plan_dev:
+    name: Cognito
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: bootstrap
+      working_directory: cognito-user-pool
       environment: dev
-      assume_role_name: github
+      assume_role_name: arc-saas-assume-role
       aws_region: us-east-1
       publish_plan_artifact: false  # only for apply step
-      update_backend_config: false
+      update_backend_config: true
     secrets: inherit
     permissions:
       id-token: write

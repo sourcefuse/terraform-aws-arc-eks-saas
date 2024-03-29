@@ -18,7 +18,6 @@ variable "environment" {
   default     = "dev"
   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 }
-
 ################################################################################
 ## EKS
 ################################################################################
@@ -206,14 +205,21 @@ variable "argo_workflows" {
 variable "enable_argocd" {
   description = "Enable Argo CD Kubernetes add-on"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "argocd" {
   description = "ArgoCD addon configuration values"
   type        = any
-  default     = {}
+  default = {
+    set = [
+      {
+        name  = "server.extraArgs"
+        value = "{--insecure}"
+      }
+  ] }
 }
+
 
 ################################################################################
 # AWS Cloudwatch Metrics

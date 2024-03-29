@@ -5,27 +5,25 @@ export AWS_REGION=us-east-1
 export NAMESPACE=arc-saas
 export ENVIRONMENT=dev
 
-# Change directory
-cd ../../samples/ || { echo "Failed to change directory"; exit 1; }
 
 # Install git-remote-codecommit
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
 
 # Clone codecommit repo
-git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to clone repository"; exit 1; }
-
-# Removing old content from the repository 
-rm -rf ${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository/*
+git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to clone repository"; exit 1; }
 
 # Change directory 
-cd ${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to change directory"; exit 1; }
+cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to change directory"; exit 1; }
 
-# Copy contents from ../pooled-tenant/ to current directory
-cp -r ../pooled-tenant/* . || { echo "Failed to copy files"; exit 1; }
-
+# Copy tenant values.yaml to pooled-helm directory
+if [ -d "../output" ]; then
+    cp -r ../output/* pooled-helm/ || { echo "Failed to copy files"; exit 1; }
+else
+    echo "'output' folder does not exist. Skipping file copy."
+fi
 
 # Set origin URL
-git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to set remote URL"; exit 1; }
+git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to set remote URL"; exit 1; }
 
 # Check if main branch already exists
 if git show-ref --verify --quiet refs/heads/main; then
@@ -44,7 +42,7 @@ git config --global user.name 'sfdevops' || { echo "Failed to configure user nam
 if [ -n "$(git status --porcelain)" ]; then
     git add . || { echo "Failed to add files"; exit 1; }
 
-    git commit -m 'Initial Commit' || { echo "Failed to commit changes"; exit 1; }
+    git commit -m 'Helm Chart Updated' || { echo "Failed to commit changes"; exit 1; }
 
     git push origin main || { echo "Failed to push changes"; exit 1; }
 

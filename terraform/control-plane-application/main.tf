@@ -224,3 +224,27 @@ resource "helm_release" "fluent_bit" {
   replace          = true
   values           = [data.template_file.fluentbit_helm_value_template.rendered]
 }
+
+##################################################################################
+## Create ARGOCD Secret to connect repository 
+##################################################################################
+# Connect using SSH please follow this https://argo-cd.readthedocs.io/en/stable/operator-manual/argocd-repositories-yaml/
+resource "local_file" "argocd_repo" {
+  content  = <<-EOT
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tenant-helm-repo
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-helm-chart-repository
+  password: ${data.aws_ssm_parameter.https_connection_password.value}
+  username: ${data.aws_ssm_parameter.https_connection_user.value}
+  insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
+  forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
+  enableLfs: "true"
+    EOT
+  filename = "${path.module}/argocd-repo-secret.yaml"
+}

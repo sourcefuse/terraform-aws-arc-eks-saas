@@ -82,6 +82,9 @@ phases:
       # Run Terraform to create infra and apply helm  
       - terraform init --backend-config=config.hcl
       - terraform apply -auto-approve
+      - chmod +x push-values.sh
+      - ./push-values.sh
+      - kubectl apply -f argocd-application.yaml --namespace argocd || true
     finally:
       - node webhook.js
      
