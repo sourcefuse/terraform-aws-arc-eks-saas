@@ -1,24 +1,28 @@
 ---
-name: Plan - WAF
+name: Plan - ClientVPN
 
-on:  # yamllint disable-line rule:truthy
+on:  
   pull_request:
     branches:
-      - dev
+      - main
     paths:
-      - 'terraform/waf/*'
-      - 'terraform/waf/**'
-      - '.github/workflows/plan-waf.yaml'
+      - 'terraform/client-vpn/*'
+      - 'terraform/client-vpn/**'
+      - '.github/workflows/plan-client-vpn.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Apply - OpenSearch"]
+    types:
+      - completed
 
 jobs:
   ## run terraform plan
   plan_dev:
-    name: WAF
+    name: ClientVPN
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: waf
+      working_directory: client-vpn
       environment: dev
       assume_role_name: arc-saas-assume-role
       aws_region: us-east-1
