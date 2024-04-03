@@ -79,11 +79,11 @@ phases:
       - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_KEY=${KEY}/${KEY}.tfstate
-      - envsubst < config.txt > config.hcl
+      - envsubst < config.txt > config.${ENVIRONMENT}.hcl
       - envsubst <tfvariables.txt> ${KEY}.tfvars
 
       # Run Terraform to create infra and apply helm  
-      - terraform init --backend-config=config.hcl
+      - terraform init --backend-config=config.${ENVIRONMENT}.hcl
       - terraform apply -auto-approve
       - chmod +x push-values.sh
       - ./push-values.sh

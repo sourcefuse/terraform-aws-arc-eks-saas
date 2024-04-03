@@ -25,6 +25,8 @@ fi
 # Copy tenant specific tfvars to codecommit repository
 cp -r ../*.tfvars silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 
+cp -r ../*.hcl silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
+
 # Set origin URL
 git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to set remote URL"; exit 1; }
 
