@@ -87,7 +87,6 @@ phases:
       # - chmod +x push-values.sh
       # - ./push-values.sh
       # - kubectl apply -f argocd-application.yaml --namespace argocd || true
-      - python push_to_dynamodb.py
     finally:
       - node webhook.js
      
@@ -97,6 +96,7 @@ phases:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - sleep 30
       - node webhook.js
+      - python push_to_dynamodb.py
 
 
 
