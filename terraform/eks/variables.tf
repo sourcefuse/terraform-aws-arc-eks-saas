@@ -198,8 +198,8 @@ variable "argo_workflows" {
   default     = {
      set = [
       {
-        name  = "server.authModes"
-        value = "[\"client\"]"
+        name  = "server.authMode"
+        value = "server"
       }
   ]
   }
