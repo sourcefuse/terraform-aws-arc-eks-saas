@@ -195,7 +195,14 @@ variable "enable_argo_workflows" {
 variable "argo_workflows" {
   description = "Argo Workflows addon configuration values"
   type        = any
-  default     = {}
+  default     = {
+     set = [
+      {
+        name  = "server.authModes"
+        value = jsonencode(["server"])
+      }
+  ]
+  }
 }
 
 ################################################################################
