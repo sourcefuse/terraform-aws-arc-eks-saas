@@ -28,27 +28,26 @@ environment_variables = {
     'TENANT_CLIENT_ID': os.environ.get('TENANT_CLIENT_ID'),
     'VPC_ID': os.environ.get('VPC_ID'),
     'REFRESH_TOKEN_EXPIRATION': os.environ.get('REFRESH_TOKEN_EXPIRATION'),
-    'AWS_REGION': os.environ.get('AWS_REGION'),
-    'ENVIRONMENT': os.environ.get('ENVIRONMENT'),
     'TENANT_DATA': os.environ.get('TENANT_DATA'),
-    'TENANT_ID': os.environ.get('TENANT_ID'),
-    'NAMESPACE': os.environ.get('NAMESPACE'),
     'DOMAIN_NAME': os.environ.get('DOMAIN_NAME')
 }
 
-# Get the TENANT_ID or use 'unknown' if not present
-tenant_id = environment_variables.get('TENANT_ID', 'unknown')
+# Define the partition key value
+tenant_id = os.environ.get('TENANT_ID')
 
 # Push data to DynamoDB
 table = dynamodb.Table(table_name)
+
+# Create a dict to hold the batch item
+batch_item = {
+    'TENANT_ID': tenant_id,
+}
+
+# Add each environment variable as a column in the batch item
 for key, value in environment_variables.items():
     if value is not None:  # Only push non-empty values
-        response = table.put_item(
-            Item={
-                'TENANT_ID': tenant_id,
-                'variable_name': key,
-                'value': value
-            }
-        )
+        batch_item[key] = value
 
-        print(response)
+# Insert the batch item
+response = table.put_item(Item=batch_item)
+print(response)

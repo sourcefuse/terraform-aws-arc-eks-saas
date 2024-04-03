@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Set  environment variable
+# Set environment variables
 export AWS_REGION=us-east-1
 export NAMESPACE=arc-saas
 export ENVIRONMENT=dev
@@ -17,34 +17,47 @@ git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-ch
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to change directory"; exit 1; }
 
-# Check if the silo-helm folder already exists
-if [ ! -d "silo-helm" ]; then
-    # If it doesn't exist, create the silo-helm folder
-    mkdir silo-helm || { echo "Failed to create 'silo-helm' folder"; exit 1; }
-else
-    echo "The 'silo-helm' folder already exists."
-fi
+# Function to create directory if it doesn't exist
+create_directory() {
+    local dir_name=$1
+    if [ ! -d "$dir_name" ]; then
+        mkdir "$dir_name" || { echo "Failed to create '$dir_name' folder"; exit 1; }
+    else
+        echo "The '$dir_name' folder already exists."
+    fi
+}
 
-# Check if the pooled-helm folder already exists
-if [ ! -d "pooled-helm" ]; then
-    # If it doesn't exist, create the pooled-helm folder
-    mkdir pooled-helm || { echo "Failed to create 'pooled-helm' folder"; exit 1; }
-else
-    echo "The 'pooled-helm' folder already exists."
-fi
+# Create silo and pooled directories if they don't exist
+create_directory "silo"
+create_directory "pooled"
 
-# Copy silo base helm chart to silo-helm directory
-cp -r ../silo-tenant/terraform/application-helm/* silo-helm/ || { echo "Failed to copy files"; exit 1; }
+# Function to create application and infra directories inside silo and pooled
+create_subdirectories() {
+    local parent_dir=$1
+    create_directory "$parent_dir/application"
+    create_directory "$parent_dir/infra"
+}
+
+# Create application and infra directories inside silo and pooled if they don't exist
+create_subdirectories "silo"
+create_subdirectories "pooled"
+
+
+# Copy silo base helm chart to silo directory
+cp -r ../silo-tenant/terraform/application-helm/* silo/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../silo-tenant/* silo/infra/
 
 # removing the values.yaml as will push tenant values.yaml on tenant on-boarding
-rm -rf silo-helm/values.yaml
+rm -rf silo/application/values.yaml
 
 
-# Copy pooled base helm chart to pooled-helm directory
-cp -r ../pooled-tenant/terraform/application-helm/* pooled-helm/ || { echo "Failed to copy files"; exit 1; }
+# Copy pooled base helm chart to pooled directory
+cp -r ../pooled-tenant/terraform/application-helm/* pooled/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../pooled-tenant/* pooled/infra/
 
 # removing the values.yaml as will push tenant values.yaml on tenant on-boarding
-rm -rf pooled-helm/values.yaml
+rm -rf pooled/application/values.yaml
+
 
 # Set origin URL
 git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to set remote URL"; exit 1; }
