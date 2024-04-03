@@ -199,7 +199,7 @@ variable "argo_workflows" {
      set = [
       {
         name  = "server.authModes"
-        value = "[\"server\"]"
+        value = "[\"client\"]"
       }
   ]
   }
