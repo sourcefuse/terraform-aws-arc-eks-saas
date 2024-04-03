@@ -189,7 +189,7 @@ variable "argo_rollouts" {
 variable "enable_argo_workflows" {
   description = "Enable Argo workflows add-on"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "argo_workflows" {
