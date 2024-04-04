@@ -10,10 +10,10 @@ export ENVIRONMENT=dev
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
 
 # Clone codecommit repo
-git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to clone repository"; exit 1; }
+git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to clone repository"; exit 1; }
 
 # Change directory 
-cd ${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to change directory"; exit 1; }
+cd ${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to change directory"; exit 1; }
 
 # Copy tenant values.yaml to silo directory
 if [ -d "../output" ]; then
@@ -28,7 +28,7 @@ cp -r ../*.tfvars silo/infra/terraform/ || { echo "Failed to copy files"; exit 1
 cp -r ../*.hcl silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 
 # Set origin URL
-git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-helm-chart-repository || { echo "Failed to set remote URL"; exit 1; }
+git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to set remote URL"; exit 1; }
 
 # Check if main branch already exists
 if git show-ref --verify --quiet refs/heads/main; then

@@ -248,10 +248,10 @@ spec:
           - |
             export KUBECONFIG=$HOME/.kube/config
             CREDENTIALS=$(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600)
-            export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
-            export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
-            export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
-            export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+            export AWS_ACCESS_KEY_ID="$(echo $(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600) | jq -r '.Credentials.AccessKeyId')"
+            export AWS_SECRET_ACCESS_KEY="$(echo $(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600)} | jq -r '.Credentials.SecretAccessKey')"
+            export AWS_SESSION_TOKEN="$(echo $(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600) | jq -r '.Credentials.SessionToken')"
+            export AWS_EXPIRATION=$(echo $(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600) | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region c
             cp -r /home/terraform/silo/infra/* /home/myuser/
             ls -la
