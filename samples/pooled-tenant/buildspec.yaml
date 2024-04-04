@@ -78,6 +78,7 @@ phases:
       - cd infra
       - export TF_INFRA_KEY=pooled.tfstate
       - envsubst < config.txt > config.pooled.hcl
+      - envsubst <tfvariables.txt> pooled.tfvars
       # Run Terraform to create infra 
       - terraform init --backend-config=config.pooled.hcl
       - terraform apply -auto-approve
@@ -88,6 +89,7 @@ phases:
       - envsubst < config.txt > config.${KEY}.hcl
       - envsubst <tfvariables.txt> ${KEY}.tfvars
       
+
       - terraform init --backend-config=config.${KEY}.hcl
       - terraform apply -auto-approve
       - chmod +x push-values.sh
