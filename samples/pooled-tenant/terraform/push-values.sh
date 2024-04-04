@@ -27,7 +27,10 @@ cp -r ../*.tfvars silo/infra/terraform/ || { echo "Failed to copy files"; exit 1
 
 cp -r ../*.hcl silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 
-cp -r ../infra/*.hcl silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
+# Copy Pooled tfvars and config file to codecommit repository
+cp -r ../infra/*.hcl silo/infra/terraform/infra/ || { echo "Failed to copy files"; exit 1; }
+
+cp -r ../*.tfvars silo/infra/terraform/infra/ || { echo "Failed to copy files"; exit 1; }
 
 # Set origin URL
 git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to set remote URL"; exit 1; }
