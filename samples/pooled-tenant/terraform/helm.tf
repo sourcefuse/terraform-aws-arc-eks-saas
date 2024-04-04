@@ -194,7 +194,7 @@ resource "kubectl_manifest" "pooled_argo_workflow" {
   apiVersion: argoproj.io/v1alpha1
   kind: Workflow
   metadata:
-    name: pooled-terraform-workflow
+    name: pooled-tenant-terraform-workflow
     namespace: argo-workflows
   spec:
     entrypoint: terraform-apply
