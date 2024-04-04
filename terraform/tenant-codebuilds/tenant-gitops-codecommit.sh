@@ -43,17 +43,19 @@ create_subdirectories "silo"
 create_subdirectories "pooled"
 
 
-# Copy silo base helm chart to silo directory
+# Copy silo base helm chart & terraform to silo directory
 cp -r ../silo-tenant/terraform/application-helm/* silo/application/ || { echo "Failed to copy files"; exit 1; }
-cp -r ../silo-tenant/* silo/infra/
+cp -r ../silo-tenant/modules    silo/infra/
+cp -r ../silo-tenant/terraform   silo/infra/
 
 # removing the values.yaml as will push tenant values.yaml on tenant on-boarding
 rm -rf silo/application/values.yaml
 
 
-# Copy pooled base helm chart to pooled directory
+# Copy pooled base helm chart & terraform to pooled directory
 cp -r ../pooled-tenant/terraform/application-helm/* pooled/application/ || { echo "Failed to copy files"; exit 1; }
-cp -r ../pooled-tenant/* pooled/infra/
+cp -r ../pooled-tenant/modules    pooled/infra/
+cp -r ../pooled-tenant/terraform  pooled/infra/
 
 # removing the values.yaml as will push tenant values.yaml on tenant on-boarding
 rm -rf pooled/application/values.yaml

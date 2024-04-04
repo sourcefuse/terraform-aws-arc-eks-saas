@@ -226,9 +226,10 @@ resource "helm_release" "fluent_bit" {
 }
 
 ##################################################################################
-## Create ARGOCD Secret to connect repository 
+## Create ARGOCD Repository Secret to connect tenant gitops repository 
 ##################################################################################
 # Connect using SSH please follow this https://argo-cd.readthedocs.io/en/stable/operator-manual/argocd-repositories-yaml/
+# argocd
 resource "local_file" "argocd_repo" {
   content  = <<-EOT
 apiVersion: v1
@@ -239,7 +240,7 @@ metadata:
   labels:
     argocd.argoproj.io/secret-type: repository
 stringData:
-  url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-helm-chart-repository
+  url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
   password: ${data.aws_ssm_parameter.https_connection_password.value}
   username: ${data.aws_ssm_parameter.https_connection_user.value}
   insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
@@ -247,4 +248,25 @@ stringData:
   enableLfs: "true"
     EOT
   filename = "${path.module}/argocd-repo-secret.yaml"
+}
+
+#argo-workflow
+resource "local_file" "argo_workflow_repo" {
+  content  = <<-EOT
+apiVersion: v1
+kind: Secret
+metadata:
+  name: codecommit-secret
+  namespace: argo-workflows
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+  password: ${data.aws_ssm_parameter.https_connection_password.value}
+  username: ${data.aws_ssm_parameter.https_connection_user.value}
+  insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
+  forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
+  enableLfs: "true"
+    EOT
+  filename = "${path.module}/argo-workflow-repo-secret.yaml"
 }

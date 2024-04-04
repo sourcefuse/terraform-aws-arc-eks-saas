@@ -406,8 +406,8 @@ resource "aws_codecommit_repository" "standard_repo" {
 ## Tenant Helm Chart CodeCommit Repository
 #####################################################################################
 resource "aws_codecommit_repository" "tenant_helm_repo" {
-  repository_name = "${var.namespace}-${var.environment}-tenant-helm-chart-repository"
-  description     = "${var.namespace}-${var.environment}-tenant-helm-chart-repository."
+  repository_name = "${var.namespace}-${var.environment}-tenant-management-gitops-repository"
+  description     = "${var.namespace}-${var.environment}-tenant-management-gitops-repository."
   default_branch  = "main"
 
   lifecycle {

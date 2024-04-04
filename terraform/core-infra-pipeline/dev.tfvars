@@ -4,4 +4,4 @@ namespace   = "arc-saas"
 
 github_connection_pipeline = "arc-pipeline"
 github_FullRepositoryId    = "sourcefuse/terraform-aws-arc-eks-saas"
-github_BranchName          = "dev"
+github_BranchName          = "main"

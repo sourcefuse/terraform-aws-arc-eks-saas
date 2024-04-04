@@ -170,7 +170,9 @@ resource "helm_release" "application_helm" {
   ]
 }
 
-
+###############################################################################################
+## Register Tenant Helm App on ArgoCD
+###############################################################################################
 resource "local_file" "argocd_application" {
   content  = <<-EOT
 apiVersion: argoproj.io/v1alpha1
@@ -187,7 +189,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: silo/application
-    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-helm-chart-repository'
+    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
     targetRevision: main
     helm:
       valueFiles:
@@ -207,4 +209,57 @@ spec:
       selfHeal: true
     EOT
   filename = "${path.module}/argocd-application.yaml"
+}
+
+#######################################################################################
+## Register Tenant Terraform Workflow on Argo
+#######################################################################################
+resource "local_file" "argo_workflow" {
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: ${var.tenant}-terraform-workflow
+  namespace: argo-workflows
+spec:
+  entrypoint: terraform-apply
+  templates:
+    - name: terraform-apply
+      inputs:
+        artifacts:
+          - name: terraform
+            path: /home/terraform
+            git:
+              repo: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+              depth: 1
+              usernameSecret:
+                name: codecommit-secret
+                key: username
+              passwordSecret:
+                name: codecommit-secret
+                key: password
+      container:
+        imagePullPolicy: "Always"
+        image: public.ecr.aws/f6f1e4v9/terraform:argo-terraform 
+        command:
+          - sh
+          - -c
+        args:
+          - |
+            export KUBECONFIG=$HOME/.kube/config
+            CREDENTIALS=$(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600)
+            export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+            export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+            export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+            export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+            aws eks update-kubeconfig --name ${var.cluster_name} --region c
+            cp -r /home/terraform/silo/infra/* /home/myuser/
+            ls -la
+            cd terraform
+            ls -la
+            /bin/terraform init --backend-config=config.${var.tenant}.hcl
+            /bin/terraform plan --var-file=${var.tenant}.tfvars
+            /bin/terraform apply --var-file=${var.tenant}.tfvars --auto-approve
+    EOT
+  filename = "${path.module}/argo-workflow.yaml"
 }

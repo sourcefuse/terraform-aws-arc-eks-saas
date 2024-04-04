@@ -43,6 +43,7 @@ phases:
       - PASSWORD=$(kubectl --namespace argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
       - aws ssm put-parameter --name "/${namespace}/${environment}/argocd/admin-password" --value "$PASSWORD" --type SecureString --overwrite
       - kubectl apply -f argocd-repo-secret.yaml --namespace argocd || true
+      - kubectl apply -f argo-workflow-repo-secret.yaml --namespace argo-workflows || true
 
   post_build:
     commands:
