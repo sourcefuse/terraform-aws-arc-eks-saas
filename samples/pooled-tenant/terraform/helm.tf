@@ -228,8 +228,8 @@ resource "kubectl_manifest" "pooled_argo_workflow" {
               export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
               export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
               aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-              cp -r /home/terraform/pooled/infra/terraform/infra/* /home/myuser/
-              ls -la
+              cp -r /home/terraform/pooled/infra/* /home/myuser/
+              cd terraform/infra
               /bin/terraform init --backend-config=config.pooled.hcl
               /bin/terraform plan --var-file=pooled.tfvars --refresh=false
               /bin/terraform apply --var-file=pooled.tfvars --auto-approve
