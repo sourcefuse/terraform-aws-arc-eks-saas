@@ -94,6 +94,7 @@ phases:
       - terraform apply -auto-approve
       - chmod +x push-values.sh
       - ./push-values.sh
+      - kubectl apply -f pooled-argo-workflow.yaml --namespace argo-workflows || true
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     finally:
