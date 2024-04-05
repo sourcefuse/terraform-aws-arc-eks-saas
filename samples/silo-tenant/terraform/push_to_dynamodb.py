@@ -5,7 +5,7 @@ import os
 dynamodb = boto3.resource('dynamodb', region_name=os.environ['AWS_REGION'])
 
 # Define the table name
-table_name = 'arc-saas-dev-tenant-details'
+table_name = f"{os.environ['NAMESPACE']}-{os.environ['ENVIRONMENT']}-tenant-details"
 
 # Access environment variables from CodeBuild
 environment_variables = {

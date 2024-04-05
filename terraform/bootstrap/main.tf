@@ -159,6 +159,38 @@ resource "aws_s3_bucket_public_access_block" "public_access_block" {
 
   depends_on = [resource.aws_s3_bucket.artifact_bucket]
 }
+#########################################################################################
+## DynamoDB Table to store tenant details
+#########################################################################################
+locals {
+  dynamo_kms_master_key_id = var.dynamo_kms_master_key_id == null ? "" : var.dynamo_kms_master_key_id
+}
+
+resource "aws_dynamodb_table" "tenant_details" {
+  name           = "${var.namespace}-${var.environment}-tenant-details"
+  hash_key       = var.dynamodb_hash_key
+  read_capacity  = 5
+  write_capacity = 5
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = local.dynamo_kms_master_key_id
+  }
+
+  attribute {
+    name = var.dynamodb_hash_key
+    type = "S"
+  }
+
+  point_in_time_recovery {
+    enabled = var.enable_dynamodb_point_in_time_recovery
+  }
+
+  tags = merge(module.tags.tags, tomap({
+    Name = "${var.namespace}-${var.environment}-tenant-details",
+  }))
+}
+
 
 #########################################################################################
 ## Put Resource name in Parameter Store
@@ -186,6 +218,13 @@ module "bootstrap_ssm_parameters" {
       type        = "String"
       overwrite   = "true"
       description = "Codepipeline Artifact Bucket"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/tenant-details-dynamodb-table"
+      value       = resource.aws_dynamodb_table.tenant_details.id
+      type        = "String"
+      overwrite   = "true"
+      description = "Tenant Details DynamoDB Table"
     }
   ]
   tags       = module.tags.tags

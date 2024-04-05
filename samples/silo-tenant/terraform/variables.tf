@@ -530,6 +530,12 @@ variable "domain_name" {
 #################################################################################
 ## Helm
 #################################################################################
+variable "helm_apply" {
+  type        = bool
+  description = "Set to true for applying tenant helm application"
+  default     = true
+}
+
 variable "tenant_email" {
   type        = string
   description = "tenant Email"

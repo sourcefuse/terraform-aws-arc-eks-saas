@@ -22,7 +22,7 @@ else
     echo "'output' folder does not exist. Skipping file copy."
 fi
 
-# Copy tenant specific tfvars and config file to codecommit repository
+# Copy tenant specific terraform tfvars and config file to codecommit repository
 cp -r ../*.tfvars silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 
 cp -r ../*.hcl silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }

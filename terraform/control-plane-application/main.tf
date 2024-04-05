@@ -9,6 +9,12 @@ terraform {
       version = "~> 5.0"
       source  = "hashicorp/aws"
     }
+
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
+
   }
 
   backend "s3" {}
@@ -30,6 +36,12 @@ provider "helm" {
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.EKScluster.certificate_authority[0].data)
     token                  = data.aws_eks_cluster_auth.EKScluster.token
   }
+}
+
+provider "kubectl" {
+  host                   = data.aws_eks_cluster.EKScluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.EKScluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.EKScluster.token
 }
 ################################################################################
 ## tag
@@ -230,43 +242,41 @@ resource "helm_release" "fluent_bit" {
 ##################################################################################
 # Connect using SSH please follow this https://argo-cd.readthedocs.io/en/stable/operator-manual/argocd-repositories-yaml/
 # argocd
-resource "local_file" "argocd_repo" {
-  content  = <<-EOT
-apiVersion: v1
-kind: Secret
-metadata:
-  name: tenant-helm-repo
-  namespace: argocd
-  labels:
-    argocd.argoproj.io/secret-type: repository
-stringData:
-  url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
-  password: ${data.aws_ssm_parameter.https_connection_password.value}
-  username: ${data.aws_ssm_parameter.https_connection_user.value}
-  insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
-  forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
-  enableLfs: "true"
-    EOT
-  filename = "${path.module}/argocd-repo-secret.yaml"
+resource "kubectl_manifest" "argocd_repo_secret" {
+  yaml_body = <<YAML
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: tenant-helm-repo
+    namespace: argocd
+    labels:
+      argocd.argoproj.io/secret-type: repository
+  stringData:
+    url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+    password: ${data.aws_ssm_parameter.https_connection_password.value}
+    username: ${data.aws_ssm_parameter.https_connection_user.value}
+    insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
+    forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
+    enableLfs: "true"
+YAML
 }
 
 #argo-workflow
-resource "local_file" "argo_workflow_repo" {
-  content  = <<-EOT
-apiVersion: v1
-kind: Secret
-metadata:
-  name: codecommit-secret
-  namespace: argo-workflows
-  labels:
-    argocd.argoproj.io/secret-type: repository
-stringData:
-  url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
-  password: ${data.aws_ssm_parameter.https_connection_password.value}
-  username: ${data.aws_ssm_parameter.https_connection_user.value}
-  insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
-  forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
-  enableLfs: "true"
-    EOT
-  filename = "${path.module}/argo-workflow-repo-secret.yaml"
+resource "kubectl_manifest" "argo_workflow_repo_secret" {
+  yaml_body = <<YAML
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: codecommit-secret
+    namespace: argo-workflows
+    labels:
+      argocd.argoproj.io/secret-type: repository
+  stringData:
+    url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+    password: ${data.aws_ssm_parameter.https_connection_password.value}
+    username: ${data.aws_ssm_parameter.https_connection_user.value}
+    insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
+    forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
+    enableLfs: "true"
+YAML
 }
