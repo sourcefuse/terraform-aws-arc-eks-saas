@@ -37,7 +37,6 @@ jobs:
   manual_approval:
     name: Manual Approval
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Request approval
         uses: actions/github-script@v5
