@@ -1,18 +1,12 @@
 ---
 name: Terraform-Documentation
 
-on:  
+on:              # yamllint disable-line rule:truthy
   push:
     branches:
-      - feature/doc
-    paths:
-      - 'terraform/*'
-      - 'modules/*'
-  workflow_dispatch:
+      - "**"       # matches every branch
+      - "!main"    # excludes main
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   docs:
