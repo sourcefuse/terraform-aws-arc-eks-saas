@@ -38,23 +38,10 @@ jobs:
     name: Manual Approval
     runs-on: ubuntu-latest
     steps:
-      - name: Request approval
-        uses: actions/github-script@v5
+      - uses: trstringer/manual-approval@v1
         with:
-          github-token: ${{ secrets.TOKEN }}
-          script: |
-            const { data: pullRequest } = await github.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.workflow_run.head_branch.split('/')[2]  // Extracting pull request number from the branch name
-            });
-            await github.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: pullRequest.number,
-              event: 'APPROVE',
-              body: 'The changes are ready to be applied. Please review and merge.',
-            });
+          secret: ${{ github.TOKEN }}
+          approvers: HarshitSF
 
   ## modify to run terraform apply
   apply_bootstrap:
