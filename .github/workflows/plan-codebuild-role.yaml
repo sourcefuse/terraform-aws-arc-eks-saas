@@ -1,24 +1,28 @@
 ---
-name: Plan - DB
+name: Plan - CodeBuildRole
 
-on:  # yamllint disable-line rule:truthy
+on:
   pull_request:
     branches:
-      - dev
+      - main
     paths:
-      - 'terraform/db/*'
-      - 'terraform/db/**'
-      - '.github/workflows/plan-db.yaml'
+      - 'terraform/codebuild-role/*'
+      - 'terraform/codebuild-role/**'
+      - '.github/workflows/plan-codebuild-role.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Plan - ClientVPN"]
+    types:
+      - completed
 
 jobs:
   ## run terraform plan
   plan_dev:
-    name: DB
+    name: CodeBuildRole
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: db
+      working_directory: codebuild-role
       environment: dev
       assume_role_name: arc-saas-assume-role
       aws_region: us-east-1

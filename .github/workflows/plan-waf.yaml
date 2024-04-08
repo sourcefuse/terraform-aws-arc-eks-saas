@@ -1,24 +1,28 @@
 ---
-name: Plan - Cognito
+name: Plan - WAF
 
-on:  # yamllint disable-line rule:truthy
+on:
   pull_request:
     branches:
-      - dev
+      - main
     paths:
-      - 'terraform/cognito-user-pool/*'
-      - 'terraform/cognito-user-pool/**'
-      - '.github/workflows/plan-cognito.yaml'
+      - 'terraform/waf/*'
+      - 'terraform/waf/**'
+      - '.github/workflows/plan-waf.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Plan - TenantCodebuild"]
+    types:
+      - completed
 
 jobs:
   ## run terraform plan
   plan_dev:
-    name: Cognito
+    name: WAF
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: cognito-user-pool
+      working_directory: waf
       environment: dev
       assume_role_name: arc-saas-assume-role
       aws_region: us-east-1

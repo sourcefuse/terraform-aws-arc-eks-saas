@@ -1,24 +1,28 @@
 ---
-name: Plan - ClientVPN
+name: Plan - Elasticache
 
-on:  # yamllint disable-line rule:truthy
+on:
   pull_request:
     branches:
-      - dev
+      - main
     paths:
-      - 'terraform/client-vpn/*'
-      - 'terraform/client-vpn/**'
-      - '.github/workflows/plan-client-vpn.yaml'
+      - 'terraform/elasticache/*'
+      - 'terraform/elasticache/**'
+      - '.github/workflows/plan-elasticache.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Plan - DB"]
+    types:
+      - completed
 
 jobs:
   ## run terraform plan
   plan_dev:
-    name: ClientVPN
+    name: Elasticache
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: client-vpn
+      working_directory: elasticache
       environment: dev
       assume_role_name: arc-saas-assume-role
       aws_region: us-east-1

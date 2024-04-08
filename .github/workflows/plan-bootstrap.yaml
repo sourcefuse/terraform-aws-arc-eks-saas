@@ -1,29 +1,29 @@
 ---
-name: Plan - CodeBuildRole
+name: Plan - Bootstrap
 
-on:  # yamllint disable-line rule:truthy
+on:  
   pull_request:
     branches:
-      - dev
+      - main
     paths:
-      - 'terraform/codebuild-role/*'
-      - 'terraform/codebuild-role/**'
-      - '.github/workflows/plan-codebuild-role.yaml'
+      - 'terraform/bootstrap/*'
+      - 'terraform/bootstrap/**'
+      - '.github/workflows/plan-bootstrap.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
 
 jobs:
   ## run terraform plan
-  plan_dev:
-    name: CodeBuildRole
+  plan_bootstrap:
+    name: Bootstrap
     uses: "./.github/workflows/reusable-ci-workflow.yaml"
     with:
-      working_directory: codebuild-role
+      working_directory: bootstrap
       environment: dev
-      assume_role_name: arc-saas-assume-role
+      assume_role_name: github
       aws_region: us-east-1
       publish_plan_artifact: false  # only for apply step
-      update_backend_config: true
+      update_backend_config: false
     secrets: inherit
     permissions:
       id-token: write
