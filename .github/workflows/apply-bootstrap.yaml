@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - dev
+      - main
     paths:
       - 'terraform/bootstrap/*'
       - 'terraform/bootstrap/**'
@@ -33,28 +33,19 @@ jobs:
       contents: read
       pull-requests: write
   
-  ## Manual approval step
-  manual_approval:
-    name: Manual Approval
-    runs-on: ubuntu-latest
-    steps:
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: HarshitSF
 
   ## modify to run terraform apply
-  apply_bootstrap:
-    name: Apply - bootstrap
-    uses: "./.github/workflows/reusable-cd-workflow.yaml"
-    needs: [plan_bootstrap, manual_approval]
-    with:
-      working_directory: bootstrap
-      environment: dev
-      assume_role_name: github
-      plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
-    secrets: inherit
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
+  # apply_bootstrap:
+  #   name: Apply - bootstrap
+  #   uses: "./.github/workflows/reusable-cd-workflow.yaml"
+  #   needs: [plan_bootstrap, manual_approval]
+  #   with:
+  #     working_directory: bootstrap
+  #     environment: dev
+  #     assume_role_name: github
+  #     plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
+  #   secrets: inherit
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #     pull-requests: write
