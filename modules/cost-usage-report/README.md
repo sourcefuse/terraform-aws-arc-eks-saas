@@ -78,54 +78,87 @@ For more information about Cost & Usage Reports in general, see [AWS: What are C
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13, < 2.0 |
-| <a name="requirement_archive"></a> [archive](#requirement\_archive) | ~> 2.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 3.29 |
+No requirements.
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws.cur"></a> [aws.cur](#provider\_aws.cur) | ~> 3.29 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 3.29 |
-| <a name="provider_archive"></a> [archive](#provider\_archive) | ~> 2.0 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+| <a name="provider_aws.cur"></a> [aws.cur](#provider\_aws.cur) | n/a |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_cloudwatch_log_group.crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cloudwatch_log_group.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
+| [aws_cur_report_definition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cur_report_definition) | resource |
+| [aws_glue_catalog_database.cur](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_catalog_database) | resource |
+| [aws_glue_crawler.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_crawler) | resource |
+| [aws_iam_role.crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy.crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.lambda](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_kms_alias.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
+| [aws_kms_key.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
+| [aws_lambda_function.run_crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
+| [aws_lambda_permission.allow_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
+| [aws_s3_bucket.cur](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_notification.cur](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification) | resource |
+| [aws_s3_bucket_policy.cur](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
+| [aws_s3_bucket_public_access_block.cur](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
+| [archive_file.lambda](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.crawler](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.crawler_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.crawler_trigger](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.crawler_trigger_assume](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.s3_cur](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_kms_key.s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/kms_key) | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| [aws_s3_bucket.cur](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/s3_bucket) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_use_existing_s3_bucket"></a> [use\_existing\_s3\_bucket](#input\_use\_existing\_s3\_bucket) | Whether to use an existing S3 bucket or create a new one. Regardless, `s3_bucket_name` must contain the name of the bucket. | `bool` | n/a | yes |
-| <a name="input_s3_bucket_name"></a> [s3\_bucket\_name](#input\_s3\_bucket\_name) | Name of the S3 bucket into which CUR will put the cost data. | `string` | n/a | yes |
-| <a name="input_s3_use_existing_kms_key"></a> [s3\_use\_existing\_kms\_key](#input\_s3\_use\_existing\_kms\_key) | Whether to use an existing KMS CMK for S3 SSE. | `bool` | n/a | yes |
-| <a name="input_s3_kms_key_alias"></a> [s3\_kms\_key\_alias](#input\_s3\_kms\_key\_alias) | Alias for the KMS CMK, existing or otherwise. | `string` | `""` | no |
-| <a name="input_report_name"></a> [report\_name](#input\_report\_name) | Name of the Cost and Usage Report which will be created. | `string` | n/a | yes |
-| <a name="input_report_frequency"></a> [report\_frequency](#input\_report\_frequency) | How often the Cost and Usage Report will be generated. HOURLY or DAILY. | `string` | n/a | yes |
-| <a name="input_report_versioning"></a> [report\_versioning](#input\_report\_versioning) | Whether reports should be overwritten or new ones should be created. | `string` | n/a | yes |
-| <a name="input_report_format"></a> [report\_format](#input\_report\_format) | Format for report. Valid values are: textORcsv, Parquet. If Parquet is used, then Compression must also be Parquet. | `string` | n/a | yes |
-| <a name="input_report_compression"></a> [report\_compression](#input\_report\_compression) | Compression format for report. Valid values are: GZIP, ZIP, Parquet. If Parquet is used, then format must also be Parquet. | `string` | n/a | yes |
-| <a name="input_report_additional_artifacts"></a> [report\_additional\_artifacts](#input\_report\_additional\_artifacts) | A list of additional artifacts. Valid values are: REDSHIFT, QUICKSIGHT, ATHENA. When ATHENA exists within additional\_artifacts, no other artifact type can be declared and report\_versioning must be OVERWRITE\_REPORT. | `set(string)` | n/a | yes |
-| <a name="input_s3_bucket_prefix"></a> [s3\_bucket\_prefix](#input\_s3\_bucket\_prefix) | Prefix in the S3 bucket to put reports. | `string` | `""` | no |
 | <a name="input_cur_role_arn"></a> [cur\_role\_arn](#input\_cur\_role\_arn) | ARN of the role to assume in order to provision the Cost and Usage Reports S3 bucket in us-east-1. | `string` | `""` | no |
 | <a name="input_cur_role_session_name"></a> [cur\_role\_session\_name](#input\_cur\_role\_session\_name) | Session name to use when assuming `cur_role_arn`. | `string` | `null` | no |
-| <a name="input_lambda_log_group_retention_days"></a> [lambda\_log\_group\_retention\_days](#input\_lambda\_log\_group\_retention\_days) | Number of days to retain logs from the Lambda function, which ensures Glue Crawler runs when new CUR data is available. | `number` | `14` | no |
 | <a name="input_glue_crawler_create_log_group"></a> [glue\_crawler\_create\_log\_group](#input\_glue\_crawler\_create\_log\_group) | Whether to create a CloudWatch Log Group for the Glue Crawler. Crawlers share Log Group, and this gives the option of managing the Log Group with retention through this module. | `bool` | `true` | no |
 | <a name="input_glue_crawler_log_group_retention_days"></a> [glue\_crawler\_log\_group\_retention\_days](#input\_glue\_crawler\_log\_group\_retention\_days) | Number of days to retain logs from the Glue Crawler, which populates the Athena table whenever new CUR data is available. | `number` | `14` | no |
+| <a name="input_lambda_log_group_retention_days"></a> [lambda\_log\_group\_retention\_days](#input\_lambda\_log\_group\_retention\_days) | Number of days to retain logs from the Lambda function, which ensures Glue Crawler runs when new CUR data is available. | `number` | `14` | no |
+| <a name="input_report_additional_artifacts"></a> [report\_additional\_artifacts](#input\_report\_additional\_artifacts) | A list of additional artifacts. Valid values are: REDSHIFT, QUICKSIGHT, ATHENA. When ATHENA exists within additional\_artifacts, no other artifact type can be declared and report\_versioning must be OVERWRITE\_REPORT. | `set(string)` | n/a | yes |
+| <a name="input_report_compression"></a> [report\_compression](#input\_report\_compression) | Compression format for report. Valid values are: GZIP, ZIP, Parquet. If Parquet is used, then format must also be Parquet. | `string` | n/a | yes |
+| <a name="input_report_format"></a> [report\_format](#input\_report\_format) | Format for report. Valid values are: textORcsv, Parquet. If Parquet is used, then Compression must also be Parquet. | `string` | n/a | yes |
+| <a name="input_report_frequency"></a> [report\_frequency](#input\_report\_frequency) | How often the Cost and Usage Report will be generated. HOURLY or DAILY. | `string` | n/a | yes |
+| <a name="input_report_name"></a> [report\_name](#input\_report\_name) | Name of the Cost and Usage Report which will be created. | `string` | n/a | yes |
+| <a name="input_report_versioning"></a> [report\_versioning](#input\_report\_versioning) | Whether reports should be overwritten or new ones should be created. CREATE\_NEW\_REPORT or OVERWRITE\_REPORT | `string` | n/a | yes |
+| <a name="input_s3_bucket_name"></a> [s3\_bucket\_name](#input\_s3\_bucket\_name) | Name of the S3 bucket into which CUR will put the cost data. | `string` | n/a | yes |
+| <a name="input_s3_bucket_prefix"></a> [s3\_bucket\_prefix](#input\_s3\_bucket\_prefix) | Prefix in the S3 bucket to put reports. | `string` | `""` | no |
+| <a name="input_s3_kms_key_alias"></a> [s3\_kms\_key\_alias](#input\_s3\_kms\_key\_alias) | Alias for the KMS CMK, existing or otherwise. | `string` | `""` | no |
+| <a name="input_s3_use_existing_kms_key"></a> [s3\_use\_existing\_kms\_key](#input\_s3\_use\_existing\_kms\_key) | Whether to use an existing KMS CMK for S3 SSE. | `bool` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags which will be applied to provisioned resources. | `map(string)` | `{}` | no |
+| <a name="input_use_existing_s3_bucket"></a> [use\_existing\_s3\_bucket](#input\_use\_existing\_s3\_bucket) | Whether to use an existing S3 bucket or create a new one. Regardless, `s3_bucket_name` must contain the name of the bucket. | `bool` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_s3_bucket_name"></a> [s3\_bucket\_name](#output\_s3\_bucket\_name) | Name of S3 bucket used for storing CUR data. This may be provisioned by this module or not. |
-| <a name="output_s3_bucket_prefix"></a> [s3\_bucket\_prefix](#output\_s3\_bucket\_prefix) | Prefix used for storing CUR data inside the S3 bucket. |
-| <a name="output_s3_bucket_arn"></a> [s3\_bucket\_arn](#output\_s3\_bucket\_arn) | ARN of S3 bucket used for storing CUR data. This may be provisioned by this module or not. |
-| <a name="output_s3_bucket_region"></a> [s3\_bucket\_region](#output\_s3\_bucket\_region) | Region where the S3 bucket used for storing CUR data is provisioned. This may be provisioned by this module or not. |
-| <a name="output_report_name"></a> [report\_name](#output\_report\_name) | Name of the provisioned Cost and Usage Report. |
-| <a name="output_lambda_crawler_trigger_arn"></a> [lambda\_crawler\_trigger\_arn](#output\_lambda\_crawler\_trigger\_arn) | ARN of the Lambda function responsible for triggering the Glue Crawler when new CUR data is uploaded into the S3 bucket. |
-| <a name="output_lambda_crawler_trigger_role_arn"></a> [lambda\_crawler\_trigger\_role\_arn](#output\_lambda\_crawler\_trigger\_role\_arn) | ARN of the IAM role used by the Lambda function responsible for starting the Glue Crawler. |
 | <a name="output_crawler_arn"></a> [crawler\_arn](#output\_crawler\_arn) | ARN of the Glue Crawler responsible for populating the Catalog Database with new CUR data. |
 | <a name="output_crawler_role_arn"></a> [crawler\_role\_arn](#output\_crawler\_role\_arn) | ARN of the IAM role used by the Glue Crawler responsible for populating the Catalog Database with new CUR data. |
 | <a name="output_glue_catalog_database_name"></a> [glue\_catalog\_database\_name](#output\_glue\_catalog\_database\_name) | Name of the Glue Catalog Database which is populated with CUR data. |
+| <a name="output_lambda_crawler_trigger_arn"></a> [lambda\_crawler\_trigger\_arn](#output\_lambda\_crawler\_trigger\_arn) | ARN of the Lambda function responsible for triggering the Glue Crawler when new CUR data is uploaded into the S3 bucket. |
+| <a name="output_lambda_crawler_trigger_role_arn"></a> [lambda\_crawler\_trigger\_role\_arn](#output\_lambda\_crawler\_trigger\_role\_arn) | ARN of the IAM role used by the Lambda function responsible for starting the Glue Crawler. |
+| <a name="output_report_name"></a> [report\_name](#output\_report\_name) | Name of the provisioned Cost and Usage Report. |
+| <a name="output_s3_bucket_arn"></a> [s3\_bucket\_arn](#output\_s3\_bucket\_arn) | ARN of S3 bucket used for storing CUR data. This may be provisioned by this module or not. |
+| <a name="output_s3_bucket_name"></a> [s3\_bucket\_name](#output\_s3\_bucket\_name) | Name of S3 bucket used for storing CUR data. This may be provisioned by this module or not. |
+| <a name="output_s3_bucket_prefix"></a> [s3\_bucket\_prefix](#output\_s3\_bucket\_prefix) | Prefix used for storing CUR data inside the S3 bucket. |
+| <a name="output_s3_bucket_region"></a> [s3\_bucket\_region](#output\_s3\_bucket\_region) | Region where the S3 bucket used for storing CUR data is provisioned. This may be provisioned by this module or not. |
 <!-- END_TF_DOCS -->
