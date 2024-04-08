@@ -1,0 +1,32 @@
+---
+name: Terraform-Documentation
+
+on:  
+  push:
+    branches:
+      - feature/doc
+    paths:
+      - 'terraform/*'
+      - 'modules/*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    runs-on: [self-hosted, linux, codebuild]
+    name: terraform-doc
+    steps:
+      - uses: actions/checkout@v3.6.0
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Render terraform docs inside the README.md and push changes back to PR branch
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          find-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: 'true'
