@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - main
+      - dev
     paths:
       - 'terraform/core-infra-pipeline/*'
       - 'terraform/core-infra-pipeline/**'

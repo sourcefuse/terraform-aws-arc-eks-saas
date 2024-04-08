@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - main
+      - dev
     paths:
       - 'terraform/bootstrap/*'
       - 'terraform/bootstrap/**'
@@ -32,19 +32,43 @@ jobs:
       id-token: write
       contents: read
       pull-requests: write
+  
+  ## Manual approval step
+  manual_approval:
+    name: Manual Approval
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Request approval
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.TOKEN }}
+          script: |
+            const { data: pullRequest } = await github.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.workflow_run.head_branch.split('/')[2]  // Extracting pull request number from the branch name
+            });
+            await github.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pullRequest.number,
+              event: 'APPROVE',
+              body: 'The changes are ready to be applied. Please review and merge.',
+            });
 
-  ## uncomment to run terraform apply
-##  apply_bootstrap:
-##    name: Apply - bootstrap
-##    uses: "./.github/workflows/reusable-cd-workflow.yaml"
-##    needs: plan_bootstrap
-##    with:
-##      working_directory: bootstrap
-##      environment: dev
-##      assume_role_name: github
-##      plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
-##    secrets: inherit
-##    permissions:
-##      id-token: write
-##      contents: read
-##      pull-requests: write
+  ## modify to run terraform apply
+  apply_bootstrap:
+    name: Apply - bootstrap
+    uses: "./.github/workflows/reusable-cd-workflow.yaml"
+    needs: [plan_bootstrap, manual_approval]
+    with:
+      working_directory: bootstrap
+      environment: dev
+      assume_role_name: github
+      plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write

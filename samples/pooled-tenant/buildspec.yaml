@@ -103,7 +103,7 @@ phases:
   post_build:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
-      - sleep 30
+      - sleep 300
       - node webhook.js
       - python push_to_dynamodb.py
 
