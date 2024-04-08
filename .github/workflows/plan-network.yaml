@@ -11,10 +11,6 @@ on:
       - '.github/workflows/plan-network.yaml'
       - '.github/workflows/reusable-ci-workflow.yaml'
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Apply - CodePipeline"]
-    types:
-      - completed
 
 jobs:
   ## run terraform plan
