@@ -189,3 +189,7 @@ data "aws_ssm_parameter" "opensearch_username" {
 data "aws_ssm_parameter" "opensearch_password" {
   name = "/${var.namespace}/${var.environment}/opensearch/admin_password"
 }
+
+data "aws_ssm_parameter" "codebuild_role" {
+  name = "/${var.namespace}/${var.environment}/codebuild_role"
+}

@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Set  environment variable
+# Set environment variables
 export AWS_REGION=us-east-1
 export NAMESPACE=arc-saas
 export ENVIRONMENT=dev
 
+# Change directory
+cd ../../samples/ || { echo "Failed to change directory"; exit 1; }
 
 # Install git-remote-codecommit
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
@@ -15,17 +17,49 @@ git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-managem
 # Change directory 
 cd ${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to change directory"; exit 1; }
 
-# Copy tenant values.yaml to silo directory
-if [ -d "../output" ]; then
-    cp -r ../output/* silo/application/ || { echo "Failed to copy files"; exit 1; }
-else
-    echo "'output' folder does not exist. Skipping file copy."
-fi
+# Function to create directory if it doesn't exist
+create_directory() {
+    local dir_name=$1
+    if [ ! -d "$dir_name" ]; then
+        mkdir "$dir_name" || { echo "Failed to create '$dir_name' folder"; exit 1; }
+    else
+        echo "The '$dir_name' folder already exists."
+    fi
+}
 
-# Copy tenant specific terraform tfvars and config file to codecommit repository
-cp -r ../*.tfvars silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
+# Create silo and pooled directories if they don't exist
+create_directory "silo"
+create_directory "pooled"
 
-cp -r ../*.hcl silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
+# Function to create application and infra directories inside silo and pooled
+create_subdirectories() {
+    local parent_dir=$1
+    create_directory "$parent_dir/application"
+    create_directory "$parent_dir/infra"
+}
+
+# Create application and infra directories inside silo and pooled if they don't exist
+create_subdirectories "silo"
+create_subdirectories "pooled"
+
+
+# Copy silo base helm chart & terraform to silo directory
+cp -r ../silo-tenant/terraform/application-helm/* silo/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../silo-tenant/modules    silo/infra/
+cp -r ../silo-tenant/terraform   silo/infra/
+
+# removing the values.yaml as will push tenant values.yaml on tenant on-boarding
+rm -rf silo/application/values.yaml
+
+
+# Copy pooled base helm chart & terraform to pooled directory
+cp -r ../pooled-tenant/terraform/application-helm/* pooled/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../pooled-tenant/modules    pooled/infra/
+cp -r ../pooled-tenant/terraform  pooled/infra/
+
+# removing the values.yaml as will push tenant values.yaml on tenant on-boarding
+rm -rf pooled/application/values.yaml
+
 
 # Set origin URL
 git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to set remote URL"; exit 1; }

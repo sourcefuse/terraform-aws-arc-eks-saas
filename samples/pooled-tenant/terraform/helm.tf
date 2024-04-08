@@ -132,25 +132,29 @@ resource "local_file" "helm_values" {
 }
 
 
-resource "helm_release" "application_helm" {
-  name             = var.tenant
-  chart            = "application-helm" #Local Path of helm chart
-  namespace        = kubernetes_namespace.my_namespace.metadata.0.name
-  create_namespace = true
-  force_update     = true
-  recreate_pods    = true
-  values           = [data.template_file.helm_values_template.rendered]
-  depends_on = [
-    module.tenant_iam_role, module.jwt_ssm_parameters, aws_cognito_user_pool_client.app_client
-  ]
-}
+# resource "helm_release" "application_helm" {
+#   count            = var.helm_apply ? 1 : 0
+#   name             = var.tenant
+#   chart            = "application-helm" #Local Path of helm chart
+#   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
+#   create_namespace = true
+#   force_update     = true
+#   recreate_pods    = true
+#   values           = [data.template_file.helm_values_template.rendered]
+#   depends_on = [
+#     module.tenant_iam_role, module.jwt_ssm_parameters, aws_cognito_user_pool_client.app_client
+#   ]
+# }
 
+###############################################################################################
+## Register Tenant Helm App on ArgoCD
+###############################################################################################
 resource "local_file" "argocd_application" {
   content  = <<-EOT
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ${var.tenant}
+  name: pooled-${var.tenant}
   namespace: argocd
   labels:
     Tenant: ${var.tenant} 
@@ -160,8 +164,8 @@ spec:
     namespace: pooled-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: pooled-helm
-    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-helm-chart-repository'
+    path: pooled/application
+    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
     targetRevision: main
     helm:
       valueFiles:
@@ -181,4 +185,106 @@ spec:
       selfHeal: true
     EOT
   filename = "${path.module}/argocd-application.yaml"
+}
+
+#######################################################################################
+## Register Pooled Terraform Workflow on Argo
+#######################################################################################
+resource "local_file" "pooled_argo_workflow" {
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: pooled-terraform-workflow
+  namespace: argo-workflows
+spec:
+  entrypoint: terraform-apply
+  templates:
+    - name: terraform-apply
+      inputs:
+        artifacts:
+          - name: terraform
+            path: /home/terraform
+            git:
+              repo: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+              depth: 1
+              usernameSecret:
+                name: codecommit-secret
+                key: username
+              passwordSecret:
+                name: codecommit-secret
+                key: password
+      container:
+        imagePullPolicy: "Always"
+        image: public.ecr.aws/f6f1e4v9/terraform:argo-terraform 
+        command:
+          - sh
+          - -c
+        args:
+          - |
+            export KUBECONFIG=$HOME/.kube/config
+            CREDENTIALS=$(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600)
+            export AWS_ACCESS_KEY_ID=$(echo "$CREDENTIALS" | jq -r '.Credentials.AccessKeyId')
+            export AWS_SECRET_ACCESS_KEY=$(echo "$CREDENTIALS" | jq -r '.Credentials.SecretAccessKey')
+            export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
+            export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
+            aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
+            cp -r /home/terraform/pooled/infra/* /home/myuser/
+            cd terraform/infra
+            /bin/terraform init --backend-config=config.pooled.hcl
+            /bin/terraform plan --var-file=pooled.tfvars --refresh=false
+            /bin/terraform apply --var-file=pooled.tfvars --auto-approve
+    EOT
+  filename = "${path.module}/pooled-argo-workflow.yaml"
+}
+
+#######################################################################################
+## Register Tenant Terraform Workflow on Argo
+#######################################################################################
+resource "local_file" "argo_workflow" {
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: pooled-${var.tenant}-terraform-workflow
+  namespace: argo-workflows
+spec:
+  entrypoint: terraform-apply
+  templates:
+    - name: terraform-apply
+      inputs:
+        artifacts:
+          - name: terraform
+            path: /home/terraform
+            git:
+              repo: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+              depth: 1
+              usernameSecret:
+                name: codecommit-secret
+                key: username
+              passwordSecret:
+                name: codecommit-secret
+                key: password
+      container:
+        imagePullPolicy: "Always"
+        image: public.ecr.aws/f6f1e4v9/terraform:argo-terraform 
+        command:
+          - sh
+          - -c
+        args:
+          - |
+            export KUBECONFIG=$HOME/.kube/config
+            CREDENTIALS=$(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600)
+            export AWS_ACCESS_KEY_ID=$(echo "$CREDENTIALS" | jq -r '.Credentials.AccessKeyId')
+            export AWS_SECRET_ACCESS_KEY=$(echo "$CREDENTIALS" | jq -r '.Credentials.SecretAccessKey')
+            export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
+            export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
+            aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
+            cp -r /home/terraform/pooled/infra/* /home/myuser/
+            cd terraform
+            /bin/terraform init --backend-config=config.${var.tenant}.hcl
+            /bin/terraform plan --var-file=${var.tenant}.tfvars --refresh=false
+            /bin/terraform apply --var-file=${var.tenant}.tfvars --auto-approve
+    EOT
+  filename = "${path.module}/argo-workflow.yaml"
 }

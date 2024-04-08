@@ -189,13 +189,20 @@ variable "argo_rollouts" {
 variable "enable_argo_workflows" {
   description = "Enable Argo workflows add-on"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "argo_workflows" {
   description = "Argo Workflows addon configuration values"
   type        = any
-  default     = {}
+  default = {
+    set = [
+      {
+        name  = "server.authMode"
+        value = "server"
+      }
+    ]
+  }
 }
 
 ################################################################################

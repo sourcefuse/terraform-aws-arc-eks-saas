@@ -1,6 +1,12 @@
 ################################################################################
 ## shared
 ################################################################################
+variable "helm_apply" {
+  type        = bool
+  description = "Set to true for applying tenant helm application"
+  default     = true
+}
+
 variable "region" {
   type        = string
   description = "AWS region"

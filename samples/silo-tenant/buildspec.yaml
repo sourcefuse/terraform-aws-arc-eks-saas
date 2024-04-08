@@ -14,6 +14,8 @@ phases:
       - export PATH=$PWD/:$PATH
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
+      - pip install boto3
+
     finally:
       - node webhook.js
   pre_build:
@@ -77,14 +79,16 @@ phases:
       - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_KEY=${KEY}/${KEY}.tfstate
-      - envsubst < config.txt > config.hcl
+      - envsubst < config.txt > config.${KEY}.hcl
+      - envsubst <tfvariables.txt> ${KEY}.tfvars
 
       # Run Terraform to create infra and apply helm  
-      - terraform init --backend-config=config.hcl
+      - terraform init --backend-config=config.${KEY}.hcl
       - terraform apply -auto-approve
       - chmod +x push-values.sh
       - ./push-values.sh
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     finally:
       - node webhook.js
      
@@ -92,8 +96,9 @@ phases:
   post_build:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
-      - sleep 30
+      - sleep 300
       - node webhook.js
+      - python push_to_dynamodb.py
 
 
 
