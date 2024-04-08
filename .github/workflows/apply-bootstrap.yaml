@@ -1,7 +1,7 @@
 ---
 name: Apply - Bootstrap
 
-on:  # yamllint disable-line rule:truthy
+on:
   pull_request:
     types: [closed]
     branches:
@@ -33,18 +33,18 @@ jobs:
       contents: read
       pull-requests: write
 
-  ## run terraform apply
-  apply_bootstrap:
-    name: Apply - bootstrap
-    uses: "./.github/workflows/reusable-cd-workflow.yaml"
-    needs: plan_bootstrap
-    with:
-      working_directory: bootstrap
-      environment: dev
-      assume_role_name: github
-      plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
-    secrets: inherit
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
+  ## uncomment to run terraform apply
+##  apply_bootstrap:
+##    name: Apply - bootstrap
+##    uses: "./.github/workflows/reusable-cd-workflow.yaml"
+##    needs: plan_bootstrap
+##    with:
+##      working_directory: bootstrap
+##      environment: dev
+##      assume_role_name: github
+##      plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
+##    secrets: inherit
+##    permissions:
+##      id-token: write
+##      contents: read
+##      pull-requests: write
