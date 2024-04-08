@@ -8,6 +8,7 @@ module "db_password" {
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
+
 module "aurora" {
   source  = "sourcefuse/arc-db/aws"
   version = "2.0.3"

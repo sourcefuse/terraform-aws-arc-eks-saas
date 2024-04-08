@@ -132,19 +132,19 @@ resource "local_file" "helm_values" {
 }
 
 
-resource "helm_release" "application_helm" {
-  count            = var.helm_apply ? 1 : 0
-  name             = var.tenant
-  chart            = "application-helm" #Local Path of helm chart
-  namespace        = kubernetes_namespace.my_namespace.metadata.0.name
-  create_namespace = true
-  force_update     = true
-  recreate_pods    = true
-  values           = [data.template_file.helm_values_template.rendered]
-  depends_on = [
-    module.tenant_iam_role, module.jwt_ssm_parameters, aws_cognito_user_pool_client.app_client
-  ]
-}
+# resource "helm_release" "application_helm" {
+#   count            = var.helm_apply ? 1 : 0
+#   name             = var.tenant
+#   chart            = "application-helm" #Local Path of helm chart
+#   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
+#   create_namespace = true
+#   force_update     = true
+#   recreate_pods    = true
+#   values           = [data.template_file.helm_values_template.rendered]
+#   depends_on = [
+#     module.tenant_iam_role, module.jwt_ssm_parameters, aws_cognito_user_pool_client.app_client
+#   ]
+# }
 
 ###############################################################################################
 ## Register Tenant Helm App on ArgoCD

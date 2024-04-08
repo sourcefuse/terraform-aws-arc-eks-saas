@@ -3,14 +3,18 @@ name: Apply - CodePipeline
 
 on:  # yamllint disable-line rule:truthy
   pull_request:
+    types: [closed]
     branches:
-      - dev
+      - main
     paths:
       - 'terraform/core-infra-pipeline/*'
       - 'terraform/core-infra-pipeline/**'
       - '.github/workflows/apply-pipeline.yaml'
       - '.github/workflows/reusable-cd-workflow.yaml'
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Apply - Bootstrap"]
+    types:
+      - completed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
