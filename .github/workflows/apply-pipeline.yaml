@@ -3,6 +3,7 @@ name: Apply - CodePipeline
 
 on:  
   pull_request:
+    types: [closed]
     branches:
       - main
     paths:
@@ -10,7 +11,10 @@ on:
       - 'terraform/core-infra-pipeline/**'
       - '.github/workflows/apply-pipeline.yaml'
       - '.github/workflows/reusable-cd-workflow.yaml'
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Apply - Bootstrap"]
+    types:
+      - completed
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

@@ -19,6 +19,11 @@ terraform {
       source  = "opensearch-project/opensearch"
       version = "2.2.0"
     }
+
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
   }
 
   backend "s3" {}
@@ -40,6 +45,12 @@ provider "helm" {
     cluster_ca_certificate = base64decode(data.aws_eks_cluster.EKScluster.certificate_authority[0].data)
     token                  = data.aws_eks_cluster_auth.EKScluster.token
   }
+}
+
+provider "kubectl" {
+  host                   = data.aws_eks_cluster.EKScluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.EKScluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.EKScluster.token
 }
 ################################################################################
 ## tags

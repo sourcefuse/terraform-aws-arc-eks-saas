@@ -65,11 +65,10 @@ module "tenant_codebuild_module_build_step_codebuild_project" {
           "./silo-codecommit.sh",
           "chmod +x pooled-codecommit.sh",
           "./pooled-codecommit.sh",
-          "chmod +x tenant-helm-chart-codecommit.sh",
-          "./tenant-helm-chart-codecommit.sh",
+          "chmod +x tenant-gitops-codecommit.sh",
+          "./tenant-gitops-codecommit.sh",
         ]
       }
-
     }
   })
 

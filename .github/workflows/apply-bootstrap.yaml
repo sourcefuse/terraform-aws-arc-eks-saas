@@ -3,6 +3,7 @@ name: Apply - Bootstrap
 
 on:
   pull_request:
+    types: [closed]
     branches:
       - main
     paths:
@@ -31,19 +32,20 @@ jobs:
       id-token: write
       contents: read
       pull-requests: write
+  
 
-  ## uncomment to run terraform apply
-##  apply_bootstrap:
-##    name: Apply - bootstrap
-##    uses: "./.github/workflows/reusable-cd-workflow.yaml"
-##    needs: plan_bootstrap
-##    with:
-##      working_directory: bootstrap
-##      environment: dev
-##      assume_role_name: github
-##      plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
-##    secrets: inherit
-##    permissions:
-##      id-token: write
-##      contents: read
-##      pull-requests: write
+  ## modify to run terraform apply
+  # apply_bootstrap:
+  #   name: Apply - bootstrap
+  #   uses: "./.github/workflows/reusable-cd-workflow.yaml"
+  #   needs: [plan_bootstrap, manual_approval]
+  #   with:
+  #     working_directory: bootstrap
+  #     environment: dev
+  #     assume_role_name: github
+  #     plan_id: ${{ needs.plan_bootstrap.outputs.plan_id }}
+  #   secrets: inherit
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #     pull-requests: write

@@ -412,8 +412,8 @@ variable "admin_create_user_config" {
   description = "The configuration for AdminCreateUser requests"
   type        = map(any)
   default = {
-    email_message = "Dear {username}, your verification code is {####}."
-    email_subject = "Here, your verification code"
+    email_message = "Dear {username}, your temporary password is {####}."
+    email_subject = "Here, your temporary password"
     sms_message   = "Your username is {username} and temporary password is {####}."
   }
 }

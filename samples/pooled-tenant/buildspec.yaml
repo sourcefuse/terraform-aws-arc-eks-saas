@@ -58,7 +58,6 @@ phases:
       - export TF_VAR_tenant_client_secret=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
       - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
       - export TF_VAR_alb_url="${ALB_DNS}"
-      - echo "${ALB_DNS}"
       # check if bootstrap need to be run or not
       - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/pooled/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
       - if [ -z "$PARAMETER_VALUE" ]; then 
@@ -78,28 +77,35 @@ phases:
       - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/pooled/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - cd infra
       - export TF_INFRA_KEY=pooled.tfstate
-      - envsubst < config.txt > config.hcl
+      - envsubst < config.txt > config.pooled.hcl
+      - envsubst <tfvariables.txt> pooled.tfvars
       # Run Terraform to create infra 
-      - terraform init --backend-config=config.hcl
+      - terraform init --backend-config=config.pooled.hcl
       - terraform apply -auto-approve
       - cd ..
 
       # Run terraform for tenant
       - export TF_KEY=${KEY}/${KEY}.tfstate
-      - envsubst < config.txt > config.hcl
-      - terraform init --backend-config=config.hcl
+      - envsubst < config.txt > config.${KEY}.hcl
+      - envsubst <tfvariables.txt> ${KEY}.tfvars
+      
+
+      - terraform init --backend-config=config.${KEY}.hcl
       - terraform apply -auto-approve
       - chmod +x push-values.sh
       - ./push-values.sh
+      - kubectl apply -f pooled-argo-workflow.yaml --namespace argo-workflows || true
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     finally:
       - node webhook.js
 
   post_build:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
-      - sleep 30
+      - sleep 300
       - node webhook.js
+      - python push_to_dynamodb.py
 
 
 
