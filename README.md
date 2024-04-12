@@ -1,10 +1,16 @@
 # SourceFuse ARC EKS SAAS Reference Architecture
 
+<p align="center">
+<a href="https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas" target="_blank">
+<img alt="Sonar Quality Gate" src="https://img.shields.io/sonar/quality_gate/sourcefuse_terraform-aws-arc-eks-saas?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge">
+</a>
+</p>
+
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=sourcefuse_terraform-aws-arc-eks-saas&token=753087a003438b8bb11e624ea44302d9044d428e)](https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas)
 
 [![snyk](https://github.com/sourcefuse/terraform-aws-arc-eks-saas/actions/workflows/synk.yaml/badge.svg)](https://github.com/sourcefuse/terraform-aws-arc-eks-saas/actions/workflows/synk.yaml)
 
-# Overview 
+# Overview
 
 SourceFuse Reference Architecture to implement a sample EKS SaaS Solution. This solution will use AWS Codepipeline to deploy all the control plane infrastructure component of Networking, Compute, Database, Monitoring & Logging, Security alongwith the control plane application using helm chart. This solution will also setup tenant codebuild projects which is responsible for onboarding of new silo/pooled tenant. Each tenant will have it's own infrastructure and application helm chart Which will be managed using gitops tool like ArgoCD and Argo Workflow. This solution will also have strict IAM policy and Kubernetes Authorization Policy for tenants to avoid cross namespace access. 
 
@@ -90,4 +96,6 @@ once the codepipeline is created then when you will merge code to main branch it
 This project is authored by below people
 
 - SourceFuse ARC Team
+
+
 
