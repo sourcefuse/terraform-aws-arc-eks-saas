@@ -24,30 +24,31 @@ SourceFuse Reference Architecture to implement a sample EKS SaaS Solution. This 
 3. SES account should be setup in production mode and domain identity should be verified. [Generate smtp credentials](https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html) and store them in ssm parameter store. (use naming convention - /{namespace}/ses_access_key & /{namespace}/ses_secret_access_key where **namespace** is project name)
 4. [Generate http credentials](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html#setting-up-gc-iam) for your IAM user and store them in ssm parameter. (use naming convention - /{namespace}/https_connection_user & /{namespace}/https_connection_password where **namespace** is project name)
 5. Create a [codepipeline connection for github](https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html). Please make sure to update the connection name in **tfvars** file of terraform/core-infra-pipeline folder.
-6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in *.tfvars* file of client-vpn folder.
+6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in **.tfvars** file of client-vpn folder.
 
 
 ## Setting up the environment
 
-First clone the Github repository. Update the variables like **namespace**,**environment**,**region**,**domain_name** etc. in the *tfvars* file of terraform/{sub_dir}/ folder. Also, make sure to update the variables in the script files of terraform/tenant-codebuilds folder.
+First clone the Github repository. Update the variables like **namespace**,**environment**,**region**,**domain_name** etc. in the respective *tfvars* file of terraform folder. Also, make sure to update the variables in the script files of terraform/tenant-codebuilds folder.
 
 Once the required variables are updated, We will setup terraform codepipeline which will deploy all control plane infrastructure components.
 
 1. Using Github Actions :: 
 
 To use github action workflow,
-    a. first create an [IAM role for github workflow actions](https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/) and update the role name and other required variables in workflow yaml files. 
-    b. Add **AWS_ACCOUNT_ID** in [github repository secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions).
-    c. Next, Make sure to update the environment variable in *scripts/update-backend-config.sh* file.
-    d. Execute the workflow of *apply-bootstrap.yaml* & *apply-pipeline.yaml* by updating the github events in these files.  
+
+* First create an [IAM role for github workflow actions](https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/) and update the role name and other required variables like environment etc. in workflow yaml files.
+* Add **AWS_ACCOUNT_ID** in [github repository secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions).
+* Next, Make sure to update the environment variable in *scripts/update-backend-config.sh* file.
+* Execute the workflow of *apply-bootstrap.yaml* & *apply-pipeline.yaml* by updating the github events in these files.
 
 
-> **_NOTE:_** If you want to run other workflows, which are terraform plans, please make sure to update the workflows files. Terraform bootstrap is one time activity so once bootstrap workflow is executed, please disable that to run again. 
+> **_NOTE:_** If you want to run other workflows, which are terraform plans, please make sure to update the workflows files. Terraform bootstrap is one time activity so once bootstrap workflow is executed, please disable that to run again.
 
 
 2. Using Local ::
 
-AWS & Terraform CLI must be installed on your machine. If not installed, then follow the documentation to install [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) & [terraform cli](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
+AWS & Terraform CLI latest version must be installed on your machine. If not installed, then follow the documentation to install [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) & [terraform cli](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
 
     a. Configure your terminal with aws.
     b. Go to the terraform/bootstrap folder and run the floowing command to deploy it - 
@@ -67,8 +68,10 @@ AWS & Terraform CLI must be installed on your machine. If not installed, then fo
     terraform apply --var-file={env}.tfvars
 
     ```
+> **_NOTE:_** All Terraform README files are present in respective folder.
 
-once the codepipeline is executed successfully then register the following entry in route53 hosted zone of the domain, with Load Balancer DNS address.
+
+once the codepipeline is executed successfully then register the following entry in route53 hosted zone of the domain, using Load Balancer DNS address.
 
 | Record Entry          | Description                     |
 |-----------------------|---------------------------------|
