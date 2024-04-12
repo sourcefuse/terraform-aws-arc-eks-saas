@@ -48,3 +48,36 @@ No modules.
 | <a name="ssm_parameter_value"></a> [ssm_parameter_value](#output\_value) | The Value of SSM Parameter |
 | <a name="ssm_parameter_arn"></a> [ssm_parameter_arn](#output\_arn) | The ARN of SSM Parameter |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+No requirements.
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_ssm_parameter.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ssm_parameter) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_parameter_defaults"></a> [parameter\_defaults](#input\_parameter\_defaults) | Parameter write default settings | `map(any)` | <pre>{<br>  "description": null,<br>  "overwrite": "false",<br>  "tier": "Standard",<br>  "type": "SecureString"<br>}</pre> | no |
+| <a name="input_ssm_parameters"></a> [ssm\_parameters](#input\_ssm\_parameters) | List of maps with the parameter values to write to SSM Parameter Store | `list(map(string))` | `[]` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to assign the security groups. | `map(string)` | n/a | yes |
+
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->
