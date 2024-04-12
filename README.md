@@ -3,13 +3,13 @@
 
 <p align="center">
 <a href="https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas" target="_blank">
-<img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_terraform-aws-arc-eks-saas&metric=alert_status&token=753087a003438b8bb11e624ea44302d9044d428e)](https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas">
+<img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_terraform-aws-arc-eks-saas&metric=alert_status&token=753087a003438b8bb11e624ea44302d9044d428e">
 </a>
 <a href="https://app.snyk.io/org/ashishkaushik/reporting?context[page]=issues-detail&project_target=%255B%2522sourcefuse%252Fterraform-aws-arc-eks-saas%2522%255D&project_origin=%255B%2522github%2522%255D&issue_status=%255B%2522Open%2522%255D&issue_by=Severity&table_issues_detail_cols=SCORE%257CCVE%257CCWE%257CPROJECT%257CEXPLOIT%2520MATURITY%257CAUTO%2520FIXABLE%257CINTRODUCED%257CSNYK%2520PRODUCT&v=1">
 <img alt="Synk" src="https://github.com/sourcefuse/terraform-aws-arc-eks-saas/actions/workflows/synk.yaml/badge.svg">
 </a>
 <a href="./LICENSE">
-<img src="https://img.shields.io/github/license/sourcefuse/loopback4-microservice-catalog?style=for-the-badge" alt="License" />
+<img src="https://img.shields.io/github/license/sourcefuse/terraform-aws-arc-eks-saas?style=for-the-badge" alt="License" />
 </a>
 
 
