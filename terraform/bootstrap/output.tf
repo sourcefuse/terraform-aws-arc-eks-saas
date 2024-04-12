@@ -4,6 +4,7 @@ output "state_bucket_arn" {
 }
 
 output "state_bucket_name" {
+  sensitive = true
   value       = module.bootstrap.bucket_name
   description = "State bucket name"
 }
