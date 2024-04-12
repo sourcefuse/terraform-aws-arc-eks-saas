@@ -2,10 +2,9 @@
 name: Terraform-Documentation
 
 on:              # yamllint disable-line rule:truthy
-  push:
+  pull_request:
     branches:
-      - "**"       # matches every branch
-      - "!main"    # excludes main
+      - main
 
 
 jobs:
