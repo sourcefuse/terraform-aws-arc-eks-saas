@@ -71,7 +71,7 @@ AWS & Terraform CLI latest version must be installed on your machine. If not ins
 > **_NOTE:_** All Terraform module README files are present in respective folder.
 
 
-once the codepipeline is executed successfully then register the following entry in route53 hosted zone of the domain, using Load Balancer DNS address.
+once the codepipeline is created then when you will merge code to main branch it will be triggered and once it is executed successfully then register the following entry in route53 hosted zone of the domain, using Load Balancer DNS address.
 
 | Record Entry          | Description                     |
 |-----------------------|---------------------------------|
