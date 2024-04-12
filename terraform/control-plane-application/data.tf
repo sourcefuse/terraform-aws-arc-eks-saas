@@ -127,11 +127,11 @@ data "aws_ssm_parameter" "docker_password" {
 }
 
 data "aws_ssm_parameter" "https_connection_user" {
-  name = "/${var.namespace}/${var.environment}/https_connection_user"
+  name = "/${var.namespace}/https_connection_user"
 }
 
 data "aws_ssm_parameter" "https_connection_password" {
-  name = "/${var.namespace}/${var.environment}/https_connection_password"
+  name = "/${var.namespace}/https_connection_password"
 }
 ################################################################################
 ## iam policy data
@@ -151,7 +151,7 @@ data "aws_iam_policy_document" "ssm_policy" {
       "ssm:DescribeParameters",
       "ssm:DeleteParameters"
     ]
-    resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/*"]
+    resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/*"]
   }
 }
 
