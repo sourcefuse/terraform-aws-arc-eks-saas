@@ -68,7 +68,7 @@ AWS & Terraform CLI latest version must be installed on your machine. If not ins
     terraform apply --var-file={env}.tfvars
 
     ```
-> **_NOTE:_** All Terraform README files are present in respective folder.
+> **_NOTE:_** All Terraform module README files are present in respective folder.
 
 
 once the codepipeline is executed successfully then register the following entry in route53 hosted zone of the domain, using Load Balancer DNS address.
