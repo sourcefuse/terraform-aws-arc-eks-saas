@@ -1,7 +1,7 @@
 # SourceFuse ARC EKS SAAS Reference Architecture
 
 
-<p align="center">
+<p align="left">
 <a href="https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas" target="_blank">
 <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_terraform-aws-arc-eks-saas&metric=alert_status&token=753087a003438b8bb11e624ea44302d9044d428e">
 </a>
@@ -9,7 +9,7 @@
 <img alt="Synk" src="https://github.com/sourcefuse/terraform-aws-arc-eks-saas/actions/workflows/synk.yaml/badge.svg">
 </a>
 <a href="./LICENSE">
-<img src="https://img.shields.io/github/license/sourcefuse/terraform-aws-arc-eks-saas?style=for-the-badge" alt="License" />
+<img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License" />
 </a>
 
 
