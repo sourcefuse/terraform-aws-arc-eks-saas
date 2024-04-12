@@ -1,11 +1,11 @@
 # SourceFuse ARC EKS SAAS Reference Architecture
 
 <p align="center">
-<a href="[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_terraform-aws-arc-eks-saas&metric=alert_status&token=753087a003438b8bb11e624ea44302d9044d428e)](https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas)">
+<a href="https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_terraform-aws-arc-eks-saas&metric=alert_status&token=753087a003438b8bb11e624ea44302d9044d428e">
 </a>
 </p>
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_terraform-aws-arc-eks-saas&metric=alert_status&token=753087a003438b8bb11e624ea44302d9044d428e)](https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas)
+<!-- [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_terraform-aws-arc-eks-saas&metric=alert_status&token=753087a003438b8bb11e624ea44302d9044d428e)](https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas) -->
 
 [![snyk](https://github.com/sourcefuse/terraform-aws-arc-eks-saas/actions/workflows/synk.yaml/badge.svg)](https://github.com/sourcefuse/terraform-aws-arc-eks-saas/actions/workflows/synk.yaml)
 
