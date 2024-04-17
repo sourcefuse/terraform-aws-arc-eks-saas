@@ -17,7 +17,7 @@
 
 # Overview
 
-SourceFuse Reference Architecture to implement a sample EKS Multi-Tenant SaaS Solution. This solution will use AWS Codepipeline to deploy all the control plane infrastructure component of Networking, Compute, Database, Monitoring & Logging and Security alongwith the control plane application using helm chart. This solution will also setup tenant codebuild projects which is responsible for onboarding of new silo/pooled tenant. Each tenant will have it's own infrastructure and application helm chart Which will be managed using gitops tool like ArgoCD and Argo Workflow. This solution will also have strict IAM policy and Kubernetes Authorization Policy for tenants to avoid cross namespace access.
+SourceFuse Reference Architecture to implement a sample EKS Multi-Tenant SaaS Solution. This solution will use AWS Codepipeline to deploy all the control plane infrastructure component of Networking, Compute, Database, Monitoring & Logging and Security alongwith the control plane application using helm chart. This solution will also setup tenant codebuild projects which is responsible for onboarding of new silo and pooled tenant. Each tenant will have it's own infrastructure and application helm chart Which will be managed using gitops tool like ArgoCD and Argo Workflow. This solution will also have strict IAM policy and Kubernetes Authorization Policy for tenants to avoid cross namespace access.
 
 ## Requirements
 
@@ -32,26 +32,31 @@ SourceFuse Reference Architecture to implement a sample EKS Multi-Tenant SaaS So
 
 1. If you don't have registered domain in Route53 then [register domain in Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html).
 2. Generate Public Certificate for the domain using [AWS ACM](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html). (please ensure to give both wildcard and root domain in Fully qualified domain name while generating ACM, e.g. if domain name is xyz.com then use both xyz.com & *.xyz.com in ACM)
-3. SES account should be setup in production mode and domain identity should be verified. [Generate smtp credentials](https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html) and store them in ssm parameter store. (using parameter name - /{namespace}/ses_access_key & /{namespace}/ses_secret_access_key where **namespace** is project name)
-4. [Generate http credentials](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html#setting-up-gc-iam) for your IAM user and store them in ssm parameter. (using parameter name - /{namespace}/https_connection_user & /{namespace}/https_connection_password where **namespace** is project name)
-5. Create a [codepipeline connection for github](https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html). Please make sure to update the connection name in **tfvars** file of terraform/core-infra-pipeline folder.
+3. SES account should be setup in production mode and **domain** should be verified. [Generate smtp credentials](https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html) and store them in ssm parameter store as SecureString. (using parameter name - /{namespace}/ses_access_key & /{namespace}/ses_secret_access_key where **namespace** is project name)
+4. [Generate http credentials](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html#setting-up-gc-iam) for your IAM user and store them in ssm parameter as SecureString. (using parameter name - /{namespace}/https_connection_user & /{namespace}/https_connection_password where **namespace** is project name)
+5. Create a [codepipeline connection for github](https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html) with your github account.
 6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in **.tfvars** file of client-vpn folder.
 
 
 ## Setting up the environment
 
-First clone the Github repository. Update the variables like **namespace**,**environment**,**region**,**domain_name** etc. in the respective **tfvars** file of terraform folder. Also, make sure to update the variables in the script files of terraform/tenant-codebuilds folder.
+* First clone/fork the Github repository. 
+* Based on the environment, create **{env}.tfvars** file in all terraform folders and copy the values from dev.tfvars.
+* Update the variables **namespace**,**environment**,**region**,**domain_name** etc. in the **script/replace-variable.sh** file. It will replace these common variables in all tfvars and script files.
+* Execute the script using command *./scripts/replace-variable.sh*
+* Update the codepipeline connection name (created in pre-requisite section) and github repository name in **{env}.tfvars** file of terraform/core-infra-pipeline folder.
+* Go thorugh all the variables decalred in tfvars file and update variables according to requirement.
 
-Once the required variables are updated, We will setup terraform codepipeline which will deploy all control plane infrastructure components. We have multiple option to do that - 
+Once the variables are updated, We will setup terraform codepipeline which will deploy all control plane infrastructure components alongwith control plane helm. We have multiple option to do that - 
 
 1. Using Github Actions :: 
 
 > **_NOTE:_** We are using slef hosted github runners to execute workflow action. please follow [this](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners) document to setup runners.
 
-* First create an [IAM role for github workflow actions](https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/) and update the role name and other required variables like environment etc. in workflow yaml files.
+* First create an [IAM role for github workflow actions](https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/) and update the role name and other required variables like environment etc. in workflow yaml files defined under **.github** directory.
 * Add **AWS_ACCOUNT_ID** in [github repository secret](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions).
-* Next, Make sure to update the environment variable in *scripts/update-backend-config.sh* file.
-* Execute the workflow of *apply-bootstrap.yaml* & *apply-pipeline.yaml* by updating the github events in these files. Currently these workflows will be executed when pull request will be merged to main branch so change the invocation of these workflow files according to you. 
+* Execute the workflow of *apply-bootstrap.yaml* & *apply-pipeline.yaml* by updating the github events in these files. Currently these workflows will be executed when pull request will be merged to main branch so change the invocation of these workflow files according to you.
+* Push the code to your github repository.
 
 
 > **_NOTE:_** If you want to run other workflows, which are terraform plans, make sure to update the workflow files. Terraform bootstrap is one time activity so once bootstrap workflow is executed, please disable that to run again.
@@ -69,7 +74,9 @@ AWS CLI version2 & Terraform CLI version 1.7 must be installed on your machine. 
     terraform plan --var-file={env}.tfvars
     terraform apply --var-file={env}.tfvars
     ```
-* Now, Go to the terraform/core-infra-pipeline and update the *config.{env}.hcl* with bucket and dynamodb table name, created in above step. 
+* Now, Go to the terraform/core-infra-pipeline and update the bucket name, dynamodb table name (created in above step) and environment in **config.{env}.hcl**. 
+**_NOTE:_** Create *config.{env}.hcl* file based on the environment and copy the content from *config.dev.hcl*
+* Push the code to your github repository.
 * Run the Followign command to create terraform codepipeline - 
 
     ```
@@ -82,12 +89,12 @@ AWS CLI version2 & Terraform CLI version 1.7 must be installed on your machine. 
 
 once the codepipeline is created, it will be triggered when code will be merged to main branch as current release branch set to main in terraform pipeline folder (you can change it). When Codepipeline is executed successfully then register the following entry in route53 hosted zone of the domain, using Load Balancer DNS address.
 
-| Record Entry          | Description                     |
-|-----------------------|---------------------------------|
-| {domain-name}         | control-plane application URL.  |
-| argocd.{domain-name}  | ArgoCD URL                      |
-| argo.{domain-name}    | Argo Workflow URL               |
-| grafana.{domain-name} | Grafana Dashboard URL           |
+| Record Entry                   | Description                     |
+|-----------------------         |---------------------------------|
+| {domain-name}                  | control-plane application URL.  |
+| argocd.{domain-name}           | ArgoCD URL                      |
+| argo-workflow.{domain-name}    | Argo Workflow URL               |
+| grafana.{domain-name}          | Grafana Dashboard URL           |
 
 > **_NOTE:_** All authentication password will be saved in SSM Paramater store.
 

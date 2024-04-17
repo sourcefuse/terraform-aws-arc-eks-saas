@@ -232,8 +232,8 @@ spec:
             cp -r /home/terraform/pooled/infra/* /home/myuser/
             cd terraform/infra
             /bin/terraform init --backend-config=config.pooled.hcl
-            /bin/terraform plan --var-file=pooled.tfvars --refresh=false
-            /bin/terraform apply --var-file=pooled.tfvars --auto-approve
+            /bin/terraform plan --var-file=pooled.tfvars --refresh=false --lock=false
+            /bin/terraform apply --var-file=pooled.tfvars --auto-approve --lock=false
     EOT
   filename = "${path.module}/pooled-argo-workflow.yaml"
 }
