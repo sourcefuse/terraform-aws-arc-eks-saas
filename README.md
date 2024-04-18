@@ -30,11 +30,11 @@ SourceFuse Reference Architecture to implement a sample EKS Multi-Tenant SaaS So
 
 > :warning: Please ensure you are logged into AWS Account as an IAM user with Administrator privileges, not the root account user.
 
-1. If you don't have registered domain in Route53 then [register domain in Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html).
+1. If you don't have registered domain in Route53 then [register domain in Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html). (If you have domain registered with 3rd party registrars then [create hosted zone on route53](https://medium.com/weekly-webtips/how-to-integrate-3rd-party-domain-names-with-aws-route-53-for-your-website-webapp-7f6cd8ff36b6) for your domain.)
 2. Generate Public Certificate for the domain using [AWS ACM](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html). (please ensure to give both wildcard and root domain in Fully qualified domain name while generating ACM, e.g. if domain name is xyz.com then use both xyz.com & *.xyz.com in ACM)
 3. SES account should be setup in production mode and **domain** should be verified. [Generate smtp credentials](https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html) and store them in ssm parameter store as **SecureString**. (using parameter name - /{namespace}/ses_access_key & /{namespace}/ses_secret_access_key where **namespace** is project name)
 4. [Generate http credentials](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html#setting-up-gc-iam) for your IAM user and store them in ssm parameter as **SecureString**. (using parameter name - /{namespace}/https_connection_user & /{namespace}/https_connection_password where **namespace** is project name)
-5. Create a [codepipeline connection for github](https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html) with your github account.
+5. Create a [codepipeline connection for github](https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html) with your github account and repository.
 6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in **.tfvars** file of client-vpn folder.
 
 
@@ -88,7 +88,7 @@ AWS CLI version2 & Terraform CLI version 1.7 must be installed on your machine. 
 > **_NOTE:_** All Terraform module README files are present in respective folder.
 
 
-once the codepipeline is created, it will be triggered when code will be merged to main branch as current release branch set to main in terraform pipeline folder (you can change it). When Codepipeline is executed successfully then register the following entry in route53 hosted zone of the domain, using Load Balancer DNS address.
+Once the codepipeline is created, Monitor the pipeline and when Codepipeline is executed successfully then create the following records in route53 hosted zone of the domain, using Load Balancer DNS address.
 
 | Record Entry                   | Description                     |
 |-----------------------         |---------------------------------|
@@ -99,7 +99,7 @@ once the codepipeline is created, it will be triggered when code will be merged 
 
 > **_NOTE:_** All authentication password will be saved in SSM Paramater store.
 
-
+After Creating record in the Route53, you can access the control plane application using **{domain-name}** URL (eg. if your domain name is xyz.com then control plane will be accessible on xyz.com). Tenant onboarding can be done using the URL **{domain-name}/tenant/signup**. Once the tenant will be onboarded successfully then you can access the tenant application plane on URL **{tenant-key}.{domain-name}**
 
 ## Authors
 
