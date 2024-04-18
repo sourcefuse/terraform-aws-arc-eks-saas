@@ -41,7 +41,7 @@ module "codepipeline_role" {
     "Service" = ["codepipeline.amazonaws.com"]
   }
   policy_documents = [
-    join("", data.aws_iam_policy_document.codestar_access.*.json)
+    join("", data.aws_iam_policy_document.resource_full_access.*.json)
   ]
   policy_name        = "TerraformCodePipelinePolicy-${var.namespace}-${var.environment}"
   policy_description = "TerraformCodePipelinePolicy"

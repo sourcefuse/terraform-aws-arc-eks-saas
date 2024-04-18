@@ -6,7 +6,7 @@ data "aws_ssm_parameter" "artifact_bucket" {
   name = "/${var.namespace}/${var.environment}/artifact-bucket"
 }
 
-data "aws_iam_policy_document" "codestar_access" {
+data "aws_iam_policy_document" "resource_full_access" {
 
   statement {
     sid       = "FullAccess"
