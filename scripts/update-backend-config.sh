@@ -22,8 +22,8 @@ while getopts "u:d:" option; do
 done
 
 
-NAMESPACE="arc-saas"
-ENVIRONMENT="dev"
+NAMESPACE=arc-saas
+ENVIRONMENT=dev
 REGION="us-east-1"
 
 TF_STATE_BUCKET=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/terraform-state-bucket" --query 'Parameter.Value' --region "$REGION" --output text 2>/dev/null)

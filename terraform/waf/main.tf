@@ -229,7 +229,7 @@ module "waf" {
     {
       name     = "rule-11"
       action   = "allow"
-      priority = 11
+      priority = 60
 
       statement = {
         country_codes = ["US", "IN"]

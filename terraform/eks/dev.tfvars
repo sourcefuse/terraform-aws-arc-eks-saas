@@ -14,7 +14,7 @@ min_size                     = 3
 
 
 # When updating the Kubernetes version, also update the API and client-go version in test/src/go.mod
-kubernetes_version = "1.28"
+kubernetes_version = "1.29"
 
 map_additional_iam_users = []
 

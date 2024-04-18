@@ -46,15 +46,22 @@ data "aws_iam_policy_document" "codebuild_policy" {
       "s3:*",
       "es:*",
       "ec2:*",
-      "eks:Describe*",
+      "eks:*",
       "cognito-idp:*",
       "iam:*",
       "ssm:*",
-      "dynamodb:PutItem",
-      "dynamodb:GetItem",
-      "dynamodb:DeleteItem",
+      "dynamodb:*",
       "aps:*",
-      "kms:*"
+      "kms:*",
+      "logs:*",
+      "lambda:*",
+      "glue:*",
+      "SNS:*",
+      "cur:*",
+      "budgets:*",
+      "route53:*",
+      "elasticloadbalancing:DescribeLoadBalancers",
+      "codecommit:*"
     ]
     resources = ["*"]
   }
