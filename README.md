@@ -45,8 +45,10 @@ SourceFuse Reference Architecture to implement a sample EKS Multi-Tenant SaaS So
 * Update the variables **namespace**,**environment**,**region**,**domain_name** in the **script/replace-variable.sh** file.
 * Execute the script using command **./scripts/replace-variable.sh**
 * Update the codepipeline connection name (created in pre-requisite section) and github repository name in **{env}.tfvars** file of terraform/core-infra-pipeline folder.
+* Check if **AWSServiceRoleForAmazonOpenSearchService** Role is already created in your AWS account then set **create_iam_service_linked_role** variables to false in tfvars file of **terraform/opensearch** otherwise set it to true.
 * Update the ACM ((created in pre-requisite section)) ARN in **{env}.tfvars** file of terraform/istio folder.
 * Go thorugh all the variables decalred in tfvars file and update the variables according to your requirement.
+
 
 Once the variables are updated, We will setup terraform codepipeline which will deploy all control plane infrastructure components alongwith control plane helm. We have multiple option to do that - 
 
@@ -75,7 +77,7 @@ AWS CLI version2 & Terraform CLI version 1.7 must be installed on your machine. 
     terraform plan --var-file={env}.tfvars
     terraform apply --var-file={env}.tfvars
     ```
-* After that, Go to the **terraform/core-infra-pipeline** and update the bucket name, dynamodb table name (created in above step) and environment in **config.{env}.hcl**. 
+* After that, Go to the **terraform/core-infra-pipeline** and update the bucket name, dynamodb table name (created in above step) and region in **config.{env}.hcl**. 
 **_NOTE:_** Create *config.{env}.hcl* file based on the environment and copy the content from *config.dev.hcl*
 * Push the code to your github repository.
 * Run the Followign command to create terraform codepipeline - 

@@ -41,11 +41,18 @@ module "codepipeline_role" {
     "Service" = ["codepipeline.amazonaws.com"]
   }
   policy_documents = [
-    join("", data.aws_iam_policy_document.resource_full_access.*.json)
+    join("", data.aws_iam_policy_document.codestar_access.*.json)
   ]
   policy_name        = "TerraformCodePipelinePolicy-${var.namespace}-${var.environment}"
   policy_description = "TerraformCodePipelinePolicy"
   tags               = module.tags.tags
+}
+
+resource "aws_iam_role_policy_attachment" "codepipeline_role_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = "TerraformCodePipelineRole-${var.namespace}-${var.environment}"
+
+  depends_on = [module.codepipeline_role]
 }
 
 ############################################################################################
