@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "codestar_access" {
     sid       = "FullAccess"
     effect    = "Allow"
     actions   = [
-      "codestar-connections:UseConnection"
+      "*"
       ]
     resources = ["*"]
   }
