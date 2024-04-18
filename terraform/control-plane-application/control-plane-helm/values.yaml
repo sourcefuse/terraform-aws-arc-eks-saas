@@ -427,6 +427,7 @@ controlPlaneHost: ${CONTROL_PLANE_HOST_DOMAIN}
 domain: ${DOMAIN}
 arn: ${WEB_IDENTITY_ROLE_ARN}
 namespace: ${NAMESPACE}
+projectName: ${namespace}
 # ssm parameter name
 dbhost: ${DB_HOST}
 dbport: ${DB_PORT}
