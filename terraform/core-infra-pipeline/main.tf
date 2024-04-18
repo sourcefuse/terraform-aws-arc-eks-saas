@@ -48,12 +48,12 @@ module "codepipeline_role" {
   tags               = module.tags.tags
 }
 
-resource "aws_iam_role_policy_attachment" "codepipeline_role_attachment" {
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-  role       = "TerraformCodePipelineRole-${var.namespace}-${var.environment}"
+# resource "aws_iam_role_policy_attachment" "codepipeline_role_attachment" {
+#   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+#   role       = "TerraformCodePipelineRole-${var.namespace}-${var.environment}"
 
-  depends_on = [module.codepipeline_role]
-}
+#   depends_on = [module.codepipeline_role]
+# }
 
 ############################################################################################
 ## Codepipeline
