@@ -79,8 +79,7 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_control_plane_host"></a> [control\_plane\_host](#input\_control\_plane\_host) | Enter control plane host where application will be deployed | `string` | `"arc-saas.net"` | no |
-| <a name="input_domain"></a> [domain](#input\_domain) | Enter Registered Domain Name | `string` | `"arc-saas.net"` | no |
+| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Enter Registered Domain Name | `string` | `"arc-saas.net"` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | `"dev"` | no |
 | <a name="input_jwt_issuer"></a> [jwt\_issuer](#input\_jwt\_issuer) | JWT Issuer | `string` | `"control-plane"` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | `"arc-saas"` | no |
