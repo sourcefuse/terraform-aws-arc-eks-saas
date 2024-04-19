@@ -95,7 +95,7 @@ AWS CLI version2 & Terraform CLI version 1.7 must be installed on your machine. 
 Once the codepipeline is created, Monitor the pipeline and when Codepipeline is executed successfully then create the following records in route53 hosted zone of the domain, using Load Balancer DNS address.
 
 | Record Entry                   | Type   | Description                     |
-|-----------------------         |--------|---------------------------------|
+|--------------------------------|--------|---------------------------------|
 | {domain-name}                  |   A    | control-plane application URL.  |
 | argocd.{domain-name}           | CNAME  | ArgoCD URL                      |
 | argo-workflow.{domain-name}    | CNAME  | Argo Workflow URL               |
