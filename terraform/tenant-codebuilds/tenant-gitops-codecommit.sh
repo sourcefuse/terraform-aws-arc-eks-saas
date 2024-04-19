@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Set environment variables
-export export export export AWS_REGION=us-east-1
-export export export export NAMESPACE=arc-saas
-export export export export ENVIRONMENT=dev
+export AWS_REGION=us-east-1
+export NAMESPACE=arc-saas
+export ENVIRONMENT=dev
 
 # Change directory
 cd ../../samples/ || { echo "Failed to change directory"; exit 1; }
