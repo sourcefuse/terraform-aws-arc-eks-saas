@@ -79,7 +79,7 @@ AWS CLI version2 & Terraform CLI version 1.7 must be installed on your machine. 
     ```
 * After that, Go to the `terraform/core-infra-pipeline` and update the bucket name, dynamodb table name (created in above step) and region in `config.{env}.hcl`. 
 
-**_NOTE:_** Create *config.{env}.hcl* file based on the environment and copy the content from *config.dev.hcl*
+**_NOTE:_** Create `config.{env}.hcl` file based on the environment and copy the content from *config.dev.hcl*
 
 * Push the code to your github repository.
 * Run the Followign command to create terraform codepipeline - 
@@ -94,12 +94,12 @@ AWS CLI version2 & Terraform CLI version 1.7 must be installed on your machine. 
 
 Once the codepipeline is created, Monitor the pipeline and when Codepipeline is executed successfully then create the following records in route53 hosted zone of the domain, using Load Balancer DNS address.
 
-| Record Entry                   | Description                     |
-|-----------------------         |---------------------------------|
-| {domain-name}                  | control-plane application URL.  |
-| argocd.{domain-name}           | ArgoCD URL                      |
-| argo-workflow.{domain-name}    | Argo Workflow URL               |
-| grafana.{domain-name}          | Grafana Dashboard URL           |
+| Record Entry                   | Type   | Description                     |
+|-----------------------         |--------|---------------------------------|
+| {domain-name}                  |   A    | control-plane application URL.  |
+| argocd.{domain-name}           | CNAME  | ArgoCD URL                      |
+| argo-workflow.{domain-name}    | CNAME  | Argo Workflow URL               |
+| grafana.{domain-name}          | CNAME  | Grafana Dashboard URL           |
 
 > **_NOTE:_** All authentication password will be saved in SSM Paramater store.
 
