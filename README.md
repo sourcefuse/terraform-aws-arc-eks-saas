@@ -35,7 +35,7 @@ SourceFuse Reference Architecture to implement a sample EKS Multi-Tenant SaaS So
 3. SES account should be setup in production mode and **domain** should be verified. [Generate smtp credentials](https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html) and store them in ssm parameter store as **SecureString**. (using parameter name - /{namespace}/ses_access_key & /{namespace}/ses_secret_access_key where **namespace** is project name)
 4. [Generate http credentials](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html#setting-up-gc-iam) for your IAM user and store them in ssm parameter as **SecureString**. (using parameter name - /{namespace}/https_connection_user & /{namespace}/https_connection_password where **namespace** is project name)
 5. Create a [codepipeline connection for github](https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html) with your github account and repository.
-6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in **.tfvars** file of client-vpn folder.
+6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in **.tfvars** file of client-vpn folder. [follow [doc](doc/client-vpn-connection.md) to connect with VPN ]
 
 
 ## Setting up the environment
