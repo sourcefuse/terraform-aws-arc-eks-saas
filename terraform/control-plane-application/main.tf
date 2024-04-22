@@ -172,6 +172,7 @@ data "template_file" "helm_values_template" {
   template = file("${path.module}/control-plane-helm/values.yaml")
   vars = {
     NAMESPACE                 = local.kubernetes_ns
+    namespace                 = var.namespace
     TENANT_NAME               = var.tenant_name
     TENANT_EMAIL              = var.tenant_email
     COGNITO_USER              = var.user_name

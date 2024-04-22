@@ -7,11 +7,11 @@ NEW_ENVIRONMENT="dev"
 DOMAIN="arc-saas.net"
 
 # Find and replace the variables in all .sh files
-find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/export AWS_REGION=.*/export AWS_REGION=$NEW_AWS_REGION/g" {} +
-find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/export NAMESPACE=.*/export NAMESPACE=$NEW_NAMESPACE/g" {} +
-find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/export ENVIRONMENT=.*/export ENVIRONMENT=$NEW_ENVIRONMENT/g" {} +
+find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/AWS_REGION=.*/AWS_REGION=$NEW_AWS_REGION/g" {} +
+find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/NAMESPACE=.*/NAMESPACE=$NEW_NAMESPACE/g" {} +
+find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/ENVIRONMENT=.*/ENVIRONMENT=$NEW_ENVIRONMENT/g" {} +
 
-find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/AREGION=.*/REGION=$NEW_AWS_REGION/g" {} +
+find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/REGION=.*/REGION=$NEW_AWS_REGION/g" {} +
 find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/NAMESPACE=.*/NAMESPACE=$NEW_NAMESPACE/g" {} +
 find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i "s/ENVIRONMENT=.*/ENVIRONMENT=$NEW_ENVIRONMENT/g" {} +
 
