@@ -102,6 +102,7 @@ phases:
 
   post_build:
     commands:
+      - cd ..
       - export CODEBUILD_BUILD_POSTBUILD=1
       - sleep 300
       - node webhook.js
