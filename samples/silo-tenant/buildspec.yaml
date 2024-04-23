@@ -47,9 +47,9 @@ phases:
       - export TF_VAR_region="${AWS_REGION}"
       - export TF_VAR_tenant="${KEY}"
       - export TF_VAR_user_name="${USERNAME}"
-      - export TF_VAR_tenant_email="${TENANT_EMAIL}"
+      - export TF_VAR_tenant_email="${TENANT_ADMIN_EMAIL}"
       - export TF_VAR_domain_name="${DOMAIN_NAME}"
-      - export TF_VAR_tenant_name="${TENANT}"
+      - export TF_VAR_tenant_name="${TENANT_NAME}"
       - export TF_VAR_tenant_secret="${SECRET}"
       - export TF_VAR_tenant_id="${TENANT_ID}"
       - export TF_VAR_cluster_name="${EKS_CLUSTER_NAME}"
@@ -97,7 +97,7 @@ phases:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - sleep 300
-      - node webhook.js
+      - node ../webhook.js
       - python push_to_dynamodb.py
 
 

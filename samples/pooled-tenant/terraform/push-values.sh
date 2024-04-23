@@ -33,7 +33,7 @@ cp -r ../infra/*.hcl pooled/infra/terraform/infra/ || { echo "Failed to copy fil
 cp -r ../infra/*.tfvars pooled/infra/terraform/infra/ || { echo "Failed to copy files"; exit 1; }
 
 # Set origin URL
-git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to set remote URL"; exit 1; }
+git remote set-url origin codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to set remote URL"; exit 1; }
 
 # Check if main branch already exists
 if git show-ref --verify --quiet refs/heads/main; then

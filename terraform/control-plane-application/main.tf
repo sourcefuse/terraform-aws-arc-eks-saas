@@ -172,6 +172,7 @@ data "template_file" "helm_values_template" {
   template = file("${path.module}/control-plane-helm/values.yaml")
   vars = {
     NAMESPACE                 = local.kubernetes_ns
+    namespace                 = var.namespace
     TENANT_NAME               = var.tenant_name
     TENANT_EMAIL              = var.tenant_email
     COGNITO_USER              = var.user_name
@@ -179,8 +180,8 @@ data "template_file" "helm_values_template" {
     SILO_PIPELINE             = "${var.namespace}-${var.environment}-premium-codebuild-project"
     POOLED_PIPELINE           = "${var.namespace}-${var.environment}-standard-codebuild-project"
     REGION                    = var.region
-    CONTROL_PLANE_HOST_DOMAIN = var.control_plane_host
-    DOMAIN                    = var.domain
+    CONTROL_PLANE_HOST_DOMAIN = var.domain_name
+    DOMAIN                    = var.domain_name
     WEB_IDENTITY_ROLE_ARN     = module.control_plane_iam_role.arn
     DB_HOST                   = data.aws_ssm_parameter.db_host.name
     DB_PORT                   = data.aws_ssm_parameter.db_port.name

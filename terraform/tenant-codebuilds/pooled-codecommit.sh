@@ -25,7 +25,7 @@ cp -r ../pooled-tenant/* . || { echo "Failed to copy files"; exit 1; }
 
 
 # Set origin URL
-git remote set-url origin codecommit::us-east-1://${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to set remote URL"; exit 1; }
+git remote set-url origin codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to set remote URL"; exit 1; }
 
 # Check if main branch already exists
 if git show-ref --verify --quiet refs/heads/main; then

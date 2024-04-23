@@ -60,9 +60,6 @@
 | [aws_codestarconnections_connection.existing_github_connection](https://registry.terraform.io/providers/hashicorp/aws/5.4.0/docs/data-sources/codestarconnections_connection) | data source |
 | [aws_iam_policy_document.resource_full_access](https://registry.terraform.io/providers/hashicorp/aws/5.4.0/docs/data-sources/iam_policy_document) | data source |
 | [aws_ssm_parameter.artifact_bucket](https://registry.terraform.io/providers/hashicorp/aws/5.4.0/docs/data-sources/ssm_parameter) | data source |
-| [aws_subnets.private](https://registry.terraform.io/providers/hashicorp/aws/5.4.0/docs/data-sources/subnets) | data source |
-| [aws_subnets.public](https://registry.terraform.io/providers/hashicorp/aws/5.4.0/docs/data-sources/subnets) | data source |
-| [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/5.4.0/docs/data-sources/vpc) | data source |
 
 ## Inputs
 
