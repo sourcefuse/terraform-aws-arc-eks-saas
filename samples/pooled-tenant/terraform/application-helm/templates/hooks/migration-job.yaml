@@ -40,52 +40,52 @@ spec:
             mountPath: /mnt/api-token
             readOnly: true
         env:
-          - name: AUTHENTICATION_SERVICE_DB_HOST
+          - name: AUTHENTICATION_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: AUTHENTICATION_SERVICE_DB_PORT
+          - name: AUTHENTICATION_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: AUTHENTICATION_SERVICE_DB_USER
+          - name: AUTHENTICATION_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: AUTHENTICATION_SERVICE_DB_PASSWORD
+          - name: AUTHENTICATION_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: AUTHENTICATION_SERVICE_DB_DATABASE
+          - name: AUTHENTICATION_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: AUTHENTICATION_SERVICE_DB_DATABASE
-          - name: AUDIT_SERVICE_DB_HOST
+          - name: AUDIT_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: AUDIT_SERVICE_DB_PORT
+          - name: AUDIT_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: AUDIT_SERVICE_DB_USER
+          - name: AUDIT_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: AUDIT_SERVICE_DB_PASSWORD
+          - name: AUDIT_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: AUDIT_SERVICE_DB_DATABASE
+          - name: AUDIT_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
@@ -191,27 +191,27 @@ spec:
                 name: api-token
                 key: USER-TENANT-SERVICE_DB_DATABASE
           
-          - name: PRODUCT_SERVICE_DB_HOST
+          - name: PRODUCT_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: PRODUCT_SERVICE_DB_PORT
+          - name: PRODUCT_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: PRODUCT_SERVICE_DB_USER
+          - name: PRODUCT_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: PRODUCT_SERVICE_DB_PASSWORD
+          - name: PRODUCT_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: PRODUCT_SERVICE_DB_DATABASE
+          - name: PRODUCT_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
