@@ -17,9 +17,9 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = ">= 1.7.0"
     }
-    postgresql = {
-      source  = "cyrilgdn/postgresql"
-      version = "1.12.0"
+     postgresql = {
+      source = "ricochet1k/postgresql"
+      version = "1.20.2"
     }
 
   }

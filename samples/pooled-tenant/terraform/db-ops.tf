@@ -1,9 +1,9 @@
 provider "postgresql" {
-  host      = data.aws_ssm_parameter.db_host
-  port      = data.aws_ssm_parameter.db_port
+  host      = data.aws_ssm_parameter.db_host.value
+  port      = data.aws_ssm_parameter.db_port.value
   database  = "user"
-  username  = data.aws_ssm_parameter.db_user
-  password  = data.aws_ssm_parameter.db_password
+  username  = data.aws_ssm_parameter.db_user.value
+  password  = data.aws_ssm_parameter.db_password.value
   sslmode   = "require"
   superuser = false
 }
@@ -14,6 +14,7 @@ resource "random_string" "uuid" {
 }
 
 data "postgresql_query" "seed_user" {
+  count = var.first_pooled_user ? 0 : 1
   database = "user"
   query = <<-EOF
     SET search_path TO main, public;
