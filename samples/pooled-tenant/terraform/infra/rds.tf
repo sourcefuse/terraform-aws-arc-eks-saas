@@ -108,7 +108,11 @@ resource "postgresql_database" "video_db" {
   allow_connections = true
   depends_on        = [module.aurora]
 }
-
+resource "postgresql_database" "product_db" {
+  name              = var.productdbdatabase
+  allow_connections = true
+  depends_on        = [module.aurora]
+}
 ########################################################################
 ## Store DB Configs in Parameter Store
 ########################################################################

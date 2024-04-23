@@ -1,0 +1,15 @@
+{{- if .Values.productService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-product-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+data:
+      PORT: '{{ .Values.productService.port }}'
+      NODE_ENV: '{{ .Values.productService.node_env }}'
+      LOG_LEVEL: '{{ .Values.productService.log_level }}'
+      BASE_PATH: '{{ .Values.productService.base_path }}'
+{{- end}}
