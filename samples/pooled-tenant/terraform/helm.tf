@@ -121,6 +121,7 @@ data "template_file" "helm_values_template" {
     SCHEDULER_DATABASE    = data.aws_ssm_parameter.schedulerdbdatabase.name
     USER_DATABASE         = data.aws_ssm_parameter.userdbdatabase.name
     VIDEO_DATABASE        = data.aws_ssm_parameter.videodbdatabase.name
+    PRODUCT_DATABASE      = data.aws_ssm_parameter.productdbdatabase.name
     DOCKER_USERNAME       = data.aws_ssm_parameter.docker_username.value
     DOCKER_PASSWORD       = data.aws_ssm_parameter.docker_password.value
   }

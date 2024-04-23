@@ -191,6 +191,32 @@ spec:
                 name: api-token
                 key: USER-TENANT-SERVICE_DB_DATABASE
           
+          - name: PRODUCT-SERVICE_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: PRODUCT-SERVICE_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: PRODUCT-SERVICE_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: PRODUCT-SERVICE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: PRODUCT-SERVICE_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PRODUCT-SERVICE_DB_DATABASE
+          
           - name: TENANT_NAME
             value: {{ .Values.tenantName }}
           - name: TENANT_KEY

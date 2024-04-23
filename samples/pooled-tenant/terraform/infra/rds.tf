@@ -202,6 +202,13 @@ module "db_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "User Management Database Name"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/pooled/productdbdatabase"
+      value       = var.productdbdatabase
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Product Database Name"
     }
   ]
   tags       = module.tags.tags

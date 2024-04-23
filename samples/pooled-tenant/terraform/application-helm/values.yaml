@@ -433,3 +433,4 @@ notificationdbdatabase: ${NOTIFICATION_DATABASE}
 schedulerdbdatabase: ${SCHEDULER_DATABASE}
 userdbdatabase: ${USER_DATABASE}
 videodbdatabase: ${VIDEO_DATABASE}
+productdbdatabase: ${PRODUCT_DATABASE}

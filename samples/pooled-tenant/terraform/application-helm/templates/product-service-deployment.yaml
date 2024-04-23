@@ -67,6 +67,31 @@ spec:
           - configMapRef:
               name: {{ include "helm.fullname" . }}-cm-product-service
           env:
+          - name: AUDIT_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: AUDIT_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: AUDIT_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: AUDIT_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: AUDIT_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUDIT-SERVICE_DB_DATABASE
           - name: DB_HOST
             valueFrom:
               secretKeyRef:
@@ -91,7 +116,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: product-service_DB_DATABASE
+                key: PRODUCT-SERVICE_DB_DATABASE
           - name: DB_SCHEMA
             valueFrom:
               secretKeyRef:
