@@ -1,10 +1,10 @@
-region = "us-east-1"
+region = "us-west-2"
 environment = "dev"
-namespace = "arc-saas"
+namespace = "sf-arc-saas"
 min_pods            = 1
 max_pods            = 9
 common_name         = "arc-saas.net" #domain name supplied as common name.
 organization        = "Sourcefuse, Inc."
 alb_ingress_name    = "alb-external-ingress"
-acm_certificate_arn = "arn:aws:acm:us-east-1:471112653618:certificate/906cb286-116b-492b-bd7d-3a5f440deb1f"
+acm_certificate_arn = "arn:aws:acm:us-west-2:471112653618:certificate/1b5b65ee-2304-42db-a951-624ef4600c69"
 full_domain_name    = "*.arc-saas.net" #should always start with wildcard

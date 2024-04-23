@@ -1,3 +1,3 @@
-region = "us-east-1"
-namespace = "arc-saas"
+region = "us-west-2"
+namespace = "sf-arc-saas"
 environment = "dev"

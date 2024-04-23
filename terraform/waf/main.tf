@@ -78,21 +78,21 @@ module "waf" {
         metric_name                = "AWS-AWSManagedRulesAmazonIpReputationList"
       }
     },
-    {
-      name     = "AWS-AWSManagedRulesCommonRuleSet"
-      priority = 3
+    # {
+    #   name     = "AWS-AWSManagedRulesCommonRuleSet"
+    #   priority = 3
 
-      statement = {
-        name        = "AWSManagedRulesCommonRuleSet"
-        vendor_name = "AWS"
-      }
+    #   statement = {
+    #     name        = "AWSManagedRulesCommonRuleSet"
+    #     vendor_name = "AWS"
+    #   }
 
-      visibility_config = {
-        cloudwatch_metrics_enabled = true
-        sampled_requests_enabled   = true
-        metric_name                = "AWS-AWSManagedRulesCommonRuleSet"
-      }
-    },
+    #   visibility_config = {
+    #     cloudwatch_metrics_enabled = true
+    #     sampled_requests_enabled   = true
+    #     metric_name                = "AWS-AWSManagedRulesCommonRuleSet"
+    #   }
+    # },
     {
       name     = "AWS-AWSManagedRulesKnownBadInputsRuleSet"
       priority = 4
@@ -227,7 +227,7 @@ module "waf" {
       }
     },
     {
-      name     = "rule-11"
+      name     = "rule-60"
       action   = "allow"
       priority = 60
 
@@ -238,7 +238,7 @@ module "waf" {
       visibility_config = {
         cloudwatch_metrics_enabled = false
         sampled_requests_enabled   = false
-        metric_name                = "rule-11-metric"
+        metric_name                = "rule-60-metric"
       }
     }
   ]
@@ -265,7 +265,7 @@ module "waf" {
       action   = "block"
 
       statement = {
-        country_codes = ["US"]
+        country_codes = ["DE"]
       }
 
       visibility_config = {
