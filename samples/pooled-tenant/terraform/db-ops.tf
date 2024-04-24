@@ -48,7 +48,7 @@ WHERE
 
 INSERT INTO main.user_tenants(id, user_id, tenant_id, status, role_id)
 SELECT
-        '${random_string.uuid.result}',
+        'c739829b-57e7-49d8-bb23-8ccb2ca56765',
 (
         SELECT
             id
