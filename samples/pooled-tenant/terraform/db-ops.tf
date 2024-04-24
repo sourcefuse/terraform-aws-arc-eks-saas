@@ -87,7 +87,7 @@ module "tenant_db_password" {
 }
 
 resource "postgresql_role" "db_user" {
-  name     = ${var.tenant}
+  name     = "${var.tenant}"
   login    = true
   password = module.tenant_db_password.result
 }
@@ -97,7 +97,7 @@ module "db_ssm_parameters" {
   ssm_parameters = [
     {
       name        = "/${var.namespace}/${var.environment}/pooled-${var.tenant}/db_user"
-      value       = ${var.tenant}
+      value       = "${var.tenant}"
       type        = "String"
       overwrite   = "true"
       description = "Database User Name"
