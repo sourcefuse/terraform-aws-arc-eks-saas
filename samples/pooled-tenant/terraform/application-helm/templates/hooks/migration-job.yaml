@@ -221,18 +221,18 @@ spec:
             value: {{ .Values.tenantName }}
           - name: TENANT_KEY
             value: {{ .Values.tenantKey }}
-          - name: TENANT_SECRET
+          - name: SECRET
             value: {{ .Values.tenantSecret }}
           - name: TENANT_EMAIL
             value: {{ .Values.tenantEmail }}
-          - name: TENANT_CLIENT_ID
+          - name: CLIENT_ID
             value: {{ .Values.clientId }}
-          - name: TENANT_CLIENT_SECRET
+          - name: CLIENT_SECRET
             value: {{ .Values.publicKey }}
           - name: ADMIN_USER_TENANT_ID
             value: {{ .Values.adminUserTenantId }}
           - name: REDIRECT_URL
-            value: "https://{{ .Values.hostname }}/{{ .Values.frontend.home_path }}"
+            value: "https://{{ .Values.hostname }}{{ .Values.frontend.home_path }}"
           - name: USERNAME
             value: {{ .Values.cognitoUser }}
           - name: USER_SUB
