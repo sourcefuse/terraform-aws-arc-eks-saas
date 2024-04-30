@@ -3,7 +3,7 @@
 #############################################################################################
 module "eks_observability_module_build_step_role" {
   source           = "../../modules/iam-role"
-  role_name        = "terraform-eks-observability-module-build-step-role-${var.namespace}-${var.environment}"
+  role_name        = "terraform-eks-observability-role-${var.namespace}-${var.environment}"
   role_description = "terraform eks observability module build step role"
   principals = {
     "Service" : ["codebuild.amazonaws.com"]
@@ -11,7 +11,7 @@ module "eks_observability_module_build_step_role" {
   policy_documents = [
     join("", data.aws_iam_policy_document.resource_full_access.*.json)
   ]
-  policy_name        = "terraform-eks-observability-module-build-step-policy-${var.namespace}-${var.environment}"
+  policy_name        = "terraform-eks-observability-policy-${var.namespace}-${var.environment}"
   policy_description = "terraform eks observability module build step role"
   tags               = module.tags.tags
 }

@@ -265,7 +265,7 @@ module "waf" {
       action   = "block"
 
       statement = {
-        country_codes = ["US"]
+        country_codes = ["DE"]
       }
 
       visibility_config = {
