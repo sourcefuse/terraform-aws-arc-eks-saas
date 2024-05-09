@@ -7,11 +7,14 @@
   - [Kubernetes Objects](#kubernetes-objects)
   - [Logging And Monitoring](#logging-and-monitoring)
   - [Billing](#billing)
+  - [Control Plane Services](#control-plane-services)
+  - [Tenant Provisioning Codebuilds](#tenant-provisioning-codebuilds)
 - [Per-tenant Infrastructure](#per-tenant-infrastructure)
   - [Tenant Routing](#tenant-routing)
   - [Tenant Management](#tenant-management)
+- [Conclusion]
 
-  
+
 
 
 ## Introduction
@@ -130,9 +133,11 @@ We will also register each tenant application with argocd and tenant infrastruct
 
 ### Logging And Monitoring
 
-We are using AWS Opensearch for storing logs of the control-plane microservices as well as we are managing per tenant wise logs. We are creating separate opensearch indexes based on kubernetes namespaces using lua fluentbit script. We are also creating opensearch user and index patterns for each tenant. Each tenant will have access to it's own index pattern and it can not access application logs of other tenant namespace. Tenant specific indexes and users will be created on the fly using tenant provisioning codebuild.
+In a multi-tenant solution, robust monitoring and logging systems are indispensable for maintaining optimal performance, security, and compliance. By implementing tailored monitoring and logging strategies, administrators can ensure the seamless operation of each tenant's environment while safeguarding data integrity and privacy. Effective monitoring enables timely detection of anomalies and performance issues, while comprehensive logging facilitates detailed analysis, troubleshooting, and auditing. In this dynamic landscape, prioritizing monitoring and logging is key to delivering a secure and reliable multi-tenant solution.
 
-For monitoring, Mainly we are using Prometheus and Grafana. We have configured prometheus node-exporter and adot collector on EKS cluster to collect the metrices from naemspaces. These metrices can be visualised using Grafana dahsboards. We can visualize tenant wise API metrics as well. Here are some example of grafana Dashabords.
+Within our architecture, AWS OpenSearch serves as our chosen solution for storing control-plane microservices logs and managing logs on a per-tenant basis. We've implemented a strategy involving the creation of distinct OpenSearch indexes based on Kubernetes namespaces, facilitated by a FluentBit Lua script. Additionally, we're provisioning OpenSearch users and index patterns for each tenant, ensuring strict data isolation. Through dynamic tenant provisioning CodeBuild processes, tenant-specific indexes and users are generated, granting exclusive access to their respective index patterns while preventing access to logs from other tenant namespaces.
+
+In our monitoring setup, our primary tools are Prometheus and Grafana. We've set up Prometheus node-exporter and ADOT collector on the EKS cluster to gather metrics from various namespaces. These metrics are then visualized using Grafana dashboards. Our configuration enables us to visualize API metrics on a per-tenant basis as well. Below are examples of Grafana dashboards illustrating this functionality.
 
 ![Figure 5.1 - Grafana Dashboard1](static/monitoring/grafana-dashbaord1.png)
 ![Figure 5.2 - Grafana Dashboard2](static/monitoring/grafana-dashbaord2.png)
@@ -140,3 +145,35 @@ For monitoring, Mainly we are using Prometheus and Grafana. We have configured p
 Figure5 - Grafana Dashboards
 
 
+### Billing
+
+In a multi-tenant solution, efficient billing mechanisms are essential for accurately tracking resource usage and allocating costs among tenants. By implementing robust billing systems, providers can ensure fair and transparent billing practices while enabling tenants to monitor and manage their usage effectively. Effective billing solutions streamline the invoicing process, provide detailed usage reports, and support flexible pricing models tailored to the diverse needs of tenants
+
+With SaaS, tenants often share some or all of a system’s infrastructure resources. SaaS organizations often rely on some understanding of the cost per tenant as a key element of their broader economic and business model. This cost data can directly influence the pricing dimensions and tiering strategies that are adopted by a SaaS provider. 
+
+In our multi-tenant solution, achieving accurate billing is facilitated through the integration of Kubecost for resource cost monitoring and Cost and Usage Report visualization via Athena. We've configured Grafana dashboards to provide comprehensive insights into AWS costs, including tenant-specific breakdowns. While in a siloed model, calculating per-tenant costs is straightforward due to individual resource allocations, we've leveraged resource tagging to enable filtering for tenant-specific costs within the Cost and Usage Report. This technical approach ensures precise billing granularity and transparency in our multi-tenant environment. 
+
+Here is the flow of billing in our multi-tenant solution- 
+![Figure 6 - Billing](static/arc-saas-billing.png)
+Figure6 - Billing
+
+Utilizing Kubecost, we've implemented a methodology to extract cost data per namespace within the EKS cluster, enabling us to ascertain the per-tenant cost of application resources hosted on the cluster. Additionally, within Grafana dashboards, we've incorporated functionality to filter AWS resource costs based on tenant tags. This technical setup ensures precise delineation of costs at both the Kubernetes namespace and AWS resource levels, facilitating granular billing insights in our multi-tenant environment.
+
+![Figure 7.1 - Billing Dashboard1](static/monitoring/billing-dashbaord1.png)
+![Figure 7.2 - Billing Dashboard2](static/monitoring/billing-dashbaord2.png)
+![Figure 7.3 - Billing Dashboard3](static/monitoring/billing-dashbaord3.png)
+Figure7 - Billing Dashboards
+
+
+### Control Plane Services
+
+Within our control plane infrastructure, we incorporate essential microservices tailored to the functionalities of our EKS SaaS solution. These encompass Audit, Authentication, Tenant Management, Subscription, and User Management microservices, meticulously deployed using Helm package manager alongside Terraform for Infrastructure as Code (IAC). Leveraging DockerHub for image storage, we ensure continuous security scanning to identify and address any potential vulnerabilities. This technical framework underscores the foundation of our control plane, enabling robust and secure service delivery.
+
+### Tenant Provisioning Codebuilds
+
+We've established distinct CodeBuild projects, categorized as premium (featuring siloed compute and storage) and standard (incorporating pooled compute and storage), tailored to different tenant types for provisioning purposes. Each CodeBuild project is associated with its dedicated source, housed within a CodeCommit repository containing tenant-specific Terraform Infrastructure as Code (IAC) and application plane Helm charts. When onboarding a new tenant, the control plane service initiates the respective CodeBuild, orchestrating the provisioning process. Subsequently, upon completion of tenant onboarding, a webhook triggered via CodeBuild relays the provisioning status back to the control plane, ensuring seamless integration and visibility throughout the provisioning lifecycle.
+
+The tenant provisioning CodeBuild processes extend their functionality to include the transmission of tenant-specific data to a DynamoDB table and the registration of tenant applications on ArgoCD. Additionally, they facilitate the transmission of tenant-specific Helm values.yaml files and Terraform tfvars files to a GitOps management repository. This separate repository serves as a centralized hub for managing the lifecycle of tenant infrastructure and application services, enhancing efficiency and control in maintaining the overall environment.
+
+
+## Per-tenant Infrastructure 
