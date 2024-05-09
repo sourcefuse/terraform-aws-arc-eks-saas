@@ -3,6 +3,15 @@
   - [Tenant Onboarding](#tenant-onboarding)
   - [Tenant Isolation Models](#tenant-isolation-models)
 - [AWS Architecture](#aws-architecture)
+  - [EKS Cluster](#eks-cluster)
+  - [Kubernetes Objects](#kubernetes-objects)
+  - [Logging And Monitoring](#logging-and-monitoring)
+  - [Billing](#billing)
+- [Per-tenant Infrastructure](#per-tenant-infrastructure)
+  - [Tenant Routing](#tenant-routing)
+  - [Tenant Management](#tenant-management)
+
+  
 
 
 ## Introduction
@@ -89,9 +98,45 @@ Figure3 descibes two level of different isolation. At the top of the diagram, yo
 
 ## AWS Architecture
 
-In the Figure2, We have described how multi-tenant SaaS solution is deployed on AWS. This infrastructure is comprised of the actual EKS cluster that hosts our service. It also includes the required supporting infrastructure, such as IAM, RDS, S3 buckets, monitoring and logging tools etc. 
+Having grasped the key concepts in motion, let's explore the underlying architecture and observe the tangible architectural elements formed during the setup of the SaaS EKS solution.
+
+In the Figure4, We have described how multi-tenant SaaS solution is deployed on AWS. This infrastructure is comprised of the actual EKS cluster that hosts our service. It also includes the required supporting infrastructure, such as IAM, RDS, WAF, Cognito, S3 buckets, tenant provisioning codebuilds, monitoring and logging tools etc.
+
+The entire solution is built and deployed using terraform infrastructure as a code (IAC). To deploy the each component of the AWS architecture, we have either used ARC IAC terraform modules or we have written the modules to avoid repeatable code.
+
+We have configured codepipeline using terraform to deploy the complete control-plane infrastructure which will also deploy the microservices for control-plane/admin-plane. Please see the README.md file in the root directory of the repository for the rolling out multi-tenant EKS SAAS solution.
 
 ![Figure 4 - AWS Physical EKS SaaS Architecture](static/ARC-SaaS-AWS-Physical-Architecture.png)
 Figure4 - AWS Physical EKS SaaS Architecture
 
-The EKS cluster, along with its corresponding virtual private cloud (VPC), subnets, and network address translation (NAT) gateways, etc are deployed via terraform. 
+The following is a breakdown of the key components of this baseline architecture.
+
+### EKS Cluster
+
+The EKS cluster, along with its corresponding VPC, subnets and NAT Gateways, is deployed via terraform IAC. The terraform scripts deploys a ready-to-use EKS cluster alongwith EKS addons like fluentbit, argocd, argo-workflow, karpenter etc. This cluster runs the pooled and the silo tenant environments of your EKS SaaS solution.
+
+EKS addon helps with logging configuration using fluentbit, managing tenant compute resources using karpenter and tenant application management using argo gitops. We have also configured kuberhealthy operator for synthetic monitoring on EKS cluster.
+
+All new tenant which will be onboarded to the system, will have separate namespace on cluster. Each namespace will have security policy and service account role attached to it.
+
+We have configured istio service mesh for inter-service routing, failure recovery, load balancing and security. Tenant routing will be managed through istio. We have also implemented Kiali to configure, visualize, validate and troubleshoot the istio service mesh.
+
+
+### Kubernetes Objects
+
+During Control Plane IAC deployment, we also need to configure the Kubernetes objects that needed to support the needs of our SaaS environment. The baseline configuration call uses kubectl to configure and deploy these constructs. This kubernetes objects like istio authorization policy, karpenter nodepool & ec2nodeclass, kuberhealthy health check, virtual service, gateways etc will be deployed using helm package manager. 
+
+We will also register each tenant application with argocd and tenant infrastructure workflow using argo-workflow using kubectl.
+
+### Logging And Monitoring
+
+We are using AWS Opensearch for storing logs of the control-plane microservices as well as we are managing per tenant wise logs. We are creating separate opensearch indexes based on kubernetes namespaces using lua fluentbit script. We are also creating opensearch user and index patterns for each tenant. Each tenant will have access to it's own index pattern and it can not access application logs of other tenant namespace. Tenant specific indexes and users will be created on the fly using tenant provisioning codebuild.
+
+For monitoring, Mainly we are using Prometheus and Grafana. We have configured prometheus node-exporter and adot collector on EKS cluster to collect the metrices from naemspaces. These metrices can be visualised using Grafana dahsboards. We can visualize tenant wise API metrics as well. Here are some example of grafana Dashabords.
+
+![Figure 5.1 - Grafana Dashboard1](static/monitoring/grafana-dashbaord1.png)
+![Figure 5.2 - Grafana Dashboard2](static/monitoring/grafana-dashbaord2.png)
+![Figure 5.3 - Grafana Dashboard3](static/monitoring/grafana-dashbaord3.png)
+Figure5 - Grafana Dashboards
+
+
