@@ -11,9 +11,9 @@
   - [Tenant Provisioning Codebuilds](#tenant-provisioning-codebuilds)
 - [Per-tenant Infrastructure](#per-tenant-infrastructure)
   - [Tenant Routing](#tenant-routing)
-  - [Tenant Management](#tenant-management)
-- [Conclusion]
-
+  - [Tenant Deployment And Management](#tenant-deployment-and-management)
+- [Conclusion](#conclusion)
+- [Authors](#authors)
 
 
 
@@ -177,3 +177,47 @@ The tenant provisioning CodeBuild processes extend their functionality to includ
 
 
 ## Per-tenant Infrastructure 
+
+Once the control plane infrastructure is established, the focus shifts towards configuring the necessary infrastructure to accommodate tenants during the onboarding process to the SaaS application. In our chosen architecture, we adopt a namespace-per-tenant model to enforce isolation, necessitating the deployment of distinct resources for each tenant. Below, we delve deeper into this isolation model to explain its technical details.
+
+Upon onboarding a new tenant into the multi-tenant system, its associated infrastructure will be provisioned utilizing Terraform Infrastructure as Code (IAC), while application-level microservices will be deployed via Helm charts in dedicated namespaces within the same cluster. Notably, these microservices and namespaces remain dormant until a tenant is successfully onboarded, ensuring resource allocation is demand-driven. Each tenant is allocated distinct IAM roles and security policies to mitigate potential disruptions from neighboring tenants. Our system accommodates two tenant models with differing characteristics.
+
+1. **Silo Tenant** : Every siloed tenant is allocated exclusive resources encompassing dedicated compute and storage layers, alongside additional components such as a Cognito user pool, Redis ElastiCache etc. Karpenter will provision compute node for silo tenants on the fly. Furthermore, each tenant is provisioned with its distinct application services. Tenant records are systematically registered on Route 53 for streamlined access as subdomain. An administrative user will be instantiated within the Cognito user pool, and its credentials will be disseminated to the designated email address associated with the tenant during the registration process. 
+
+2. **Pooled Tenant** : In the pooled tenant scenario, certain resources are pooled and shared among tenants, including compute nodes, storage databases, Cognito user pools, and Redis ElastiCache instances. However, each pooled tenant is assigned a unique application ID and user within the Cognito user pool. Application services for pooled tenants are deployed on a per-namespace basis, utilizing shared underlying compute resources. 
+
+The SaaS application is equipped with authentication guards, which automatically direct users to the hosted UI if authentication is not detected. Additionally, we've integrated monitoring, logging, and billing functionalities tailored to each tenant. Furthermore, the system dynamically generates tenant-specific OpenSearch users and indexes.
+
+
+### Tenant Routing
+
+As requests flow from the tenant into each of our microservice, the system must be able to identify the tenant that is associated with each request and route that request to the appropriate tenant namespace. There are multiple ways to address this routing requirement. For the EKS SaaS solution, We have implemented istio service mesh and also configured kiali to Configure, visualize, validate and troubleshoot this service mesh. Kiali is a console for Istio service mesh.
+
+Istio allows you to transparently add capabilities like observability, traffic management, and security. It is configured through terraform only. Istio provides secure service-to-service communication in a cluster with TLS encryption, strong identity-based authentication and authorization, Fine-grained control of traffic behavior with rich routing rules, retries, failovers, and fault injection. 
+
+![Figure 8 - Tenant Routing](static/arc-saas-tenant-routing.png)
+Figure8 - Tenant Routing
+
+Service mesh uses a proxy to intercept all your network traffic. An Envoy proxy is deployed along with each service that we deploy in cluster. On tenant provisoning, a gateway and a virtual service is deployed as part of kubernetes objects in the EKS cluster.
+
+
+### Tenant Deployment And Management
+
+![Figure 9 - Tenant Deployment And Management](static/arc-saas-tenant-deployment.png)
+Figure9 - Tenant Deployment And management
+
+Figure 9 illustrates the process flow for tenant deployment and management within the multi-tenant SaaS solution. The control plane initiates the CodeBuild process, which orchestrates the provisioning of the tenant. Upon successful onboarding, the infrastructure and application lifecycle of the tenant are managed using tools such as ArgoCD and Argo Workflow. This setup facilitates seamless management of updates to tenant infrastructure and application services. A distinct CodeCommit repository is utilized for housing tenant-specific Helm values and Terraform tfvars files, ensuring organized storage and management of these configuration artifacts.
+
+
+## Conclusion
+
+This document delved into the foundational components of the Amazon EKS SaaS solution, offering an overview of the key building blocks employed in its construction. It aims to provide a comprehensive understanding of the application's architecture and facilitate efficient navigation of the resources within the repository.
+
+We encourage thorough examination of the codebase and welcome feedback to inform the ongoing evolution of this environment. Anticipating continual enhancements to the solution, we remain committed to addressing emerging strategies and adapting accordingly.
+
+## Authors
+
+This project is authored by below people
+
+- SourceFuse ARC Team
+
