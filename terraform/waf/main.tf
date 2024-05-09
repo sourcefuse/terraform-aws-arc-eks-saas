@@ -87,6 +87,12 @@ module "waf" {
         vendor_name = "AWS"
       }
 
+      rule_action_override = {
+        NoUserAgent_HEADER = {
+          action = "allow"
+          }
+        }
+
       visibility_config = {
         cloudwatch_metrics_enabled = true
         sampled_requests_enabled   = true
