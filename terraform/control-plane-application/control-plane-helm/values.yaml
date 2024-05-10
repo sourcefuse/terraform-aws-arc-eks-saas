@@ -282,7 +282,7 @@ tenantMgmtService:
   port: 3000
   node_env: "production"
   log_level: "info"
-  from_email: demo@arc-saas.net
+  from_email: no-reply@arc-saas.net
   system_user_id: ""
   app_login_url: ""
   affinity: {}

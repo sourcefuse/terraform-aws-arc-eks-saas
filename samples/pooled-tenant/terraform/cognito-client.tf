@@ -7,7 +7,7 @@ module "cognito_password" {
   is_special  = true
   min_upper   = 1
   min_numeric = 1
-
+  min_special = 1
 }
 
 #####################################################################################
