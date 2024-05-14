@@ -1,12 +1,6 @@
 ################################################################################
 ## shared
 ################################################################################
-variable "helm_apply" {
-  type        = bool
-  description = "Set to true for applying tenant helm application"
-  default     = true
-}
-
 variable "region" {
   type        = string
   description = "AWS region"
@@ -94,12 +88,4 @@ variable "jwt_issuer" {
 variable "alb_url" {
   type        = string
   description = "ALB DNS Record"
-}
-
-##########################################################
-## Seed user
-##########################################################
-variable "first_pooled_user" {
-  default = true
-  description = "First pooled user"
 }
