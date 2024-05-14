@@ -100,6 +100,7 @@ phases:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - sleep 280
+      - export CREATE_USER=0
       - node ../webhook.js
       - python push_to_dynamodb.py
 
