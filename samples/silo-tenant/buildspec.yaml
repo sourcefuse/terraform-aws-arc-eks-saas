@@ -21,7 +21,6 @@ phases:
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
       - pip install boto3
       - ln -sf $WEBHOOK_PATH /usr/local/bin/webhook
-      - ls -la
 
     finally:
       - node $WEBHOOK_PATH
@@ -68,48 +67,48 @@ phases:
       - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
       - export TF_VAR_alb_url="${ALB_DNS}"
 
-      # # check if bootstrap need to be run or not
-      # - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
-      # - if [ -z "$PARAMETER_VALUE" ]; then 
-      #      is_bootstrap_creation=1;
-      #   else
-      #      is_bootstrap_creation=0;
-      #   fi
+      # check if bootstrap need to be run or not
+      - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
+      - if [ -z "$PARAMETER_VALUE" ]; then 
+           is_bootstrap_creation=1;
+        else
+           is_bootstrap_creation=0;
+        fi
 
-      # # Run Bootstrap to create terraform state s3 bucket
-      # - cd terraform/bootstrap
-      # - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
-      # - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
-      # - cd ..
+      # Run Bootstrap to create terraform state s3 bucket
+      - cd terraform/bootstrap
+      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
+      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
+      - cd ..
 
-      # # Configuing S3 backend
-      # - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
-      # - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
-      # - export TF_KEY=${KEY}/${KEY}.tfstate
-      # - envsubst < config.txt > config.${KEY}.hcl
-      # - envsubst <tfvariables.txt> ${KEY}.tfvars
+      # Configuing S3 backend
+      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_KEY=${KEY}/${KEY}.tfstate
+      - envsubst < config.txt > config.${KEY}.hcl
+      - envsubst <tfvariables.txt> ${KEY}.tfvars
 
-      # # Run Terraform to create infra and apply helm  
-      # - terraform init --backend-config=config.${KEY}.hcl
-      # - terraform apply -auto-approve
-      # - chmod +x push-values.sh
-      # - ./push-values.sh
-      # - kubectl apply -f argocd-application.yaml --namespace argocd || true
-      # - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
+      # Run Terraform to create infra and apply helm  
+      - terraform init --backend-config=config.${KEY}.hcl
+      - terraform apply -auto-approve
+      - chmod +x push-values.sh
+      - ./push-values.sh
+      - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     finally:
       # fetching cognito sub 
-      # - export COGNITO_AUTH_ID = $(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
-      # - echo "${COGNITO_AUTH_ID}"
+      - export COGNITO_AUTH_ID = $(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
+      - echo "${COGNITO_AUTH_ID}"
       - node $WEBHOOK_PATH
      
 
   post_build:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
-      #- sleep 280
+      - sleep 280
       - export CREATE_USER=0
       - node $WEBHOOK_PATH
-     # - python push_to_dynamodb.py
+      - python push_to_dynamodb.py
 
 
 

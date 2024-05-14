@@ -1,4 +1,9 @@
 version: 0.2
+
+env:
+  variables:
+    WEBHOOK_PATH: ./webhook.js
+
 phases:
   install:
     runtime-versions:
@@ -14,8 +19,9 @@ phases:
       - export PATH=$PWD/:$PATH
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
+      - ln -sf $WEBHOOK_PATH /usr/local/bin/webhook
     finally:
-      - node webhook.js
+      - node $WEBHOOK_PATH
   pre_build:
     on-failure: ABORT  
     commands:
@@ -27,7 +33,7 @@ phases:
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
     finally:
-      - node webhook.js
+      - node $WEBHOOK_PATH
   build:
     on-failure: ABORT
     commands:
@@ -100,14 +106,14 @@ phases:
     finally:
       - export COGNITO_AUTH_ID = $(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
       - echo "${COGNITO_AUTH_ID}"
-      - node webhook.js
+      - node $WEBHOOK_PATH
 
   post_build:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=1
       - sleep 280
-      - node ../webhook.js
+      - node $WEBHOOK_PATH
       - python push_to_dynamodb.py
 
 
