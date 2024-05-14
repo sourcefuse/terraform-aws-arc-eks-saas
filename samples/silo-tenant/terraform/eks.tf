@@ -10,30 +10,7 @@ module "route53-record" {
   ttl     = "60"
   values  = var.alb_url
 }
-######################################################################
-## Create Cognito User
-######################################################################
-module "cognito_password" {
-  source      = "../modules/random-password"
-  length      = 12
-  is_special  = true
-  min_upper   = 1
-  min_numeric = 1
 
-}
-
-resource "aws_cognito_user" "cognito_user" {
-  user_pool_id = module.aws_cognito_user_pool.id
-  username     = var.user_name
-
-  attributes = {
-    email          = var.tenant_email
-    email_verified = true
-  }
-  temporary_password = module.cognito_password.result
-
-  depends_on = [module.aws_cognito_user_pool]
-}
 
 ###############################################################################
 ## Tenant IAM Role
@@ -86,13 +63,6 @@ module "jwt_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "${var.tenant} JWT Secret"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/${var.user_name}/user_sub"
-      value       = aws_cognito_user.cognito_user.sub
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "${var.tenant} User Cognito Sub"
     }
   ]
   tags = module.tags.tags
