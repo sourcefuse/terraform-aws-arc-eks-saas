@@ -90,6 +90,9 @@ phases:
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     finally:
+      # fetching cognito sub 
+      - export COGNITO_AUTH_ID = $(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
+      - echo "${COGNITO_AUTH_ID}"
       - node webhook.js
      
 
