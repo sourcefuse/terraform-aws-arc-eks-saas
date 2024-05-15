@@ -7,6 +7,7 @@
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 1.7.0 |
 | <a name="requirement_opensearch"></a> [opensearch](#requirement\_opensearch) | 2.2.0 |
+| <a name="requirement_postgresql"></a> [postgresql](#requirement\_postgresql) | 1.20.2 |
 
 ## Providers
 
@@ -16,6 +17,7 @@
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
 | <a name="provider_local"></a> [local](#provider\_local) | n/a |
 | <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | 2.2.0 |
+| <a name="provider_postgresql"></a> [postgresql](#provider\_postgresql) | 1.20.2 |
 | <a name="provider_template"></a> [template](#provider\_template) | n/a |
 
 ## Modules
@@ -24,10 +26,12 @@
 |------|--------|---------|
 | <a name="module_cognito_password"></a> [cognito\_password](#module\_cognito\_password) | ../modules/random-password | n/a |
 | <a name="module_cognito_ssm_parameters"></a> [cognito\_ssm\_parameters](#module\_cognito\_ssm\_parameters) | ../modules/ssm-parameter | n/a |
+| <a name="module_db_ssm_parameters"></a> [db\_ssm\_parameters](#module\_db\_ssm\_parameters) | ../modules/ssm-parameter | n/a |
 | <a name="module_jwt_secret"></a> [jwt\_secret](#module\_jwt\_secret) | ../modules/random-password | n/a |
 | <a name="module_jwt_ssm_parameters"></a> [jwt\_ssm\_parameters](#module\_jwt\_ssm\_parameters) | ../modules/ssm-parameter | n/a |
 | <a name="module_route53-record"></a> [route53-record](#module\_route53-record) | clouddrove/route53-record/aws | 1.0.1 |
 | <a name="module_tags"></a> [tags](#module\_tags) | sourcefuse/arc-tags/aws | 1.2.5 |
+| <a name="module_tenant_db_password"></a> [tenant\_db\_password](#module\_tenant\_db\_password) | ../modules/random-password | n/a |
 | <a name="module_tenant_iam_role"></a> [tenant\_iam\_role](#module\_tenant\_iam\_role) | ../modules/iam-role | n/a |
 | <a name="module_tenant_opensearch_parameters"></a> [tenant\_opensearch\_parameters](#module\_tenant\_opensearch\_parameters) | ../modules/ssm-parameter | n/a |
 | <a name="module_tenant_opensearch_password"></a> [tenant\_opensearch\_password](#module\_tenant\_opensearch\_password) | ../modules/random-password | n/a |
@@ -49,6 +53,7 @@
 | [opensearch_roles_mapping.user_role_mapping1](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/roles_mapping) | resource |
 | [opensearch_roles_mapping.user_role_mapping2](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/roles_mapping) | resource |
 | [opensearch_user.tenant_user](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/user) | resource |
+| [postgresql_role.db_user](https://registry.terraform.io/providers/ricochet1k/postgresql/1.20.2/docs/resources/role) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_eks_cluster.EKScluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster) | data source |
 | [aws_eks_cluster_auth.EKScluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster_auth) | data source |

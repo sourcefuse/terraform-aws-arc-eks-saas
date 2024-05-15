@@ -66,7 +66,7 @@ tenantMgmtFacade:
   port: 3000
   node_env: "production"
   log_level: "info"
-  from_email: demo@arc-saas.net
+  from_email: no-reply@arc-saas.net
   csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
   affinity: {}
   allowed_origins: "*"
@@ -176,7 +176,6 @@ notificationService:
   port: 3000
   node_env: "production"
   log_level: "info"
-  smtp_host: email-smtp.us-east-1.amazonaws.com
   smtp_port: "587"
   affinity: {}
   allowed_origins: "*"
@@ -283,7 +282,7 @@ tenantMgmtService:
   port: 3000
   node_env: "production"
   log_level: "info"
-  from_email: demo@arc-saas.net
+  from_email: no-reply@arc-saas.net
   system_user_id: ""
   app_login_url: ""
   affinity: {}
@@ -428,6 +427,7 @@ controlPlaneHost: ${CONTROL_PLANE_HOST_DOMAIN}
 domain: ${DOMAIN}
 arn: ${WEB_IDENTITY_ROLE_ARN}
 namespace: ${NAMESPACE}
+projectName: ${namespace}
 # ssm parameter name
 dbhost: ${DB_HOST}
 dbport: ${DB_PORT}

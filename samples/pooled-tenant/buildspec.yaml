@@ -112,6 +112,7 @@ phases:
 
   post_build:
     commands:
+      - cd ..
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=1
       - sleep 280
