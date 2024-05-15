@@ -10,30 +10,7 @@ module "route53-record" {
   ttl     = "60"
   values  = var.alb_url
 }
-######################################################################
-## Create Cognito User
-######################################################################
-module "cognito_password" {
-  source      = "../modules/random-password"
-  length      = 12
-  is_special  = true
-  min_upper   = 1
-  min_numeric = 1
 
-}
-
-resource "aws_cognito_user" "cognito_user" {
-  user_pool_id = module.aws_cognito_user_pool.id
-  username     = var.user_name
-
-  attributes = {
-    email          = var.tenant_email
-    email_verified = true
-  }
-  temporary_password = module.cognito_password.result
-
-  depends_on = [module.aws_cognito_user_pool]
-}
 
 ###############################################################################
 ## Tenant IAM Role
@@ -129,6 +106,7 @@ data "template_file" "helm_values_template" {
     KARPENTER_ROLE        = var.karpenter_role
     EKS_CLUSTER_NAME      = var.cluster_name
     TENANT_HOST_NAME      = var.tenant_host_domain
+    USER_CALLBACK_SECRET  = var.user_callback_secret
     WEB_IDENTITY_ROLE_ARN = module.tenant_iam_role.arn
     DB_HOST               = data.aws_ssm_parameter.db_host.name
     DB_PORT               = data.aws_ssm_parameter.db_port.name

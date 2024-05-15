@@ -91,7 +91,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: AUDIT-SERVICE_DB_DATABASE
+                key: AUDIT_SERVICE_DB_DATABASE
           - name: DB_SCHEMA
             valueFrom:
               secretKeyRef:

@@ -1,12 +1,6 @@
 ################################################################################
 ## shared
 ################################################################################
-variable "helm_apply" {
-  type        = bool
-  description = "Set to true for applying tenant helm application"
-  default     = true
-}
-
 variable "region" {
   type        = string
   description = "AWS region"
@@ -69,6 +63,11 @@ variable "tenant_client_id" {
 variable "tenant_client_secret" {
   type        = string
   description = "tenant Client Secret"
+}
+
+variable "user_callback_secret" {
+  type = string 
+  description = "Secret for user tenant service"
 }
 
 variable "karpenter_role" {

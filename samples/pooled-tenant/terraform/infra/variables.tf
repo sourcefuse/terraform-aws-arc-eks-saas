@@ -191,6 +191,11 @@ variable "videodbdatabase" {
   default = "video"
 }
 
+variable "productdbdatabase" {
+  type    = string
+  default = "product"
+}
+
 ###################################################################################
 ## Redis Elasticache
 ###################################################################################

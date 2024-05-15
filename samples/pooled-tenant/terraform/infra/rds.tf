@@ -108,7 +108,11 @@ resource "postgresql_database" "video_db" {
   allow_connections = true
   depends_on        = [module.aurora]
 }
-
+resource "postgresql_database" "product_db" {
+  name              = var.productdbdatabase
+  allow_connections = true
+  depends_on        = [module.aurora]
+}
 ########################################################################
 ## Store DB Configs in Parameter Store
 ########################################################################
@@ -198,6 +202,13 @@ module "db_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "User Management Database Name"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/pooled/productdbdatabase"
+      value       = var.productdbdatabase
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Product Database Name"
     }
   ]
   tags       = module.tags.tags
