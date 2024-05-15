@@ -550,6 +550,11 @@ variable "tenant_secret" {
   description = "tenant secret"
 }
 
+variable "user_callback_secret" {
+  type = string 
+  description = "Secret for user tenant service"
+}
+
 variable "tenant_client_id" {
   type        = string
   description = "tenant Client ID"
