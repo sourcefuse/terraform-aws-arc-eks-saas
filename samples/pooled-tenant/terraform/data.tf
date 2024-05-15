@@ -154,6 +154,10 @@ data "aws_ssm_parameter" "videodbdatabase" {
   name = "/${var.namespace}/${var.environment}/pooled/videodbdatabase"
 }
 
+data "aws_ssm_parameter" "productdbdatabase" {
+  name = "/${var.namespace}/${var.environment}/pooled/productdbdatabase"
+}
+
 data "aws_ssm_parameter" "jwt_issuer" {
   name       = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_issuer"
   depends_on = [module.jwt_ssm_parameters]

@@ -61,7 +61,7 @@ frontend:
 #auditService
 auditService:
   enabled: true
-  repository: sourcefuse/tata-elxsi-poc-app-plane-audit-service
+  repository: sourcefuse/pooled-audit
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -96,7 +96,7 @@ auditService:
 #authenticationService
 authenticationService:
   enabled: true
-  repository: sourcefuse/tata-elxsi-poc-app-plane-authentication-service
+  repository: sourcefuse/pooled-authentication
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -268,11 +268,45 @@ videoConferencingService:
     targetMemoryUtilizationPercentage: 80
   base_path: /video-conferencing-service
 
+productService:
+  enabled: true
+  repository: sourcefuse/pooled-product
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /product-service
+
 #migrationJob
 migrationJob:
 #enable it when correct image has been provided
   enabled: true
-  repository: sourcefuse/tata-elxsi-poc-app-plane-migrations
+  repository: sourcefuse/pooled-migrations
   pullPolicy: Always
   tag: "1.0.0"
   replicaCount: 1
@@ -366,7 +400,8 @@ tenantEmail: ${TENANT_EMAIL}
 cognitoUser: ${COGNITO_USER}
 cognitoSub: ${COGNITO_USER_SUB}
 adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
-userCallbackSecret: "yugeyifgweyfgy"
+#userCallbackSecret: "yugeyifgweyfgy"
+userCallbackSecret: ${USER_CALLBACK_SECRET}
 
 # Frontend variable
 clientId: ${TENANT_CLIENT_ID}
@@ -399,3 +434,4 @@ notificationdbdatabase: ${NOTIFICATION_DATABASE}
 schedulerdbdatabase: ${SCHEDULER_DATABASE}
 userdbdatabase: ${USER_DATABASE}
 videodbdatabase: ${VIDEO_DATABASE}
+productdbdatabase: ${PRODUCT_DATABASE}

@@ -37,6 +37,7 @@
 | [postgresql_database.audit_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.authentication_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.notification_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
+| [postgresql_database.product_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.scheduler_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.user_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.video_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
@@ -108,6 +109,7 @@
 | <a name="input_password_policy"></a> [password\_policy](#input\_password\_policy) | A container for information about the user pool password policy | <pre>object({<br>    minimum_length                   = number,<br>    require_lowercase                = bool,<br>    require_numbers                  = bool,<br>    require_symbols                  = bool,<br>    require_uppercase                = bool,<br>    temporary_password_validity_days = number<br>  })</pre> | <pre>{<br>  "minimum_length": 10,<br>  "require_lowercase": true,<br>  "require_numbers": true,<br>  "require_symbols": true,<br>  "require_uppercase": true,<br>  "temporary_password_validity_days": 7<br>}</pre> | no |
 | <a name="input_performance_insights_enabled"></a> [performance\_insights\_enabled](#input\_performance\_insights\_enabled) | Whether to enable Performance Insights | `bool` | `true` | no |
 | <a name="input_performance_insights_retention_period"></a> [performance\_insights\_retention\_period](#input\_performance\_insights\_retention\_period) | Amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years) | `number` | `7` | no |
+| <a name="input_productdbdatabase"></a> [productdbdatabase](#input\_productdbdatabase) | n/a | `string` | `"product"` | no |
 | <a name="input_recovery_mechanisms"></a> [recovery\_mechanisms](#input\_recovery\_mechanisms) | The list of Account Recovery Options | `list(any)` | `[]` | no |
 | <a name="input_redis_database"></a> [redis\_database](#input\_redis\_database) | Redis Database | `string` | `"0"` | no |
 | <a name="input_redis_port"></a> [redis\_port](#input\_redis\_port) | Redis Port | `number` | `6379` | no |

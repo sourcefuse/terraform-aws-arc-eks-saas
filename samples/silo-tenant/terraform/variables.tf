@@ -530,12 +530,6 @@ variable "domain_name" {
 #################################################################################
 ## Helm
 #################################################################################
-variable "helm_apply" {
-  type        = bool
-  description = "Set to true for applying tenant helm application"
-  default     = true
-}
-
 variable "tenant_email" {
   type        = string
   description = "tenant Email"
@@ -554,6 +548,11 @@ variable "tenant_name" {
 variable "tenant_secret" {
   type        = string
   description = "tenant secret"
+}
+
+variable "user_callback_secret" {
+  type = string 
+  description = "Secret for user tenant service"
 }
 
 variable "tenant_client_id" {

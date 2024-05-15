@@ -68,6 +68,13 @@ module "cognito_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain Secret"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/${var.tenant}/${var.user_name}/user_sub"
+      value       = aws_cognito_user.cognito_user.sub
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "${var.tenant} User Cognito Sub"
     }
   ]
   tags = module.tags.tags

@@ -10,13 +10,14 @@ module "route53-record" {
   ttl     = "60"
   values  = var.alb_url
 }
+
 ###############################################################################
 ## Tenant IAM Role
 ###############################################################################
 module "tenant_iam_role" {
   source              = "../modules/iam-role"
-  role_name           = "${var.namespace}-${var.environment}-pooled-${var.tenant}-iam-role"
-  role_description    = "IAM role for pooled ${var.tenant} application"
+  role_name           = "${var.namespace}-${var.environment}-${var.tenant}-iam-role"
+  role_description    = "IAM role for ${var.tenant} application"
   assume_role_actions = ["sts:AssumeRoleWithWebIdentity"]
   principals = {
     "Federated" : ["arn:aws:iam::${local.sts_caller_arn}:oidc-provider/${local.oidc_arn}"]
@@ -28,11 +29,11 @@ module "tenant_iam_role" {
     {
       test     = "StringEquals"
       variable = "${local.oidc_arn}:sub"
-      values   = ["system:serviceaccount:${local.kubernetes_ns}:pooled-${var.tenant}"]
+      values   = ["system:serviceaccount:${local.kubernetes_ns}:${var.tenant}"]
     }
   ]
-  policy_name        = "${var.namespace}-${var.environment}-pooled-${var.tenant}-iam-policy"
-  policy_description = "IAM policy for pooled ${var.tenant} application"
+  policy_name        = "${var.namespace}-${var.environment}-${var.tenant}-iam-policy"
+  policy_description = "IAM policy for ${var.tenant} application"
   tags               = module.tags.tags
 }
 
@@ -49,18 +50,18 @@ module "jwt_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_issuer"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_issuer"
       value       = var.jwt_issuer
       type        = "SecureString"
       overwrite   = "true"
-      description = "pooled ${var.tenant} JWT Issuer"
+      description = "${var.tenant} JWT Issuer"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_secret"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_secret"
       value       = module.jwt_secret.result
       type        = "SecureString"
       overwrite   = "true"
-      description = "pooled ${var.tenant} JWT Secret"
+      description = "${var.tenant} JWT Secret"
     }
   ]
   tags = module.tags.tags
@@ -104,6 +105,7 @@ data "template_file" "helm_values_template" {
     KARPENTER_ROLE        = var.karpenter_role
     EKS_CLUSTER_NAME      = var.cluster_name
     TENANT_HOST_NAME      = var.tenant_host_domain
+    USER_CALLBACK_SECRET  = var.user_callback_secret
     WEB_IDENTITY_ROLE_ARN = module.tenant_iam_role.arn
     DB_HOST               = data.aws_ssm_parameter.db_host.name
     DB_PORT               = data.aws_ssm_parameter.db_port.name
@@ -142,7 +144,7 @@ resource "local_file" "helm_values" {
 #   recreate_pods    = true
 #   values           = [data.template_file.helm_values_template.rendered]
 #   depends_on = [
-#     module.tenant_iam_role, module.jwt_ssm_parameters, aws_cognito_user_pool_client.app_client
+#     module.tenant_iam_role, module.aurora, module.redis, module.aws_cognito_user_pool
 #   ]
 # }
 
@@ -154,17 +156,17 @@ resource "local_file" "argocd_application" {
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: pooled-${var.tenant}
+  name: ${var.tenant}
   namespace: argocd
   labels:
     Tenant: ${var.tenant} 
     Tenant_ID: ${var.tenant_id}
 spec:
   destination:
-    namespace: pooled-${var.tenant}
+    namespace: ${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: pooled/application
+    path: silo/application
     repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
     targetRevision: main
     helm:
@@ -188,57 +190,6 @@ spec:
 }
 
 #######################################################################################
-## Register Pooled Terraform Workflow on Argo
-#######################################################################################
-resource "local_file" "pooled_argo_workflow" {
-  content  = <<-EOT
-apiVersion: argoproj.io/v1alpha1
-kind: Workflow
-metadata:
-  name: pooled-terraform-workflow
-  namespace: argo-workflows
-spec:
-  entrypoint: terraform-apply
-  templates:
-    - name: terraform-apply
-      inputs:
-        artifacts:
-          - name: terraform
-            path: /home/terraform
-            git:
-              repo: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
-              depth: 1
-              usernameSecret:
-                name: codecommit-secret
-                key: username
-              passwordSecret:
-                name: codecommit-secret
-                key: password
-      container:
-        imagePullPolicy: "Always"
-        image: public.ecr.aws/f6f1e4v9/terraform:argo-terraform 
-        command:
-          - sh
-          - -c
-        args:
-          - |
-            export KUBECONFIG=$HOME/.kube/config
-            CREDENTIALS=$(aws sts assume-role --role-arn ${data.aws_ssm_parameter.codebuild_role.value} --role-session-name codebuild-kubectl --duration-seconds 3600)
-            export AWS_ACCESS_KEY_ID=$(echo "$CREDENTIALS" | jq -r '.Credentials.AccessKeyId')
-            export AWS_SECRET_ACCESS_KEY=$(echo "$CREDENTIALS" | jq -r '.Credentials.SecretAccessKey')
-            export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
-            export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
-            aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-            cp -r /home/terraform/pooled/infra/* /home/myuser/
-            cd terraform/infra
-            /bin/terraform init --backend-config=config.pooled.hcl
-            /bin/terraform plan --var-file=pooled.tfvars --refresh=false --lock=false
-            /bin/terraform apply --var-file=pooled.tfvars --auto-approve --lock=false
-    EOT
-  filename = "${path.module}/pooled-argo-workflow.yaml"
-}
-
-#######################################################################################
 ## Register Tenant Terraform Workflow on Argo
 #######################################################################################
 resource "local_file" "argo_workflow" {
@@ -246,7 +197,7 @@ resource "local_file" "argo_workflow" {
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: pooled-${var.tenant}-terraform-workflow
+  name: ${var.tenant}-terraform-workflow
   namespace: argo-workflows
 spec:
   entrypoint: terraform-apply
@@ -267,7 +218,7 @@ spec:
                 key: password
       container:
         imagePullPolicy: "Always"
-        image: public.ecr.aws/f6f1e4v9/terraform:argo-terraform 
+        image: public.ecr.aws/f6f1e4v9/terraform:argo-terraform
         command:
           - sh
           - -c
@@ -280,7 +231,7 @@ spec:
             export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
             export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-            cp -r /home/terraform/pooled/infra/* /home/myuser/
+            cp -r /home/terraform/silo/infra/* /home/myuser/
             cd terraform
             /bin/terraform init --backend-config=config.${var.tenant}.hcl
             /bin/terraform plan --var-file=${var.tenant}.tfvars --refresh=false
@@ -288,3 +239,4 @@ spec:
     EOT
   filename = "${path.module}/argo-workflow.yaml"
 }
+

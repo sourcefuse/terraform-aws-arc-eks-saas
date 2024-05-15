@@ -80,6 +80,7 @@
 | [aws_ssm_parameter.opensearch_domain](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.opensearch_password](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.opensearch_username](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
+| [aws_ssm_parameter.productdbdatabase](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.redis_database](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.redis_host](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.redis_port](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
@@ -99,7 +100,6 @@
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | EKS Cluster Name | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Enter Defeault Redirect URL | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
-| <a name="input_helm_apply"></a> [helm\_apply](#input\_helm\_apply) | Set to true for applying tenant helm application | `bool` | `true` | no |
 | <a name="input_jwt_issuer"></a> [jwt\_issuer](#input\_jwt\_issuer) | jwt issuer | `string` | n/a | yes |
 | <a name="input_karpenter_role"></a> [karpenter\_role](#input\_karpenter\_role) | EKS Karpenter Role | `string` | n/a | yes |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
@@ -112,6 +112,7 @@
 | <a name="input_tenant_id"></a> [tenant\_id](#input\_tenant\_id) | Tenat unique ID | `string` | n/a | yes |
 | <a name="input_tenant_name"></a> [tenant\_name](#input\_tenant\_name) | Tenant Name | `string` | n/a | yes |
 | <a name="input_tenant_secret"></a> [tenant\_secret](#input\_tenant\_secret) | tenant secret | `string` | n/a | yes |
+| <a name="input_user_callback_secret"></a> [user\_callback\_secret](#input\_user\_callback\_secret) | Secret for user tenant service | `string` | n/a | yes |
 | <a name="input_user_name"></a> [user\_name](#input\_user\_name) | cognito user | `string` | n/a | yes |
 
 ## Outputs

@@ -1,17 +1,17 @@
-{{- if .Values.authenticationService.enabled }}
+{{- if .Values.productService.enabled }}
 ---
 #Deployment
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm.fullname" . }}-authentication-service
+  name: {{ include "helm.fullname" . }}-product-service
   labels:
     app: {{ include "helm.fullname" . }}
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
-  replicas: {{ .Values.authenticationService.replicaCount }}
+  replicas: {{ .Values.productService.replicaCount }}
   strategy:
     type: {{ .Values.strategy.type }}
     rollingUpdate:
@@ -23,26 +23,26 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/cm-authentication-service.yaml") . | sha256sum }}
-        prometheus.io/path: {{ .Values.app.basePath }}/authentication-service/obf/metrics
+        checksum/config: {{ include (print $.Template.BasePath "/cm-product-service.yaml") . | sha256sum }}
+        prometheus.io/path: {{ .Values.app.basePath }}/product-service/obf/metrics
 {{- if .Values.extraAnnotations }} 
 {{ toYaml .Values.extraAnnotations | indent 8 }} 
 {{- end }}
       labels:
         app: {{ include "helm.fullname" . }}
-        component: authentication-service
+        component: product-service
         Tenant: {{ .Values.tenant }}
         Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
       containers:
-        - imagePullPolicy: {{ .Values.authenticationService.pullPolicy }}
+        - imagePullPolicy: {{ .Values.productService.pullPolicy }}
           resources:
-            {{- toYaml .Values.authenticationService.resources | nindent 12 }}
+            {{- toYaml .Values.productService.resources | nindent 12 }}
 {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.app.basePath }}/authentication-service
+              path: {{ .Values.app.basePath }}/product-service
               port: 3000
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -51,22 +51,47 @@ spec:
 {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.app.basePath }}/authentication-service
+              path: {{ .Values.app.basePath }}/product-service
               port: 3000
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
 {{- end }}
-          name: {{ include "helm.fullname" . }}-authentication-service
-          image: {{ .Values.authenticationService.repository }}:{{ .Values.authenticationService.tag }}
+          name: {{ include "helm.fullname" . }}-product-service
+          image: {{ .Values.productService.repository }}:{{ .Values.productService.tag }}
           volumeMounts:
           - name: my-api-token
             mountPath: /mnt/api-token
             readOnly: true
           envFrom:
           - configMapRef:
-              name: {{ include "helm.fullname" . }}-cm-authentication-service
+              name: {{ include "helm.fullname" . }}-cm-product-service
           env:
+          - name: AUDIT_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: AUDIT_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: AUDIT_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: AUDIT_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: AUDIT_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUDIT_SERVICE_DB_DATABASE
           - name: DB_HOST
             valueFrom:
               secretKeyRef:
@@ -91,7 +116,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: AUTHENTICATION_SERVICE_DB_DATABASE
+                key: PRODUCT_SERVICE_DB_DATABASE
           - name: DB_SCHEMA
             valueFrom:
               secretKeyRef:
@@ -129,21 +154,6 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
-          - name: COGNITO_AUTH_CLIENT_DOMAIN
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_DOMAIN
-          - name: COGNITO_AUTH_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_ID
-          - name: COGNITO_AUTH_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_SECRET
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
@@ -162,7 +172,7 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: {{ .Values.saname }}-aws-secrets
-{{- with .Values.authenticationService.affinity }}
+{{- with .Values.productService.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -170,25 +180,25 @@ spec:
 ---
 #HPA
 
-{{- if .Values.authenticationService.autoscaling.enabled }}
+{{- if .Values.productService.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "helm.fullname" . }}-authentication-service
+  name: {{ include "helm.fullname" . }}-product-service
   labels:
     app: {{ include "helm.fullname" . }}
-    component: authentication-service
+    component: product-service
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "helm.fullname" . }}-authentication-service
-  minReplicas: {{ .Values.authenticationService.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.authenticationService.autoscaling.maxReplicas }}
+    name: {{ include "helm.fullname" . }}-product-service
+  minReplicas: {{ .Values.productService.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.productService.autoscaling.maxReplicas }}
   metrics:
-  {{- with .Values.authenticationService.autoscaling.targetCPUUtilizationPercentage }}
+  {{- with .Values.productService.autoscaling.targetCPUUtilizationPercentage }}
   - type: Resource
     resource:
       name: cpu
@@ -196,7 +206,7 @@ spec:
         type: Utilization
         averageUtilization: {{ . }}
   {{- end }}
-  {{- with .Values.authenticationService.autoscaling.targetMemoryUtilizationPercentage }}
+  {{- with .Values.productService.autoscaling.targetMemoryUtilizationPercentage }}
   - type: Resource
     resource:
       name: memory
@@ -210,20 +220,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helm.fullname" . }}-authentication-service
+  name: {{ include "helm.fullname" . }}-product-service
   labels:
     app: {{ include "helm.fullname" . }}
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
-  type: {{ .Values.authenticationService.service.type }}
+  type: {{ .Values.productService.service.type }}
   ports:
-    - port: {{ .Values.authenticationService.service.port }}
-      targetPort: {{ .Values.authenticationService.service.targetPort }}
-      protocol: {{ .Values.authenticationService.service.protocol }}
+    - port: {{ .Values.productService.service.port }}
+      targetPort: {{ .Values.productService.service.targetPort }}
+      protocol: {{ .Values.productService.service.protocol }}
       name: web
   selector:
     app: {{ include "helm.fullname" . }}
-    component: authentication-service
+    component: product-service
 ---
 {{- end }}

@@ -40,56 +40,56 @@ spec:
             mountPath: /mnt/api-token
             readOnly: true
         env:
-          - name: AUTHENTICATION-SERVICE_DB_HOST
+          - name: AUTHENTICATION_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: AUTHENTICATION-SERVICE_DB_PORT
+          - name: AUTHENTICATION_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: AUTHENTICATION-SERVICE_DB_USER
+          - name: AUTHENTICATION_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: AUTHENTICATION-SERVICE_DB_PASSWORD
+          - name: AUTHENTICATION_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: AUTHENTICATION-SERVICE_DB_DATABASE
+          - name: AUTHENTICATION_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: AUTHENTICATION-SERVICE_DB_DATABASE
-          - name: AUDIT-SERVICE_DB_HOST
+                key: AUTHENTICATION_SERVICE_DB_DATABASE
+          - name: AUDIT_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: AUDIT-SERVICE_DB_PORT
+          - name: AUDIT_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: AUDIT-SERVICE_DB_USER
+          - name: AUDIT_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: AUDIT-SERVICE_DB_PASSWORD
+          - name: AUDIT_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: AUDIT-SERVICE_DB_DATABASE
+          - name: AUDIT_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: AUDIT-SERVICE_DB_DATABASE
+                key: AUDIT_SERVICE_DB_DATABASE
           - name: NOTIFICATION-SERVICE_DB_HOST
             valueFrom:
               secretKeyRef:
@@ -191,22 +191,48 @@ spec:
                 name: api-token
                 key: USER-TENANT-SERVICE_DB_DATABASE
           
+          - name: PRODUCT_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: PRODUCT_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: PRODUCT_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: PRODUCT_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: PRODUCT_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PRODUCT_SERVICE_DB_DATABASE
+          
           - name: TENANT_NAME
             value: {{ .Values.tenantName }}
           - name: TENANT_KEY
             value: {{ .Values.tenantKey }}
-          - name: TENANT_SECRET
+          - name: SECRET
             value: {{ .Values.tenantSecret }}
           - name: TENANT_EMAIL
             value: {{ .Values.tenantEmail }}
-          - name: TENANT_CLIENT_ID
+          - name: CLIENT_ID
             value: {{ .Values.clientId }}
-          - name: TENANT_CLIENT_SECRET
+          - name: CLIENT_SECRET
             value: {{ .Values.publicKey }}
           - name: ADMIN_USER_TENANT_ID
             value: {{ .Values.adminUserTenantId }}
           - name: REDIRECT_URL
-            value: "https://{{ .Values.hostname }}/{{ .Values.frontend.home_path }}"
+            value: "https://{{ .Values.hostname }}{{ .Values.frontend.home_path }}"
           - name: USERNAME
             value: {{ .Values.cognitoUser }}
           - name: USER_SUB

@@ -1,4 +1,9 @@
 version: 0.2
+
+env:
+  variables:
+    WEBHOOK_PATH: webhook.js
+
 phases:
   install:
     runtime-versions:
@@ -14,8 +19,9 @@ phases:
       - export PATH=$PWD/:$PATH
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
+      - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook
     finally:
-      - node webhook.js
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
   pre_build:
     on-failure: ABORT  
     commands:
@@ -27,7 +33,7 @@ phases:
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
     finally:
-      - node webhook.js
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
   build:
     on-failure: ABORT
     commands:
@@ -49,6 +55,7 @@ phases:
       - export TF_VAR_domain_name="${DOMAIN_NAME}"
       - export TF_VAR_tenant_name="${TENANT_NAME}"
       - export TF_VAR_tenant_secret="${SECRET}"
+      - export TF_VAR_user_callback_secret="${SECRET}"
       - export TF_VAR_tenant_id="${TENANT_ID}"
       - export TF_VAR_cluster_name="${EKS_CLUSTER_NAME}"
       - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"
@@ -97,15 +104,19 @@ phases:
       - kubectl apply -f pooled-argo-workflow.yaml --namespace argo-workflows || true
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
+      # fetching cognito user sub
+      - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
+      - echo "${COGNITO_AUTH_ID}"
     finally:
-      - node webhook.js
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
 
   post_build:
     commands:
       - cd ..
       - export CODEBUILD_BUILD_POSTBUILD=1
+      - export CREATE_USER=1
       - sleep 280
-      - node ../webhook.js
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
       - python push_to_dynamodb.py
 
 
