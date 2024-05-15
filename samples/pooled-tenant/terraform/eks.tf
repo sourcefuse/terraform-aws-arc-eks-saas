@@ -104,6 +104,7 @@ data "template_file" "helm_values_template" {
     KARPENTER_ROLE        = var.karpenter_role
     EKS_CLUSTER_NAME      = var.cluster_name
     TENANT_HOST_NAME      = var.tenant_host_domain
+    USER_CALLBACK_SECRET  = var.user_callback_secret
     WEB_IDENTITY_ROLE_ARN = module.tenant_iam_role.arn
     DB_HOST               = data.aws_ssm_parameter.db_host.name
     DB_PORT               = data.aws_ssm_parameter.db_port.name

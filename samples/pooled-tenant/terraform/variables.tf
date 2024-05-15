@@ -65,6 +65,11 @@ variable "tenant_client_secret" {
   description = "tenant Client Secret"
 }
 
+variable "user_callback_secret" {
+  type = string 
+  description = "Secret for user tenant service"
+}
+
 variable "karpenter_role" {
   type        = string
   description = "EKS Karpenter Role"
