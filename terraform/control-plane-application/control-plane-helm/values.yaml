@@ -99,7 +99,7 @@ auditService:
   enabled: true
   repository: sourcefuse/arc-saas-control-plane-audit-service
   pullPolicy: Always
-  tag: "v1"
+  tag: "v4"
   replicaCount: 1
   port: 3000
   node_env: "production"
