@@ -168,17 +168,17 @@ data "aws_ssm_parameter" "jwt_secret" {
   depends_on = [module.jwt_ssm_parameters]
 }
 
-data "aws_ssm_parameter" "opensearch_domain" {
-  name = "/${var.namespace}/${var.environment}/opensearch/domain_endpoint"
-}
+# data "aws_ssm_parameter" "opensearch_domain" {
+#   name = "/${var.namespace}/${var.environment}/opensearch/domain_endpoint"
+# }
 
-data "aws_ssm_parameter" "opensearch_username" {
-  name = "/${var.namespace}/${var.environment}/opensearch/admin_username"
-}
+# data "aws_ssm_parameter" "opensearch_username" {
+#   name = "/${var.namespace}/${var.environment}/opensearch/admin_username"
+# }
 
-data "aws_ssm_parameter" "opensearch_password" {
-  name = "/${var.namespace}/${var.environment}/opensearch/admin_password"
-}
+# data "aws_ssm_parameter" "opensearch_password" {
+#   name = "/${var.namespace}/${var.environment}/opensearch/admin_password"
+# }
 
 data "aws_ssm_parameter" "codebuild_role" {
   name = "/${var.namespace}/${var.environment}/codebuild_role"

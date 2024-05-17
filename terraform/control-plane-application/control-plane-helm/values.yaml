@@ -134,7 +134,7 @@ authenticationService:
   enabled: true
   repository: sourcefuse/arc-saas-control-plane-authentication-service
   pullPolicy: Always
-  tag: "v1"
+  tag: "v2"
   replicaCount: 1
   port: 3000
   node_env: "production"
