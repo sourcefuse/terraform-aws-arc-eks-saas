@@ -15,7 +15,6 @@ data:
       FROM_EMAIL: '{{ .Values.tenantMgmtService.from_email }}'
       NOTIFICATION_SERVICE_URL: 'https://{{ .Values.controlPlaneHost }}/notification-service'
       SUBSCRIPTION_SERVICE_URL: 'https://{{ .Values.controlPlaneHost }}/subscription-service'
-      APP_VALIDATE_URL: 'https://{{ .Values.controlPlaneHost }}/tenant/verify'
       APP_NAME: '{{ .Values.tenantKey}}'
       SILOED_PIPELINE: '{{ .Values.siloPipeline }}' 
       POOLED_PIPELINE: '{{ .Values.pooledPipeline }}'
