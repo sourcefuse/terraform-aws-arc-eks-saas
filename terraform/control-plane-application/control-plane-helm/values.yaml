@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: sourcefuse/arc-saas-control-plane-ui
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.3"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
@@ -317,7 +317,7 @@ migrationJob:
   enabled: true
   repository: sourcefuse/arc-saas-control-plane-migrations
   pullPolicy: Always
-  tag: "v1"
+  tag: "v2"
   replicaCount: 1
   affinity: {}
   allowed_origins: "*"
