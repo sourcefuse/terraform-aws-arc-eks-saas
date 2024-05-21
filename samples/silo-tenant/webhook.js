@@ -23,6 +23,7 @@ async function callWebhook() {
             },
           },
         ],
+        appPlaneUrl: process.env.APP_PLANE_REDIRECT_URL
       },
     });
 
