@@ -40,7 +40,7 @@ async function callWebhook() {
     authClient: {
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      redirectUrl: process.env.REDIRECT_URL,
+      redirectUrl: process.env.APP_PLANE_REDIRECT_URL,
       secret: process.env.RANDOM_SECRET,
       accessTokenExpiration: Number(process.env.ACCESS_TOKEN_EXPIRATION),
       refreshTokenExpiration: Number(process.env.REFRESH_TOKEN_EXPIRATION),
