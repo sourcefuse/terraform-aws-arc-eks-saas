@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: sourcefuse/arc-saas-control-plane-ui
   pullPolicy: Always
-  tag: "0.0.6"
+  tag: "0.0.5"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
