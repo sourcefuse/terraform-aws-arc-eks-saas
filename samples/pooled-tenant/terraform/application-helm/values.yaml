@@ -25,7 +25,7 @@ readinessProbe:
 
 frontend:
   enabled: true
-  repository: sourcefuse/tata-elxsi-control-plane
+  repository: sourcefuse/tata-elxsi-application-plane
   pullPolicy: Always
   tag: "0.0.6"
   log_level: "info"
