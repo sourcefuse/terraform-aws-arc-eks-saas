@@ -306,7 +306,7 @@ productService:
 migrationJob:
 #enable it when correct image has been provided
   enabled: true
-  repository: sourcefuse/pooled-migrations
+  repository: sourcefuse/arc-saas-pooled-app-plane-migrations
   pullPolicy: Always
   tag: "1.0.0"
   replicaCount: 1
