@@ -25,9 +25,9 @@ readinessProbe:
 
 frontend:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-ui
+  repository: sourcefuse/tata-elxsi-control-plane
   pullPolicy: Always
-  tag: "0.0.5"
+  tag: "0.0.6"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
