@@ -78,6 +78,12 @@ resource "aws_iam_role_policy_attachment" "prometheus_managed_role_attachment" {
   role       = "${var.namespace}-${var.environment}-web-identity-role"
   depends_on = [module.web_identity_iam_role]
 }
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_role_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccessV2"
+  role       = "${var.namespace}-${var.environment}-web-identity-role"
+  depends_on = [module.web_identity_iam_role]
+}
 ################################################################################
 ## prometheus
 ################################################################################

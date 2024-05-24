@@ -99,7 +99,6 @@ phases:
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
       # fetching cognito user sub
       - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
-      - echo "${COGNITO_AUTH_ID}"
     finally:
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
      
