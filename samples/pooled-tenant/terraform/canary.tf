@@ -41,7 +41,7 @@ module "canary" {
     name   = "${var.tenant}-synthetic-canary"
     runtime_version = var.runtime_version
     take_screenshot = var.take_screenshot
-    api_hostname = "https://${tenant_host_domain}"
+    api_hostname = "https://${var.tenant_host_domain}"
     api_path = var.api_path
     reports-bucket = module.canary_infra.reports-bucket
     role = module.canary_infra.role
