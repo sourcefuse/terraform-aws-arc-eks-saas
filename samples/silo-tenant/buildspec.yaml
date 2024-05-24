@@ -107,7 +107,7 @@ phases:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=0
-      - sleep 280
+      - sleep 240
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
       - python push_to_dynamodb.py
 
