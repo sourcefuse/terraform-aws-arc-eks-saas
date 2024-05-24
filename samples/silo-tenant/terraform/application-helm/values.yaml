@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: sourcefuse/tata-elxsi-application-plane
   pullPolicy: Always
-  tag: "0.0.7"
+  tag: "0.0.8"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
