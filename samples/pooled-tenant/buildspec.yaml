@@ -105,8 +105,12 @@ phases:
       - kubectl apply -f pooled-argo-workflow.yaml --namespace argo-workflows || true
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
+      # run synthetic canary
+      - cd synthetic-canary
+      - envsubst < config.txt > config.${KEY}.hcl
       # fetching cognito user sub
       - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
+    
     finally:
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
 
@@ -115,7 +119,12 @@ phases:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=1
       - sleep 240
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH # To run the webhook which will send notification and create tenant first admin user in pooled database
+      # run canary terraform
+      - terraform init --backend-config=config.${KEY}.hcl
+      - terraform apply -auto-approve
+      - cd ..
+      # To run the webhook which will send notification and create tenant first admin user in pooled database
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
       - python push_to_dynamodb.py
 
 

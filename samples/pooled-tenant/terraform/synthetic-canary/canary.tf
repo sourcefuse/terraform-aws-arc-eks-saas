@@ -31,7 +31,7 @@ resource "aws_sns_topic_subscription" "canary_update_subscription" {
 
 // Setup of the common Infrastructure
 module "canary_infra" {
-  source     = "../modules/canary-infra"
+  source     = "../../modules/canary-infra"
   vpc_id     = data.aws_vpc.vpc.id
   subnet_ids = data.aws_subnets.private.ids
   tags       = module.tags.tags
@@ -39,7 +39,7 @@ module "canary_infra" {
 
 // Setup for one Canary. This section can be reused several time.
 module "canary" {
-  source            = "../modules/canary"
+  source            = "../../modules/canary"
   name              = "${var.tenant}-canary-run"
   runtime_version   = var.runtime_version
   take_screenshot   = var.take_screenshot
