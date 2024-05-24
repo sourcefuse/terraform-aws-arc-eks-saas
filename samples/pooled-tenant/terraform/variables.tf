@@ -94,3 +94,30 @@ variable "alb_url" {
   type        = string
   description = "ALB DNS Record"
 }
+
+###############################################################################
+## Canary
+###############################################################################
+variable "runtime_version" {
+    description= "Runtime version of the canary. Details: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_nodejs_puppeteer.html"
+    type = string
+    default = "syn-nodejs-puppeteer-3.7"
+}
+
+variable "take_screenshot" {
+    description= "If screenshot should be taken"
+    type = bool
+    default = true
+}
+
+variable "api_path" {
+    description= "The path for the API call , ex: /path?param=value."
+    type = string
+    default = "/main/home"
+}
+
+variable "frequency" {
+    description= "The frequency in minutes at which the canary should be run. The minimum is two minutes."
+    type = string
+    default = "6"
+}
