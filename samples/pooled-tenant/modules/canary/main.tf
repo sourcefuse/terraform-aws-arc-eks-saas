@@ -47,9 +47,7 @@ resource "aws_synthetics_canary" "canary_api_calls" {
     security_group_ids = [var.security_group_id]
   }
 
-  tags = {
-    Name = "canary"
-  }
+  tags = var.tags
 
   depends_on = [
     data.archive_file.lambda_canary_zip,
@@ -69,7 +67,7 @@ resource "aws_cloudwatch_metric_alarm" "canary_alarm" {
   threshold           = "90"
   alarm_actions       = [var.alert_sns_topic]
   alarm_description   = "Canary - ${var.name}"
-  dimensions          = {
+  dimensions = {
     CanaryName = var.name
   }
 }

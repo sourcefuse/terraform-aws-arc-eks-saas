@@ -17,14 +17,14 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = ">= 1.7.0"
     }
-     postgresql = {
-      source = "ricochet1k/postgresql"
+    postgresql = {
+      source  = "ricochet1k/postgresql"
       version = "1.20.2"
     }
     archive = {
-           source  = "hashicorp/archive"
-           version = "= 2.2.0"
-       }
+      source  = "hashicorp/archive"
+      version = "= 2.2.0"
+    }
 
   }
 

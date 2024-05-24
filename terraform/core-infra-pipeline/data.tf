@@ -9,11 +9,11 @@ data "aws_ssm_parameter" "artifact_bucket" {
 data "aws_iam_policy_document" "resource_full_access" {
 
   statement {
-    sid       = "FullAccess"
-    effect    = "Allow"
-    actions   = [
+    sid    = "FullAccess"
+    effect = "Allow"
+    actions = [
       "*"
-      ]
+    ]
     resources = ["*"]
   }
 }

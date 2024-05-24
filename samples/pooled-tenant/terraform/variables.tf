@@ -66,7 +66,7 @@ variable "tenant_client_secret" {
 }
 
 variable "user_callback_secret" {
-  type = string 
+  type        = string
   description = "Secret for user tenant service"
 }
 
@@ -99,25 +99,25 @@ variable "alb_url" {
 ## Canary
 ###############################################################################
 variable "runtime_version" {
-    description= "Runtime version of the canary. Details: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_nodejs_puppeteer.html"
-    type = string
-    default = "syn-nodejs-puppeteer-3.7"
+  description = "Runtime version of the canary. Details: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_nodejs_puppeteer.html"
+  type        = string
+  default     = "syn-nodejs-puppeteer-3.7"
 }
 
 variable "take_screenshot" {
-    description= "If screenshot should be taken"
-    type = bool
-    default = true
+  description = "If screenshot should be taken"
+  type        = bool
+  default     = true
 }
 
 variable "api_path" {
-    description= "The path for the API call , ex: /path?param=value."
-    type = string
-    default = "/main/home"
+  description = "The path for the API call , ex: /path?param=value."
+  type        = string
+  default     = "/main/home"
 }
 
 variable "frequency" {
-    description= "The frequency in minutes at which the canary should be run. The minimum is two minutes."
-    type = string
-    default = "6"
+  description = "The frequency in minutes at which the canary should be run. The minimum is two minutes."
+  type        = string
+  default     = "6"
 }

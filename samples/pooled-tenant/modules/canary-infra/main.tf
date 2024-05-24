@@ -6,9 +6,7 @@ resource "aws_s3_bucket" "canaries_reports_bucket" {
   bucket = "canaries-reports-bucket-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}"
   #checkov:skip=CKV_AWS_18:The bucket does not require access logging
   #checkov:skip=CKV_AWS_144:The bucket does not require cross-region replication
-  tags = {
-    Name = "canary"
-  }
+  tags = var.tags
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "canaries_reports_bucket_encryption_configuration" {
@@ -17,7 +15,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "canaries_reports_
   rule {
     apply_server_side_encryption_by_default {
       kms_master_key_id = aws_kms_key.canaries_reports_bucket_encryption_key.arn
-      sse_algorithm = "aws:kms"
+      sse_algorithm     = "aws:kms"
     }
   }
 }
@@ -42,10 +40,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "canaries_reports_bucket_lifecy
   }
 }
 
-resource "aws_s3_bucket_acl" "canaries_reports_bucket_acl" {
-  bucket = aws_s3_bucket.canaries_reports_bucket.bucket
-  acl    = "private"
-}
+# resource "aws_s3_bucket_acl" "canaries_reports_bucket_acl" {
+#   bucket = aws_s3_bucket.canaries_reports_bucket.bucket
+#   acl    = "private"
+# }
 
 resource "aws_s3_bucket_public_access_block" "canaries_reports_bucket_block_public_access" {
   bucket                  = aws_s3_bucket.canaries_reports_bucket.id
@@ -58,12 +56,12 @@ resource "aws_s3_bucket_public_access_block" "canaries_reports_bucket_block_publ
 resource "aws_s3_bucket_policy" "canaries_reports_bucket-policy" {
   bucket = aws_s3_bucket.canaries_reports_bucket.id
   policy = jsonencode({
-    Version   = "2012-10-17"
-    Id        = "CanariesReportsBucketPolicy"
+    Version = "2012-10-17"
+    Id      = "CanariesReportsBucketPolicy"
     Statement = [
       {
-        Sid       = "Permissions"
-        Effect    = "Allow"
+        Sid    = "Permissions"
+        Effect = "Allow"
         Principal = {
           AWS = data.aws_caller_identity.current.account_id
         }
@@ -71,19 +69,19 @@ resource "aws_s3_bucket_policy" "canaries_reports_bucket-policy" {
         Resource = ["${aws_s3_bucket.canaries_reports_bucket.arn}/*"]
       },
       {
-        "Sid": "AllowSSLRequestsOnly",
-        "Action": "s3:*",
-        "Effect": "Deny",
-        "Resource": [
+        "Sid" : "AllowSSLRequestsOnly",
+        "Action" : "s3:*",
+        "Effect" : "Deny",
+        "Resource" : [
           aws_s3_bucket.canaries_reports_bucket.arn,
           "${aws_s3_bucket.canaries_reports_bucket.arn}/*"
         ],
-        "Condition": {
-          "Bool": {
-            "aws:SecureTransport": "false"
+        "Condition" : {
+          "Bool" : {
+            "aws:SecureTransport" : "false"
           }
         },
-        "Principal": "*"
+        "Principal" : "*"
       }
     ]
   })
@@ -106,9 +104,7 @@ resource "aws_iam_role" "canary-role" {
   assume_role_policy = data.aws_iam_policy_document.canary-assume-role-policy.json
   description        = "IAM role for AWS Synthetic Monitoring Canaries"
 
-  tags = {
-    Name = "canary"
-  }
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
@@ -118,8 +114,8 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
 
 data "aws_iam_policy_document" "canary-policy" {
   statement {
-    sid     = "CanaryS3Permission1"
-    effect  = "Allow"
+    sid    = "CanaryS3Permission1"
+    effect = "Allow"
     actions = [
       "s3:PutObject",
       "s3:GetBucketLocation",
@@ -132,8 +128,8 @@ data "aws_iam_policy_document" "canary-policy" {
   }
 
   statement {
-    sid     = "CanaryS3Permission2"
-    effect  = "Allow"
+    sid    = "CanaryS3Permission2"
+    effect = "Allow"
     actions = [
       "s3:ListAllMyBuckets"
     ]
@@ -143,8 +139,8 @@ data "aws_iam_policy_document" "canary-policy" {
   }
 
   statement {
-    sid     = "CanaryCloudWatchLogs"
-    effect  = "Allow"
+    sid    = "CanaryCloudWatchLogs"
+    effect = "Allow"
     actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
@@ -156,8 +152,8 @@ data "aws_iam_policy_document" "canary-policy" {
   }
 
   statement {
-    sid     = "CanaryCloudWatchAlarm"
-    effect  = "Allow"
+    sid    = "CanaryCloudWatchAlarm"
+    effect = "Allow"
     actions = [
       "cloudwatch:PutMetricData"
     ]
@@ -172,8 +168,8 @@ data "aws_iam_policy_document" "canary-policy" {
   }
 
   statement {
-    sid     = "CanaryinVPC"
-    effect  = "Allow"
+    sid    = "CanaryinVPC"
+    effect = "Allow"
     actions = [
       "ec2:DescribeNetworkInterfaces",
       "ec2:CreateNetworkInterface",
@@ -192,9 +188,7 @@ resource "aws_iam_policy" "canary-policy" {
   policy      = data.aws_iam_policy_document.canary-policy.json
   description = "IAM role for AWS Synthetic Monitoring Canaries"
 
-  tags = {
-    Name = "canary"
-  }
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "canary-policy-attachment" {
@@ -244,9 +238,7 @@ resource "aws_security_group" "canary_sg" {
     },
   ]
 
-  tags = {
-    Name = "canary"
-  }
+  tags = var.tags
 }
 
 resource "aws_security_group" "canary_endpoints_sg" {
@@ -268,24 +260,20 @@ resource "aws_security_group" "canary_endpoints_sg" {
     }
   ]
 
-  tags = {
-    Name = "canary"
-  }
+  tags = var.tags
 }
 
 
 resource "aws_vpc_endpoint" "canary_monitoring_endpoint" {
-  service_name      = "com.amazonaws.${data.aws_region.current.name}.monitoring"
-  vpc_id            = var.vpc_id
-  vpc_endpoint_type = "Interface"
+  service_name        = "com.amazonaws.${data.aws_region.current.name}.monitoring"
+  vpc_id              = var.vpc_id
+  vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
 
   security_group_ids = [aws_security_group.canary_endpoints_sg.id]
   subnet_ids         = var.subnet_ids
 
-  tags = {
-    Name = "canary"
-  }
+  tags = var.tags
 }
 
 resource "aws_vpc_endpoint" "canary_synthetics_endpoint" {
@@ -298,7 +286,5 @@ resource "aws_vpc_endpoint" "canary_synthetics_endpoint" {
   subnet_ids         = var.subnet_ids
 
 
-  tags = {
-    Name = "canary"
-  }
+  tags = var.tags
 }

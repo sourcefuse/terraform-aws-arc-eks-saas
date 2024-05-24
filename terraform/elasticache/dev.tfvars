@@ -1,6 +1,6 @@
-namespace = "sf-arc-saas"
-environment = "dev"
-region = "us-west-2"
+namespace                  = "sf-arc-saas"
+environment                = "dev"
+region                     = "us-west-2"
 instance_type              = "cache.t3.small"
 cluster_size               = 1
 family                     = "redis6.x"

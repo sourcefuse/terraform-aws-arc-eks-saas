@@ -1,6 +1,6 @@
 variable "tags" {
   type        = map(string)
-  description = "Tags to assign the security groups."
+  description = "Tags to assign the resources."
 }
 
 variable "parameter_defaults" {

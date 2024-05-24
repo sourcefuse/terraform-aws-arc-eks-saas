@@ -551,7 +551,7 @@ variable "tenant_secret" {
 }
 
 variable "user_callback_secret" {
-  type = string 
+  type        = string
   description = "Secret for user tenant service"
 }
 
