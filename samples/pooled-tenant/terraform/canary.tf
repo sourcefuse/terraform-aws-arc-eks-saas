@@ -38,7 +38,7 @@ module "canary_infra" {
 // Setup for one Canary. This section can be reused several time.
 module "canary" {
     source = "../modules/canary"
-    name   = "${var.tenant}-synthetic-canary"
+    name   = "${var.tenant}-canary-run"
     runtime_version = var.runtime_version
     take_screenshot = var.take_screenshot
     api_hostname = "https://${var.tenant_host_domain}"
