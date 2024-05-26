@@ -63,10 +63,10 @@ resource "aws_synthetics_canary" "main" {
   #   security_group_ids = 
   # }
 
-    run_config {
-    active_tracing = true
-    timeout_in_seconds = 60
-  }
+  #   run_config {
+  #   active_tracing = true
+  #   timeout_in_seconds = 60
+  # }
 
   schedule {
     expression = "rate(6 minutes)"
