@@ -59,16 +59,3 @@ variable "frequency" {
   type        = string
   default     = "6"
 }
-
-
-variable "endpointpath" {
-    description = "path - appended to the hostname for full api request"
-    type        = string
-    default = "/main/home"
-}
-
-variable "port" {
-    description = "port to target request on"
-    type        = string
-    default = "80"
-}
