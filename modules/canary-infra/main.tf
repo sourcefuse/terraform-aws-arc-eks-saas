@@ -197,7 +197,7 @@ resource "aws_iam_role_policy_attachment" "canary-policy-attachment" {
 }
 
 resource "aws_security_group" "canary_sg" {
-  name        = "canary_sg"
+  name        = "canary_security_group"
   description = "Allow canaries to call the services they need to call"
   vpc_id      = var.vpc_id
 
