@@ -120,7 +120,7 @@ phases:
       - cd synthetic-canary
       - envsubst < config.txt > config.hcl
       - terraform init --backend-config=config.hcl 
-      - terraform apply -auto-approve
+      - terraform apply -auto-approve --refresh=false
       - cd ..
       # To run the webhook which will send notification and create tenant first admin user in pooled database
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
