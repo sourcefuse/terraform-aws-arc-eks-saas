@@ -29,13 +29,6 @@ resource "aws_sns_topic_subscription" "canary_update_subscription" {
   endpoint  = var.tenant_email
 }
 
-// Setup of the common Infrastructure
-module "canary_infra" {
-  source     = "../../modules/canary-infra"
-  vpc_id     = data.aws_vpc.vpc.id
-  subnet_ids = data.aws_subnets.private.ids
-  tags       = module.tags.tags
-}
 
 // Setup for one Canary. This section can be reused several time.
 module "canary" {
@@ -45,9 +38,9 @@ module "canary" {
   take_screenshot   = var.take_screenshot
   api_hostname      = "https://${var.tenant_host_domain}"
   api_path          = var.api_path
-  reports-bucket    = module.canary_infra.reports-bucket
-  role              = module.canary_infra.role
-  security_group_id = module.canary_infra.security_group_id
+  reports-bucket    = data.aws_ssm_parameter.canary_report_bucket.value
+  role              = data.aws_ssm_parameter.canary_role.value
+  security_group_id = data.aws_ssm_parameter.canary_security_group.value
   subnet_ids        = data.aws_subnets.private.ids
   frequency         = var.frequency
   alert_sns_topic   = aws_sns_topic.canary_updates.id

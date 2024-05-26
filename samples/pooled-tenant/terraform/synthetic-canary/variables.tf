@@ -39,13 +39,13 @@ variable "tenant_host_domain" {
 variable "runtime_version" {
   description = "Runtime version of the canary. Details: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_nodejs_puppeteer.html"
   type        = string
-  default     = "syn-nodejs-puppeteer-3.7"
+  default     = "syn-nodejs-puppeteer-7.0"
 }
 
 variable "take_screenshot" {
   description = "If screenshot should be taken"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "api_path" {

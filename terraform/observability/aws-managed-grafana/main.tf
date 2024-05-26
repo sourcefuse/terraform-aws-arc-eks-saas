@@ -231,3 +231,44 @@ resource "helm_release" "kuberhealthy" {
 
   depends_on = [module.prometheus, module.grafana]
 }
+
+###############################################################################
+## Canary Infra Creation for Tenants Synthetic Monitoring
+###############################################################################
+module "canary_infra" {
+  source      = "../../..modules/canary-infra"
+  namespace   = var.namespace
+  environment = var.environment
+  vpc_id      = data.aws_vpc.vpc.id
+  subnet_ids  = data.aws_subnets.private.ids
+  tags        = module.tags.tags
+}
+
+
+module "canary_ssm_parameters" {
+  source = "../../../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/canary/report-bucket"
+      value       = module.canary_infra.reports-bucket
+      type        = "String"
+      overwrite   = "true"
+      description = "Canary S3 Report Bukcet"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/canary/security-group"
+      value       = module.canary_infra.security_group_id
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Canary Security Group ID"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/canary/role"
+      value       = module.canary_infra.role
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Canary IAM Role"
+    }
+  ]
+  tags = module.tags.tags
+}

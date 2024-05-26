@@ -120,7 +120,7 @@ phases:
       - export CREATE_USER=1
       - sleep 240
       # run canary terraform
-      - terraform init --backend-config=config.${KEY}.hcl
+      - terraform init --backend-config=config.${KEY}.hcl --refresh=false
       - terraform apply -auto-approve
       - cd ..
       # To run the webhook which will send notification and create tenant first admin user in pooled database

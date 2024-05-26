@@ -3,7 +3,7 @@ resource "aws_kms_key" "canaries_reports_bucket_encryption_key" {
 }
 
 resource "aws_s3_bucket" "canaries_reports_bucket" {
-  bucket = "canaries-reports-bucket-${data.aws_caller_identity.current.account_id}-${data.aws_region.current.name}"
+  bucket = "${var.namespace}-${var.environment}-canaries-reports-bucket-${data.aws_caller_identity.current.account_id}"
   #checkov:skip=CKV_AWS_18:The bucket does not require access logging
   #checkov:skip=CKV_AWS_144:The bucket does not require cross-region replication
   tags = var.tags
