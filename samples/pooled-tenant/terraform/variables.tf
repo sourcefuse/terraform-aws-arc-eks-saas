@@ -94,16 +94,3 @@ variable "alb_url" {
   type        = string
   description = "ALB DNS Record"
 }
-
-
-variable "take_screenshot" {
-  description = "If screenshot should be taken"
-  type        = bool
-  default     = false
-}
-
-variable "api_path" {
-  description = "The path for the API call , ex: /path?param=value."
-  type        = string
-  default     = "/main/home"
-}

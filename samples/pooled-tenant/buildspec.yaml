@@ -116,15 +116,15 @@ phases:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=1
       - sleep 240
-      # run synthetic canary
-      #- cd synthetic-canary
-      #- envsubst < config.txt > config.hcl
-      #- terraform init --backend-config=config.hcl 
-      #- terraform apply -auto-approve --refresh=false
-      #- cd ..
       # To run the webhook which will send notification and create tenant first admin user in pooled database
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
       - python push_to_dynamodb.py
+      # run synthetic canary
+      - cd synthetic-canary
+      - envsubst < config.txt > config.hcl
+      - terraform init --backend-config=config.hcl 
+      - terraform apply -auto-approve --refresh=false
+      
 
 
 

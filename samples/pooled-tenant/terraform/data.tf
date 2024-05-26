@@ -183,17 +183,3 @@ data "aws_ssm_parameter" "opensearch_password" {
 data "aws_ssm_parameter" "codebuild_role" {
   name = "/${var.namespace}/${var.environment}/codebuild_role"
 }
-
-
-
-data "aws_ssm_parameter" "canary_report_bucket" {
-  name = "/${var.namespace}/${var.environment}/canary/report-bucket"
-}
-
-data "aws_ssm_parameter" "canary_security_group" {
-  name = "/${var.namespace}/${var.environment}/canary/security-group"
-}
-
-data "aws_ssm_parameter" "canary_role" {
-  name = "/${var.namespace}/${var.environment}/canary/role"
-}

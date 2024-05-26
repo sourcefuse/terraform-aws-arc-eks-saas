@@ -110,6 +110,12 @@ phases:
       - sleep 240
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
       - python push_to_dynamodb.py
+      # Run tenant synthetic canary
+      - cd synthetic-canary
+      - envsubst < config.txt > config.hcl
+      - terraform init --backend-config=config.hcl 
+      - terraform apply -auto-approve --refresh=false
+      
 
 
 

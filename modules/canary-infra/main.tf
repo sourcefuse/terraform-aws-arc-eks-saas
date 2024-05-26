@@ -262,29 +262,3 @@ resource "aws_security_group" "canary_endpoints_sg" {
 
   tags = var.tags
 }
-
-
-resource "aws_vpc_endpoint" "canary_monitoring_endpoint" {
-  service_name        = "com.amazonaws.${data.aws_region.current.name}.monitoring"
-  vpc_id              = var.vpc_id
-  vpc_endpoint_type   = "Interface"
-  private_dns_enabled = true
-
-  security_group_ids = [aws_security_group.canary_endpoints_sg.id]
-  subnet_ids         = var.subnet_ids
-
-  tags = var.tags
-}
-
-resource "aws_vpc_endpoint" "canary_synthetics_endpoint" {
-  service_name        = "com.amazonaws.${data.aws_region.current.name}.synthetics"
-  vpc_id              = var.vpc_id
-  vpc_endpoint_type   = "Interface"
-  private_dns_enabled = true
-
-  security_group_ids = [aws_security_group.canary_endpoints_sg.id]
-  subnet_ids         = var.subnet_ids
-
-
-  tags = var.tags
-}
