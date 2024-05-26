@@ -30,7 +30,6 @@ data "archive_file" "canary_zip_inline" {
   
   source {
     content  = templatefile("${path.module}/templates/canary_node.tmpl", {
-      endpoint = "https://${var.tenant_host_domain}/main/home"
       api_hostname = "https://${var.tenant_host_domain}"
       api_path = var.api_path
       take_screenshot = var.take_screenshot

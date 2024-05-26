@@ -26,11 +26,6 @@ variable "tenant_id" {
   description = "Tenat unique ID"
 }
 
-variable "tenant_email" {
-  type        = string
-  description = "tenant Email"
-}
-
 variable "tenant_host_domain" {
   type        = string
   description = "tenant Host"
