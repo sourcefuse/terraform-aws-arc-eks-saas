@@ -7,5 +7,5 @@ output "security_group_id" {
 }
 
 output "role" {
-  value = aws_iam_role.canary-role.id
+  value = aws_iam_role.canary-role.arn
 }
