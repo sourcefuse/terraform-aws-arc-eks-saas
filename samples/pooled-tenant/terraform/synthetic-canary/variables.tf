@@ -61,11 +61,6 @@ variable "frequency" {
 }
 
 
-variable "hostname" {
-    description = "the hostname for the canary request"
-    type        = string
-}
-
 variable "endpointpath" {
     description = "path - appended to the hostname for full api request"
     type        = string
