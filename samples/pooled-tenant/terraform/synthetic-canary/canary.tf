@@ -80,7 +80,10 @@ data "archive_file" "canary_zip_inline" {
   
   source {
     content  = templatefile("${path.module}/templates/canary_node.tmpl", {
-      endpoint = "https://${var.tenant_host_domain}"
+      endpoint = "https://${var.tenant_host_domain}/main/home"
+      hostname = "https://${var.tenant_host_domain}"
+      endpointpath = var.endpointpath
+      port = var.port
     })
     filename = "nodejs/node_modules/apiCanaryBlueprint.js"
   }
