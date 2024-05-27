@@ -1,4 +1,5 @@
 resource "aws_synthetics_canary" "main" {
+  count = var.canary_enabled ? 1 : 0
   name                 = "${var.tenant}-canary"
   artifact_s3_location = "s3://${data.aws_ssm_parameter.canary_report_bucket.value}/${var.tenant}-canary"
   execution_role_arn   = data.aws_ssm_parameter.canary_role.value

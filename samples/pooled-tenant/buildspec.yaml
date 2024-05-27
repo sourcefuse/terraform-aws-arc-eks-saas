@@ -92,18 +92,19 @@ phases:
       - terraform apply -auto-approve
       - cd ..
 
-      # Run terraform for tenant
+      # Run terraform to create resources for tenant
       - export TF_KEY=${KEY}/${KEY}.tfstate
       - envsubst < config.txt > config.${KEY}.hcl
       - envsubst <tfvariables.txt> ${KEY}.tfvars
-      
-
       - terraform init --backend-config=config.${KEY}.hcl
-      - terraform apply -auto-approve
+      - terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
+      # Push value to tenant management gitops repository
       - chmod +x push-values.sh
       - ./push-values.sh
-      - kubectl apply -f pooled-argo-workflow.yaml --namespace argo-workflows || true
+      - kubectl apply -f pooled-argo-workflow.yaml --namespace argo-workflows || true 
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      - sleep 180 # waiting time to spin up tenant pods 
+      - terraform apply -auto-approve --refresh=false  # refresh is false to avoid API hitting
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
       # fetching cognito user sub
       - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
@@ -115,15 +116,10 @@ phases:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=1
-      - sleep 240
       # To run the webhook which will send notification and create tenant first admin user in pooled database
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
       - python push_to_dynamodb.py
-      # run synthetic canary
-      - cd synthetic-canary
-      - envsubst < config.txt > config.hcl
-      - terraform init --backend-config=config.hcl 
-      - terraform apply -auto-approve --refresh=false
+  
       
 
 
