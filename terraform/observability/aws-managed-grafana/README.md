@@ -23,6 +23,8 @@
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_canary_infra"></a> [canary\_infra](#module\_canary\_infra) | ../../..modules/canary-infra | n/a |
+| <a name="module_canary_ssm_parameters"></a> [canary\_ssm\_parameters](#module\_canary\_ssm\_parameters) | ../../../modules/ssm-parameter | n/a |
 | <a name="module_grafana"></a> [grafana](#module\_grafana) | ../../../modules/aws-managed-grafana | n/a |
 | <a name="module_observability_ssm_parameters"></a> [observability\_ssm\_parameters](#module\_observability\_ssm\_parameters) | ../../../modules/ssm-parameter | n/a |
 | <a name="module_prometheus"></a> [prometheus](#module\_prometheus) | ../../../modules/eks-monitoring | n/a |
@@ -41,6 +43,9 @@
 | [aws_eks_cluster.eks_cluster](https://registry.terraform.io/providers/aws/5.4.0/docs/data-sources/eks_cluster) | data source |
 | [aws_eks_cluster_auth.cluster_auth](https://registry.terraform.io/providers/aws/5.4.0/docs/data-sources/eks_cluster_auth) | data source |
 | [aws_iam_policy_document.prometheus_sa_policy](https://registry.terraform.io/providers/aws/5.4.0/docs/data-sources/iam_policy_document) | data source |
+| [aws_subnets.private](https://registry.terraform.io/providers/aws/5.4.0/docs/data-sources/subnets) | data source |
+| [aws_subnets.public](https://registry.terraform.io/providers/aws/5.4.0/docs/data-sources/subnets) | data source |
+| [aws_vpc.vpc](https://registry.terraform.io/providers/aws/5.4.0/docs/data-sources/vpc) | data source |
 
 ## Inputs
 
