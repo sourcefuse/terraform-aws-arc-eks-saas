@@ -1,5 +1,5 @@
-region = "us-west-2"
+region = "us-east-1"
 environment = "dev"
-namespace = "sf-arc-saas"
+namespace = "arc-saas"
 enable_client_vpn = false    // set to true for creating client vpn
 common_name       = "*.arc-saas.net"

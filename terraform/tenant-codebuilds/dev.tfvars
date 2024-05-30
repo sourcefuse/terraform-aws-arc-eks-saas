@@ -1,5 +1,5 @@
-region = "us-west-2"
-namespace = "sf-arc-saas"
+region = "us-east-1"
+namespace = "arc-saas"
 environment = "dev"
 concurrent_build_limit  = 2
 premium_source_version  = "refs/heads/main"
