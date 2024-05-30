@@ -61,7 +61,9 @@ data "aws_iam_policy_document" "codebuild_policy" {
       "budgets:*",
       "route53:*",
       "elasticloadbalancing:DescribeLoadBalancers",
-      "codecommit:*"
+      "codecommit:*",
+      "synthetics:*",
+      "cloudwatch:*"
     ]
     resources = ["*"]
   }

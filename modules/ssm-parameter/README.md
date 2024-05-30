@@ -75,7 +75,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_parameter_defaults"></a> [parameter\_defaults](#input\_parameter\_defaults) | Parameter write default settings | `map(any)` | <pre>{<br>  "description": null,<br>  "overwrite": "false",<br>  "tier": "Standard",<br>  "type": "SecureString"<br>}</pre> | no |
 | <a name="input_ssm_parameters"></a> [ssm\_parameters](#input\_ssm\_parameters) | List of maps with the parameter values to write to SSM Parameter Store | `list(map(string))` | `[]` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tags to assign the security groups. | `map(string)` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to assign the resources. | `map(string)` | n/a | yes |
 
 ## Outputs
 

@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: sourcefuse/tata-elxsi-application-plane
   pullPolicy: Always
-  tag: "0.0.6"
+  tag: "0.0.8"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
@@ -98,7 +98,7 @@ authenticationService:
   enabled: true
   repository: sourcefuse/pooled-authentication
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -201,9 +201,9 @@ schedulerService:
 #userTenantService
 userTenantService:
   enabled: true
-  repository: sourcefuse/tata-elxsi-poc-app-plane-user-tenant-service
+  repository: sourcefuse/app-plane-user-tenant-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "v2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -306,9 +306,9 @@ productService:
 migrationJob:
 #enable it when correct image has been provided
   enabled: true
-  repository: sourcefuse/pooled-migrations
+  repository: sourcefuse/arc-saas-pooled-app-plane-migrations
   pullPolicy: Always
-  tag: "1.0.0"
+  tag: "3.0.0"
   replicaCount: 1
   port: 3000
   node_env: "production"

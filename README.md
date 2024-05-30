@@ -19,6 +19,8 @@
 
 SourceFuse Reference Architecture to implement a sample EKS Multi-Tenant SaaS Solution. This solution will use AWS Codepipeline to deploy all the control plane infrastructure component of Networking, Compute, Database, Monitoring & Logging and Security alongwith the control plane application using helm chart. This solution will also setup tenant codebuild projects which is responsible for onboarding of new silo and pooled tenant. Each tenant will have it's own infrastructure and application helm chart Which will be managed using gitops tool like ArgoCD and Argo Workflow. This solution will also have strict IAM policy and Kubernetes Authorization Policy for tenants to avoid cross namespace access.
 
+For more details, you can go through the [eks saas architecture documentation](doc/eks-saas-architecture.md).
+
 ## Requirements
 
 1. AWS Account 
@@ -101,9 +103,10 @@ Once the codepipeline is created, Monitor the pipeline and when Codepipeline is 
 | argo-workflow.{domain-name}    | CNAME  | Argo Workflow URL               |
 | grafana.{domain-name}          | CNAME  | Grafana Dashboard URL           |
 
-> **_NOTE:_** All authentication password will be saved in SSM Paramater store.
+> **_NOTE:_** All authentication password will be saved in SSM Paramater store. On Grafana, Please add athena, cloudwatch and prometheus data source and import the dashboard using json mentioned in billing and observability folder. 
 
 After Creating record in the Route53, you can access the control plane application using `{domain-name}` URL (eg. if your domain name is xyz.com then control plane will be accessible on xyz.com). Tenant onboarding can be done using the URL `{domain-name}/tenant/signup`. Once the tenant will be onboarded successfully then you can access the tenant application plane on URL `{tenant-key}.{domain-name}`
+
 
 ## Authors
 

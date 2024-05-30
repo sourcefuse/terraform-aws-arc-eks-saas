@@ -8,7 +8,9 @@ provider "postgresql" {
   superuser = false
 }
 
-
+resource "random_id" "uuid" {
+  byte_length = 16
+}
 
 #######################################################################
 ## pooled tenant db user
@@ -21,7 +23,7 @@ module "tenant_db_password" {
 }
 
 resource "postgresql_role" "db_user" {
-  name     = "${var.tenant}"
+  name     = var.tenant
   login    = true
   password = module.tenant_db_password.result
 }

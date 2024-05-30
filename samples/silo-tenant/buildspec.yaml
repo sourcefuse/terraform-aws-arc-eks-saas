@@ -10,6 +10,7 @@ phases:
       nodejs: 18
     on-failure: ABORT
     commands:
+      # install dependencies 
       - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
       - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
       - chmod +x ./kubectl ./aws-iam-authenticator
@@ -20,13 +21,13 @@ phases:
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
       - pip install boto3
-      - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook
-
+      - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
     finally:
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH 
   pre_build:
     on-failure: ABORT  
     commands:
+      # authenticating cluster with codebuild using IAM role session
       - export KUBECONFIG=$HOME/.kube/config
       - CREDENTIALS=$(aws sts assume-role --role-arn $CB_ROLE --role-session-name codebuild-kubectl --duration-seconds 3600)
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
@@ -39,9 +40,10 @@ phases:
   build:
     on-failure: ABORT
     commands:
-      # Webhook Envs
-      - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-service/webhook"
+      # Exporting Webhook Envs
+      - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
       - export REDIRECT_URL="${CONTROL_PLANE_HOST}/main/home"
+      - export APP_PLANE_REDIRECT_URL="https://${KEY}.${DOMAIN_NAME}/main/home"
       - export USER_CALLBACK_ENDPOINT="https://${KEY}.${DOMAIN_NAME}/user-tenant-service/user-callback"
       - export CLIENT_ID="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
       - export CLIENT_SECRET=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
@@ -76,13 +78,13 @@ phases:
            is_bootstrap_creation=0;
         fi
 
-      # Run Bootstrap to create terraform state s3 bucket
+      # Run Bootstrap folder to create terraform state s3 bucket
       - cd terraform/bootstrap
       - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
       - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
       - cd ..
 
-      # Configuing S3 backend
+      # Creating terraform backend config and tfvars at run time
       - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_KEY=${KEY}/${KEY}.tfstate
@@ -91,26 +93,26 @@ phases:
 
       # Run Terraform to create infra and apply helm  
       - terraform init --backend-config=config.${KEY}.hcl
-      - terraform apply -auto-approve
-      - chmod +x push-values.sh
-      - ./push-values.sh
+      - terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
+      - chmod +x push-values.sh 
+      - ./push-values.sh # push values to tenant management gitops repository
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      - sleep 220 # waiting time to spin up tenant pods 
+      - terraform apply -auto-approve --refresh=false  # refresh is false to avoid API hitting
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
-      # fetching cognito user sub
+      
+      # fetching cognito user sub as it will be created once terraform will be applied successfully
       - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
-      - echo "${COGNITO_AUTH_ID}"
     finally:
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
      
 
   post_build:
     commands:
-      - cd ..
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=0
-      - sleep 280
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
-      - python push_to_dynamodb.py
+      - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
 
 
 

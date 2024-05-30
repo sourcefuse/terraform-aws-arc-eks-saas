@@ -39,14 +39,6 @@ spec:
               number: 3000
     - match:
         - uri:
-            prefix: {{ .Values.app.basePath }}/scheduler-service
-      route:
-        - destination:
-            host: "{{ include "helm.fullname" . }}-scheduler-service"
-            port:
-              number: 3000
-    - match:
-        - uri:
             prefix: {{ .Values.app.basePath }}/user-tenant-service
       route:
         - destination:
