@@ -139,6 +139,12 @@ Within our architecture, AWS OpenSearch serves as our chosen solution for storin
 
 In our monitoring setup, our primary tools are Prometheus and Grafana. We've set up Prometheus node-exporter and ADOT collector on the EKS cluster to gather metrics from various namespaces. These metrics are then visualized using Grafana dashboards. Our configuration enables us to visualize API metrics on a per-tenant basis as well. Below are examples of Grafana dashboards illustrating this functionality.
 
+We have added some important dashboards in grafana mentioned below - 
+
+* [AWS Cost Visualization](https://aws.amazon.com/blogs/mt/visualize-and-gain-insights-into-your-aws-cost-and-usage-with-amazon-managed-grafana/)
+* [Tenant OnBoarding Deployment measurement](https://grafana.com/grafana/dashboards/11155-aws-codebuild/)
+* [Tenat Uptime Visibility using canary](https://grafana.com/grafana/dashboards/13892-aws-cloudwatch-synthetics/)
+
 ![Figure 5.1 - Grafana Dashboard1](static/monitoring/grafana-dashbaord1.png)
 ![Figure 5.2 - Grafana Dashboard2](static/monitoring/grafana-dashbaord2.png)
 ![Figure 5.3 - Grafana Dashboard3](static/monitoring/grafana-dashbaord3.png)

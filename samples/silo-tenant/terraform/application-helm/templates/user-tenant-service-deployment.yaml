@@ -91,7 +91,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: USER-TENANT-SERVICE_DB_DATABASE
+                key: AUTHENTICATION-SERVICE_DB_DATABASE
           - name: DB_SCHEMA
             valueFrom:
               secretKeyRef:
