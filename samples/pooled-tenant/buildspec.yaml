@@ -19,12 +19,13 @@ phases:
       - export PATH=$PWD/:$PATH
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
-      - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook
+      - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
     finally:
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
   pre_build:
     on-failure: ABORT  
     commands:
+     # authenticating cluster with codebuild using IAM role session
       - export KUBECONFIG=$HOME/.kube/config
       - CREDENTIALS=$(aws sts assume-role --role-arn $CB_ROLE --role-session-name codebuild-kubectl --duration-seconds 3600)
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
@@ -92,7 +93,7 @@ phases:
       - terraform apply -auto-approve
       - cd ..
 
-      # Run terraform to create resources for tenant
+      # Creating terraform backend config and tfvars at run time and Run terraform to create resources for tenant
       - export TF_KEY=${KEY}/${KEY}.tfstate
       - envsubst < config.txt > config.${KEY}.hcl
       - envsubst <tfvariables.txt> ${KEY}.tfvars
@@ -106,7 +107,7 @@ phases:
       - sleep 220 # waiting time to spin up tenant pods 
       - terraform apply -auto-approve --refresh=false  # refresh is false to avoid unnecessary API hitting
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
-      # fetching cognito user sub
+      # fetching cognito user sub as it will be created once terraform will be applied successfully
       - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
     
     finally:
@@ -118,7 +119,7 @@ phases:
       - export CREATE_USER=1
       # To run the webhook which will send notification and create tenant first admin user in pooled database
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
-      - python push_to_dynamodb.py
+      - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
   
       
 
