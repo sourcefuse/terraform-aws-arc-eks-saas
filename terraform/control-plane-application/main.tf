@@ -164,7 +164,7 @@ data "template_file" "fluentbit_helm_value_template" {
   template = file("${path.module}/fluent-bit-helm/values.yaml")
   vars = {
     REGION             = var.region
-    OS_DOMAIN_ENDPOINT = data.aws_ssm_parameter.opensearch_domain_endpoint.value
+    //OS_DOMAIN_ENDPOINT = data.aws_ssm_parameter.opensearch_domain_endpoint.value
   }
 }
 
