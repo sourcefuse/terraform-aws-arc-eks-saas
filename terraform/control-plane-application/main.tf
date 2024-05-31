@@ -203,8 +203,7 @@ data "template_file" "helm_values_template" {
     COGNITO_DOMAIN            = data.aws_ssm_parameter.cognito_domain.name
     COGNITO_ID                = data.aws_ssm_parameter.cognito_id.name
     COGNITO_SECRET            = data.aws_ssm_parameter.cognito_secret.name
-    DOCKER_USERNAME           = data.aws_ssm_parameter.docker_username.value
-    DOCKER_PASSWORD           = data.aws_ssm_parameter.docker_password.value
+    FROM_EMAIL                = var.from_email
   }
 }
 
