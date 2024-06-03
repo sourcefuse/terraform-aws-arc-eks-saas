@@ -171,7 +171,7 @@ module "db_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Notification Database Name"
-    }
+    },
     {
       name        = "/${var.namespace}/${var.environment}/pooled/userdbdatabase"
       value       = var.userdbdatabase
