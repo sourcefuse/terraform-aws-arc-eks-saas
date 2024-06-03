@@ -168,27 +168,13 @@ module "db_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Notification Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/schedulerdbdatabase"
-      value       = var.schedulerdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Scheduler Database Name"
-    },
+    }
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/userdbdatabase"
       value       = var.userdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "User Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/videodbdatabase"
-      value       = var.videodbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "User Management Database Name"
     }
   ]
   tags       = module.tags.tags
