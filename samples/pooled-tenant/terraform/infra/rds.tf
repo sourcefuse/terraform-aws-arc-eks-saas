@@ -171,14 +171,14 @@ module "db_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Notification Database Name"
-    }
+    },
     {
       name        = "/${var.namespace}/${var.environment}/pooled/userdbdatabase"
       value       = var.userdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "User Database Name"
-    }
+    },
     {
       name        = "/${var.namespace}/${var.environment}/pooled/productdbdatabase"
       value       = var.productdbdatabase

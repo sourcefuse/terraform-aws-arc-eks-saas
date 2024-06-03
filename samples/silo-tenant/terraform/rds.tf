@@ -168,7 +168,7 @@ module "db_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Notification Database Name"
-    }
+    },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/userdbdatabase"
       value       = var.userdbdatabase
