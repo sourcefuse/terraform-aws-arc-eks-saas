@@ -25,9 +25,9 @@ readinessProbe:
 
 frontend:
   enabled: true
-  repository: sourcefuse/tata-elxsi-application-plane
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-ui
   pullPolicy: Always
-  tag: "0.0.8"
+  tag: "0.0.1"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
@@ -61,7 +61,7 @@ frontend:
 #auditService
 auditService:
   enabled: true
-  repository: sourcefuse/pooled-audit
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-audit-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -96,9 +96,9 @@ auditService:
 #authenticationService
 authenticationService:
   enabled: true
-  repository: sourcefuse/pooled-authentication
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-pooled-authentication-service
   pullPolicy: Always
-  tag: "0.0.2"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -131,7 +131,7 @@ authenticationService:
 #notificationService
 notificationService:
   enabled: true
-  repository: sourcefuse/tata-elxsi-poc-app-plane-notification-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-notification-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -163,47 +163,12 @@ notificationService:
     targetMemoryUtilizationPercentage: 80
   base_path: /notification-service
 
-#schedulerService
-schedulerService:
-  enabled: true
-  repository: sourcefuse/tata-elxsi-poc-app-plane-scheduler-service
-  pullPolicy: Always
-  tag: "0.0.1"
-  replicaCount: 1
-  port: 3000
-  node_env: "production"
-  log_level: "info"
-  affinity: {}
-  allowed_origins: "*"
-  imagePullPolicy:
-    enabled: "yes"
-    name: regcred
-  resources:
-    requests:
-      memory: "128Mi"
-      cpu: "100m"
-    limits:
-      memory: "2048Mi"
-      cpu: "1"
-  service:
-    type: NodePort
-    port: 3000
-    targetPort: 3000
-    protocol: TCP
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 1
-    targetCPUUtilizationPercentage: 75
-    targetMemoryUtilizationPercentage: 80
-  base_path: /scheduler-service
-
 #userTenantService
 userTenantService:
   enabled: true
-  repository: sourcefuse/app-plane-user-tenant-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-user-tenant-service
   pullPolicy: Always
-  tag: "v2"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -233,44 +198,9 @@ userTenantService:
     targetMemoryUtilizationPercentage: 80
   base_path: /user-tenant-service
 
-#videConferencingService
-videoConferencingService:
-  enabled: true
-  repository: sourcefuse/tata-elxsi-poc-app-plane-video-conferencing-service
-  pullPolicy: Always
-  tag: "0.0.1"
-  replicaCount: 1
-  port: 3000
-  node_env: "production"
-  log_level: "info"
-  affinity: {}
-  allowed_origins: "*"
-  imagePullPolicy:
-    enabled: "yes"
-    name: regcred
-  resources:
-    requests:
-      memory: "128Mi"
-      cpu: "100m"
-    limits:
-      memory: "2048Mi"
-      cpu: "1"
-  service:
-    type: NodePort
-    port: 3000
-    targetPort: 3000
-    protocol: TCP
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 1
-    targetCPUUtilizationPercentage: 75
-    targetMemoryUtilizationPercentage: 80
-  base_path: /video-conferencing-service
-
 productService:
   enabled: true
-  repository: sourcefuse/pooled-product
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-user-tenant-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -306,9 +236,9 @@ productService:
 migrationJob:
 #enable it when correct image has been provided
   enabled: true
-  repository: sourcefuse/arc-saas-pooled-app-plane-migrations
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-pooled-application-plane-migration
   pullPolicy: Always
-  tag: "3.0.0"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -330,12 +260,12 @@ migrationJob:
 
 imagePullSecret:
 #enable it and pass the correct parameters below
-  enabled: true
+  enabled: false
   name: regcred
   registry: https://index.docker.io/v1/
-  username: ${DOCKER_USERNAME}
-  password: ${DOCKER_PASSWORD}
-  email: devops@sourcefuse.com
+  username: ''
+  password: ''
+  email: sfdevops@sourcefuse.com
 
 nameOverride: ""
 
@@ -431,7 +361,5 @@ jwtissuer: ${JWT_ISSUER}
 authenticationdbdatabase: ${AUTH_DATABASE}
 auditdbdatabase: ${AUDIT_DATABASE}
 notificationdbdatabase: ${NOTIFICATION_DATABASE}
-schedulerdbdatabase: ${SCHEDULER_DATABASE}
 userdbdatabase: ${USER_DATABASE}
-videodbdatabase: ${VIDEO_DATABASE}
 productdbdatabase: ${PRODUCT_DATABASE}

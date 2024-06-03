@@ -77,13 +77,6 @@ data "aws_ssm_parameter" "cognito_user_pool_id" {
   name = "/${var.namespace}/${var.environment}/pooled/cognito_user_pool_id"
 }
 
-data "aws_ssm_parameter" "docker_username" {
-  name = "/${var.namespace}/${var.environment}/docker_username"
-}
-data "aws_ssm_parameter" "docker_password" {
-  name = "/${var.namespace}/${var.environment}/docker_password"
-}
-
 data "aws_ssm_parameter" "cognito_domain" {
   name = "/${var.namespace}/${var.environment}/pooled/cognito_domain"
 }
@@ -142,16 +135,8 @@ data "aws_ssm_parameter" "notificationdbdatabase" {
   name = "/${var.namespace}/${var.environment}/pooled/notificationdbdatabase"
 }
 
-data "aws_ssm_parameter" "schedulerdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/schedulerdbdatabase"
-}
-
 data "aws_ssm_parameter" "userdbdatabase" {
   name = "/${var.namespace}/${var.environment}/pooled/userdbdatabase"
-}
-
-data "aws_ssm_parameter" "videodbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/videodbdatabase"
 }
 
 data "aws_ssm_parameter" "productdbdatabase" {

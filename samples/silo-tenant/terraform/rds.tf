@@ -94,18 +94,8 @@ resource "postgresql_database" "notification_db" {
   allow_connections = true
   depends_on        = [module.aurora]
 }
-resource "postgresql_database" "scheduler_db" {
-  name              = var.schedulerdbdatabase
-  allow_connections = true
-  depends_on        = [module.aurora]
-}
 resource "postgresql_database" "user_db" {
   name              = var.userdbdatabase
-  allow_connections = true
-  depends_on        = [module.aurora]
-}
-resource "postgresql_database" "video_db" {
-  name              = var.videodbdatabase
   allow_connections = true
   depends_on        = [module.aurora]
 }
