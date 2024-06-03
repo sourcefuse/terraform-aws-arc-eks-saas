@@ -121,11 +121,7 @@ data "template_file" "helm_values_template" {
     AUTH_DATABASE         = data.aws_ssm_parameter.authenticationdbdatabase.name
     AUDIT_DATABASE        = data.aws_ssm_parameter.auditdbdatabase.name
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
-    SCHEDULER_DATABASE    = data.aws_ssm_parameter.schedulerdbdatabase.name
     USER_DATABASE         = data.aws_ssm_parameter.userdbdatabase.name
-    VIDEO_DATABASE        = data.aws_ssm_parameter.videodbdatabase.name
-    DOCKER_USERNAME       = data.aws_ssm_parameter.docker_username.value
-    DOCKER_PASSWORD       = data.aws_ssm_parameter.docker_password.value
   }
 }
 

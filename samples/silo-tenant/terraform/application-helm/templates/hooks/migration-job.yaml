@@ -115,56 +115,6 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: NOTIFICATION-SERVICE_DB_DATABASE
-          - name: SCHEDULER-SERVICE_DB_HOST
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_HOST
-          - name: SCHEDULER-SERVICE_DB_PORT
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_PORT
-          - name: SCHEDULER-SERVICE_DB_USER
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_USER
-          - name: SCHEDULER-SERVICE_DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_PASSWORD
-          - name: SCHEDULER-SERVICE_DB_DATABASE
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: SCHEDULER-SERVICE_DB_DATABASE
-          - name: VIDEO-CONFERENCING-SERVICE_DB_HOST
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_HOST
-          - name: VIDEO-CONFERENCING-SERVICE_DB_PORT
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_PORT
-          - name: VIDEO-CONFERENCING-SERVICE_DB_USER
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_USER
-          - name: VIDEO-CONFERENCING-SERVICE_DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_PASSWORD
-          - name: VIDEO-CONFERENCING-SERVICE_DB_DATABASE
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: VIDEO-CONFERENCING-SERVICE_DB_DATABASE
           - name: USER-TENANT-SERVICE_DB_HOST
             valueFrom:
               secretKeyRef:

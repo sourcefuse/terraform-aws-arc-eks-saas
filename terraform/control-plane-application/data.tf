@@ -119,13 +119,6 @@ data "aws_ssm_parameter" "cognito_secret" {
 #   name = "/${var.namespace}/${var.environment}/opensearch/domain_endpoint"
 # }
 
-# data "aws_ssm_parameter" "docker_username" {
-#   name = "/${var.namespace}/${var.environment}/docker_username"
-# }
-# data "aws_ssm_parameter" "docker_password" {
-#   name = "/${var.namespace}/${var.environment}/docker_password"
-# }
-
 data "aws_ssm_parameter" "https_connection_user" {
   name = "/${var.namespace}/https_connection_user"
 }

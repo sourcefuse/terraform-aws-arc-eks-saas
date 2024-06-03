@@ -86,13 +86,6 @@ data "aws_route53_zone" "selected" {
   private_zone = false
 }
 
-data "aws_ssm_parameter" "docker_username" {
-  name = "/${var.namespace}/${var.environment}/docker_username"
-}
-data "aws_ssm_parameter" "docker_password" {
-  name = "/${var.namespace}/${var.environment}/docker_password"
-}
-
 data "aws_ssm_parameter" "cognito_domain" {
   name       = "/${var.namespace}/${var.environment}/${var.tenant}/cognito_domain"
   depends_on = [module.cognito_ssm_parameters]
@@ -163,18 +156,8 @@ data "aws_ssm_parameter" "notificationdbdatabase" {
   depends_on = [module.db_ssm_parameters]
 }
 
-data "aws_ssm_parameter" "schedulerdbdatabase" {
-  name       = "/${var.namespace}/${var.environment}/${var.tenant}/schedulerdbdatabase"
-  depends_on = [module.db_ssm_parameters]
-}
-
 data "aws_ssm_parameter" "userdbdatabase" {
   name       = "/${var.namespace}/${var.environment}/${var.tenant}/userdbdatabase"
-  depends_on = [module.db_ssm_parameters]
-}
-
-data "aws_ssm_parameter" "videodbdatabase" {
-  name       = "/${var.namespace}/${var.environment}/${var.tenant}/videodbdatabase"
   depends_on = [module.db_ssm_parameters]
 }
 
