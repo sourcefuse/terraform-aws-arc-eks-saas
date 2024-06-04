@@ -115,9 +115,9 @@ data "aws_ssm_parameter" "cognito_secret" {
   name = "/${var.namespace}/${var.environment}/cognito_secret"
 }
 
-# data "aws_ssm_parameter" "opensearch_domain_endpoint" {
-#   name = "/${var.namespace}/${var.environment}/opensearch/domain_endpoint"
-# }
+data "aws_ssm_parameter" "opensearch_domain_endpoint" {
+  name = "/${var.namespace}/${var.environment}/opensearch/domain_endpoint"
+}
 
 data "aws_ssm_parameter" "https_connection_user" {
   name = "/${var.namespace}/https_connection_user"
