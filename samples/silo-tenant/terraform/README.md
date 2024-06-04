@@ -63,9 +63,7 @@
 | [postgresql_database.audit_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.authentication_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.notification_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
-| [postgresql_database.scheduler_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.user_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
-| [postgresql_database.video_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [archive_file.canary_zip_inline](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_eks_cluster.EKScluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/eks_cluster) | data source |
@@ -88,8 +86,6 @@
 | [aws_ssm_parameter.db_port](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.db_schema](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.db_user](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.docker_password](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.docker_username](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.jwt_issuer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.jwt_secret](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.notificationdbdatabase](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
@@ -99,9 +95,7 @@
 | [aws_ssm_parameter.redis_database](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.redis_host](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.redis_port](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.schedulerdbdatabase](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.userdbdatabase](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
-| [aws_ssm_parameter.videodbdatabase](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_subnets.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
 | [aws_subnets.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
 | [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
@@ -181,7 +175,6 @@
 | <a name="input_region"></a> [region](#input\_region) | AWS region | `string` | n/a | yes |
 | <a name="input_resource_servers"></a> [resource\_servers](#input\_resource\_servers) | A container with the user\_groups definitions | `list(any)` | `[]` | no |
 | <a name="input_runtime_version"></a> [runtime\_version](#input\_runtime\_version) | Runtime version of the canary. Details: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Library_nodejs_puppeteer.html | `string` | `"syn-nodejs-puppeteer-7.0"` | no |
-| <a name="input_schedulerdbdatabase"></a> [schedulerdbdatabase](#input\_schedulerdbdatabase) | n/a | `string` | `"scheduler"` | no |
 | <a name="input_sms_authentication_message"></a> [sms\_authentication\_message](#input\_sms\_authentication\_message) | A string representing the SMS authentication message | `string` | `"Your username is {username} and temporary password is {####}."` | no |
 | <a name="input_sms_verification_message"></a> [sms\_verification\_message](#input\_sms\_verification\_message) | A string representing the SMS verification message | `string` | `"This is the verification message {####}."` | no |
 | <a name="input_snapshot_retention_limit"></a> [snapshot\_retention\_limit](#input\_snapshot\_retention\_limit) | The number of days for which ElastiCache will retain automatic cache cluster snapshots before deleting them. | `number` | `0` | no |
@@ -204,7 +197,6 @@
 | <a name="input_user_name"></a> [user\_name](#input\_user\_name) | cognito user | `string` | n/a | yes |
 | <a name="input_user_pool_add_ons_advanced_security_mode"></a> [user\_pool\_add\_ons\_advanced\_security\_mode](#input\_user\_pool\_add\_ons\_advanced\_security\_mode) | The mode for advanced security, must be one of `OFF`, `AUDIT` or `ENFORCED` | `string` | `"OFF"` | no |
 | <a name="input_userdbdatabase"></a> [userdbdatabase](#input\_userdbdatabase) | n/a | `string` | `"user"` | no |
-| <a name="input_videodbdatabase"></a> [videodbdatabase](#input\_videodbdatabase) | n/a | `string` | `"video"` | no |
 
 ## Outputs
 

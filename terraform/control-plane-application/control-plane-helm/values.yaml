@@ -25,9 +25,9 @@ readinessProbe:
   
 frontend:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-ui
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-ui
   pullPolicy: Always
-  tag: "0.0.8"
+  tag: "0.0.1"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
@@ -59,14 +59,14 @@ frontend:
 #tenantMgmtFacade
 tenantMgmtFacade:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-tenant-mgmt-facade
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-facade
   pullPolicy: Always
-  tag: "v3"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
   log_level: "info"
-  from_email: no-reply@arc-saas.net
+  from_email: {FROM_EMAIL}
   csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
   affinity: {}
   allowed_origins: "*"
@@ -97,9 +97,9 @@ tenantMgmtFacade:
 #auditService
 auditService:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-audit-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-audit-service
   pullPolicy: Always
-  tag: "v4"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -132,9 +132,9 @@ auditService:
 #authenticationService
 authenticationService:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-authentication-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-authentication-service
   pullPolicy: Always
-  tag: "v2"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -169,9 +169,9 @@ authenticationService:
 #notificationService
 notificationService:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-notification-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-notification-service
   pullPolicy: Always
-  tag: "v1"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -205,9 +205,9 @@ notificationService:
 #subscriptionService
 subscriptionService:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-subscription-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-subscription-service
   pullPolicy: Always
-  tag: "v1"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -240,9 +240,9 @@ subscriptionService:
 #userTenantService
 userTenantService:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-user-tenant-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-user-tenant-service
   pullPolicy: Always
-  tag: "v1"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -275,14 +275,14 @@ userTenantService:
 #tenantMgmtService
 tenantMgmtService:
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-tenant-mgmt-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-service
   pullPolicy: Always
-  tag: "v3"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
   log_level: "info"
-  from_email: no-reply@arc-saas.net
+  from_email: ${FROM_EMAIL}
   system_user_id: ""
   app_login_url: ""
   affinity: {}
@@ -315,9 +315,9 @@ tenantMgmtService:
 migrationJob:
 #enable it when correct image has been provided
   enabled: true
-  repository: sourcefuse/arc-saas-control-plane-migrations
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-migration
   pullPolicy: Always
-  tag: "v3"
+  tag: "0.0.1"
   replicaCount: 1
   affinity: {}
   allowed_origins: "*"
@@ -340,12 +340,12 @@ migrationJob:
 
 imagePullSecret:
 #enable it and pass the correct parameters below
-  enabled: true
+  enabled: false
   name: regcred
   registry: https://index.docker.io/v1/
-  username: ${DOCKER_USERNAME}
-  password: ${DOCKER_PASSWORD}
-  email: devops@sourcefuse.com
+  username: ''
+  password: ''
+  email: sfdevops@sourcefuse.com
 
 nameOverride: ""
 

@@ -51,3 +51,9 @@ variable "domain_name" {
   description = "Enter Registered Domain Name"
   default     = "arc-saas.net"
 }
+
+variable "from_email" {
+  type        = string
+  description = "Enter the email from where notification will be sent. it should have contain verified ses domain identity"
+  default     = "no-reply@arc-saas.net"
+}

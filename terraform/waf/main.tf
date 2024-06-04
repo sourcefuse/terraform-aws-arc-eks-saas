@@ -90,8 +90,8 @@ module "waf" {
       rule_action_override = {
         NoUserAgent_HEADER = {
           action = "allow"
-          }
         }
+      }
 
       visibility_config = {
         cloudwatch_metrics_enabled = true

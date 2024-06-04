@@ -93,18 +93,8 @@ resource "postgresql_database" "notification_db" {
   allow_connections = true
   depends_on        = [module.aurora]
 }
-resource "postgresql_database" "scheduler_db" {
-  name              = var.schedulerdbdatabase
-  allow_connections = true
-  depends_on        = [module.aurora]
-}
 resource "postgresql_database" "user_db" {
   name              = var.userdbdatabase
-  allow_connections = true
-  depends_on        = [module.aurora]
-}
-resource "postgresql_database" "video_db" {
-  name              = var.videodbdatabase
   allow_connections = true
   depends_on        = [module.aurora]
 }
@@ -183,25 +173,11 @@ module "db_ssm_parameters" {
       description = "Notification Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/schedulerdbdatabase"
-      value       = var.schedulerdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Scheduler Database Name"
-    },
-    {
       name        = "/${var.namespace}/${var.environment}/pooled/userdbdatabase"
       value       = var.userdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "User Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/pooled/videodbdatabase"
-      value       = var.videodbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "User Management Database Name"
     },
     {
       name        = "/${var.namespace}/${var.environment}/pooled/productdbdatabase"

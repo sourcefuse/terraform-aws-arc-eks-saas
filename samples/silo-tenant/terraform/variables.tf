@@ -186,19 +186,9 @@ variable "notificationdbdatabase" {
   default = "notification"
 }
 
-variable "schedulerdbdatabase" {
-  type    = string
-  default = "scheduler"
-}
-
 variable "userdbdatabase" {
   type    = string
   default = "user"
-}
-
-variable "videodbdatabase" {
-  type    = string
-  default = "video"
 }
 ###################################################################################
 ## Redis Elasticache
