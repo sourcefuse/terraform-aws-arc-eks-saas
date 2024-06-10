@@ -66,7 +66,7 @@ tenantMgmtFacade:
   port: 3000
   node_env: "production"
   log_level: "info"
-  from_email: no-reply@arc-saas.net
+  from_email: {FROM_EMAIL}
   csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
   affinity: {}
   allowed_origins: "*"
@@ -282,7 +282,7 @@ tenantMgmtService:
   port: 3000
   node_env: "production"
   log_level: "info"
-  from_email: no-reply@arc-saas.net
+  from_email: ${FROM_EMAIL}
   system_user_id: ""
   app_login_url: ""
   affinity: {}
@@ -345,7 +345,7 @@ imagePullSecret:
   registry: https://index.docker.io/v1/
   username: ''
   password: ''
-  email: devops@sourcefuse.com
+  email: sfdevops@sourcefuse.com
 
 nameOverride: ""
 
