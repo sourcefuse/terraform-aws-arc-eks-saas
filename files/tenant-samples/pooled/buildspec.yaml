@@ -84,7 +84,7 @@ phases:
       # Configuing S3 backend
       - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/pooled/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/pooled/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
-      - cd infra
+      - cd pool-infra
       - export TF_INFRA_KEY=pooled.tfstate
       - envsubst < config.txt > config.pooled.hcl
       - envsubst <tfvariables.txt> pooled.tfvars

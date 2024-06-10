@@ -3,10 +3,6 @@
 ################################################################################
 data "aws_caller_identity" "this" {}
 
-# data "aws_ssm_parameter" "github_token" {
-#   name = "GITHUB_TOKEN"
-# }
-
 data "aws_ssm_parameter" "terraform_state_bucket" {
   name = "/${var.namespace}/${var.environment}/terraform-state-bucket"
 }

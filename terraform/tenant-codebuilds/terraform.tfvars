@@ -1,11 +1,11 @@
 region                  = "us-east-1"
-namespace               = "arc-saas"
-environment             = "dev"
+namespace               = ""
+environment             = ""
 concurrent_build_limit  = 2
 premium_source_version  = "refs/heads/main"
 standard_source_version = "refs/heads/main"
 premium_buildspec       = "buildspec.yaml"
 standard_buildspec      = "buildspec.yaml"
 
-domain_name        = "arc-saas.net"
-control_plane_host = "https://arc-saas.net"
+domain_name        = "abc.com"
+control_plane_host = "https://abc.com"

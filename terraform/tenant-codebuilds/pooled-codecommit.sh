@@ -2,11 +2,11 @@
 
 # Set  environment variable
 export AWS_REGION=us-east-1
-export NAMESPACE=arc-saas
-export ENVIRONMENT=dev
+export NAMESPACE=
+export ENVIRONMENT=
 
 # Change directory
-cd ../../samples/ || { echo "Failed to change directory"; exit 1; }
+cd ../../files/tenant-samples/ || { echo "Failed to change directory"; exit 1; }
 
 # Install git-remote-codecommit
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
@@ -21,7 +21,7 @@ rm -rf ${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository/*
 cd ${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to change directory"; exit 1; }
 
 # Copy contents from ../pooled-tenant/ to current directory
-cp -r ../pooled-tenant/* . || { echo "Failed to copy files"; exit 1; }
+cp -r ../pooled/* . || { echo "Failed to copy files"; exit 1; }
 
 
 # Set origin URL

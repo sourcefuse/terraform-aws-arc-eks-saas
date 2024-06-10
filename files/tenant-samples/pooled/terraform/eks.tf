@@ -1,3 +1,19 @@
+################################################################################
+## tags
+################################################################################
+module "tags" {
+  source  = "sourcefuse/arc-tags/aws"
+  version = "1.2.5"
+
+  environment = var.environment
+  project     = var.namespace
+
+  extra_tags = {
+    Tenant    = var.tenant
+    Tenant_ID = var.tenant_id
+  }
+
+}
 ###############################################################################
 ## Register domain name in Route53
 ###############################################################################
@@ -83,8 +99,10 @@ resource "kubernetes_namespace" "my_namespace" {
   }
 }
 
+# generate tenant specific helm values.yaml
+
 data "template_file" "helm_values_template" {
-  template = file("${path.module}/application-helm/values.yaml")
+  template = file("${path.module}/../application-helm-chart/values.yaml")
   vars = {
     NAMESPACE        = local.kubernetes_ns
     TENANT_NAME      = var.tenant_name
@@ -128,21 +146,6 @@ resource "local_file" "helm_values" {
   filename = "${path.module}/output/${var.tenant}-values.yaml"
   content  = data.template_file.helm_values_template.rendered
 }
-
-
-# resource "helm_release" "application_helm" {
-#   count            = var.helm_apply ? 1 : 0
-#   name             = var.tenant
-#   chart            = "application-helm" #Local Path of helm chart
-#   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
-#   create_namespace = true
-#   force_update     = true
-#   recreate_pods    = true
-#   values           = [data.template_file.helm_values_template.rendered]
-#   depends_on = [
-#     module.tenant_iam_role, module.jwt_ssm_parameters, aws_cognito_user_pool_client.app_client
-#   ]
-# }
 
 ###############################################################################################
 ## Register Tenant Helm App on ArgoCD
@@ -228,7 +231,7 @@ spec:
             export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
             cp -r /home/terraform/pooled/infra/* /home/myuser/
-            cd terraform/infra
+            cd terraform/pool-infra
             /bin/terraform init --backend-config=config.pooled.hcl
             /bin/terraform plan --var-file=pooled.tfvars --refresh=false --lock=false
             /bin/terraform apply --var-file=pooled.tfvars --auto-approve --lock=false
