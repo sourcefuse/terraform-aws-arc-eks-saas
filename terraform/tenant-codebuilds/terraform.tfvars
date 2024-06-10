@@ -8,4 +8,4 @@ premium_buildspec       = "buildspec.yaml"
 standard_buildspec      = "buildspec.yaml"
 
 domain_name        = "arc-saas.net"
-control_plane_host = "arc-saas.net"
+control_plane_host = "https://arc-saas.net"
