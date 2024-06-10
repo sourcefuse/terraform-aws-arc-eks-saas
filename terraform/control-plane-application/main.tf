@@ -161,7 +161,7 @@ resource "kubernetes_namespace" "my_namespace" {
 }
 
 data "template_file" "fluentbit_helm_value_template" {
-  template = file("${path.module}/../files/control-plane/fluent-bit-helm/values.yaml.template")
+  template = file("${path.module}/../../files/control-plane/fluent-bit-helm/values.yaml.template")
   vars = {
     REGION             = var.region
     OS_DOMAIN_ENDPOINT = data.aws_ssm_parameter.opensearch_domain_endpoint.value
@@ -169,7 +169,7 @@ data "template_file" "fluentbit_helm_value_template" {
 }
 
 data "template_file" "helm_values_template" {
-  template = file("${path.module}/../files/control-plane/control-plane-helm-chart/values.yaml.template")
+  template = file("${path.module}/../../files/control-plane/control-plane-helm-chart/values.yaml.template")
   vars = {
     NAMESPACE                 = local.kubernetes_ns
     namespace                 = var.namespace
@@ -215,7 +215,7 @@ resource "local_file" "helm_values" {
 # Helm chart deployment
 resource "helm_release" "control_plane_app" {
   name             = "control-plane"
-  chart            = "../files/control-plane/control-plane-helm-chart" #Local Path of helm chart
+  chart            = "../../files/control-plane/control-plane-helm-chart" #Local Path of helm chart
   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
   create_namespace = true
   force_update     = true
@@ -229,7 +229,7 @@ resource "helm_release" "control_plane_app" {
 resource "helm_release" "fluent_bit" {
   count            = 1
   name             = "aws-for-fluent-bits"
-  chart            = "../files/control-plane/fluent-bit-helm"
+  chart            = "../../files/control-plane/fluent-bit-helm"
   namespace        = "kube-system"
   create_namespace = false
   force_update     = true
