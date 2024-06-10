@@ -19,7 +19,7 @@
 
 SourceFuse Reference Architecture to implement a sample EKS Multi-Tenant SaaS Solution. This solution will use AWS Codepipeline to deploy all the control plane infrastructure component of Networking, Compute, Database, Monitoring & Logging and Security alongwith the control plane application using helm chart. This solution will also setup tenant codebuild projects which is responsible for onboarding of new silo and pooled tenant. Each tenant will have it's own infrastructure and application helm chart Which will be managed using gitops tool like ArgoCD and Argo Workflow. This solution will also have strict IAM policy and Kubernetes Authorization Policy for tenants to avoid cross namespace access.
 
-For more details, you can go through the [eks saas architecture documentation](doc/eks-saas-architecture.md).
+For more details, you can go through the [eks saas architecture documentation](docs/eks-saas-architecture.md).
 
 ## Requirements
 
