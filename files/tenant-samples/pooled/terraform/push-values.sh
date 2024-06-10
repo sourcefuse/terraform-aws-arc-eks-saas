@@ -28,9 +28,9 @@ cp -r ../*.tfvars pooled/infra/terraform/ || { echo "Failed to copy files"; exit
 cp -r ../*.hcl pooled/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 
 # Copy Pooled tfvars and config file to codecommit repository
-cp -r ../infra/*.hcl pooled/infra/terraform/infra/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../pool-infra/*.hcl pooled/infra/terraform/pool-infra/ || { echo "Failed to copy files"; exit 1; }
 
-cp -r ../infra/*.tfvars pooled/infra/terraform/infra/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../pool-infra/*.tfvars pooled/infra/terraform/pool-infra/ || { echo "Failed to copy files"; exit 1; }
 
 # Set origin URL
 git remote set-url origin codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to set remote URL"; exit 1; }
