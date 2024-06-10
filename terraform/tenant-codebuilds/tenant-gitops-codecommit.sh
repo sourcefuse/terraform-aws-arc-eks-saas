@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Set environment variables
-export AWS_REGION=us-west-2
-export NAMESPACE=sf-arc-saas
-export ENVIRONMENT=dev
+export AWS_REGION=us-east-1
+export NAMESPACE=
+export ENVIRONMENT=
 
 # Change directory
-cd ../../samples/ || { echo "Failed to change directory"; exit 1; }
+cd ../../files/tenant-samples/ || { echo "Failed to change directory"; exit 1; }
 
 # Install git-remote-codecommit
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
@@ -44,18 +44,20 @@ create_subdirectories "pooled"
 
 
 # Copy silo base helm chart & terraform to silo directory
-cp -r ../silo-tenant/terraform/application-helm/* silo/application/ || { echo "Failed to copy files"; exit 1; }
-cp -r ../silo-tenant/modules    silo/infra/
-cp -r ../silo-tenant/terraform   silo/infra/
-
+cp -r ../silo/application-helm-chart/* silo/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../silo/application-helm-chart   silo/infra/
+cp -r ../silo/modules                  silo/infra/
+cp -r ../silo/terraform                silo/infra/
+              
 # removing the values.yaml as will push tenant values.yaml on tenant on-boarding
 rm -rf silo/application/values.yaml
 
 
 # Copy pooled base helm chart & terraform to pooled directory
-cp -r ../pooled-tenant/terraform/application-helm/* pooled/application/ || { echo "Failed to copy files"; exit 1; }
-cp -r ../pooled-tenant/modules    pooled/infra/
-cp -r ../pooled-tenant/terraform  pooled/infra/
+cp -r ../pooled/application-helm-chart/* pooled/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../pooled/application-helm-chart   pooled/infra/
+cp -r ../pooled/modules                  pooled/infra/
+cp -r ../pooled/terraform                pooled/infra/
 
 # removing the values.yaml as will push tenant values.yaml on tenant on-boarding
 rm -rf pooled/application/values.yaml

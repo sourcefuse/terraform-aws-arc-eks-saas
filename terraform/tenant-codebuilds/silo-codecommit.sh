@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Set  environment variable
-export AWS_REGION=us-west-2
-export NAMESPACE=sf-arc-saas
-export ENVIRONMENT=dev
+export AWS_REGION=us-east-1
+export NAMESPACE=
+export ENVIRONMENT=
 
 # Change directory
-cd ../../samples/ || { echo "Failed to change directory"; exit 1; }
+cd ../../files/tenant-samples/ || { echo "Failed to change directory"; exit 1; }
 
 # Install git-remote-codecommit
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
@@ -22,7 +22,7 @@ cd ${NAMESPACE}-${ENVIRONMENT}-premium-plan-repository || { echo "Failed to chan
 
 
 # Copy contents from ../silo-tenant/ to current directory
-cp -r ../silo-tenant/* . || { echo "Failed to copy files"; exit 1; }
+cp -r ../silo/* . || { echo "Failed to copy files"; exit 1; }
 
 
 # Set origin URL
