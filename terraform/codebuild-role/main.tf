@@ -1,24 +1,4 @@
 ##############################################################
-## default
-##############################################################
-terraform {
-  required_version = ">= 1.3"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 5.0"
-    }
-  }
-
-  backend "s3" {}
-}
-
-provider "aws" {
-  region = var.region
-}
-
-##############################################################
 ## tags
 ##############################################################
 module "tags" {
@@ -31,47 +11,8 @@ module "tags" {
 }
 
 ##############################################################
-## data lookup
-##############################################################
-data "aws_caller_identity" "this" {}
-
-data "aws_iam_policy_document" "codebuild_policy" {
-
-  statement {
-    sid    = "CodeBuildPolicy"
-    effect = "Allow"
-    actions = [
-      "rds:*",
-      "elasticache:*",
-      "s3:*",
-      "es:*",
-      "ec2:*",
-      "eks:*",
-      "cognito-idp:*",
-      "iam:*",
-      "ssm:*",
-      "dynamodb:*",
-      "aps:*",
-      "kms:*",
-      "logs:*",
-      "lambda:*",
-      "glue:*",
-      "SNS:*",
-      "cur:*",
-      "budgets:*",
-      "route53:*",
-      "elasticloadbalancing:DescribeLoadBalancers",
-      "codecommit:*",
-      "synthetics:*",
-      "cloudwatch:*"
-    ]
-    resources = ["*"]
-  }
-}
-##############################################################
 ## codebuild iam role
 ##############################################################
-
 module "codebuild_role" {
   source           = "../../modules/iam-role"
   role_name        = "${var.namespace}-${var.environment}-codebuild-iam-role"

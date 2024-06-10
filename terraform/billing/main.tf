@@ -103,7 +103,7 @@ resource "kubernetes_annotations" "service_account" {
 ## Kubecost Ingress
 ###############################################################################
 data "template_file" "ingress_template" {
-  template = file("${path.module}/kubecost-helm/values.yaml")
+  template = file("${path.module}/../../files/control-plane/kubecost-helm/values.yaml.template")
   vars = {
     DOMAIN = var.domain_name
   }
@@ -111,7 +111,7 @@ data "template_file" "ingress_template" {
 
 resource "helm_release" "kubecost_ingress" {
   name             = "kubecost-ingress"
-  chart            = "kubecost-helm"
+  chart            = "../../files/control-plane/kubecost-helm"
   namespace        = "kubecost"
   create_namespace = false
   force_update     = true

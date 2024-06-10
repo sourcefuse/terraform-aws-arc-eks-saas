@@ -48,7 +48,7 @@ module "networking_module_build_step_codebuild_project" {
         commands = [
           "export PATH=$PWD/:$PATH",
           "cd terraform/network",
-          "rm config.${var.environment}.hcl",
+          "rm config.hcl",
           "sed -i 's/aws_region/${var.region}/g' config.txt",
           "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.region})",
           "tf_state_table=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-dynamodb-table\" --query \"Parameter.Value\" --output text --region ${var.region})",
@@ -59,8 +59,8 @@ module "networking_module_build_step_codebuild_project" {
       build = {
         commands = [
           "terraform init --backend-config=config.${var.environment}.hcl",
-          "terraform plan --var-file=${var.environment}.tfvars",
-          "terraform apply --var-file=${var.environment}.tfvars -auto-approve",
+          "terraform plan ",
+          "terraform apply --auto-approve",
           "export vpc_id=$(aws ec2 describe-vpcs --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-vpc\" --query \"Vpcs[].VpcId\" --output text)",
           "export subnet_ids_first=$(aws ec2 describe-subnets --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-private-subnet-private-${var.region}a\" --query \"Subnets[].SubnetId\" --output text)",
           "export subnet_ids_second=$(aws ec2 describe-subnets --filters \"Name=tag:Name,Values=${var.namespace}-${var.environment}-private-subnet-private-${var.region}b\" --query \"Subnets[].SubnetId\" --output text)",

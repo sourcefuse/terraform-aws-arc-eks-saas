@@ -9,13 +9,11 @@ variable "region" {
 
 variable "namespace" {
   type        = string
-  default     = "arc-saas"
   description = "Namespace for the resources."
 }
 
 variable "environment" {
   type        = string
-  default     = "dev"
   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 }
 ################################################################################
@@ -23,7 +21,7 @@ variable "environment" {
 ################################################################################
 variable "kubernetes_version" {
   type        = string
-  default     = "1.27"
+  default     = "1.29"
   description = "Desired Kubernetes master version. If you do not specify a value, the latest available version is used"
 }
 

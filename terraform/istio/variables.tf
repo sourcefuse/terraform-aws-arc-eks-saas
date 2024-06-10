@@ -9,14 +9,12 @@ variable "region" {
 
 variable "environment" {
   type        = string
-  default     = "dev"
   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 }
 
 variable "namespace" {
   type        = string
   description = "Namespace for the resources."
-  default     = "arc-saas"
 }
 
 ##################################################################################
@@ -35,13 +33,11 @@ variable "max_pods" {
 variable "common_name" {
   type        = string
   description = " Domain Name  supplied as commn name."
-  default     = ""
 }
 
 variable "organization" {
   type        = string
   description = " Organization name supplied as common name."
-  default     = ""
 }
 
 variable "alb_ingress_name" {
@@ -53,11 +49,9 @@ variable "alb_ingress_name" {
 variable "acm_certificate_arn" {
   type        = string
   description = " AWS CertificateMmanager Certificate ARN for the AWS LoadBalancer."
-  default     = ""
 }
 
 variable "full_domain_name" {
   type        = string
   description = "Domain  with wildcard   example >>   *.domain.in "
-  default     = ""
 }

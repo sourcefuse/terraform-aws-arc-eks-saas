@@ -4,7 +4,7 @@ name: Plan - TenantCodebuild
 on:
   pull_request:
     branches:
-      - main
+      - feature/demo
     paths:
       - 'terraform/tenant-codebuilds/*'
       - 'terraform/tenant-codebuilds/**'

@@ -9,14 +9,12 @@ variable "region" {
 
 variable "environment" {
   type        = string
-  default     = "dev"
   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 }
 
 variable "namespace" {
   type        = string
   description = "Namespace for the resources."
-  default     = "arc-saas"
 }
 
 ################################################################################
@@ -36,7 +34,6 @@ variable "secret_path_format" {
 variable "common_name" {
   type        = string
   description = " Domain Name  supplied as commn name."
-  default     = ""
 }
 ################################################################################
 ## VPN configuration
@@ -50,7 +47,7 @@ variable "enable_client_vpn" {
 variable "client_vpn_name" {
   type        = string
   description = "The name of the client vpn"
-  default     = "arc-saas-vpn"
+  default     = "saas-vpn"
 }
 
 variable "vpc_name_override" {

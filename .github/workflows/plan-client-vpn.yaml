@@ -4,7 +4,7 @@ name: Plan - ClientVPN
 on:  
   pull_request:
     branches:
-      - main
+      - feature/demo
     paths:
       - 'terraform/client-vpn/*'
       - 'terraform/client-vpn/**'

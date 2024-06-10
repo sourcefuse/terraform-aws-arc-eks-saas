@@ -16,7 +16,7 @@ phases:
   pre_build:
     commands:
       - cd terraform/billing
-      - rm config.${environment}.hcl
+      - rm config.hcl
       - sed -i 's/aws_region/'"$aws_region"'/g' config.txt
       - tf_state_bucket=$(aws ssm get-parameter --name "/${namespace}/${environment}/terraform-state-bucket" --query "Parameter.Value" --output text --region "$aws_region")
       - tf_state_table=$(aws ssm get-parameter --name "/${namespace}/${environment}/terraform-state-dynamodb-table" --query "Parameter.Value" --output text --region "$aws_region")
@@ -28,13 +28,12 @@ phases:
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${namespace}-${environment}-eks-cluster 
-      - kubectl version
 
   build:
     commands:     
       - terraform init --backend-config=config.${environment}.hcl
-      - terraform plan --var-file=${environment}.tfvars
-      - terraform apply --var-file=${environment}.tfvars --auto-approve
+      - terraform plan
+      - terraform apply --auto-approve
 
   post_build:
     commands:

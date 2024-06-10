@@ -4,7 +4,6 @@
 variable "environment" {
   type        = string
   description = "Name of the environment, i.e. dev, stage, prod"
-  default     = "dev"
 }
 
 variable "region" {
@@ -16,7 +15,6 @@ variable "region" {
 variable "namespace" {
   type        = string
   description = "Namespace of the project, i.e. arc"
-  default     = "arc-saas"
 }
 
 ################################################################################
