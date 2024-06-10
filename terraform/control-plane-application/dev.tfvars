@@ -1,5 +1,0 @@
-region      = "us-east-1"
-namespace   = "arc-saas"
-environment = "dev"
-domain_name = "arc-saas.net"
-from_email  = "no-reply@arc-saas.net"

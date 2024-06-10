@@ -34,7 +34,7 @@ resource "opensearch_role" "tenant_index_role" {
   cluster_permissions = ["cluster_composite_ops_ro"]
 
   index_permissions {
-    index_patterns = ["${each.value}*","logs-${each.value}*"]
+    index_patterns = ["${each.value}*", "logs-${each.value}*"]
     allowed_actions = [
       "get",
       "search",
