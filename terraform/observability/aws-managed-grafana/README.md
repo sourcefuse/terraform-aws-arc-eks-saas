@@ -52,9 +52,9 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Domain Name | `string` | `"arc-saas.net"` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | `"dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
 | <a name="input_grafana_version"></a> [grafana\_version](#input\_grafana\_version) | AWS Managed grafana version | `string` | `"9.4"` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | `"arc-saas"` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS Region | `string` | `"us-east-1"` | no |
 | <a name="input_workspace_api_keys_keyname"></a> [workspace\_api\_keys\_keyname](#input\_workspace\_api\_keys\_keyname) | Workspace api key base key name | `string` | `"admin"` | no |
 | <a name="input_workspace_api_keys_keyrole"></a> [workspace\_api\_keys\_keyrole](#input\_workspace\_api\_keys\_keyrole) | Workspace api key base key role like ADMIN, VIEWER, EDITOR etc | `string` | `"ADMIN"` | no |

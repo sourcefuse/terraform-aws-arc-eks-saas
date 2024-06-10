@@ -43,9 +43,9 @@ No resources.
 | <a name="input_enable_s3_endpoint"></a> [enable\_s3\_endpoint](#input\_enable\_s3\_endpoint) | Enable S3 endpoints | `bool` | `false` | no |
 | <a name="input_enable_sns_endpoint"></a> [enable\_sns\_endpoint](#input\_enable\_sns\_endpoint) | Enable SNS endpoints | `bool` | `false` | no |
 | <a name="input_enable_sqs_endpoint"></a> [enable\_sqs\_endpoint](#input\_enable\_sqs\_endpoint) | Enable SQS endpoints | `bool` | `false` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | `"dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
 | <a name="input_is_custom_subnet_enabled"></a> [is\_custom\_subnet\_enabled](#input\_is\_custom\_subnet\_enabled) | Enable to create subnets with custom cidr range | `bool` | `false` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | `"arc-saas"` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
 | <a name="input_private_subnet_count"></a> [private\_subnet\_count](#input\_private\_subnet\_count) | Number of private subnets required | `number` | `2` | no |
 | <a name="input_public_subnet_count"></a> [public\_subnet\_count](#input\_public\_subnet\_count) | Number of public subnets required | `number` | `2` | no |
 | <a name="input_region"></a> [region](#input\_region) | AWS Region | `string` | `"us-east-1"` | no |

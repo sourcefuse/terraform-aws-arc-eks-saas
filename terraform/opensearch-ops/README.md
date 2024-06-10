@@ -36,8 +36,8 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_backend_roles"></a> [backend\_roles](#input\_backend\_roles) | List of IAM Roles which need to be mapped to opensearch | `list(string)` | `[]` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | Name of the environment, i.e. dev, stage, prod | `string` | `"dev"` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace of the project, i.e. arc | `string` | `"arc-saas"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Name of the environment, i.e. dev, stage, prod | `string` | n/a | yes |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace of the project, i.e. arc | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS Region | `string` | `"us-east-1"` | no |
 
 ## Outputs

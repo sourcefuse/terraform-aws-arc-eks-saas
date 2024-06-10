@@ -57,13 +57,13 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Domain Name | `string` | `"arc-saas.net"` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | `"dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
 | <a name="input_grafana_admin_username"></a> [grafana\_admin\_username](#input\_grafana\_admin\_username) | Grafana admin login username | `string` | `"adminuser"` | no |
 | <a name="input_grafana_helm_release_version"></a> [grafana\_helm\_release\_version](#input\_grafana\_helm\_release\_version) | Grafana helm release version | `string` | `"7.3.0"` | no |
 | <a name="input_grafana_namespace"></a> [grafana\_namespace](#input\_grafana\_namespace) | grafana namespace in which grafna will be deployed | `string` | `"grafana"` | no |
 | <a name="input_grafana_service_type"></a> [grafana\_service\_type](#input\_grafana\_service\_type) | Grafana Service type Loadbalancer in our type | `string` | `"Loadbalancer"` | no |
 | <a name="input_grafana_volume_size"></a> [grafana\_volume\_size](#input\_grafana\_volume\_size) | Grafana persistant volume size | `string` | `"10Gi"` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | `"arc-saas"` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS Region | `string` | `"us-east-1"` | no |
 | <a name="input_service_account_name"></a> [service\_account\_name](#input\_service\_account\_name) | Service Account Name | `string` | `"grafana"` | no |
 

@@ -37,9 +37,9 @@
 | <a name="input_auditdbdatabase"></a> [auditdbdatabase](#input\_auditdbdatabase) | ################################################################################# # Postgres DBs ################################################################################# | `string` | `"audit"` | no |
 | <a name="input_aurora_db_name"></a> [aurora\_db\_name](#input\_aurora\_db\_name) | Database name. | `string` | `"auroradb"` | no |
 | <a name="input_authenticationdbdatabase"></a> [authenticationdbdatabase](#input\_authenticationdbdatabase) | n/a | `string` | `"auth"` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | `"dev"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
 | <a name="input_featuretoggledbdatabase"></a> [featuretoggledbdatabase](#input\_featuretoggledbdatabase) | n/a | `string` | `"feature"` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | `"arc-saas"` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
 | <a name="input_notificationdbdatabase"></a> [notificationdbdatabase](#input\_notificationdbdatabase) | n/a | `string` | `"notification"` | no |
 | <a name="input_paymentdbdatabase"></a> [paymentdbdatabase](#input\_paymentdbdatabase) | n/a | `string` | `"payment"` | no |
 | <a name="input_region"></a> [region](#input\_region) | AWS region | `string` | `"us-east-1"` | no |
