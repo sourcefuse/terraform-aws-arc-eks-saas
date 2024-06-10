@@ -77,15 +77,15 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Enter Registered Domain Name | `string` | `"arc-saas.net"` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | `"dev"` | no |
-| <a name="input_from_email"></a> [from\_email](#input\_from\_email) | Enter the email from where notification will be sent. it should have contain verified ses domain identity | `string` | `"no-reply@arc-saas.net"` | no |
+| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Enter Registered Domain Name | `string` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
+| <a name="input_from_email"></a> [from\_email](#input\_from\_email) | Enter the email from where notification will be sent. it should have contain verified ses domain identity | `string` | n/a | yes |
 | <a name="input_jwt_issuer"></a> [jwt\_issuer](#input\_jwt\_issuer) | JWT Issuer | `string` | `"control-plane"` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | `"arc-saas"` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS region | `string` | `"us-east-1"` | no |
-| <a name="input_tenant_email"></a> [tenant\_email](#input\_tenant\_email) | Enter Default Tenant Email ID | `string` | `"harshit.kumar+1@sourcefuse.com"` | no |
-| <a name="input_tenant_name"></a> [tenant\_name](#input\_tenant\_name) | Enter Default Tenant Name | `string` | `"SOURCEFUSE"` | no |
-| <a name="input_user_name"></a> [user\_name](#input\_user\_name) | cognito User Name | `string` | `"sourcefuse"` | no |
+| <a name="input_tenant_email"></a> [tenant\_email](#input\_tenant\_email) | Enter Default Tenant Email ID | `string` | n/a | yes |
+| <a name="input_tenant_name"></a> [tenant\_name](#input\_tenant\_name) | Enter Default Tenant Name | `string` | n/a | yes |
+| <a name="input_user_name"></a> [user\_name](#input\_user\_name) | cognito User Name | `string` | n/a | yes |
 
 ## Outputs
 

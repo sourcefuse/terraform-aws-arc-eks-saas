@@ -70,7 +70,7 @@ check_dir() {
 
 init () {
   cd terraform/$DIRECTORY
-  terraform init -backend-config config.$ENV.hcl $EXTRA_ARGS
+  terraform init -backend-config config.hcl $EXTRA_ARGS
   terraform workspace list
 }
 
@@ -78,7 +78,7 @@ plan () {
 
   cd terraform/$DIRECTORY
   PLAN_FILENAME=$ENV-$(basename $DIRECTORY)-$plan_id.tfplan
-  terraform plan -var-file $ENV.tfvars $EXTRA_ARGS -out $PLAN_FILENAME
+  terraform plan $EXTRA_ARGS -out $PLAN_FILENAME
   PLAN_OUTPUT=$(terraform show -no-color $PLAN_FILENAME)
 
   echo "<details><summary>Terraform plan output for $DIRECTORY in $ENV</summary>" >> $ENV-plan-output.txt

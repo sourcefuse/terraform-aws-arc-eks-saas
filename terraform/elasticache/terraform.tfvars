@@ -1,0 +1,16 @@
+namespace                  = "arc-saas"
+environment                = ""
+region                     = ""
+instance_type              = "cache.t3.small"
+cluster_size               = 1
+family                     = "redis6.x"
+engine_version             = "6.2"
+at_rest_encryption_enabled = false
+transit_encryption_enabled = false
+cluster_mode_enabled       = false
+apply_immediately          = true
+automatic_failover_enabled = false
+auto_minor_version_upgrade = true
+maintenance_window         = "sun:03:00-sun:04:00"
+snapshot_window            = "06:30-07:30"
+snapshot_retention_limit   = 0

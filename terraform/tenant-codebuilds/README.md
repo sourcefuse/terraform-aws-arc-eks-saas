@@ -57,12 +57,12 @@
 | <a name="input_build_type"></a> [build\_type](#input\_build\_type) | The type of build environment, e.g. LINUX\_CONTAINER, LINUX\_GPU\_CONTAINER, WINDOWS\_CONTAINER, WINDOWS\_SERVER\_2019\_CONTAINER, ARM\_CONTAINER, LINUX\_LAMBDA\_CONTAINER, ARM\_LAMBDA\_CONTAINER | `string` | `"LINUX_CONTAINER"` | no |
 | <a name="input_cloudwatch_log_stream_name"></a> [cloudwatch\_log\_stream\_name](#input\_cloudwatch\_log\_stream\_name) | Stream name of the logs in CloudWatch Logs. | `string` | `"log-stream"` | no |
 | <a name="input_concurrent_build_limit"></a> [concurrent\_build\_limit](#input\_concurrent\_build\_limit) | Specify a maximum number of concurrent builds for the project. The value specified must be greater than 0 and less than the account concurrent running builds limit. | `number` | `1` | no |
-| <a name="input_control_plane_host"></a> [control\_plane\_host](#input\_control\_plane\_host) | Host Name of the control plane | `string` | `""` | no |
+| <a name="input_control_plane_host"></a> [control\_plane\_host](#input\_control\_plane\_host) | Host Name of the control plane | `string` | n/a | yes |
 | <a name="input_create_premium_codebuild"></a> [create\_premium\_codebuild](#input\_create\_premium\_codebuild) | Enable or Disable to create premium codebuild project | `bool` | `true` | no |
 | <a name="input_create_standard_codebuild"></a> [create\_standard\_codebuild](#input\_create\_standard\_codebuild) | Enable or Disable to create premium codebuild project | `bool` | `true` | no |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Domain name of the control plane | `string` | `""` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | `"dev"` | no |
-| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | `"arc-saas"` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
 | <a name="input_premium_buildspec"></a> [premium\_buildspec](#input\_premium\_buildspec) | Optional buildspec declaration to use for building the project | `string` | `""` | no |
 | <a name="input_premium_cloudwatch_log_group_name"></a> [premium\_cloudwatch\_log\_group\_name](#input\_premium\_cloudwatch\_log\_group\_name) | Group name of the logs in CloudWatch Logs | `string` | `"premium-codebuild-log-group"` | no |
 | <a name="input_premium_source_location"></a> [premium\_source\_location](#input\_premium\_source\_location) | The location of the source code from git or s3 | `string` | `""` | no |

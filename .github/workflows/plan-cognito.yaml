@@ -4,7 +4,7 @@ name: Plan - Cognito
 on:
   pull_request:
     branches:
-      - main
+      - feature/demo
     paths:
       - 'terraform/cognito-user-pool/*'
       - 'terraform/cognito-user-pool/**'

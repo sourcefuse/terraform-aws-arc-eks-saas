@@ -52,7 +52,7 @@ module "eks_observability_module_build_step_codebuild_project" {
   source_type = "CODEPIPELINE"
 
 
-  buildspec = "terraform/observability/self-hosted-grafana/buildspec.yaml"
+  buildspec = "terraform/observability/self-hosted-grafana/buildspec.yaml" # change the path if you are using aws-hosted grafana
 
   tags = module.tags.tags
 }

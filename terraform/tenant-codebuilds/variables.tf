@@ -9,14 +9,12 @@ variable "region" {
 
 variable "environment" {
   type        = string
-  default     = "dev"
   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 }
 
 variable "namespace" {
   type        = string
   description = "Namespace for the resources."
-  default     = "arc-saas"
 }
 
 ################################################################################
@@ -132,7 +130,6 @@ variable "domain_name" {
 
 variable "control_plane_host" {
   type        = string
-  default     = ""
   description = "Host Name of the control plane"
 }
 

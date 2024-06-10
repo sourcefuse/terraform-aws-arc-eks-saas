@@ -4,12 +4,10 @@
 variable "namespace" {
   type        = string
   description = "Namespace for the resources."
-  default     = "arc-saas"
 }
 
 variable "environment" {
   type        = string
-  default     = "dev"
   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
 }
 
@@ -40,7 +38,7 @@ variable "instance_type" {
 
 variable "family" {
   type        = string
-  default     = "redis4.0"
+  default     = "redis6.x"
   description = "Redis family"
 }
 
@@ -55,7 +53,7 @@ variable "parameter" {
 
 variable "engine_version" {
   type        = string
-  default     = "4.0.10"
+  default     = "6.2"
   description = "Redis engine version"
 }
 

@@ -4,7 +4,7 @@ name: Plan - Elasticache
 on:
   pull_request:
     branches:
-      - main
+      - feature/demo
     paths:
       - 'terraform/elasticache/*'
       - 'terraform/elasticache/**'

@@ -52,7 +52,7 @@ module "cognito_module_build_step_codebuild_project" {
           "export PATH=$PWD/:$PATH",
           "apt-get update -y && apt-get install -y jq unzip",
           "cd terraform/cognito-user-pool",
-          "rm config.${var.environment}.hcl",
+          "rm config.hcl",
           "sed -i 's/aws_region/${var.region}/g' config.txt",
           "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.region})",
           "tf_state_table=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-dynamodb-table\" --query \"Parameter.Value\" --output text --region ${var.region})",
@@ -65,8 +65,8 @@ module "cognito_module_build_step_codebuild_project" {
       build = {
         commands = [
           "terraform init --backend-config=config.${var.environment}.hcl",
-          "terraform plan --var-file=${var.environment}.tfvars",
-          "terraform apply --var-file=${var.environment}.tfvars -auto-approve",
+          "terraform plan",
+          "terraform apply -auto-approve",
         ]
       }
     }

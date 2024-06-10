@@ -1,25 +1,4 @@
 ################################################################################
-## default
-################################################################################
-terraform {
-  required_version = ">= 1.4"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 5.0"
-    }
-  }
-
-  backend "s3" {}
-}
-
-
-provider "aws" {
-  region = var.region
-}
-
-################################################################################
 ## tag
 ################################################################################
 module "tags" {
@@ -383,9 +362,6 @@ module "standard_plan_codebuild_project" {
   cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
 
   enable_codebuild_authentication = false
-  # source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
-  # source_credential_server_type   = "GITHUB"
-  # source_credential_token         = data.aws_ssm_parameter.github_token.value
 
   tags       = module.tags.tags
   depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.standard_repo]

@@ -28,9 +28,7 @@ phases:
       - echo "${is_bootstrap_creation}"
 
       # Run Bootstrap
-      - ls -la
       - cd terraform/bootstrap
-      - ls -al
       - terraform init 
       - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
       - cd ..

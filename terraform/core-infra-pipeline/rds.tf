@@ -59,7 +59,7 @@ resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
             "tf_state_bucket=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-bucket\" --query \"Parameter.Value\" --output text --region ${var.region})",
             "tf_state_table=$(aws ssm get-parameter --name \"/${var.namespace}/${var.environment}/terraform-state-dynamodb-table\" --query \"Parameter.Value\" --output text --region ${var.region})",
             "cd terraform/db",
-            "rm config.${var.environment}.hcl",
+            "rm config.hcl",
             "sed -i 's/aws_region/${var.region}/g' config.txt",
             "envsubst < config.txt > config.${var.environment}.hcl",
 
@@ -69,17 +69,17 @@ resource "aws_codebuild_project" "rds_module_build_step_codebuild_project" {
         build = {
           commands = [
             "terraform init --backend-config=config.${var.environment}.hcl",
-            "terraform plan --var-file=${var.environment}.tfvars",
-            "terraform apply --var-file=${var.environment}.tfvars -auto-approve",
+            "terraform plan",
+            "terraform apply -auto-approve",
             "cd ..",
             # To run db-operations
             "cd db-ops",
-            "rm config.${var.environment}.hcl",
+            "rm config.hcl",
             "sed -i 's/aws_region/${var.region}/g' config.txt",
             "envsubst < config.txt > config.${var.environment}.hcl",
             "terraform init --backend-config=config.${var.environment}.hcl",
-            "terraform plan --var-file=${var.environment}.tfvars",
-            "terraform apply --var-file=${var.environment}.tfvars -auto-approve",
+            "terraform plan",
+            "terraform apply -auto-approve",
           ]
         }
       }

@@ -1,0 +1,10 @@
+region              = "us-east-1"
+environment         = ""
+namespace           = ""
+min_pods            = 1
+max_pods            = 9
+common_name         = "abc.com" #domain name supplied as common name.
+organization        = "Sourcefuse, Inc."
+alb_ingress_name    = "alb-external-ingress"
+acm_certificate_arn = "arn:aws:acm:us-east-1:xxxx:certificate/xxxx" # replace ACM ARN
+full_domain_name    = "*.abc.com"                                   #should always start with wildcard
