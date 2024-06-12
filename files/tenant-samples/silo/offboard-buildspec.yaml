@@ -35,84 +35,58 @@ phases:
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
-    finally:
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+    # finally:
+    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
   build:
     on-failure: ABORT
     commands:
-      # Exporting Webhook Envs
-      - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
-      - export REDIRECT_URL="${CONTROL_PLANE_HOST}/main/home"
-      - export APP_PLANE_REDIRECT_URL="https://${KEY}.${DOMAIN_NAME}/main/home"
-      - export USER_CALLBACK_ENDPOINT="https://${KEY}.${DOMAIN_NAME}/user-tenant-service/user-callback"
-      - export CLIENT_ID="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
-      - export CLIENT_SECRET=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
-      - export RANDOM_SECRET="${SECRET}"
-
       # Export Terraform Env Variable 
       - export TF_VAR_namespace="${NAMESPACE}"
       - export TF_VAR_environment="${ENVIRONMENT}"
       - export TF_VAR_region="${AWS_REGION}"
       - export TF_VAR_tenant="${KEY}"
-      - export TF_VAR_user_name="${USERNAME}"
-      - export TF_VAR_tenant_email="${TENANT_ADMIN_EMAIL}"
-      - export TF_VAR_domain_name="${DOMAIN_NAME}"
-      - export TF_VAR_tenant_name="${TENANT_NAME}"
-      - export TF_VAR_tenant_secret="${SECRET}"
-      - export TF_VAR_user_callback_secret="${SECRET}"
       - export TF_VAR_tenant_id="${TENANT_ID}"
-      - export TF_VAR_cluster_name="${EKS_CLUSTER_NAME}"
-      - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"
-      - export TF_VAR_tenant_host_domain="${KEY}.${DOMAIN_NAME}"
-      - export TF_VAR_jwt_issuer="${KEY}"
-      - export TF_VAR_tenant_client_id="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
-      - export TF_VAR_tenant_client_secret=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
-      - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
-      - export TF_VAR_alb_url="${ALB_DNS}"
 
-      # check if bootstrap need to be run or not
-      - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
-      - if [ -z "$PARAMETER_VALUE" ]; then 
-           is_bootstrap_creation=1;
-        else
-           is_bootstrap_creation=0;
-        fi
-
-      # Run Bootstrap folder to create terraform state s3 bucket
-      - cd terraform/bootstrap
-      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
-      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
-      - cd ..
-
-      # Creating terraform backend config and tfvars at run time
+      - pip3 install git-remote-codecommit
+      - git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository
+      - cp ${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository/silo/infra/terraform/${KEY}.tfvars terraform/
+      
       - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      
+      - cd terraform
       - export TF_KEY=${KEY}/${KEY}.tfstate
       - envsubst < config.txt > config.${KEY}.hcl
-      - envsubst <tfvariables.txt> ${KEY}.tfvars
+      - terraform init --backend-config=config.${KEY}.hcl
+      - terraform plan --var-file=${KEY}.tfvars -destroy
+      # Create Tenant Backup Using Terraform
+      - cd tenant-offboard
+      - export TF_OFFBOARD_KEY=${KEY}/backup.tfstate
+      - envsubst < config.txt > config.hcl
 
       # Run Terraform to create infra and apply helm  
-      - terraform init --backend-config=config.${KEY}.hcl
-      - terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
-      - chmod +x push-values.sh 
-      - ./push-values.sh # push values to tenant management gitops repository
-      - kubectl apply -f argocd-application.yaml --namespace argocd || true
-      - sleep 220 # waiting time to spin up tenant pods 
-      - terraform apply -auto-approve --refresh=false  # refresh is false to avoid API hitting
-      - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
+      - terraform init --backend-config=config.hcl
+      - terraform apply -auto-approve 
+      - cd .. 
+
+      # - export TF_KEY=${KEY}/${KEY}.tfstate
+      # - envsubst < config.txt > config.${KEY}.hcl
+      # - terraform init --backend-config=config.${KEY}.hcl
+      # - terraform plan --var-file=${KEY}.tfvars -destroy
       
-      # fetching cognito user sub as it will be created once terraform will be applied successfully
-      - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
-    finally:
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+      - kubectl delete application ${KEY} --namespace argocd || true
+      
+      - kubectl delete workflow ${KEY} --namespace argo-workflows || true
+      
+    # finally:
+    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
      
 
   post_build:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
-      - export CREATE_USER=0
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
-      - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
+      # - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+      # - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
 
 
 
