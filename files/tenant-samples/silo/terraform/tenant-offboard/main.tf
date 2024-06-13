@@ -64,7 +64,7 @@ resource "null_resource" "backup_job" {
 set -e
 
 # Start the backup job
-aws backup start-backup-job --backup-vault-name "${local.vault_name}" --resource-arn "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:cluster:${var.namespace}-${var.environment}-${var.tenant}-aurora" --iam-role-arn "${module.backup.backup_role_arn}" | tee response
+aws backup start-backup-job --backup-vault-name "${local.vault_name}" --resource-arn "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:cluster:${var.namespace}-${var.environment}-${var.tenant}-aurora" --iam-role-arn "${module.backup.backup_role_arn}" --lifecycle DeleteAfterDays=30 | tee response
 
 # Extract the Backup Job ID
 BACKUP_JOB_ID=$(jq -r ".BackupJobId" < response)
