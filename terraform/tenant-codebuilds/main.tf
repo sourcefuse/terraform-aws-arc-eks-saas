@@ -462,11 +462,6 @@ module "premium_offboard_codebuild_project" {
       type  = "PLAINTEXT"
     },
     {
-      name  = "USERNAME"
-      value = "test"
-      type  = "PLAINTEXT"
-    },
-    {
       name  = "ACCESS_TOKEN_EXPIRATION"
       value = 3600
       type  = "PLAINTEXT"
@@ -480,16 +475,6 @@ module "premium_offboard_codebuild_project" {
       name  = "AUTH_CODE_EXPIRATION"
       value = 3600
       type  = "PLAINTEXT"
-    },
-    {
-      name  = "TENANT_CLIENT_ID"
-      value = "/${var.namespace}/${var.environment}/silo/tenant_client_id"
-      type  = "PARAMETER_STORE"
-    },
-    {
-      name  = "TENANT_CLIENT_SECRET"
-      value = "/${var.namespace}/${var.environment}/silo/tenant_client_secret"
-      type  = "PARAMETER_STORE"
     }
   ]
 

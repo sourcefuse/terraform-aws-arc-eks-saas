@@ -29,8 +29,8 @@ echo "Backup Job ID: $BACKUP_JOB_ID"
 STATE="RUNNING"
 echo "Monitoring backup job status..."
 until [ "$STATE" = "COMPLETED" ] || [ "$STATE" = "FAILED" ]; do
-  echo "Current status: '$STATE' - waiting 10 seconds."
-  sleep 10
+  echo "Current status: '$STATE' - waiting 30 seconds."
+  sleep 30
   aws backup describe-backup-job --backup-job-id "$BACKUP_JOB_ID" | tee response
   STATE=$(jq -r ".State" < response)
 done

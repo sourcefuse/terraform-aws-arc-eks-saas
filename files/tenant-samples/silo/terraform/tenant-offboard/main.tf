@@ -29,28 +29,7 @@ module "backup" {
   backup_plan = null
   create_role = true
   role_name   = local.backup_role_name
-  backup_selection_data = {
-    name      = "${var.tenant}-backup-selection"
-    plan_name = local.backup_plan_name
-    resources = ["*"]
-    selection_tags = [
-      {
-        type  = "STRINGEQUALS"
-        key   = "Name"
-        value = "aurora"
-      },
-      {
-        type  = "STRINGEQUALS"
-        key   = "Tenant"
-        value = "${var.tenant}"
-      },
-      {
-        type  = "STRINGEQUALS"
-        key   = "Tenant_ID"
-        value = "${var.tenant_id}"
-      }
-    ]
-  }
+  backup_selection_data = null
 
 
   tags = module.tags.tags
