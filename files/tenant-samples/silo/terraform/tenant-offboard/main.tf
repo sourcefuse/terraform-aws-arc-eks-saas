@@ -46,5 +46,7 @@ resource "null_resource" "run_backup_script" {
     }
     interpreter = ["/bin/bash", "-c"]
   }
+
+  depends_on = [module.backup]
 }
 
