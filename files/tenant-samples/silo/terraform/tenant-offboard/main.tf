@@ -57,28 +57,15 @@ module "backup" {
 
 }
 
-resource "null_resource" "backup_job" {
+resource "null_resource" "run_backup_script" {
   provisioner "local-exec" {
-    command = <<EOF
-#!/bin/bash
-set -e
-
-# Start the backup job
-aws backup start-backup-job --backup-vault-name "${local.vault_name}" --resource-arn "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:cluster:${var.namespace}-${var.environment}-${var.tenant}-aurora" --iam-role-arn "${module.backup.backup_role_arn}" --lifecycle DeleteAfterDays=30 | tee response
-
-# Extract the Backup Job ID
-BACKUP_JOB_ID=$(jq -r ".BackupJobId" < response)
-
-# Monitor the backup job status
-until [ "${STATE:=RUNNING}" = "COMPLETED" ]
-do
-  echo "Current status: '${STATE}' wait 10 seconds."
-  sleep 10
-  aws backup describe-backup-job --backup-job-id "${BACKUP_JOB_ID}" | tee response
-  STATE=$(jq -r ".State" < response)
-done
-
-echo "Current status: '${STATE}'"
-EOF
+    command = "bash ./start_backup_job.sh"
+    environment = {
+      BACKUP_VAULT_NAME = local.vault_name
+      RESOURCE_ARN      = "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:cluster:${var.namespace}-${var.environment}-${var.tenant}-aurora"
+      IAM_ROLE_ARN      = module.backup.backup_role_arn
+    }
+    interpreter = ["/bin/bash", "-c"]
   }
 }
+

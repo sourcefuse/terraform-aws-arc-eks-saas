@@ -88,7 +88,7 @@ module "tenant_opensearch_parameters" {
   ssm_parameters = [
     {
       name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/opensearch_user"
-      value       = var.tenant_name
+      value       = var.tenant
       type        = "SecureString"
       overwrite   = "true"
       description = "Pooled Tenant Opensearch Username"
