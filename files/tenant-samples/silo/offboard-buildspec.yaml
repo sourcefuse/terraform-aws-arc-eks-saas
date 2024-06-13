@@ -22,8 +22,8 @@ phases:
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
       - pip install boto3
       - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
-    finally:
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH 
+    # finally:
+    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH 
   pre_build:
     on-failure: ABORT  
     commands:
@@ -53,30 +53,25 @@ phases:
       
       - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
-      
-      - cd terraform
-      - export TF_KEY=${KEY}/${KEY}.tfstate
-      - envsubst < config.txt > config.${KEY}.hcl
-      - terraform init --backend-config=config.${KEY}.hcl
-      - terraform plan --var-file=${KEY}.tfvars -destroy
-      # Create Tenant Backup Using Terraform
-      - cd tenant-offboard
-      - export TF_OFFBOARD_KEY=${KEY}/backup.tfstate
-      - envsubst < config.txt > config.hcl
 
-      # Run Terraform to create infra and apply helm  
+
+      # Create Tenant Backup Using Terraform
+      - cd terraform/tenant-offboard
+      - export TF_OFFBOARD_KEY=${KEY}/backup.tfstate
+      - envsubst < config.txt > config.hcl 
       - terraform init --backend-config=config.hcl
       - terraform apply -auto-approve 
       - cd .. 
 
-      # - export TF_KEY=${KEY}/${KEY}.tfstate
-      # - envsubst < config.txt > config.${KEY}.hcl
-      # - terraform init --backend-config=config.${KEY}.hcl
-      # - terraform plan --var-file=${KEY}.tfvars -destroy
+      # destroy tenant infra
+      - export TF_KEY=${KEY}/${KEY}.tfstate
+      - envsubst < config.txt > config.${KEY}.hcl
+      - terraform init --backend-config=config.${KEY}.hcl
+      - terraform plan --var-file=${KEY}.tfvars -destroy
       
       - kubectl delete application ${KEY} --namespace argocd || true
       
-      - kubectl delete workflow ${KEY} --namespace argo-workflows || true
+      - kubectl delete workflow ${KEY}-terraform-workflow --namespace argo-workflows || true
       
     # finally:
     #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
