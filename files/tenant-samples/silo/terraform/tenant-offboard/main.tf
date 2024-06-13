@@ -31,7 +31,6 @@ module "backup" {
   role_name   = local.backup_role_name
   backup_selection_data = null
 
-
   tags = module.tags.tags
 
 }
