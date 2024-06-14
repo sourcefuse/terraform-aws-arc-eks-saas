@@ -452,8 +452,8 @@ module "premium_offboard_codebuild_project" {
       type  = "PLAINTEXT"
     },
     {
-      name  = "DOMAIN_NAME"
-      value = var.domain_name
+      name  = "TENANT_TIER"
+      value = 1
       type  = "PLAINTEXT"
     },
     {

@@ -216,6 +216,13 @@ Figure9 - Tenant Deployment And management
 Figure 9 illustrates the process flow for tenant deployment and management within the multi-tenant SaaS solution. The control plane initiates the CodeBuild process, which orchestrates the provisioning of the tenant. Upon successful onboarding, the infrastructure and application lifecycle of the tenant are managed using tools such as ArgoCD and Argo Workflow. This setup facilitates seamless management of updates to tenant infrastructure and application services. A distinct CodeCommit repository is utilized for housing tenant-specific Helm values and Terraform tfvars files, ensuring organized storage and management of these configuration artifacts.
 
 
+### Tenant Offboarding
+
+Tenant offboarding in a multi-tenant SaaS solution on Amazon EKS involves a structured approach to remove tenant-specific resources, data, and configurations while ensuring data integrity. The process starts with creating a backup of the tenant's data, followed by disabling the tenant’s access. Subsequent steps include deleting tenant-specific Kubernetes namespaces, persistent volumes, and AWS resources such as IAM roles, S3 buckets, and databases. Automation using scripts and Terraform configurations can efficiently handle resource cleanup and environment restoration. Comprehensive logging and monitoring during offboarding ensure that all operations are tracked, maintaining compliance with data retention and privacy policies, and preventing impacts on other tenants or overall system integrity.
+
+As of now, we are focusing on the offboarding process for silo tenants in our multi-tenant SaaS solution on EKS. Silo tenants have isolated resources and configurations, making their offboarding less complex and minimizing the risk of affecting shared components or other tenants. This targeted approach ensures thorough cleanup and secure removal of all tenant-specific data, paving the way for refining and scaling the offboarding procedures for more integrated or shared tenancy models in the future.
+
+
 ## Conclusion
 
 This document delved into the foundational components of the Amazon EKS SaaS solution, offering an overview of the key building blocks employed in its construction. It aims to provide a comprehensive understanding of the application's architecture and facilitate efficient navigation of the resources within the repository.

@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    WEBHOOK_PATH: webhook.js
+    WEBHOOK_PATH: offboard-webhook.js
 
 phases:
   install:
@@ -40,6 +40,8 @@ phases:
   build:
     on-failure: ABORT
     commands:
+      # Export webhook variables 
+      - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook" 
       # Export Terraform Env Variable 
       - export TF_VAR_namespace="${NAMESPACE}"
       - export TF_VAR_environment="${ENVIRONMENT}"
@@ -68,10 +70,10 @@ phases:
       - envsubst < config.txt > config.${KEY}.hcl
       - terraform init --backend-config=config.${KEY}.hcl
       - terraform plan --var-file=${KEY}.tfvars -destroy
-      - terraform destroy --var-file=${KEY}.tfvars --auto-approve
-      # destroy tenant application
+      #- terraform destroy --var-file=${KEY}.tfvars --auto-approve
+      
       - kubectl delete application ${KEY} --namespace argocd || true
-      # destroy tenant terraform argo workflow
+      
       - kubectl delete workflow ${KEY}-terraform-workflow --namespace argo-workflows || true
       
     # finally:
@@ -80,5 +82,8 @@ phases:
 
   post_build:
     commands:
-      - export CODEBUILD_BUILD_POSTBUILD=1
-      # - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+
+
+
+
