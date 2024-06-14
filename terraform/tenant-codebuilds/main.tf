@@ -462,6 +462,11 @@ module "premium_offboard_codebuild_project" {
       type  = "PLAINTEXT"
     },
     {
+      name  = "TENANT_TIER"
+      value = 1
+      type  = "PLAINTEXT"
+    },
+    {
       name  = "ACCESS_TOKEN_EXPIRATION"
       value = 3600
       type  = "PLAINTEXT"

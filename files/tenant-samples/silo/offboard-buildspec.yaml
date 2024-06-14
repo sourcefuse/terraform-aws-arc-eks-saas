@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    WEBHOOK_PATH: webhook.js
+    WEBHOOK_PATH: offboard-webhook.js
 
 phases:
   install:
@@ -22,8 +22,8 @@ phases:
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
       - pip install boto3
       - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
-    # finally:
-    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH 
+    finally:
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH 
   pre_build:
     on-failure: ABORT  
     commands:
@@ -35,11 +35,13 @@ phases:
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
-    # finally:
-    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+    finally:
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
   build:
     on-failure: ABORT
     commands:
+      # Export webhook variables 
+      - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook" 
       # Export Terraform Env Variable 
       - export TF_VAR_namespace="${NAMESPACE}"
       - export TF_VAR_environment="${ENVIRONMENT}"
@@ -68,21 +70,19 @@ phases:
       - envsubst < config.txt > config.${KEY}.hcl
       - terraform init --backend-config=config.${KEY}.hcl
       - terraform plan --var-file=${KEY}.tfvars -destroy
-      - terraform destroy --var-file=${KEY}.tfvars --auto-approve
+      #- terraform destroy --var-file=${KEY}.tfvars --auto-approve
       
       - kubectl delete application ${KEY} --namespace argocd || true
       
       - kubectl delete workflow ${KEY}-terraform-workflow --namespace argo-workflows || true
       
-    # finally:
-    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+    finally:
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
      
 
   post_build:
     commands:
-      - export CODEBUILD_BUILD_POSTBUILD=1
-      # - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
-      # - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
 
 
 
