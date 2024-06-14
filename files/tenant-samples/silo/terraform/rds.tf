@@ -149,6 +149,13 @@ module "db_ssm_parameters" {
       description = "Default Database Schema"
     },
     {
+      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_arn"
+      value       = module.aurora.aurora_arn
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Database ARN"
+    },
+    {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/auditdbdatabase"
       value       = var.auditdbdatabase
       type        = "SecureString"

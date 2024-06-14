@@ -12,6 +12,7 @@
 - [Per-tenant Infrastructure](#per-tenant-infrastructure)
   - [Tenant Routing](#tenant-routing)
   - [Tenant Deployment And Management](#tenant-deployment-and-management)
+  - [Tenant Offboarding](#tenant-offboarding)
 - [Conclusion](#conclusion)
 - [Authors](#authors)
 

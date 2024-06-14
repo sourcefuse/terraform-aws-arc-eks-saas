@@ -32,6 +32,18 @@ variable "create_standard_codebuild" {
   default     = true
 }
 
+variable "create_premium_offboard_codebuild" {
+  type        = bool
+  description = "Enable or Disable to create premium offboarding codebuild project"
+  default     = true
+}
+
+variable "premium_offboard_buildspec" {
+  type        = string
+  default     = ""
+  description = "Optional buildspec declaration to use for building the project"
+}
+
 variable "concurrent_build_limit" {
   type        = number
   default     = 1

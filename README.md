@@ -43,12 +43,12 @@ For more details, you can go through the [eks saas architecture documentation](d
 ## Setting up the environment
 
 * First clone/fork the Github repository. 
-* Based on the environment, create `{env}.tfvars` file in all terraform folders and copy the values from dev.tfvars.
+* Based on the requirements, change `terraform.tfvars` file in all the terraform folders.
 * Update the variables **namespace**,**environment**,**region**,**domain_name** in the `script/replace-variable.sh` file.
 * Execute the script using command `./scripts/replace-variable.sh`
-* Update the codepipeline connection name (created in pre-requisite section) and github repository name in `{env}.tfvars` file of `terraform/core-infra-pipeline folder`.
+* Update the codepipeline connection name (created in pre-requisite section), github repository name and other required variables in `terraform.tfvars` file of `terraform/core-infra-pipeline folder`.
 * Check if **AWSServiceRoleForAmazonOpenSearchService** Role is already created in your AWS account then set `create_iam_service_linked_role` variables to false in tfvars file of `terraform/opensearch` otherwise set it to true.
-* Update the ACM ((created in pre-requisite section)) ARN in `{env}.tfvars` file of terraform/istio folder.
+* Update the ACM ((created in pre-requisite section)) ARN in `terraform.tfvars` file of terraform/istio folder.
 * Go thorugh all the variables decalred in tfvars file and update the variables according to your requirement.
 
 
@@ -76,20 +76,20 @@ AWS CLI version2 & Terraform CLI version 1.7 must be installed on your machine. 
 
     ```
     terraform init
-    terraform plan --var-file={env}.tfvars
-    terraform apply --var-file={env}.tfvars
+    terraform plan 
+    terraform apply
     ```
-* After that, Go to the `terraform/core-infra-pipeline` and update the bucket name, dynamodb table name (created in above step) and region in `config.{env}.hcl`. 
+* After that, Go to the `terraform/core-infra-pipeline` and update the bucket name, dynamodb table name (created in above step) and region in `config.hcl`. 
 
-**_NOTE:_** Create `config.{env}.hcl` file based on the environment and copy the content from *config.dev.hcl*
+**_NOTE:_** Update `config.hcl` file based using s
 
 * Push the code to your github repository.
 * Run the Followign command to create terraform codepipeline - 
 
     ```
-    terraform init --backend-config=config.{env}.hcl
-    terraform plan --var-file={env}.tfvars
-    terraform apply --var-file={env}.tfvars
+    terraform init --backend-config=config.hcl
+    terraform plan
+    terraform apply 
     ```
 > **_NOTE:_** All Terraform module README files are present in respective folder.
 
