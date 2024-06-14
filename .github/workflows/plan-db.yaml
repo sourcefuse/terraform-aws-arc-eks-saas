@@ -4,7 +4,7 @@ name: Plan - DB
 on:
   pull_request:
     branches:
-      - feature/demo
+      - dev
     paths:
       - 'terraform/db/*'
       - 'terraform/db/**'
