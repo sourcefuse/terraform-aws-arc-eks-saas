@@ -40,7 +40,7 @@ resource "null_resource" "run_backup_script" {
     command = "bash ./start_backup_job.sh"
     environment = {
       BACKUP_VAULT_NAME = local.vault_name
-      RESOURCE_ARN      = "arn:aws:rds:${var.region}:${data.aws_caller_identity.current.account_id}:cluster:${var.namespace}-${var.environment}-${var.tenant}-aurora"
+      RESOURCE_ARN      = data.aws_ssm_parameter.db_arn.value
       IAM_ROLE_ARN      = module.backup.backup_role_arn
     }
     interpreter = ["/bin/bash", "-c"]
