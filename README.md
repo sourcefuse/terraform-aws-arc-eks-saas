@@ -103,7 +103,7 @@ Once the codepipeline is created, Monitor the pipeline and when Codepipeline is 
 
 > **_NOTE:_** All authentication password will be saved in SSM Paramater store.
 
-After Creating record in the Route53, you can access the control plane application using `{domain-name}` URL (eg. if your domain name is xyz.com then control plane will be accessible on xyz.com). Tenant onboarding can be done using the URL `{domain-name}/tenant/signup`. Once the tenant will be onboarded successfully then you can access the tenant application plane on URL `{tenant-key}.{domain-name}`
+After Creating record in the Route53, you can access the control plane application using `{domain-name}` URL (eg. if your domain name is xyz.com then control plane will be accessible on xyz.com). Tenant onboarding can be done using the URL `{domain-name}/tenant/signup`. Once the tenant will be onboarded successfully then you can access the tenant application plane on URL `{tenant-key}.{domain-name}`.
 
 ## Authors
 
