@@ -390,3 +390,85 @@ resource "aws_codecommit_repository" "tenant_helm_repo" {
     prevent_destroy = true
   }
 }
+
+######################################################################################
+## Tenant Off-Boarding CodeBuild Project
+######################################################################################
+module "premium_offboard_codebuild_project" {
+  count       = var.create_premium_offboard_codebuild ? 1 : 0
+  source      = "../../modules/codebuild"
+  name        = "${var.namespace}-${var.environment}-premium-offboard-codebuild-project"
+  description = "Premium plan off-boarding codebuild project"
+
+  concurrent_build_limit = var.concurrent_build_limit
+  service_role           = module.tenant_codebuild_iam_role.arn
+  build_timeout          = var.build_timeout
+  queued_timeout         = var.queued_timeout
+
+  source_version  = var.premium_source_version
+  source_type     = var.source_type
+  buildspec       = var.premium_offboard_buildspec
+  source_location = aws_codecommit_repository.premium_repo.clone_url_http
+
+  vpc_id             = data.aws_vpc.vpc.id
+  subnets            = data.aws_subnets.private.ids
+  security_group_ids = [data.aws_security_groups.codebuild_db_access.ids[0]]
+
+  build_compute_type                = var.build_compute_type
+  build_image                       = var.build_image
+  build_type                        = var.build_type
+  build_image_pull_credentials_type = var.build_image_pull_credentials_type
+  privileged_mode                   = var.privileged_mode
+
+  environment_variables = [
+    {
+      name  = "AWS_ACCOUNT_ID"
+      value = data.aws_caller_identity.this.account_id
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "AWS_REGION"
+      value = var.region
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "NAMESPACE"
+      value = var.namespace
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "ENVIRONMENT"
+      value = var.environment
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "EKS_CLUSTER_NAME"
+      value = "${var.namespace}-${var.environment}-eks-cluster"
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "CB_ROLE"
+      value = data.aws_ssm_parameter.codebuild_role.value
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "TENANT_TIER"
+      value = 1
+      type  = "PLAINTEXT"
+    },
+    {
+      name  = "CONTROL_PLANE_HOST"
+      value = var.control_plane_host
+      type  = "PLAINTEXT"
+    }
+  ]
+
+  cloudwatch_log_group_name  = var.premium_cloudwatch_log_group_name
+  cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
+
+  enable_codebuild_authentication = false
+
+
+  tags       = module.tags.tags
+  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.premium_repo]
+}

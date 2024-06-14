@@ -4,7 +4,7 @@ name: Plan - Network
 on:
   pull_request:
     branches:
-      - feature/demo
+      - dev
     paths:
       - 'terraform/network/*'
       - 'terraform/network/**'

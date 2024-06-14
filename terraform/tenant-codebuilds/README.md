@@ -19,6 +19,7 @@
 |------|--------|---------|
 | <a name="module_pooled_tenant_client_id"></a> [pooled\_tenant\_client\_id](#module\_pooled\_tenant\_client\_id) | ../../modules/random-password | n/a |
 | <a name="module_pooled_tenant_client_secret"></a> [pooled\_tenant\_client\_secret](#module\_pooled\_tenant\_client\_secret) | ../../modules/random-password | n/a |
+| <a name="module_premium_offboard_codebuild_project"></a> [premium\_offboard\_codebuild\_project](#module\_premium\_offboard\_codebuild\_project) | ../../modules/codebuild | n/a |
 | <a name="module_premium_plan_codebuild_project"></a> [premium\_plan\_codebuild\_project](#module\_premium\_plan\_codebuild\_project) | ../../modules/codebuild | n/a |
 | <a name="module_silo_tenant_client_id"></a> [silo\_tenant\_client\_id](#module\_silo\_tenant\_client\_id) | ../../modules/random-password | n/a |
 | <a name="module_silo_tenant_client_secret"></a> [silo\_tenant\_client\_secret](#module\_silo\_tenant\_client\_secret) | ../../modules/random-password | n/a |
@@ -59,12 +60,14 @@
 | <a name="input_concurrent_build_limit"></a> [concurrent\_build\_limit](#input\_concurrent\_build\_limit) | Specify a maximum number of concurrent builds for the project. The value specified must be greater than 0 and less than the account concurrent running builds limit. | `number` | `1` | no |
 | <a name="input_control_plane_host"></a> [control\_plane\_host](#input\_control\_plane\_host) | Host Name of the control plane | `string` | n/a | yes |
 | <a name="input_create_premium_codebuild"></a> [create\_premium\_codebuild](#input\_create\_premium\_codebuild) | Enable or Disable to create premium codebuild project | `bool` | `true` | no |
+| <a name="input_create_premium_offboard_codebuild"></a> [create\_premium\_offboard\_codebuild](#input\_create\_premium\_offboard\_codebuild) | Enable or Disable to create premium offboarding codebuild project | `bool` | `true` | no |
 | <a name="input_create_standard_codebuild"></a> [create\_standard\_codebuild](#input\_create\_standard\_codebuild) | Enable or Disable to create premium codebuild project | `bool` | `true` | no |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Domain name of the control plane | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
 | <a name="input_premium_buildspec"></a> [premium\_buildspec](#input\_premium\_buildspec) | Optional buildspec declaration to use for building the project | `string` | `""` | no |
 | <a name="input_premium_cloudwatch_log_group_name"></a> [premium\_cloudwatch\_log\_group\_name](#input\_premium\_cloudwatch\_log\_group\_name) | Group name of the logs in CloudWatch Logs | `string` | `"premium-codebuild-log-group"` | no |
+| <a name="input_premium_offboard_buildspec"></a> [premium\_offboard\_buildspec](#input\_premium\_offboard\_buildspec) | Optional buildspec declaration to use for building the project | `string` | `""` | no |
 | <a name="input_premium_source_location"></a> [premium\_source\_location](#input\_premium\_source\_location) | The location of the source code from git or s3 | `string` | `""` | no |
 | <a name="input_premium_source_version"></a> [premium\_source\_version](#input\_premium\_source\_version) | A version of the Premium build input to be built for this project. If not specified, the latest version is used. | `string` | `""` | no |
 | <a name="input_privileged_mode"></a> [privileged\_mode](#input\_privileged\_mode) | (Optional) If set to true, enables running the Docker daemon inside a Docker container on the CodeBuild instance. Used when building Docker images | `bool` | `true` | no |

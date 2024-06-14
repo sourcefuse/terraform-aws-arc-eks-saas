@@ -1,0 +1,89 @@
+version: 0.2
+
+env:
+  variables:
+    WEBHOOK_PATH: offboard-webhook.js
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    on-failure: ABORT
+    commands:
+      # install dependencies 
+      - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
+      - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl ./aws-iam-authenticator
+      - curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip
+      - unzip /usr/local/bin/terraform.zip -d /usr/local/bin/
+      - terraform --version
+      - export PATH=$PWD/:$PATH
+      - apt-get update -y && apt-get install -y jq unzip
+      - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
+      - pip install boto3
+      - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
+    # finally:
+    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH 
+  pre_build:
+    on-failure: ABORT  
+    commands:
+      # authenticating cluster with codebuild using IAM role session
+      - export KUBECONFIG=$HOME/.kube/config
+      - CREDENTIALS=$(aws sts assume-role --role-arn $CB_ROLE --role-session-name codebuild-kubectl --duration-seconds 3600)
+      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
+    # finally:
+    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+  build:
+    on-failure: ABORT
+    commands:
+      # Export webhook variables 
+      - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook" 
+      # Export Terraform Env Variable 
+      - export TF_VAR_namespace="${NAMESPACE}"
+      - export TF_VAR_environment="${ENVIRONMENT}"
+      - export TF_VAR_region="${AWS_REGION}"
+      - export TF_VAR_tenant="${KEY}"
+      - export TF_VAR_tenant_id="${TENANT_ID}"
+
+      - pip3 install git-remote-codecommit
+      - git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository
+      - cp ${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository/silo/infra/terraform/${KEY}.tfvars terraform/
+      
+      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
+
+
+      # Create Tenant Backup Using Terraform
+      - cd terraform/tenant-offboard
+      - export TF_OFFBOARD_KEY=${KEY}/backup.tfstate
+      - envsubst < config.txt > config.hcl 
+      - terraform init --backend-config=config.hcl
+      - terraform apply -auto-approve 
+      - cd .. 
+
+      # destroy tenant infra
+      - export TF_KEY=${KEY}/${KEY}.tfstate
+      - envsubst < config.txt > config.${KEY}.hcl
+      - terraform init --backend-config=config.${KEY}.hcl
+      - terraform plan --var-file=${KEY}.tfvars -destroy
+      #- terraform destroy --var-file=${KEY}.tfvars --auto-approve
+      
+      - kubectl delete application ${KEY} --namespace argocd || true
+      
+      - kubectl delete workflow ${KEY}-terraform-workflow --namespace argo-workflows || true
+      
+    # finally:
+    #   - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+     
+
+  post_build:
+    commands:
+      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+
+
+
+
