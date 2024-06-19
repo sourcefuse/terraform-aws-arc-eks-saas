@@ -580,7 +580,14 @@ variable "enable_karpenter" {
 variable "karpenter" {
   description = "Karpenter addon configuration values"
   type        = any
-  default     = {}
+  default     = {
+    set = [
+      {
+        name  = "chart_version"
+        value = "0.37.0"
+      }
+  ] 
+  }
 }
 
 variable "karpenter_enable_spot_termination" {
