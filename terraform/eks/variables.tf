@@ -583,7 +583,7 @@ variable "karpenter" {
   default     = {
     set = [
       {
-        name  = "chart_version"
+        name  = "controller.image.tag"
         value = "0.37.0"
       }
   ] 
