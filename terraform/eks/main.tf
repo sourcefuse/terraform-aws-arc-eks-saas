@@ -72,7 +72,7 @@ resource "aws_ec2_tag" "alb_tag" {
 #################################################################################
 module "eks_cluster" {
   source                               = "sourcefuse/arc-eks/aws"
-  version                              = "5.0.3"
+  version                              = "5.0.10"
   environment                          = var.environment
   name                                 = "eks"
   namespace                            = var.namespace
