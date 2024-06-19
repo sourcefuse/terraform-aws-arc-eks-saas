@@ -25,7 +25,7 @@ resource "aws_ec2_tag" "alb_tag" {
 #################################################################################
 module "eks_cluster" {
   source                               = "sourcefuse/arc-eks/aws"
-  version                              = "5.0.3"
+  version                              = "5.0.10"
   environment                          = var.environment
   name                                 = "eks"
   namespace                            = var.namespace
@@ -67,7 +67,7 @@ module "eks_cluster" {
 #################################################################################
 module "eks_blueprints_addons" {
   source            = "aws-ia/eks-blueprints-addons/aws"
-  version           = "1.13.0"
+  version           = "1.16.3"
   cluster_name      = module.eks_cluster.eks_cluster_id
   cluster_endpoint  = module.eks_cluster.eks_cluster_endpoint
   cluster_version   = module.eks_cluster.eks_cluster_version
