@@ -55,10 +55,6 @@ spec:
   tags:
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
-status:
-  conditions:
-  - type: Ready
-    status: "True"
 
 
 

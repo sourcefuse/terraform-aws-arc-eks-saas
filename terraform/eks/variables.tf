@@ -582,7 +582,7 @@ variable "karpenter" {
   type        = any
   default     = {
     
-    chart_version = "0.37.0"
+    chart_version = "0.36.2"
 
   }
 }
