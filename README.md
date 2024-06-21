@@ -8,7 +8,7 @@
   With ARC SaaS, we’re introducing a pioneering SaaS factory model based control plane microservices and IaC modules that promises to revolutionize your SaaS journey.
 </p>
 
-<p align="left">
+<p align="center">
 <a href="https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas" target="_blank">
 <img alt="Quality Gate Status" src="https://sonarcloud.io/api/project_badges/measure?project=sourcefuse_terraform-aws-arc-eks-saas&metric=alert_status&token=753087a003438b8bb11e624ea44302d9044d428e">
 </a>
