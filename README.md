@@ -1,5 +1,12 @@
 # SourceFuse ARC EKS SAAS Reference Architecture
 
+<p align="center">
+  <a href="https://sourcefuse.github.io/arc-docs/arc-api-docs" target="blank"><img src="https://github.com/sourcefuse/arc-saas/blob/master/docs/assets/logo-dark-bg.png?raw=true" width="180" alt="ARC Logo" /></a>
+</p>
+
+<p align="center">
+  With ARC SaaS, we’re introducing a pioneering SaaS factory model based control plane microservices and IaC modules that promises to revolutionize your SaaS journey.
+</p>
 
 <p align="left">
 <a href="https://sonarcloud.io/summary/new_code?id=sourcefuse_terraform-aws-arc-eks-saas" target="_blank">
