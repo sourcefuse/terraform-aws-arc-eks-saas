@@ -162,23 +162,23 @@ data "template_file" "helm_values_template" {
 }
 
 resource "local_file" "helm_values" {
-  filename = "${path.module}/out/values.yaml"
+  filename = "${path.module}/output/control-plane-values.yaml"
   content  = data.template_file.helm_values_template.rendered
 }
 
 # Helm chart deployment
-resource "helm_release" "control_plane_app" {
-  name             = "control-plane"
-  chart            = "../../files/control-plane/control-plane-helm-chart" #Local Path of helm chart
-  namespace        = kubernetes_namespace.my_namespace.metadata.0.name
-  create_namespace = true
-  force_update     = true
-  recreate_pods    = true
-  values           = [data.template_file.helm_values_template.rendered]
-  depends_on = [
-    module.control_plane_iam_role
-  ]
-}
+# resource "helm_release" "control_plane_app" {
+#   name             = "control-plane"
+#   chart            = "../../files/control-plane/control-plane-helm-chart" #Local Path of helm chart
+#   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
+#   create_namespace = true
+#   force_update     = true
+#   recreate_pods    = true
+#   values           = [data.template_file.helm_values_template.rendered]
+#   depends_on = [
+#     module.control_plane_iam_role
+#   ]
+# }
 
 resource "helm_release" "fluent_bit" {
   count            = 1
@@ -233,4 +233,46 @@ resource "kubectl_manifest" "argo_workflow_repo_secret" {
     forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
     enableLfs: "true"
 YAML
+}
+
+###############################################################################################
+## Register control plane Helm App on ArgoCD
+###############################################################################################
+resource "local_file" "argocd_application" {
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: control-plane-application
+  namespace: argocd
+  labels:
+    project: ${var.namespace}
+    name: control-plane-application
+    environment: ${var.environment}
+spec:
+  destination:
+    namespace: ${local.kubernetes_ns}
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: control-plane
+    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
+    targetRevision: main
+    helm:
+      valueFiles:
+        - control-plane-values.yaml
+  project: default  
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        maxDuration: 3m0s
+        factor: 2
+    automated:
+      prune: false
+      selfHeal: true
+    EOT
+  filename = "${path.module}/control-plane-argocd-application.yaml"
 }
