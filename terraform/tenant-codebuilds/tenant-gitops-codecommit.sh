@@ -46,7 +46,7 @@ create_subdirectories "pooled"
 #Copy Control-Plane Application Helm Chart to control-plane directory
 cp -r ../../control-plane/control-plane-helm-chart/* control-plane/  || { echo "Failed to copy files"; exit 1; }
 # removing the values.yaml.template as will push control-plane values.yaml
-rm -rf pooled/application/values.yaml.template
+rm -rf control-plane/values.yaml.template
 
 
 # Copy silo base helm chart & terraform to silo directory
