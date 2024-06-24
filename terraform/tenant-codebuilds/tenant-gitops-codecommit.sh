@@ -28,6 +28,7 @@ create_directory() {
 }
 
 # Create silo and pooled directories if they don't exist
+create_directory "control-plane"
 create_directory "silo"
 create_directory "pooled"
 
@@ -42,12 +43,17 @@ create_subdirectories() {
 create_subdirectories "silo"
 create_subdirectories "pooled"
 
+#Copy Control-Plane Application Helm Chart to control-plane directory
+cp -r ../../control-plane/control-plane-helm-chart/* control-plane/  || { echo "Failed to copy files"; exit 1; }
+# removing the values.yaml.template as will push control-plane values.yaml
+rm -rf pooled/application/values.yaml.template
+
 
 # Copy silo base helm chart & terraform to silo directory
 cp -r ../silo/application-helm-chart/* silo/application/ || { echo "Failed to copy files"; exit 1; }
-cp -r ../silo/application-helm-chart   silo/infra/
-cp -r ../silo/modules                  silo/infra/
-cp -r ../silo/terraform                silo/infra/
+cp -r ../silo/application-helm-chart   silo/infra/       || { echo "Failed to copy files"; exit 1; }
+cp -r ../silo/modules                  silo/infra/       || { echo "Failed to copy files"; exit 1; }
+cp -r ../silo/terraform                silo/infra/       || { echo "Failed to copy files"; exit 1; }
               
 # removing the values.yaml as will push tenant values.yaml on tenant on-boarding
 rm -rf silo/application/values.yaml
