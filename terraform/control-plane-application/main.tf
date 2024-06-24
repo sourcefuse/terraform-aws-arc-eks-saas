@@ -297,7 +297,7 @@ metadata:
     environment: ${var.environment}
 spec:
   destination:
-    namespace: ${locals.kubernetes_ns}
+    namespace: ${local.kubernetes_ns}
     server: 'https://kubernetes.default.svc'
   source:
     path: control-plane
