@@ -41,6 +41,9 @@ phases:
       - terraform plan 
       - terraform apply --auto-approve
       - PASSWORD=$(kubectl --namespace argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+      - chmod +x push-helm-values.sh 
+      - ./push-helm-values.sh # push control-plane values yaml to tenant management gitops repository
+      - kubectl apply -f control-plane-argocd-application.yaml --namespace argocd || true
       - aws ssm put-parameter --name "/${namespace}/${environment}/argocd/admin-password" --value "$PASSWORD" --type SecureString --overwrite
 
   post_build:

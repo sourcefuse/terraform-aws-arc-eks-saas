@@ -70,7 +70,7 @@ phases:
       - envsubst < config.txt > config.${KEY}.hcl
       - terraform init --backend-config=config.${KEY}.hcl
       - terraform plan --var-file=${KEY}.tfvars -destroy
-      #- terraform destroy --var-file=${KEY}.tfvars --auto-approve
+      - terraform destroy --var-file=${KEY}.tfvars --auto-approve
       
       - kubectl delete application ${KEY} --namespace argocd || true
       
