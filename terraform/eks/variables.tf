@@ -196,6 +196,7 @@ variable "argo_workflows" {
   description = "Argo Workflows addon configuration values"
   type        = any
   default = {
+    chart_version = "0.41.11"
     set = [
       {
         name  = "server.authMode"
