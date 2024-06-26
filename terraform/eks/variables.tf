@@ -199,12 +199,12 @@ variable "argo_workflows" {
     chart_version = "0.40.14"
     set = [
       {
-        name  = "server.authModes[0]"
-        value = "server"
+        name  = "server.authModes"
+        value = ["server"]
       },
       {
-        name  = "workflow.rbac.serviceAccounts[0]"
-        value = "default"
+        name  = "workflow.rbac.serviceAccounts"
+        value = ["default"]
       }
     ]
   }
