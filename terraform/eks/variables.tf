@@ -196,7 +196,7 @@ variable "argo_workflows" {
   description = "Argo Workflows addon configuration values"
   type        = any
   default = {
-    chart_version = "0.36.1"
+    chart_version = "0.40.14"
     
     set = [
       {
