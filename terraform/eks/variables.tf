@@ -199,8 +199,8 @@ variable "argo_workflows" {
     
     set = [
       {
-        name  = "server.authModes"
-        value = "[\"server\"]"
+        name  = "server.authMode"
+        value = "server"
       },
       {
         name  = "workflow.rbac.serviceAccounts"
