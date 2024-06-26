@@ -196,11 +196,15 @@ variable "argo_workflows" {
   description = "Argo Workflows addon configuration values"
   type        = any
   default = {
-    chart_version = "0.41.11"
+    chart_version = "0.40.14"
     set = [
       {
-        name  = "server.authMode"
+        name  = "server.authModes[0]"
         value = "server"
+      },
+      {
+        name  = "workflow.rbac.serviceAccounts[0]"
+        value = "default"
       }
     ]
   }
