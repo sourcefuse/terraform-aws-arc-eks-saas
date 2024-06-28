@@ -50,7 +50,8 @@ jobs:
           git checkout -B $extension_branch || git checkout $extension_branch
 
           # Copy README from the current repo
-          cp ../terraform/docs/eks-saas-architecture.md docs/arc-saas-docs/$(basename $GITHUB_REPOSITORY)/
+          cp ../terraform/docs/eks-saas-architecture.md docs/arc-saas-docs/eks/README.md
+          cp -r ../terraform/docs/static docs/arc-saas-docs/eks/
           git add .
 
           if git diff --quiet --cached; then
