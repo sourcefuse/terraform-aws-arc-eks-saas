@@ -45,7 +45,22 @@ resource "aws_dynamodb_table" "tier_mapping" {
 ###################################################################################
 ## Store details in the mapping dynamodb table
 ###################################################################################
-resource "aws_dynamodb_table_item" "example" {
+resource "aws_dynamodb_table_item" "basic" {
+  table_name = aws_dynamodb_table.tier_mapping.name
+  hash_key   = aws_dynamodb_table.tier_mapping.hash_key
+
+  item = <<ITEM
+{
+  "tier": {"S": "BASIC"},
+  "eksClusterName": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
+  "jobName": {"S": "${var.namespace}-${var.environment}-basic-codebuild-project"},
+  "karpenterRole": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
+  "vpcId": {"S": "${data.aws_vpc.vpc.id}"}
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "standard" {
   table_name = aws_dynamodb_table.tier_mapping.name
   hash_key   = aws_dynamodb_table.tier_mapping.hash_key
 
@@ -56,18 +71,19 @@ resource "aws_dynamodb_table_item" "example" {
   "jobName": {"S": "${var.namespace}-${var.environment}-standard-codebuild-project"},
   "karpenterRole": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
   "vpcId": {"S": "${data.aws_vpc.vpc.id}"}
-},
+}
+ITEM
+}
+
+resource "aws_dynamodb_table_item" "premium" {
+  table_name = aws_dynamodb_table.tier_mapping.name
+  hash_key   = aws_dynamodb_table.tier_mapping.hash_key
+
+  item = <<ITEM
 {
   "tier": {"S": "PREMIUM"},
   "eksClusterName": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
   "jobName": {"S": "${var.namespace}-${var.environment}-premium-codebuild-project"},
-  "karpenterRole": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
-  "vpcId": {"S": "${data.aws_vpc.vpc.id}"}
-},
-{
-  "tier": {"S": "BASIC"},
-  "eksClusterName": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
-  "jobName": {"S": "${var.namespace}-${var.environment}-basic-codebuild-project"},
   "karpenterRole": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
   "vpcId": {"S": "${data.aws_vpc.vpc.id}"}
 }
