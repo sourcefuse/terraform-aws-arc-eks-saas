@@ -37,3 +37,17 @@ variable "dynamo_kms_master_key_id" {
   description = "The Default ID of an AWS-managed customer master key (CMK) for Amazon Dynamo"
   default     = null
 }
+
+#############################################################################
+## Extra Variables
+#############################################################################
+variable "domain_name" {
+  type        = string
+  default     = ""
+  description = "Domain name of the control plane"
+}
+
+variable "control_plane_host" {
+  type        = string
+  description = "Host Name of the control plane"
+}

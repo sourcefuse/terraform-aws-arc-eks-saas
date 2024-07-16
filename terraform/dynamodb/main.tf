@@ -52,10 +52,22 @@ resource "aws_dynamodb_table_item" "basic" {
   item = <<ITEM
 {
   "tier": {"S": "BASIC"},
-  "eksClusterName": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
+  "EKS_CLUSTER_NAME": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
   "jobName": {"S": "${var.namespace}-${var.environment}-basic-codebuild-project"},
-  "karpenterRole": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
-  "vpcId": {"S": "${data.aws_vpc.vpc.id}"}
+  "KARPENTER_ROLE": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
+  "VPC_ID": {"S": "${data.aws_vpc.vpc.id}"},
+  "AWS_ACCOUNT_ID": {"S": "${data.aws_caller_identity.current.account_id}"},
+  "AWS_REGION": {"S": "${var.region}"},
+  "NAMESPACE": {"S": "${var.namespace}"},
+  "ENVIRONMENT": {"S": "${var.environment}"},
+  "VPC_CIDR_BLOCK": {"S": "${data.aws_vpc.vpc.cidr_block}"},
+  "SUBNET_IDS": {"S": "join(",", ${data.aws_subnets.private.ids})"},
+  "CB_ROLE": {"S": "${data.aws_ssm_parameter.codebuild_role.value}"},
+  "DOMAIN_NAME": {"S": "${var.domain_name}"},
+  "CONTROL_PLANE_HOST": {"S": "${var.control_plane_host}"},
+  "ACCESS_TOKEN_EXPIRATION": {"N": "3600"},
+  "REFRESH_TOKEN_EXPIRATION": {"N": "3600"},
+  "AUTH_CODE_EXPIRATION": {"N": "3600"}
 }
 ITEM
 }
@@ -67,10 +79,22 @@ resource "aws_dynamodb_table_item" "standard" {
   item = <<ITEM
 {
   "tier": {"S": "STANDARD"},
-  "eksClusterName": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
+  "EKS_CLUSTER_NAME": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
   "jobName": {"S": "${var.namespace}-${var.environment}-standard-codebuild-project"},
-  "karpenterRole": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
-  "vpcId": {"S": "${data.aws_vpc.vpc.id}"}
+  "KARPENTER_ROLE": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
+  "VPC_ID": {"S": "${data.aws_vpc.vpc.id}"},
+  "AWS_ACCOUNT_ID": {"S": "${data.aws_caller_identity.current.account_id}"},
+  "AWS_REGION": {"S": "${var.region}"},
+  "NAMESPACE": {"S": "${var.namespace}"},
+  "ENVIRONMENT": {"S": "${var.environment}"},
+  "VPC_CIDR_BLOCK": {"S": "${data.aws_vpc.vpc.cidr_block}"},
+  "SUBNET_IDS": {"S": "join(",", ${data.aws_subnets.private.ids})"},
+  "CB_ROLE": {"S": "${data.aws_ssm_parameter.codebuild_role.value}"},
+  "DOMAIN_NAME": {"S": "${var.domain_name}"},
+  "CONTROL_PLANE_HOST": {"S": "${var.control_plane_host}"},
+  "ACCESS_TOKEN_EXPIRATION": {"N": "3600"},
+  "REFRESH_TOKEN_EXPIRATION": {"N": "3600"},
+  "AUTH_CODE_EXPIRATION": {"N": "3600"}
 }
 ITEM
 }
@@ -82,10 +106,22 @@ resource "aws_dynamodb_table_item" "premium" {
   item = <<ITEM
 {
   "tier": {"S": "PREMIUM"},
-  "eksClusterName": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
+  "EKS_CLUSTER_NAME": {"S": "${var.namespace}-${var.environment}-eks-cluster"},
   "jobName": {"S": "${var.namespace}-${var.environment}-premium-codebuild-project"},
-  "karpenterRole": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
-  "vpcId": {"S": "${data.aws_vpc.vpc.id}"}
+  "KARPENTER_ROLE": {"S": "${data.aws_ssm_parameter.karpenter_role.value}"},
+  "VPC_ID": {"S": "${data.aws_vpc.vpc.id}"},
+  "AWS_ACCOUNT_ID": {"S": "${data.aws_caller_identity.current.account_id}"},
+  "AWS_REGION": {"S": "${var.region}"},
+  "NAMESPACE": {"S": "${var.namespace}"},
+  "ENVIRONMENT": {"S": "${var.environment}"},
+  "VPC_CIDR_BLOCK": {"S": "${data.aws_vpc.vpc.cidr_block}"},
+  "SUBNET_IDS": {"S": "join(",", ${data.aws_subnets.private.ids})"},
+  "CB_ROLE": {"S": "${data.aws_ssm_parameter.codebuild_role.value}"},
+  "DOMAIN_NAME": {"S": "${var.domain_name}"},
+  "CONTROL_PLANE_HOST": {"S": "${var.control_plane_host}"},
+  "ACCESS_TOKEN_EXPIRATION": {"N": "3600"},
+  "REFRESH_TOKEN_EXPIRATION": {"N": "3600"},
+  "AUTH_CODE_EXPIRATION": {"N": "3600"}
 }
 ITEM
 }

@@ -1,6 +1,16 @@
+################################################################################
+## account
+################################################################################
+data "aws_caller_identity" "current" {}
+
 data "aws_ssm_parameter" "karpenter_role" {
   name = "/${var.namespace}/${var.environment}/karpenter_role"
 }
+
+data "aws_ssm_parameter" "codebuild_role" {
+  name = "/${var.namespace}/${var.environment}/codebuild_role"
+}
+
 
 data "aws_vpc" "vpc" {
   filter {
