@@ -11,7 +11,9 @@ data "aws_ssm_parameter" "codebuild_role" {
   name = "/${var.namespace}/${var.environment}/codebuild_role"
 }
 
-
+########################################################################
+## network lookup
+########################################################################
 data "aws_vpc" "vpc" {
   filter {
     name   = "tag:Name"
@@ -20,5 +22,19 @@ data "aws_vpc" "vpc" {
   filter {
     name   = "tag:Project"
     values = ["${var.namespace}"]
+  }
+}
+
+data "aws_subnets" "private" {
+  filter {
+    name = "tag:Type"
+
+    values = ["private"]
+  }
+
+  filter {
+    name = "tag:Environment"
+
+    values = ["${var.environment}"]
   }
 }
