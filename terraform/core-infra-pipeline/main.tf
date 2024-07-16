@@ -86,7 +86,8 @@ module "deployment_pipeline" {
     { name = "TenantCodebuilds", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.tenant_codebuild_module_build_step_codebuild_project.name}" },
     { name = "ControlPlaneApplication", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.control_plane_module_build_step_codebuild_project.name}" },
     { name = "Billing", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.billing_module_build_step_codebuild_project.name}" },
-    { name = "WAF", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.waf_module_build_step_codebuild_project.name}" }
+    { name = "WAF", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.waf_module_build_step_codebuild_project.name}" },
+    { name = "DynamoDB", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.dynamodb_module_build_step_codebuild_project.name}" }
   ]
   tags = module.tags.tags
 
@@ -106,5 +107,6 @@ module "deployment_pipeline" {
     module.istio_module_build_step_codebuild_project,
     module.eks_observability_module_build_step_codebuild_project,
     module.billing_module_build_step_codebuild_project,
-  module.waf_module_build_step_codebuild_project]
+    module.waf_module_build_step_codebuild_project,
+  module.dynamodb_module_build_step_codebuild_project]
 }

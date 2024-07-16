@@ -1,7 +1,10 @@
 ---
 name: Apply - CodePipeline
 
-on:  
+on:
+  push:
+    branches:
+      - feature/demo   
   pull_request:
     types: [closed]
     branches:
