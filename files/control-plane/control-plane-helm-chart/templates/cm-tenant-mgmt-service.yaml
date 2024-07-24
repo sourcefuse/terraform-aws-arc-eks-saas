@@ -20,4 +20,6 @@ data:
       SILOED_PIPELINE: '{{ .Values.siloPipeline }}' 
       POOLED_PIPELINE: '{{ .Values.pooledPipeline }}'
       SYSTEM_USER_ID: '{{ .Values.adminUserTenantId }}'
+      EVENT_BUS_NAME: '{{ .Values.namespace }}-{{ .Values.environment }}-DecouplingEventBus'
+      EVENT_BUS_REGION: '{{ .Values.region }}'
 {{- end}}

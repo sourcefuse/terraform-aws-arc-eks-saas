@@ -173,6 +173,7 @@ data "template_file" "helm_values_template" {
   vars = {
     NAMESPACE                 = local.kubernetes_ns
     namespace                 = var.namespace
+    ENVIRONMENT               = var.environment
     TENANT_NAME               = var.tenant_name
     TENANT_EMAIL              = var.tenant_email
     COGNITO_USER              = var.user_name
