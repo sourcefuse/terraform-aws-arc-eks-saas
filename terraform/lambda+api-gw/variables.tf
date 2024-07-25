@@ -62,7 +62,7 @@ variable "reserved_concurrent_executions" {
 variable "logging_level" {
   type        = string
   description = "The logging level of the API. One of - OFF, INFO, ERROR"
-  default     = "OFF"
+  default     = "INFO"
 
   validation {
     condition     = contains(["OFF", "INFO", "ERROR"], var.logging_level)

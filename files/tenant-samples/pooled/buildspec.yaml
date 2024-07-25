@@ -45,7 +45,15 @@ phases:
       - export USER_CALLBACK_ENDPOINT="https://${KEY}.${DOMAIN_NAME}/user-tenant-service/user-callback"
       - export CLIENT_ID="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
       - export CLIENT_SECRET=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
-      - export RANDOM_SECRET="${SECRET}"
+      - export RANDOM_SECRET="${secret}"
+
+      # Extracting tenant variables
+      - export TENANT_JSON=$(aws codebuild batch-get-builds --ids $CODEBUILD_BUILD_ID --query 'builds[0].environment.environmentVariables[?name==`tenant`].value' --output text)
+      - export TENANT_ID=$(echo $TENANT_JSON | jq -r '.id')
+      - export TENANT_NAME=$(echo $TENANT_JSON | jq -r '.name')
+      - export TENANT_ADMIN_EMAIL=$(echo $TENANT_JSON | jq -r '.contacts[] | select(.isPrimary == true) | .email')
+      - export USERNAME=$(echo $TENANT_JSON | jq -r '.key')
+     
 
       # Export Terraform Env Variable 
       - export TF_VAR_namespace="${NAMESPACE}"
@@ -56,8 +64,8 @@ phases:
       - export TF_VAR_tenant_email="${TENANT_ADMIN_EMAIL}"
       - export TF_VAR_domain_name="${DOMAIN_NAME}"
       - export TF_VAR_tenant_name="${TENANT_NAME}"
-      - export TF_VAR_tenant_secret="${SECRET}"
-      - export TF_VAR_user_callback_secret="${SECRET}"
+      - export TF_VAR_tenant_secret="${secret}"
+      - export TF_VAR_user_callback_secret="${secret}"
       - export TF_VAR_tenant_id="${TENANT_ID}"
       - export TF_VAR_cluster_name="${EKS_CLUSTER_NAME}"
       - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"

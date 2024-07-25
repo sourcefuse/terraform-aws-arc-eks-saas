@@ -33,6 +33,8 @@ module "lambda_function_container_image" {
     TIER_DETAILS_TABLE = "${var.namespace}-${var.environment}-decoupling-tier-map-table"
   }
 
+  attach_policies    = true
+  policies           = ["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess","arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess","arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator","arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess"]
   tags = module.tags.tags  
 }
 
@@ -53,11 +55,11 @@ module "api_gateway" {
     }
 
     paths = {
-      "/{proxy+}" = {
+      "/events/{eventType}" = {
         post = {
           "x-amazon-apigateway-auth": {
           "type": "AWS_IAM"
-        },
+           },
           "x-amazon-apigateway-integration" = {
                "responses" = {
                   "default" = {
