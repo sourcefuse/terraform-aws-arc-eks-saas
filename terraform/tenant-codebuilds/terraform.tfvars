@@ -8,5 +8,4 @@ premium_buildspec       = "buildspec.yaml"
 standard_buildspec      = "buildspec.yaml"
 premium_offboard_buildspec = "offboard-buildspec.yaml"
 
-domain_name        = "abc.com"
 control_plane_host = "https://abc.com"

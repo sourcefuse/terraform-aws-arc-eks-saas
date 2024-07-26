@@ -62,7 +62,6 @@
 | <a name="input_create_premium_codebuild"></a> [create\_premium\_codebuild](#input\_create\_premium\_codebuild) | Enable or Disable to create premium codebuild project | `bool` | `true` | no |
 | <a name="input_create_premium_offboard_codebuild"></a> [create\_premium\_offboard\_codebuild](#input\_create\_premium\_offboard\_codebuild) | Enable or Disable to create premium offboarding codebuild project | `bool` | `true` | no |
 | <a name="input_create_standard_codebuild"></a> [create\_standard\_codebuild](#input\_create\_standard\_codebuild) | Enable or Disable to create premium codebuild project | `bool` | `true` | no |
-| <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | Domain name of the control plane | `string` | `""` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace for the resources. | `string` | n/a | yes |
 | <a name="input_premium_buildspec"></a> [premium\_buildspec](#input\_premium\_buildspec) | Optional buildspec declaration to use for building the project | `string` | `""` | no |

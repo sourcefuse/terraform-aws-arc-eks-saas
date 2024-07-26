@@ -53,6 +53,7 @@ For more details, you can go through the [eks saas architecture documentation](d
 * Based on the requirements, change `terraform.tfvars` file in all the terraform folders.
 * Update the variables **namespace**,**environment**,**region**,**domain_name** in the `script/replace-variable.sh` file.
 * Execute the script using command `./scripts/replace-variable.sh`
+* Execute the script for pushing decoupling orchestrator image to ECR repository using command `./scripts/push-orchestrator-image.sh`
 * Update the codepipeline connection name (created in pre-requisite section), github repository name and other required variables in `terraform.tfvars` file of `terraform/core-infra-pipeline folder`.
 * Check if **AWSServiceRoleForAmazonOpenSearchService** Role is already created in your AWS account then set `create_iam_service_linked_role` variables to false in tfvars file of `terraform/opensearch` otherwise set it to true.
 * Update the ACM ((created in pre-requisite section)) ARN in `terraform.tfvars` file of terraform/istio folder.

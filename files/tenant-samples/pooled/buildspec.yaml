@@ -19,6 +19,7 @@ phases:
       - export PATH=$PWD/:$PATH
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
+      - npm i @aws-sdk/client-eventbridge
       - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
     finally:
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
@@ -38,6 +39,14 @@ phases:
   build:
     on-failure: ABORT
     commands:
+
+      # Extracting tenant variables
+      - export TENANT_ID=$(echo $tenant | jq -r '.id')
+      - export TENANT_NAME=$(echo $tenant | jq -r '.name')
+      - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
+      - export USERNAME=$(echo $tenant | jq -r '.key')
+      - export KEY=$(echo $tenant | jq -r '.key')
+      
       # Webhook Envs
       - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
       - export REDIRECT_URL="${CONTROL_PLANE_HOST}/main/home"
@@ -45,7 +54,9 @@ phases:
       - export USER_CALLBACK_ENDPOINT="https://${KEY}.${DOMAIN_NAME}/user-tenant-service/user-callback"
       - export CLIENT_ID="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
       - export CLIENT_SECRET=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
-      - export RANDOM_SECRET="${SECRET}"
+      - export RANDOM_SECRET="${secret}"
+
+     
 
       # Export Terraform Env Variable 
       - export TF_VAR_namespace="${NAMESPACE}"
@@ -56,8 +67,8 @@ phases:
       - export TF_VAR_tenant_email="${TENANT_ADMIN_EMAIL}"
       - export TF_VAR_domain_name="${DOMAIN_NAME}"
       - export TF_VAR_tenant_name="${TENANT_NAME}"
-      - export TF_VAR_tenant_secret="${SECRET}"
-      - export TF_VAR_user_callback_secret="${SECRET}"
+      - export TF_VAR_tenant_secret="${secret}"
+      - export TF_VAR_user_callback_secret="${secret}"
       - export TF_VAR_tenant_id="${TENANT_ID}"
       - export TF_VAR_cluster_name="${EKS_CLUSTER_NAME}"
       - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"
@@ -122,7 +133,3 @@ phases:
       - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
   
       
-
-
-
-
