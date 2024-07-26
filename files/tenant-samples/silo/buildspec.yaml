@@ -49,6 +49,13 @@ phases:
       - export CLIENT_SECRET=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
       - export RANDOM_SECRET="${SECRET}"
 
+      # Extracting tenant variables
+      - export TENANT_ID=$(echo $tenant | jq -r '.id')
+      - export TENANT_NAME=$(echo $tenant | jq -r '.name')
+      - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
+      - export USERNAME=$(echo $tenant | jq -r '.key')
+      - export KEY=$(echo $tenant | jq -r '.key')
+
       # Export Terraform Env Variable 
       - export TF_VAR_namespace="${NAMESPACE}"
       - export TF_VAR_environment="${ENVIRONMENT}"

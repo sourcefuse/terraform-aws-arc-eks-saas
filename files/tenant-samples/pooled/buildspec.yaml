@@ -48,11 +48,11 @@ phases:
       - export RANDOM_SECRET="${secret}"
 
       # Extracting tenant variables
-      - export TENANT_JSON=$(aws codebuild batch-get-builds --ids $CODEBUILD_BUILD_ID --query 'builds[0].environment.environmentVariables[?name==`tenant`].value' --output text)
-      - export TENANT_ID=$(echo $TENANT_JSON | jq -r '.id')
-      - export TENANT_NAME=$(echo $TENANT_JSON | jq -r '.name')
-      - export TENANT_ADMIN_EMAIL=$(echo $TENANT_JSON | jq -r '.contacts[] | select(.isPrimary == true) | .email')
-      - export USERNAME=$(echo $TENANT_JSON | jq -r '.key')
+      - export TENANT_ID=$(echo $tenant | jq -r '.id')
+      - export TENANT_NAME=$(echo $tenant | jq -r '.name')
+      - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
+      - export USERNAME=$(echo $tenant | jq -r '.key')
+      - export KEY=$(echo $tenant | jq -r '.key')
      
 
       # Export Terraform Env Variable 
