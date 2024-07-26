@@ -1,125 +1,67 @@
-async function callWebhook() {
-  const crypto = require("crypto");
-  const http =
-    process.env.API_ENDPOINT?.split("://")[0] === "https"
-      ? require("https")
-      : require("http");
+const {
+  EventBridgeClient,
+  PutEventsCommand,
+} = require('@aws-sdk/client-eventbridge');
 
-  const timestamp = Date.now();
-  const secret = process.env.SECRET;
-  const context = process.env.CODEBUILD_BUILD_ID;
-  const payload = () =>
-    JSON.stringify({
-      initiatorId: process.env.TENANT_ID,
-      type: 0,
-      data: {
-        status: Number(`${process.env.CODEBUILD_BUILD_SUCCEEDING}`),
-        resources: [
+async function callWebhook() {
+  function makeCall(name) {
+    console.log('make call', name);
+    return new Promise(async (resolve, reject) => {
+      const eventBridgeClient = new EventBridgeClient({
+        region: process.env.AWS_REGION,
+      });
+
+      const eventDetail = {...process.env};
+
+      // Remove sensitive information
+      delete eventDetail.AWS_SECRET_ACCESS_KEY;
+      delete eventDetail.AWS_SESSION_TOKEN;
+
+      const params = {
+        Entries: [
           {
-            type: "s3",
-            metadata: {
-              bucket: process.env.TF_STATE_BUCKET,
-              path: process.env.TF_KEY,
-            },
+            Source: 'saas.tenant.provisioning.codebuild',
+            DetailType:
+              process.env.CODEBUILD_BUILD_SUCCEEDING === '1'
+                ? 'TENANT_PROVISIONING_SUCCESS'
+                : 'TENANT_PROVISIONING_FAILURE',
+            Detail: JSON.stringify(eventDetail),
+            EventBusName: process.env.EVENT_BUS_NAME || 'default',
+            Time: new Date(),
           },
         ],
-        appPlaneUrl: process.env.APP_PLANE_REDIRECT_URL
-      },
-    });
-
-  const tenantData = JSON.parse(process.env.TENANT_DATA);
-  const tenantPayload = JSON.stringify({
-    email: tenantData.contact?.email,
-    phone: tenantData.contact?.phone,
-    username: tenantData.contact?.username,
-    tenantName: tenantData.name,
-    tenantKey: tenantData.key,
-    firstName: tenantData.contact?.firstName,
-    lastName: tenantData?.lastName,
-    middleName: tenantData?.middleName,
-    cognitoAuthId: process.env.COGNITO_AUTH_ID,
-    authClient: {
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
-      redirectUrl: process.env.APP_PLANE_REDIRECT_URL,
-      secret: process.env.RANDOM_SECRET,
-      accessTokenExpiration: Number(process.env.ACCESS_TOKEN_EXPIRATION),
-      refreshTokenExpiration: Number(process.env.REFRESH_TOKEN_EXPIRATION),
-      authCodeExpiration: Number(process.env.AUTH_CODE_EXPIRATION),
-    },
-    address: {
-      address: tenantData.address?.address,
-      city: tenantData.address?.city,
-      state: tenantData.address?.state,
-      zip: tenantData.address?.zip,
-      country: tenantData.address?.country,
-    },
-  });
-
-  function makeCall(endPoint, payload, name) {
-    return new Promise((resolve, reject) => {
-      let str = "";
-      if (name === "user-callback") {
-        str = `${payload}${timestamp}`;
-      } else {
-        str = `${payload}${context}${timestamp}`;
-      }
-      const signature = crypto
-        .createHmac("sha256", secret)
-        .update(str)
-        .digest("hex");
-      const options = {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-timestamp": timestamp,
-          "x-signature": signature,
-          "bypass-tunnel-reminder":true,
-        },
       };
 
-      const req = http.request(endPoint, options, (res) => {
-        console.log("statusCode:", res.statusCode);
-        if (res.statusCode !== 204) {
-          reject(`Call failed for ${name}`);
-          return;
-        }
-        resolve(`Call succeeded for ${name}`);
-      });
-
-      req.on("error", (e) => {
-        console.error(e);
-        throw e;
-      });
-
-      req.write(payload);
-      req.end();
+      try {
+        const command = new PutEventsCommand(params);
+        const response = await eventBridgeClient.send(command);
+        console.log('Event sent successfully:', response);
+      } catch (error) {
+        console.error('Failed to send event:', error);
+        throw error;
+      }
     });
   }
 
-  if (process.env.CODEBUILD_BUILD_SUCCEEDING === "0") {
-    await makeCall(process.env.API_ENDPOINT, payload(), "webhook");
-  } else if (process.env.CODEBUILD_BUILD_POSTBUILD === "1") {
+  if (process.env.CODEBUILD_BUILD_SUCCEEDING === '0') {
+    await makeCall('webhook');
+  } else if (process.env.CODEBUILD_BUILD_POSTBUILD === '1') {
     try {
-      if (process.env.CREATE_USER === "1") {
-        await makeCall(
-          process.env.USER_CALLBACK_ENDPOINT,
-          tenantPayload,
-          "user-callback"
-        );
+      if (process.env.CREATE_USER === '1') {
+        await makeCall('user-callback');
       }
     } catch (e) {
-      process.env.CODEBUILD_BUILD_SUCCEEDING = "0";
+      process.env.CODEBUILD_BUILD_SUCCEEDING = '0';
     } finally {
-      await makeCall(process.env.API_ENDPOINT, payload(), "webhook");
+      await makeCall('webhook');
     }
   } else {
-    console.log("No call made");
+    console.log('No call made.');
   }
 }
 
 if (require.main === module) {
-  callWebhook().catch((e) => console.log(e));
+  callWebhook().catch(e => console.log(e));
 }
 
-module.exports = { callWebhook };
+module.exports = {callWebhook};
