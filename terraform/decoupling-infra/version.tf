@@ -1,13 +1,17 @@
 terraform {
-  required_version = ">= 1.0"
+  required_version = ">= 1.3.0"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.53"
+      version = ">= 5.0"
     }
     random = {
       source  = "hashicorp/random"
+      version = ">= 3.0"
+    }
+    docker = {
+      source  = "kreuzwerker/docker"
       version = ">= 3.0"
     }
     null = {
@@ -16,5 +20,6 @@ terraform {
     }
   }
 
-  backend "s3" {}
+   backend "s3" {}
+
 }

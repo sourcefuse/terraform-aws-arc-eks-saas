@@ -11,6 +11,27 @@ data "aws_ssm_parameter" "codebuild_role" {
   name = "/${var.namespace}/${var.environment}/codebuild_role"
 }
 
+data "aws_ssm_parameter" "api_gw_url" {
+    name = "/${var.namespace}/${var.environment}/api_gw_arn"
+    depends_on = [module.api_gw_ssm_parameters]
+} 
+
+data "aws_ssm_parameter" "orchestrator_ecr_image" {
+    name = "/${var.namespace}/${var.environment}/orchestration-ecr-image-uri"
+}
+
+
+data "aws_iam_policy_document" "resource_full_access" {
+
+  statement {
+    sid    = "FullAccess"
+    effect = "Allow"
+    actions = [
+      "*"
+    ]
+    resources = ["*"]
+  }
+}
 ########################################################################
 ## network lookup
 ########################################################################
@@ -25,16 +46,3 @@ data "aws_vpc" "vpc" {
   }
 }
 
-data "aws_subnets" "private" {
-  filter {
-    name = "tag:Type"
-
-    values = ["private"]
-  }
-
-  filter {
-    name = "tag:Environment"
-
-    values = ["${var.environment}"]
-  }
-}
