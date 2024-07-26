@@ -16,6 +16,7 @@ async function callWebhook() {
       // Remove sensitive information
       delete eventDetail.AWS_SECRET_ACCESS_KEY;
       delete eventDetail.AWS_SESSION_TOKEN;
+      delete eventDetail.CREDENTIALS;
 
       const params = {
         Entries: [

@@ -103,8 +103,7 @@ data "aws_iam_policy_document" "tenant_codebuild_policy" {
       "ec2:CreateNetworkInterfacePermission",
       "kms:*",
       "s3:*",
-      "ssm:*",
-      "events:*"
+      "ssm:*"
     ]
     resources = ["*"]
   }

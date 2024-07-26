@@ -39,6 +39,14 @@ phases:
   build:
     on-failure: ABORT
     commands:
+
+      # Extracting tenant variables
+      - export TENANT_ID=$(echo $tenant | jq -r '.id')
+      - export TENANT_NAME=$(echo $tenant | jq -r '.name')
+      - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
+      - export USERNAME=$(echo $tenant | jq -r '.key')
+      - export KEY=$(echo $tenant | jq -r '.key')
+      
       # Webhook Envs
       - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
       - export REDIRECT_URL="${CONTROL_PLANE_HOST}/main/home"
@@ -48,12 +56,6 @@ phases:
       - export CLIENT_SECRET=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
       - export RANDOM_SECRET="${secret}"
 
-      # Extracting tenant variables
-      - export TENANT_ID=$(echo $tenant | jq -r '.id')
-      - export TENANT_NAME=$(echo $tenant | jq -r '.name')
-      - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
-      - export USERNAME=$(echo $tenant | jq -r '.key')
-      - export KEY=$(echo $tenant | jq -r '.key')
      
 
       # Export Terraform Env Variable 
