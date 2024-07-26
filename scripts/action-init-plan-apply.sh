@@ -78,7 +78,7 @@ plan () {
 
   cd terraform/$DIRECTORY
   PLAN_FILENAME=$ENV-$(basename $DIRECTORY)-$plan_id.tfplan
-  terraform plan -var-file $ENV.tfvars $EXTRA_ARGS -out $PLAN_FILENAME
+  terraform plan -var-file $EXTRA_ARGS -out $PLAN_FILENAME
   PLAN_OUTPUT=$(terraform show -no-color $PLAN_FILENAME)
 
   echo "<details><summary>Terraform plan output for $DIRECTORY in $ENV</summary>" >> $ENV-plan-output.txt
