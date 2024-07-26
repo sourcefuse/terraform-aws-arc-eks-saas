@@ -23,6 +23,8 @@
 | <a name="module_cognito_module_build_step_role"></a> [cognito\_module\_build\_step\_role](#module\_cognito\_module\_build\_step\_role) | ../../modules/iam-role | n/a |
 | <a name="module_control_plane_module_build_step_codebuild_project"></a> [control\_plane\_module\_build\_step\_codebuild\_project](#module\_control\_plane\_module\_build\_step\_codebuild\_project) | ../../modules/codebuild | n/a |
 | <a name="module_control_plane_module_build_step_role"></a> [control\_plane\_module\_build\_step\_role](#module\_control\_plane\_module\_build\_step\_role) | ../../modules/iam-role | n/a |
+| <a name="module_decoupling_module_build_step_codebuild_project"></a> [decoupling\_module\_build\_step\_codebuild\_project](#module\_decoupling\_module\_build\_step\_codebuild\_project) | ../../modules/codebuild | n/a |
+| <a name="module_decoupling_module_build_step_role"></a> [decoupling\_module\_build\_step\_role](#module\_decoupling\_module\_build\_step\_role) | ../../modules/iam-role | n/a |
 | <a name="module_deployment_pipeline"></a> [deployment\_pipeline](#module\_deployment\_pipeline) | ../../modules/codepipeline | n/a |
 | <a name="module_eks_auth_module_build_step_codebuild_project"></a> [eks\_auth\_module\_build\_step\_codebuild\_project](#module\_eks\_auth\_module\_build\_step\_codebuild\_project) | ../../modules/codebuild | n/a |
 | <a name="module_eks_auth_module_build_step_role"></a> [eks\_auth\_module\_build\_step\_role](#module\_eks\_auth\_module\_build\_step\_role) | ../../modules/iam-role | n/a |
