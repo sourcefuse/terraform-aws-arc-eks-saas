@@ -125,8 +125,9 @@ data "template_file" "fluentbit_helm_value_template" {
 data "template_file" "helm_values_template" {
   template = file("${path.module}/../../files/control-plane/control-plane-helm-chart/values.yaml.template")
   vars = {
-    NAMESPACE                 = local.kubernetes_ns
-    namespace                 = var.namespace
+    NAMESPACE                 = local.kubernetes_ns // This is kubernetes namespace
+    namespace                 = var.namespace       // This is project namespace
+    ENVIRONMENT               = var.environment
     TENANT_NAME               = var.tenant_name
     TENANT_EMAIL              = var.tenant_email
     COGNITO_USER              = var.user_name
@@ -166,19 +167,6 @@ resource "local_file" "helm_values" {
   content  = data.template_file.helm_values_template.rendered
 }
 
-# Helm chart deployment
-# resource "helm_release" "control_plane_app" {
-#   name             = "control-plane"
-#   chart            = "../../files/control-plane/control-plane-helm-chart" #Local Path of helm chart
-#   namespace        = kubernetes_namespace.my_namespace.metadata.0.name
-#   create_namespace = true
-#   force_update     = true
-#   recreate_pods    = true
-#   values           = [data.template_file.helm_values_template.rendered]
-#   depends_on = [
-#     module.control_plane_iam_role
-#   ]
-# }
 
 resource "helm_release" "fluent_bit" {
   count            = 1

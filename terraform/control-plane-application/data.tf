@@ -142,9 +142,11 @@ data "aws_iam_policy_document" "ssm_policy" {
       "ssm:GetParameters",
       "ssm:GetParameter",
       "ssm:DescribeParameters",
-      "ssm:DeleteParameters"
+      "ssm:DeleteParameters",
+      "events:PutEvents"
     ]
-    resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/*"]
+    resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/*",
+                 "arn:aws:events:${var.region}:${local.sts_caller_arn}:event-bus/${var.namespace}-${var.environment}-DecouplingEventBus"]
   }
 }
 

@@ -85,6 +85,7 @@ module "deployment_pipeline" {
     { name = "Cognito", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.cognito_module_build_step_codebuild_project.name}" },
     { name = "TenantCodebuilds", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.tenant_codebuild_module_build_step_codebuild_project.name}" },
     { name = "ControlPlaneApplication", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.control_plane_module_build_step_codebuild_project.name}" },
+    { name = "Decoupling-Infra", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.decoupling_module_build_step_codebuild_project.name}" },
     { name = "Billing", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.billing_module_build_step_codebuild_project.name}" },
     { name = "WAF", category = "Build", owner = "AWS", provider = "CodeBuild", input_artifacts = "source_output", output_artifacts = "", run_order = 8, project_name = "${module.waf_module_build_step_codebuild_project.name}" }
   ]
@@ -105,6 +106,7 @@ module "deployment_pipeline" {
     module.control_plane_module_build_step_codebuild_project,
     module.istio_module_build_step_codebuild_project,
     module.eks_observability_module_build_step_codebuild_project,
+    module.decoupling_module_build_step_codebuild_project,
     module.billing_module_build_step_codebuild_project,
   module.waf_module_build_step_codebuild_project]
 }

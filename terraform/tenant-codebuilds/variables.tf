@@ -134,12 +134,6 @@ variable "privileged_mode" {
   description = "(Optional) If set to true, enables running the Docker daemon inside a Docker container on the CodeBuild instance. Used when building Docker images"
 }
 
-variable "domain_name" {
-  type        = string
-  default     = ""
-  description = "Domain name of the control plane"
-}
-
 variable "control_plane_host" {
   type        = string
   description = "Host Name of the control plane"

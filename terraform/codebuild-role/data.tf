@@ -33,7 +33,8 @@ data "aws_iam_policy_document" "codebuild_policy" {
       "synthetics:*",
       "cloudwatch:*",
       "backup:*",
-      "backup-storage:MountCapsule"
+      "backup-storage:MountCapsule",
+      "events:*"
     ]
     resources = ["*"]
   }
