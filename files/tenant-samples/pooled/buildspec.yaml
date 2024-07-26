@@ -19,6 +19,7 @@ phases:
       - export PATH=$PWD/:$PATH
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
+      - npm i @aws-sdk/client-eventbridge
       - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
     finally:
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
