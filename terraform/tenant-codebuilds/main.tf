@@ -124,86 +124,86 @@ module "premium_plan_codebuild_project" {
   privileged_mode                   = var.privileged_mode
 
   environment_variables = [
-    {
-      name  = "AWS_ACCOUNT_ID"
-      value = data.aws_caller_identity.this.account_id
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "AWS_REGION"
-      value = var.region
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "NAMESPACE"
-      value = var.namespace
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "ENVIRONMENT"
-      value = var.environment
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "VPC_ID"
-      value = data.aws_vpc.vpc.id
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "VPC_CIDR_BLOCK"
-      value = data.aws_vpc.vpc.cidr_block
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "SUBNET_IDS"
-      value = join(",", data.aws_subnets.private.ids)
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "EKS_CLUSTER_NAME"
-      value = "${var.namespace}-${var.environment}-eks-cluster"
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "CB_ROLE"
-      value = data.aws_ssm_parameter.codebuild_role.value
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "KARPENTER_ROLE"
-      value = data.aws_ssm_parameter.karpenter_role.value
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "DOMAIN_NAME"
-      value = var.domain_name
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "CONTROL_PLANE_HOST"
-      value = var.control_plane_host
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "USERNAME"
-      value = "test"
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "ACCESS_TOKEN_EXPIRATION"
-      value = 3600
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "REFRESH_TOKEN_EXPIRATION"
-      value = 3600
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "AUTH_CODE_EXPIRATION"
-      value = 3600
-      type  = "PLAINTEXT"
-    },
+    # {
+    #   name  = "AWS_ACCOUNT_ID"
+    #   value = data.aws_caller_identity.this.account_id
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "AWS_REGION"
+    #   value = var.region
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "NAMESPACE"
+    #   value = var.namespace
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "ENVIRONMENT"
+    #   value = var.environment
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "VPC_ID"
+    #   value = data.aws_vpc.vpc.id
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "VPC_CIDR_BLOCK"
+    #   value = data.aws_vpc.vpc.cidr_block
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "SUBNET_IDS"
+    #   value = join(",", data.aws_subnets.private.ids)
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "EKS_CLUSTER_NAME"
+    #   value = "${var.namespace}-${var.environment}-eks-cluster"
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "CB_ROLE"
+    #   value = data.aws_ssm_parameter.codebuild_role.value
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "KARPENTER_ROLE"
+    #   value = data.aws_ssm_parameter.karpenter_role.value
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "DOMAIN_NAME"
+    #   value = var.domain_name
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "CONTROL_PLANE_HOST"
+    #   value = var.control_plane_host
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "USERNAME"
+    #   value = "test"
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "ACCESS_TOKEN_EXPIRATION"
+    #   value = 3600
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "REFRESH_TOKEN_EXPIRATION"
+    #   value = 3600
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "AUTH_CODE_EXPIRATION"
+    #   value = 3600
+    #   type  = "PLAINTEXT"
+    # },
     {
       name  = "TENANT_CLIENT_ID"
       value = "/${var.namespace}/${var.environment}/silo/tenant_client_id"
@@ -266,86 +266,86 @@ module "standard_plan_codebuild_project" {
   privileged_mode                   = var.privileged_mode
 
   environment_variables = [
-    {
-      name  = "AWS_ACCOUNT_ID"
-      value = data.aws_caller_identity.this.account_id
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "AWS_REGION"
-      value = var.region
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "NAMESPACE"
-      value = var.namespace
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "ENVIRONMENT"
-      value = var.environment
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "VPC_ID"
-      value = data.aws_vpc.vpc.id
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "VPC_CIDR_BLOCK"
-      value = data.aws_vpc.vpc.cidr_block
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "SUBNET_IDS"
-      value = join(",", data.aws_subnets.private.ids)
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "EKS_CLUSTER_NAME"
-      value = "${var.namespace}-${var.environment}-eks-cluster"
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "CB_ROLE"
-      value = data.aws_ssm_parameter.codebuild_role.value
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "KARPENTER_ROLE"
-      value = data.aws_ssm_parameter.karpenter_role.value
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "DOMAIN_NAME"
-      value = var.domain_name
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "USERNAME"
-      value = "test"
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "CONTROL_PLANE_HOST"
-      value = var.control_plane_host
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "ACCESS_TOKEN_EXPIRATION"
-      value = 3600
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "REFRESH_TOKEN_EXPIRATION"
-      value = 3600
-      type  = "PLAINTEXT"
-    },
-    {
-      name  = "AUTH_CODE_EXPIRATION"
-      value = 3600
-      type  = "PLAINTEXT"
-    },
+    # {
+    #   name  = "AWS_ACCOUNT_ID"
+    #   value = data.aws_caller_identity.this.account_id
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "AWS_REGION"
+    #   value = var.region
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "NAMESPACE"
+    #   value = var.namespace
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "ENVIRONMENT"
+    #   value = var.environment
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "VPC_ID"
+    #   value = data.aws_vpc.vpc.id
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "VPC_CIDR_BLOCK"
+    #   value = data.aws_vpc.vpc.cidr_block
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "SUBNET_IDS"
+    #   value = join(",", data.aws_subnets.private.ids)
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "EKS_CLUSTER_NAME"
+    #   value = "${var.namespace}-${var.environment}-eks-cluster"
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "CB_ROLE"
+    #   value = data.aws_ssm_parameter.codebuild_role.value
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "KARPENTER_ROLE"
+    #   value = data.aws_ssm_parameter.karpenter_role.value
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "DOMAIN_NAME"
+    #   value = var.domain_name
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "USERNAME"
+    #   value = "test"
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "CONTROL_PLANE_HOST"
+    #   value = var.control_plane_host
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "ACCESS_TOKEN_EXPIRATION"
+    #   value = 3600
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "REFRESH_TOKEN_EXPIRATION"
+    #   value = 3600
+    #   type  = "PLAINTEXT"
+    # },
+    # {
+    #   name  = "AUTH_CODE_EXPIRATION"
+    #   value = 3600
+    #   type  = "PLAINTEXT"
+    # },
     {
       name  = "TENANT_CLIENT_ID"
       value = "/${var.namespace}/${var.environment}/pooled/tenant_client_id"
