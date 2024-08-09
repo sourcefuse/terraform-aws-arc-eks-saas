@@ -61,7 +61,7 @@ tenantMgmtFacade:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-facade
   pullPolicy: Always
-  tag: "0.0.2-test8"
+  tag: "0.0.3"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -207,7 +207,7 @@ subscriptionService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-subscription-service
   pullPolicy: Always
-  tag: "0.0.2-test9"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -277,7 +277,7 @@ tenantMgmtService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-service
   pullPolicy: Always
-  tag: "0.0.2-test8"
+  tag: "0.0.3"
   replicaCount: 1
   port: 3000
   node_env: "production"
