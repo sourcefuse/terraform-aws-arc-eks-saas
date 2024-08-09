@@ -141,6 +141,7 @@ data "template_file" "helm_values_template" {
     AUDIT_DATABASE        = data.aws_ssm_parameter.auditdbdatabase.name
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
     USER_DATABASE         = data.aws_ssm_parameter.userdbdatabase.name
+    INSTANCE_CATEGORY     = var.karpenter_instance_category
   }
 }
 

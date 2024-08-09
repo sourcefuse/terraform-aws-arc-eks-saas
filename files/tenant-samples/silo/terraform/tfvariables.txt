@@ -16,8 +16,8 @@ tenant_client_id     = "${TF_VAR_tenant_client_id}"
 tenant_client_secret = "${TF_VAR_tenant_client_secret}"
 alb_url              = "${TF_VAR_alb_url}"
 user_callback_secret = "${TF_VAR_user_callback_secret}"
-
-
+rds_instance_allocated_storage = "${TF_VAR_rds_instance_allocated_storage}"
+karpenter_instance_category = "${TF_VAR_karpenter_instance_category}"
 
 
 

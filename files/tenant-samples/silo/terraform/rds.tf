@@ -9,43 +9,92 @@ module "db_password" {
 }
 
 
-module "aurora" {
-  source  = "sourcefuse/arc-db/aws"
-  version = "2.0.3"
-
-
+module "rds_postgres" {
+  source      = "sourcefuse/arc-db/aws"
+  version     = "3.1.5"
+  
   environment = "${var.environment}-${var.tenant}"
   namespace   = var.namespace
   region      = var.region
   vpc_id      = data.aws_vpc.vpc.id
 
-  aurora_cluster_enabled                    = var.aurora_cluster_enabled
-  aurora_cluster_name                       = "aurora"
-  enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-${var.tenant}-enhanced-monitoring"
-  aurora_db_admin_username                  = var.tenant
-  aurora_db_admin_password                  = module.db_password.result
-  aurora_db_name                            = var.aurora_db_name
-  aurora_db_port                            = var.aurora_db_port
-  aurora_cluster_family                     = var.aurora_cluster_family
-  aurora_engine                             = var.aurora_engine
-  aurora_engine_mode                        = var.aurora_engine_mode
-  aurora_storage_type                       = var.aurora_storage_type
-  aurora_engine_version                     = var.aurora_engine_version
-  aurora_allow_major_version_upgrade        = var.aurora_allow_major_version_upgrade
-  aurora_auto_minor_version_upgrade         = var.aurora_auto_minor_version_upgrade
-  aurora_instance_type                      = var.aurora_instance_type
-  aurora_cluster_size                       = var.aurora_cluster_size
-  aurora_subnets                            = data.aws_subnets.private.ids
-  aurora_allowed_cidr_blocks                = [data.aws_vpc.vpc.cidr_block]
-  aurora_serverlessv2_scaling_configuration = var.aurora_serverlessv2_scaling_configuration
-  performance_insights_enabled              = var.performance_insights_enabled
-  performance_insights_retention_period     = var.performance_insights_retention_period
-  iam_database_authentication_enabled       = var.iam_database_authentication_enabled
+  account_id                              = data.aws_caller_identity.current.id
+  rds_instance_enabled                     = var.rds_instance_enabled
+  rds_instance_name                        = var.rds_instance_name
+  enhanced_monitoring_name                 = "${var.namespace}-${var.environment}-${var.tenant}-enhanced-monitoring"
+  rds_instance_database_name               = var.rds_instance_database_name
+  rds_instance_database_user               = var.tenant
+  rds_instance_database_password           = module.db_password.result
+  rds_instance_database_port               = var.rds_instance_database_port
+  rds_instance_engine                      = var.rds_instance_engine
+  rds_instance_engine_version              = var.rds_instance_engine_version
+  rds_instance_major_engine_version        = var.rds_instance_major_engine_version
+  rds_instance_db_parameter_group          = var.rds_instance_db_parameter_group
+  rds_instance_db_parameter                = var.rds_instance_db_parameter
+  rds_instance_db_options                  = var.rds_instance_db_options
+  rds_enable_custom_option_group           = var.rds_enable_custom_option_group
+  rds_instance_ca_cert_identifier          = var.rds_instance_ca_cert_identifier
+  rds_instance_publicly_accessible         = var.rds_instance_publicly_accessible
+  rds_instance_multi_az                    = var.rds_instance_multi_az
+  rds_instance_storage_type                = var.rds_instance_storage_type
+  rds_instance_instance_class              = var.rds_instance_instance_class
+  rds_instance_allocated_storage           = var.rds_instance_allocated_storage
+  rds_instance_storage_encrypted           = var.rds_instance_storage_encrypted
+  rds_instance_snapshot_identifier         = var.rds_instance_snapshot_identifier
+  rds_instance_auto_minor_version_upgrade  = var.rds_instance_auto_minor_version_upgrade
+  rds_instance_allow_major_version_upgrade = var.rds_instance_allow_major_version_upgrade
+  rds_instance_apply_immediately           = var.rds_instance_apply_immediately
+  rds_instance_maintenance_window          = var.rds_instance_maintenance_window
+  rds_instance_skip_final_snapshot         = var.rds_instance_skip_final_snapshot
+  rds_instance_copy_tags_to_snapshot       = var.rds_instance_copy_tags_to_snapshot
+  rds_instance_backup_retention_period     = var.rds_instance_backup_retention_period
+  rds_instance_backup_window               = var.rds_instance_backup_window
+  rds_instance_allowed_cidr_blocks         = [data.aws_vpc.vpc.cidr_block]
+  rds_instance_subnet_ids                  = data.aws_subnets.private.ids
+  additional_ingress_rules_rds             = var.additional_inbound_rules
 
   tags = merge(
     module.tags.tags
   )
 }
+
+# module "aurora" {
+#   source  = "sourcefuse/arc-db/aws"
+#   version = "2.0.3"
+
+
+#   environment = "${var.environment}-${var.tenant}"
+#   namespace   = var.namespace
+#   region      = var.region
+#   vpc_id      = data.aws_vpc.vpc.id
+
+#   aurora_cluster_enabled                    = var.aurora_cluster_enabled
+#   aurora_cluster_name                       = "aurora"
+#   enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-${var.tenant}-enhanced-monitoring"
+#   aurora_db_admin_username                  = var.tenant
+#   aurora_db_admin_password                  = module.db_password.result
+#   aurora_db_name                            = var.aurora_db_name
+#   aurora_db_port                            = var.aurora_db_port
+#   aurora_cluster_family                     = var.aurora_cluster_family
+#   aurora_engine                             = var.aurora_engine
+#   aurora_engine_mode                        = var.aurora_engine_mode
+#   aurora_storage_type                       = var.aurora_storage_type
+#   aurora_engine_version                     = var.aurora_engine_version
+#   aurora_allow_major_version_upgrade        = var.aurora_allow_major_version_upgrade
+#   aurora_auto_minor_version_upgrade         = var.aurora_auto_minor_version_upgrade
+#   aurora_instance_type                      = var.aurora_instance_type
+#   aurora_cluster_size                       = var.aurora_cluster_size
+#   aurora_subnets                            = data.aws_subnets.private.ids
+#   aurora_allowed_cidr_blocks                = [data.aws_vpc.vpc.cidr_block]
+#   aurora_serverlessv2_scaling_configuration = var.aurora_serverlessv2_scaling_configuration
+#   performance_insights_enabled              = var.performance_insights_enabled
+#   performance_insights_retention_period     = var.performance_insights_retention_period
+#   iam_database_authentication_enabled       = var.iam_database_authentication_enabled
+
+#   tags = merge(
+#     module.tags.tags
+#   )
+# }
 
 #######################################################################
 ## Security Group ingress rules
@@ -54,7 +103,7 @@ module "aurora" {
 
 resource "aws_security_group_rule" "additional_inbound_rules" {
 
-  depends_on = [module.aurora]
+  depends_on = [module.rds_postgres]
 
   count             = length(var.additional_inbound_rules)
   security_group_id = data.aws_security_groups.aurora.ids[0]
@@ -70,9 +119,9 @@ resource "aws_security_group_rule" "additional_inbound_rules" {
 ## RDS Operations
 ##################################################################################
 provider "postgresql" {
-  host      = module.aurora.aurora_endpoint
-  port      = var.aurora_db_port
-  database  = var.aurora_db_name
+  host      = module.rds_postgres.rds_instance_hostname
+  port      = var.rds_instance_database_port
+  database  = var.rds_instance_database_name
   username  = var.tenant
   password  = module.db_password.result
   sslmode   = "require"
@@ -82,22 +131,22 @@ provider "postgresql" {
 resource "postgresql_database" "audit_db" {
   name              = var.auditdbdatabase
   allow_connections = true
-  depends_on        = [module.aurora]
+  depends_on        = [module.rds_postgres]
 }
 resource "postgresql_database" "authentication_db" {
   name              = var.authenticationdbdatabase
   allow_connections = true
-  depends_on        = [module.aurora]
+  depends_on        = [module.rds_postgres]
 }
 resource "postgresql_database" "notification_db" {
   name              = var.notificationdbdatabase
   allow_connections = true
-  depends_on        = [module.aurora]
+  depends_on        = [module.rds_postgres]
 }
 resource "postgresql_database" "user_db" {
   name              = var.userdbdatabase
   allow_connections = true
-  depends_on        = [module.aurora]
+  depends_on        = [module.rds_postgres]
 }
 
 ########################################################################
@@ -122,21 +171,21 @@ module "db_ssm_parameters" {
     },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_host"
-      value       = module.aurora.aurora_endpoint
+      value       = module.rds_postgres.rds_instance_hostname
       type        = "String"
       overwrite   = "true"
       description = "Database Host"
     },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_port"
-      value       = var.aurora_db_port
+      value       = var.rds_instance_database_port
       type        = "SecureString"
       overwrite   = "true"
       description = "Database Port"
     },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_database"
-      value       = var.aurora_db_name
+      value       = var.rds_instance_database_name
       type        = "SecureString"
       overwrite   = "true"
       description = "Default Database Name"
@@ -150,7 +199,7 @@ module "db_ssm_parameters" {
     },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_arn"
-      value       = module.aurora.aurora_arn
+      value       = module.rds_postgres.rds_instance_arn
       type        = "SecureString"
       overwrite   = "true"
       description = "Database ARN"
@@ -185,5 +234,5 @@ module "db_ssm_parameters" {
     }
   ]
   tags       = module.tags.tags
-  depends_on = [module.aurora, module.db_password]
+  depends_on = [module.rds_postgres, module.db_password]
 }

@@ -75,6 +75,8 @@ phases:
       - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"
       - export TF_VAR_tenant_host_domain="${KEY}.${DOMAIN_NAME}"
       - export TF_VAR_jwt_issuer="${KEY}"
+      - export TF_VAR_rds_instance_allocated_storage="${POSTGRES_SIZE}"
+      - export TF_VAR_karpenter_instance_category="${INSTANCE_CATEGORY}"
       - export TF_VAR_tenant_client_id="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
       - export TF_VAR_tenant_client_secret=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
       - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)

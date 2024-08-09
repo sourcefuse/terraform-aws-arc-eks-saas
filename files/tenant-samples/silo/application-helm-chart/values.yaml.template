@@ -327,3 +327,4 @@ authenticationdbdatabase: ${AUTH_DATABASE}
 auditdbdatabase: ${AUDIT_DATABASE}
 notificationdbdatabase: ${NOTIFICATION_DATABASE}
 userdbdatabase: ${USER_DATABASE}
+instance_category: ${INSTANCE_CATEGORY}

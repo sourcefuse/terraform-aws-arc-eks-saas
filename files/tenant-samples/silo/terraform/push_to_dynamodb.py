@@ -29,7 +29,8 @@ environment_variables = {
     'VPC_ID': os.environ.get('VPC_ID'),
     'REFRESH_TOKEN_EXPIRATION': os.environ.get('REFRESH_TOKEN_EXPIRATION'),
     'TENANT_DATA': os.environ.get('TENANT_DATA'),
-    'DOMAIN_NAME': os.environ.get('DOMAIN_NAME')
+    'DOMAIN_NAME': os.environ.get('DOMAIN_NAME'),
+    'POSTGRES_SIZE': os.environ.get('POSTGRES_SIZE')
 }
 
 # Define the partition key value

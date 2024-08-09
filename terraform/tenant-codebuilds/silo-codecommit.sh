@@ -54,3 +54,20 @@ else
 fi
 
 echo "Script executed successfully"
+
+
+
+
+
+
+
+# #!/bin/bash
+
+# # Set environment variables
+# export AWS_REGION=us-west-2
+# export NAMESPACE=sf-arc-saas
+# export ENVIRONMENT=dev
+# export GITHUB_USERNAME="HarshitSF"
+
+# # Construct the GitHub repository URL
+# GITHUB_REPO_URL="https://github.com/${GITHUB_USERNAME}/${NAMESPACE}-saas-management-repository.git"
