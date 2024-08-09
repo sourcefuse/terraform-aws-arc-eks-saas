@@ -106,20 +106,19 @@ resource "aws_security_group_rule" "additional_inbound_rules" {
   depends_on = [module.rds_postgres]
 
   count             = length(var.additional_inbound_rules)
-  security_group_id = data.aws_security_groups.aurora.ids[0]
+  security_group_id = data.aws_security_groups.rds_postgres.ids[0]
   description       = var.additional_inbound_rules[count.index].description
+  type = var.additional_inbound_rules[count.index].type
   from_port         = var.additional_inbound_rules[count.index].from_port
   to_port           = var.additional_inbound_rules[count.index].to_port
   protocol          = var.additional_inbound_rules[count.index].protocol
   cidr_blocks       = var.additional_inbound_rules[count.index].cidr_blocks
-  type              = "ingress"
-
 }
 ##################################################################################
 ## RDS Operations
 ##################################################################################
 provider "postgresql" {
-  host      = module.rds_postgres.rds_instance_hostname
+  host      = trim("${module.rds_postgres.rds_instance_endpoint}", ":5432")
   port      = var.rds_instance_database_port
   database  = var.rds_instance_database_name
   username  = var.tenant
@@ -171,7 +170,7 @@ module "db_ssm_parameters" {
     },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_host"
-      value       = module.rds_postgres.rds_instance_hostname
+      value       = trim("${module.rds_postgres.rds_instance_endpoint}", ":5432")
       type        = "String"
       overwrite   = "true"
       description = "Database Host"

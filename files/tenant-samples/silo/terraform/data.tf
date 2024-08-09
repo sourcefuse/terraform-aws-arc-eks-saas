@@ -46,11 +46,11 @@ data "aws_subnets" "public" {
   }
 }
 
-data "aws_security_groups" "aurora" {
-  depends_on = [module.aurora]
+data "aws_security_groups" "rds_postgres" {
+  depends_on = [module.rds_postgres]
   filter {
     name   = "tag:Name"
-    values = ["${var.namespace}-${var.environment}-${var.tenant}-aurora"]
+    values = ["${var.namespace}-${var.environment}-${var.tenant}-postgres"]
   }
 
   filter {

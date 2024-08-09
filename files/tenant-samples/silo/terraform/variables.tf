@@ -145,13 +145,13 @@ variable "rds_instance_multi_az" {
 variable "rds_instance_storage_type" {
   description = "The storage type for the RDS instance."
   type        = string
-  default = "gp3"
+  default = "gp2"
 }
 
 variable "rds_instance_instance_class" {
   description = "The instance class for the RDS instance."
   type        = string
-  default = "db.t4g.small"
+  default = "db.t3.small"
 }
 
 variable "rds_instance_allocated_storage" {
@@ -332,14 +332,13 @@ variable "rds_instance_backup_window" {
 
 variable "additional_inbound_rules" {
   type = list(object({
-    description       = string
-    from_port         = number
-    to_port           = number
-    protocol          = string
-    cidr_blocks       = list(string)
-    security_group_id = optional(list(string))
-    ipv6_cidr_blocks  = optional(list(string))
-
+   name        = string
+    description = string
+    type        = string
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
   }))
   default = []
 }
