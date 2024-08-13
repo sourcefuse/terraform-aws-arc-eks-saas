@@ -127,20 +127,17 @@ data "aws_ssm_parameter" "authenticationdbdatabase" {
   name = "/${var.namespace}/${var.environment}/pooled/authenticationdbdatabase"
 }
 
-data "aws_ssm_parameter" "auditdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/auditdbdatabase"
+data "aws_ssm_parameter" "featuredbdatabase" {
+  name = "/${var.namespace}/${var.environment}/pooled/featuredbdatabase"
 }
 
 data "aws_ssm_parameter" "notificationdbdatabase" {
   name = "/${var.namespace}/${var.environment}/pooled/notificationdbdatabase"
 }
 
-data "aws_ssm_parameter" "userdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/userdbdatabase"
-}
 
-data "aws_ssm_parameter" "productdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/productdbdatabase"
+data "aws_ssm_parameter" "videoconfrencingdbdatabase" {
+  name = "/${var.namespace}/${var.environment}/pooled/videoconfrencingdbdatabase"
 }
 
 data "aws_ssm_parameter" "jwt_issuer" {

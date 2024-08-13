@@ -146,8 +146,8 @@ data "aws_ssm_parameter" "authenticationdbdatabase" {
   depends_on = [module.db_ssm_parameters]
 }
 
-data "aws_ssm_parameter" "auditdbdatabase" {
-  name       = "/${var.namespace}/${var.environment}/${var.tenant}/auditdbdatabase"
+data "aws_ssm_parameter" "featuredbdatabase" {
+  name       = "/${var.namespace}/${var.environment}/${var.tenant}/featuredbdatabase"
   depends_on = [module.db_ssm_parameters]
 }
 
@@ -156,8 +156,8 @@ data "aws_ssm_parameter" "notificationdbdatabase" {
   depends_on = [module.db_ssm_parameters]
 }
 
-data "aws_ssm_parameter" "userdbdatabase" {
-  name       = "/${var.namespace}/${var.environment}/${var.tenant}/userdbdatabase"
+data "aws_ssm_parameter" "videoconfrencingdbdatabase" {
+  name = "/${var.namespace}/${var.environment}/${var.tenant}/videoconfrencingdbdatabase"
   depends_on = [module.db_ssm_parameters]
 }
 

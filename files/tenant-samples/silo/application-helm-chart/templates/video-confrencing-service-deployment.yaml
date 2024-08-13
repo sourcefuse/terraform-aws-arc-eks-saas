@@ -1,17 +1,17 @@
-{{- if .Values.auditService.enabled }}
+{{- if .Values.videoConferencingService.enabled }}
 ---
 #Deployment
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm.fullname" . }}-audit-service
+  name: {{ include "helm.fullname" . }}-video-conferencing-service
   labels:
     app: {{ include "helm.fullname" . }}
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
-  replicas: {{ .Values.auditService.replicaCount }}
+  replicas: {{ .Values.videoConferencingService.replicaCount }}
   strategy:
     type: {{ .Values.strategy.type }}
     rollingUpdate:
@@ -23,26 +23,26 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/cm-audit-service.yaml") . | sha256sum }}
-        prometheus.io/path: {{ .Values.app.basePath }}/audit-service/obf/metrics
+        checksum/config: {{ include (print $.Template.BasePath "/cm-video-conferencing-service.yaml") . | sha256sum }}
+        prometheus.io/path: {{ .Values.app.basePath }}/video-conferencing-service/obf/metrics
 {{- if .Values.extraAnnotations }} 
 {{ toYaml .Values.extraAnnotations | indent 8 }} 
 {{- end }}
       labels:
         app: {{ include "helm.fullname" . }}
-        component: audit-service
+        component: video-conferencing-service
         Tenant: {{ .Values.tenant }}
         Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
       containers:
-        - imagePullPolicy: {{ .Values.auditService.pullPolicy }}
+        - imagePullPolicy: {{ .Values.videoConferencingService.pullPolicy }}
           resources:
-            {{- toYaml .Values.auditService.resources | nindent 12 }}
+            {{- toYaml .Values.videoConferencingService.resources | nindent 12 }}
 {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.app.basePath }}/audit-service
+              path: {{ .Values.app.basePath }}/video-conferencing-service
               port: 3000
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -51,21 +51,21 @@ spec:
 {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.app.basePath }}/audit-service
+              path: {{ .Values.app.basePath }}/video-conferencing-service
               port: 3000
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
 {{- end }}
-          name: {{ include "helm.fullname" . }}-audit-service
-          image: {{ .Values.auditService.repository }}:{{ .Values.auditService.tag }}
+          name: {{ include "helm.fullname" . }}-video-conferencing-service
+          image: {{ .Values.videoConferencingService.repository }}:{{ .Values.videoConferencingService.tag }}
           volumeMounts:
           - name: my-api-token
             mountPath: /mnt/api-token
             readOnly: true
           envFrom:
           - configMapRef:
-              name: {{ include "helm.fullname" . }}-cm-audit-service
+              name: {{ include "helm.fullname" . }}-cm-video-conferencing-service
           env:
           - name: DB_HOST
             valueFrom:
@@ -91,7 +91,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: AUDIT_SERVICE_DB_DATABASE
+                key: VIDEO_CONFRENCING_SERVICE_DB_DATABASE
           - name: DB_SCHEMA
             valueFrom:
               secretKeyRef:
@@ -135,7 +135,7 @@ spec:
 {{- end }}
 
       nodeSelector:
-        pooled-node: "pooled"
+        silo-node: {{ .Values.tenant }}
 {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}
@@ -147,7 +147,7 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: {{ .Values.saname }}-aws-secrets
-{{- with .Values.auditService.affinity }}
+{{- with .Values.videoConferencingService.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -155,25 +155,25 @@ spec:
 ---
 #HPA
 
-{{- if .Values.auditService.autoscaling.enabled }}
+{{- if .Values.videoConferencingService.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "helm.fullname" . }}-audit-service
+  name: {{ include "helm.fullname" . }}-video-conferencing-service
   labels:
     app: {{ include "helm.fullname" . }}
-    component: audit-service
+    component: video-conferencing-service
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "helm.fullname" . }}-audit-service
-  minReplicas: {{ .Values.auditService.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.auditService.autoscaling.maxReplicas }}
+    name: {{ include "helm.fullname" . }}-video-conferencing-service
+  minReplicas: {{ .Values.videoConferencingService.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.videoConferencingService.autoscaling.maxReplicas }}
   metrics:
-  {{- with .Values.auditService.autoscaling.targetCPUUtilizationPercentage }}
+  {{- with .Values.videoConferencingService.autoscaling.targetCPUUtilizationPercentage }}
   - type: Resource
     resource:
       name: cpu
@@ -181,7 +181,7 @@ spec:
         type: Utilization
         averageUtilization: {{ . }}
   {{- end }}
-  {{- with .Values.auditService.autoscaling.targetMemoryUtilizationPercentage }}
+  {{- with .Values.videoConferencingService.autoscaling.targetMemoryUtilizationPercentage }}
   - type: Resource
     resource:
       name: memory
@@ -195,20 +195,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helm.fullname" . }}-audit-service
+  name: {{ include "helm.fullname" . }}-video-conferencing-service
   labels:
     app: {{ include "helm.fullname" . }}
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
-  type: {{ .Values.auditService.service.type }}
+  type: {{ .Values.videoConferencingService.service.type }}
   ports:
-    - port: {{ .Values.auditService.service.port }}
-      targetPort: {{ .Values.auditService.service.targetPort }}
-      protocol: {{ .Values.auditService.service.protocol }}
+    - port: {{ .Values.videoConferencingService.service.port }}
+      targetPort: {{ .Values.videoConferencingService.service.targetPort }}
+      protocol: {{ .Values.videoConferencingService.service.protocol }}
       name: web
   selector:
     app: {{ include "helm.fullname" . }}
-    component: audit-service
+    component: video-conferencing-service
 ---
 {{- end }}

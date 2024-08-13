@@ -91,7 +91,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: NOTIFICATION-SERVICE_DB_DATABASE
+                key: NOTIFICATION_SERVICE_DB_DATABASE
           - name: DB_SCHEMA
             valueFrom:
               secretKeyRef:

@@ -93,8 +93,8 @@ provider "postgresql" {
   superuser = false
 }
 
-resource "postgresql_database" "audit_db" {
-  name              = var.auditdbdatabase
+resource "postgresql_database" "feature_db" {
+  name              = var.featuredbdatabase
   allow_connections = true
   depends_on        = [module.aurora]
 }
@@ -108,13 +108,8 @@ resource "postgresql_database" "notification_db" {
   allow_connections = true
   depends_on        = [module.aurora]
 }
-resource "postgresql_database" "user_db" {
-  name              = var.userdbdatabase
-  allow_connections = true
-  depends_on        = [module.aurora]
-}
-resource "postgresql_database" "product_db" {
-  name              = var.productdbdatabase
+resource "postgresql_database" "video_confrencing_db" {
+  name              = var.videoconfrencingdbdatabase
   allow_connections = true
   depends_on        = [module.aurora]
 }
@@ -167,11 +162,11 @@ module "db_ssm_parameters" {
       description = "Default Database Schema"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/auditdbdatabase"
-      value       = var.auditdbdatabase
+      name        = "/${var.namespace}/${var.environment}/pooled/featuredbdatabase"
+      value       = var.featuredbdatabase
       type        = "SecureString"
       overwrite   = "true"
-      description = "Audit Database Name"
+      description = "Feature Toggle Database Name"
     },
     {
       name        = "/${var.namespace}/${var.environment}/pooled/authenticationdbdatabase"
@@ -188,18 +183,11 @@ module "db_ssm_parameters" {
       description = "Notification Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/userdbdatabase"
-      value       = var.userdbdatabase
+      name        = "/${var.namespace}/${var.environment}/pooled/videoconfrencingdbdatabase"
+      value       = var.videoconfrencingdbdatabase
       type        = "SecureString"
       overwrite   = "true"
-      description = "User Database Name"
-    },
-    {
-      name        = "/${var.namespace}/${var.environment}/pooled/productdbdatabase"
-      value       = var.productdbdatabase
-      type        = "SecureString"
-      overwrite   = "true"
-      description = "Product Database Name"
+      description = "Video Confrencing Database Name"
     }
   ]
   tags       = module.tags.tags

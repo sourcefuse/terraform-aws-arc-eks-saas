@@ -40,106 +40,106 @@ spec:
             mountPath: /mnt/api-token
             readOnly: true
         env:
-          - name: AUTHENTICATION-SERVICE_DB_HOST
+          - name: AUTH_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: AUTHENTICATION-SERVICE_DB_PORT
+          - name: AUTH_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: AUTHENTICATION-SERVICE_DB_USER
+          - name: AUTH_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: AUTHENTICATION-SERVICE_DB_PASSWORD
+          - name: AUTH_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: AUTHENTICATION-SERVICE_DB_DATABASE
+          - name: AUTH_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: AUTHENTICATION-SERVICE_DB_DATABASE
-          - name: AUDIT-SERVICE_DB_HOST
+                key: AUTHENTICATION_SERVICE_DB_DATABASE
+          - name: FEATURE_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: AUDIT-SERVICE_DB_PORT
+          - name: FEATURE_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: AUDIT-SERVICE_DB_USER
+          - name: FEATURE_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: AUDIT-SERVICE_DB_PASSWORD
+          - name: FEATURE_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: AUDIT-SERVICE_DB_DATABASE
+          - name: FEATURE_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: AUDIT-SERVICE_DB_DATABASE
-          - name: NOTIFICATION-SERVICE_DB_HOST
+                key: FEATURE_DB_DATABASE
+          - name: NOTIF_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: NOTIFICATION-SERVICE_DB_PORT
+          - name: NOTIF_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: NOTIFICATION-SERVICE_DB_USER
+          - name: NOTIF_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: NOTIFICATION-SERVICE_DB_PASSWORD
+          - name: NOTIF_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: NOTIFICATION-SERVICE_DB_DATABASE
+          - name: NOTIF_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: NOTIFICATION-SERVICE_DB_DATABASE
-          - name: USER-TENANT-SERVICE_DB_HOST
+                key: NOTIFICATION_SERVICE_DB_DATABASE
+          - name: VIDEO_DB_HOST
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_HOST
-          - name: USER-TENANT-SERVICE_DB_PORT
+          - name: VIDEO_DB_PORT
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PORT
-          - name: USER-TENANT-SERVICE_DB_USER
+          - name: VIDEO_DB_USER
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_USER
-          - name: USER-TENANT-SERVICE_DB_PASSWORD
+          - name: VIDEO_DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: api-token
                 key: DB_PASSWORD
-          - name: USER-TENANT-SERVICE_DB_DATABASE
+          - name: VIDEO_DB_DATABASE
             valueFrom:
               secretKeyRef:
                 name: api-token
-                key: USER-TENANT-SERVICE_DB_DATABASE
+                key: VIDEO_CONFRENCING_SERVICE_DB_DATABASE
           
           - name: TENANT_NAME
             value: {{ .Values.tenantName }}

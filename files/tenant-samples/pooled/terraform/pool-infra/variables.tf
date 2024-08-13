@@ -161,9 +161,9 @@ variable "additional_inbound_rules" {
 ##################################################################################
 ## Postgres DBs
 ##################################################################################
-variable "auditdbdatabase" {
+variable "featuredbdatabase" {
   type    = string
-  default = "audit"
+  default = "feature"
 }
 
 variable "authenticationdbdatabase" {
@@ -176,14 +176,9 @@ variable "notificationdbdatabase" {
   default = "notification"
 }
 
-variable "userdbdatabase" {
+variable "videoconfrencingdbdatabase" {
   type    = string
-  default = "user"
-}
-
-variable "productdbdatabase" {
-  type    = string
-  default = "product"
+  default = "video"
 }
 
 ###################################################################################

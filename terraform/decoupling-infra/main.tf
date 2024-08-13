@@ -146,6 +146,8 @@ module "lambda_function_container_image" {
 
   environment_variables = {
     TIER_DETAILS_TABLE = "${var.namespace}-${var.environment}-decoupling-tier-map-table"
+    EVENT_BUS_AWS_REGION = "${var.region}"
+    EVENT_BUS_NAME = "${var.namespace}-${var.environment}-DecouplingEventBus"
   }
 
   publish = true
@@ -253,7 +255,7 @@ module "eventbridge" {
   rules = {
     Decoupling-Event = {
       description   = "Decoupling Event Rule"
-      event_pattern = jsonencode({ "detail-type": ["TENANT_PROVISIONING", "TENANT_DEPROVISIONING", "TENANT_PROVISIONING_SUCCESS","TENANT_PROVISIONING_FAILURE"] })
+      event_pattern = jsonencode({ "detail-type": ["TENANT_PROVISIONING", "TENANT_DEPROVISIONING", "TENANT_PROVISIONING_SUCCESS","TENANT_PROVISIONING_FAILURE","TENANT_DEPLOYMENT","TENANT_DEPLOYMENT_SUCCESS","TENANT_DEPLOYMENT_FAILURE"] })
       enabled       = true
     }
   }

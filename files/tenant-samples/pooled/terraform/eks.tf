@@ -135,10 +135,9 @@ data "template_file" "helm_values_template" {
     JWT_SECRET            = data.aws_ssm_parameter.jwt_secret.name
     JWT_ISSUER            = data.aws_ssm_parameter.jwt_issuer.name
     AUTH_DATABASE         = data.aws_ssm_parameter.authenticationdbdatabase.name
-    AUDIT_DATABASE        = data.aws_ssm_parameter.auditdbdatabase.name
+    FEATURE_DATABASE        = data.aws_ssm_parameter.featuredbdatabase.name
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
-    USER_DATABASE         = data.aws_ssm_parameter.userdbdatabase.name
-    PRODUCT_DATABASE      = data.aws_ssm_parameter.productdbdatabase.name
+    VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
   }
 }
 

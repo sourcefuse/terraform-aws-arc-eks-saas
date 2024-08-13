@@ -58,10 +58,10 @@ frontend:
 
 
 #Services
-#auditService
-auditService:
+#featureService
+featureService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-audit-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-feature-toggle-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -91,14 +91,14 @@ auditService:
     maxReplicas: 1
     targetCPUUtilizationPercentage: 75
     targetMemoryUtilizationPercentage: 80
-  base_path: /audit-service
+  base_path: /feature-service
 
 #authenticationService
 authenticationService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-pooled-authentication-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -198,9 +198,9 @@ userTenantService:
     targetMemoryUtilizationPercentage: 80
   base_path: /user-tenant-service
 
-productService:
+videoConferencingService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-user-tenant-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-video-confrencing-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -230,7 +230,7 @@ productService:
     maxReplicas: 1
     targetCPUUtilizationPercentage: 75
     targetMemoryUtilizationPercentage: 80
-  base_path: /product-service
+  base_path: /video-confrencing-service
 
 #migrationJob
 migrationJob:
@@ -359,7 +359,6 @@ redisdatabase: ${REDIS_DATABASE}
 jwtsecret: ${JWT_SECRET}
 jwtissuer: ${JWT_ISSUER}
 authenticationdbdatabase: ${AUTH_DATABASE}
-auditdbdatabase: ${AUDIT_DATABASE}
+featuredbdatabase: ${FEATURE_DATABASE}
 notificationdbdatabase: ${NOTIFICATION_DATABASE}
-userdbdatabase: ${USER_DATABASE}
-productdbdatabase: ${PRODUCT_DATABASE}
+videoconfrencingdbdatabase: ${VIDEO_CONFRENCING_DATABASE}

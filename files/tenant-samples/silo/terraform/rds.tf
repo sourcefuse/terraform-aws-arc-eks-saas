@@ -127,8 +127,8 @@ provider "postgresql" {
   superuser = false
 }
 
-resource "postgresql_database" "audit_db" {
-  name              = var.auditdbdatabase
+resource "postgresql_database" "feature_db" {
+  name              = var.featuredbdatabase
   allow_connections = true
   depends_on        = [module.rds_postgres]
 }
@@ -142,8 +142,8 @@ resource "postgresql_database" "notification_db" {
   allow_connections = true
   depends_on        = [module.rds_postgres]
 }
-resource "postgresql_database" "user_db" {
-  name              = var.userdbdatabase
+resource "postgresql_database" "video_confrencing_db" {
+  name              = var.videoconfrencingdbdatabase
   allow_connections = true
   depends_on        = [module.rds_postgres]
 }
@@ -204,11 +204,11 @@ module "db_ssm_parameters" {
       description = "Database ARN"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/auditdbdatabase"
-      value       = var.auditdbdatabase
+      name        = "/${var.namespace}/${var.environment}/${var.tenant}/featuredbdatabase"
+      value       = var.featuredbdatabase
       type        = "SecureString"
       overwrite   = "true"
-      description = "Audit Database Name"
+      description = "Feature Toggle Database Name"
     },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant}/authenticationdbdatabase"
@@ -225,11 +225,11 @@ module "db_ssm_parameters" {
       description = "Notification Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/userdbdatabase"
-      value       = var.userdbdatabase
+      name        = "/${var.namespace}/${var.environment}/${var.tenant}/videoconfrencingdbdatabase"
+      value       = var.videoconfrencingdbdatabase
       type        = "SecureString"
       overwrite   = "true"
-      description = "User Database Name"
+      description = "Video Confrencing Database Name"
     }
   ]
   tags       = module.tags.tags
