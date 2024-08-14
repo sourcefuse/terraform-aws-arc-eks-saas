@@ -200,7 +200,7 @@ userTenantService:
 
 videoConferencingService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-video-confrencing-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-video-conferencing-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1

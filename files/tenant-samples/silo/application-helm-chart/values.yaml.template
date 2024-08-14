@@ -131,7 +131,7 @@ authenticationService:
 #notificationService
 notificationService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-notification-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-notification-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -198,9 +198,9 @@ userTenantService:
     targetMemoryUtilizationPercentage: 80
   base_path: /user-tenant-service
 
-videoConferencingService:
+videoConfrencingService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-video-confrencing-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-video-conferencing-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -238,7 +238,7 @@ migrationJob:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-migration
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
