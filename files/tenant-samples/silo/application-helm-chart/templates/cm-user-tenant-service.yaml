@@ -14,4 +14,5 @@ data:
       BASE_PATH: '{{ .Values.userTenantService.base_path }}'
       ADMIN_USER_TENANT_ID: '{{ .Values.adminUserTenantId }}'
       USER_CALLBACK_SECRET: '{{ .Values.userCallbackSecret }}'
+      DB_SSL: '{{ .Values.userTenantService.db_ssl }}'
 {{- end}}

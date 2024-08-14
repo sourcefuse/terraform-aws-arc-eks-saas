@@ -68,6 +68,7 @@ featureService:
   port: 3000
   node_env: "production"
   log_level: "info"
+  db_ssl: false
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -103,6 +104,7 @@ authenticationService:
   port: 3000
   node_env: "production"
   log_level: "info"
+  db_ssl: false
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -174,6 +176,7 @@ userTenantService:
   port: 3000
   node_env: "production"
   log_level: "info"
+  db_ssl: false
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -335,7 +338,7 @@ adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
 userCallbackSecret: ${USER_CALLBACK_SECRET}
 
 # Frontend variable
-clientId: ${TENANT_CLIENT_ID}
+clientId: "webapp"
 publicKey: ${TENANT_CLIENT_SECRET}
 
 namespace: ${NAMESPACE}

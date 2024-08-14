@@ -12,6 +12,7 @@ data:
       NODE_ENV: '{{ .Values.authenticationService.node_env }}'
       LOG_LEVEL: '{{ .Values.authenticationService.log_level }}'
       BASE_PATH: '{{ .Values.authenticationService.base_path }}'
+      DB_SSL: '{{ .Values.authenticationService.db_ssl }}'
       COGNITO_AUTH_REGION: '{{ .Values.region }}'
       COGNITO_AUTH_CALLBACK_URL: 'https://{{ .Values.hostname }}/authentication-service/auth/cognito-auth-redirect'
       PRIVATE_DECRYPTION_KEY: ''

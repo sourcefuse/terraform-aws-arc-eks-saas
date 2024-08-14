@@ -61,8 +61,8 @@ spec:
           - containerPort: 80
           volumeMounts:
           - name: env-var
-            mountPath: /usr/share/nginx/html/assets/json/environment.json
-            subPath: environment.json
+            mountPath: /usr/share/nginx/html/config.json
+            subPath: config.json
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
@@ -80,7 +80,7 @@ spec:
             name: {{ include "helm.fullname" . }}-cm-frontend
             items:
             - key: env
-              path: environment.json
+              path: config.json
 {{- with .Values.frontend.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
