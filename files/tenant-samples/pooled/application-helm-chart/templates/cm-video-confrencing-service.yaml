@@ -12,4 +12,5 @@ data:
       NODE_ENV: '{{ .Values.videoConfrencingService.node_env }}'
       LOG_LEVEL: '{{ .Values.videoConfrencingService.log_level }}'
       BASE_PATH: '{{ .Values.videoConfrencingService.base_path }}'
+      DB_SSL: '{{ .Values.videoConfrencingService.db_ssl }}'
 {{- end}}

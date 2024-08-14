@@ -12,4 +12,5 @@ data:
       NODE_ENV: '{{ .Values.notificationService.node_env }}'
       LOG_LEVEL: '{{ .Values.notificationService.log_level }}'
       BASE_PATH: '{{ .Values.notificationService.base_path }}'
+      DB_SSL: '{{ .Values.notificationService.db_ssl }}'
 {{- end}}

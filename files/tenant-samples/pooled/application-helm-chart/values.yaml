@@ -138,6 +138,7 @@ notificationService:
   port: 3000
   node_env: "production"
   log_level: "info"
+  db_ssl: false
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -207,6 +208,7 @@ videoConferencingService:
   port: 3000
   node_env: "production"
   log_level: "info"
+  db_ssl: false
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
