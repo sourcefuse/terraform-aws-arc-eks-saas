@@ -96,7 +96,7 @@ featureService:
 #authenticationService
 authenticationService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-pooled-authentication-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-silo-authentication-service
   pullPolicy: Always
   tag: "0.0.2"
   replicaCount: 1
@@ -131,7 +131,7 @@ authenticationService:
 #notificationService
 notificationService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-notification-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-notification-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -236,9 +236,9 @@ videoConferencingService:
 migrationJob:
 #enable it when correct image has been provided
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-pooled-application-plane-migration
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-migration
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
