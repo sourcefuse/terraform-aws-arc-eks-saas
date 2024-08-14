@@ -97,6 +97,36 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: DB_SCHEMA
+          - name: FEATURE_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: FEATURE_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: FEATURE_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: FEATURE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: FEATURE_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: FEATURE_DB_DATABASE
+          - name: FEATURE_DB_SCHEMA
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_SCHEMA
           - name: REDIS_HOST
             valueFrom:
               secretKeyRef:
