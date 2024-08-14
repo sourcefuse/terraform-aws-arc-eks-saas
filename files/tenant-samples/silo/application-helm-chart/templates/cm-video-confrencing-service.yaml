@@ -13,4 +13,6 @@ data:
       LOG_LEVEL: '{{ .Values.videoConfrencingService.log_level }}'
       BASE_PATH: '{{ .Values.videoConfrencingService.base_path }}'
       DB_SSL: '{{ .Values.videoConfrencingService.db_ssl }}'
+      VONAGE_API_KEY: '47793071'
+      VONAGE_API_SECRET: 'f338183155d48b0fa0a1124f1d64459eaa917fda'
 {{- end}}
