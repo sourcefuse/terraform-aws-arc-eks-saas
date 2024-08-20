@@ -1,17 +1,17 @@
-{{- if .Values.authenticationService.enabled }}
+{{- if .Values.userTenantService.enabled }}
 ---
 #Deployment
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm.fullname" . }}-authentication-service
+  name: {{ include "helm.fullname" . }}-user-tenant-service
   labels:
     app: {{ include "helm.fullname" . }}
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
-  replicas: {{ .Values.authenticationService.replicaCount }}
+  replicas: {{ .Values.userTenantService.replicaCount }}
   strategy:
     type: {{ .Values.strategy.type }}
     rollingUpdate:
@@ -23,26 +23,26 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/cm-authentication-service.yaml") . | sha256sum }}
-        prometheus.io/path: {{ .Values.app.basePath }}/authentication-service/obf/metrics
+        checksum/config: {{ include (print $.Template.BasePath "/cm-user-tenant-service.yaml") . | sha256sum }}
+        prometheus.io/path: {{ .Values.app.basePath }}/user-tenant-service/obf/metrics
 {{- if .Values.extraAnnotations }} 
 {{ toYaml .Values.extraAnnotations | indent 8 }} 
 {{- end }}
       labels:
         app: {{ include "helm.fullname" . }}
-        component: authentication-service
+        component: user-tenant-service
         Tenant: {{ .Values.tenant }}
         Tenant_ID: {{ .Values.tenantID }}
     spec:
       serviceAccountName: {{ .Values.saname }}
       containers:
-        - imagePullPolicy: {{ .Values.authenticationService.pullPolicy }}
+        - imagePullPolicy: {{ .Values.userTenantService.pullPolicy }}
           resources:
-            {{- toYaml .Values.authenticationService.resources | nindent 12 }}
+            {{- toYaml .Values.userTenantService.resources | nindent 12 }}
 {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.app.basePath }}/authentication-service
+              path: {{ .Values.app.basePath }}/user-tenant-service
               port: 3000
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
@@ -51,21 +51,21 @@ spec:
 {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.app.basePath }}/authentication-service
+              path: {{ .Values.app.basePath }}/user-tenant-service
               port: 3000
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
 {{- end }}
-          name: {{ include "helm.fullname" . }}-authentication-service
-          image: {{ .Values.authenticationService.repository }}:{{ .Values.authenticationService.tag }}
+          name:  {{ include "helm.fullname" . }}-user-tenant-service
+          image: {{ .Values.userTenantService.repository }}:{{ .Values.userTenantService.tag }}
           volumeMounts:
           - name: my-api-token
             mountPath: /mnt/api-token
             readOnly: true
           envFrom:
           - configMapRef:
-              name: {{ include "helm.fullname" . }}-cm-authentication-service
+              name: {{ include "helm.fullname" . }}-cm-user-tenant-service
           env:
           - name: DB_HOST
             valueFrom:
@@ -93,36 +93,6 @@ spec:
                 name: api-token
                 key: AUTHENTICATION_SERVICE_DB_DATABASE
           - name: DB_SCHEMA
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_SCHEMA
-          - name: FEATURE_DB_HOST
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_HOST
-          - name: FEATURE_DB_PORT
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_PORT
-          - name: FEATURE_DB_USER
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_USER
-          - name: FEATURE_DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: DB_PASSWORD
-          - name: FEATURE_DB_DATABASE
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: FEATURE_DB_DATABASE
-          - name: FEATURE_DB_SCHEMA
             valueFrom:
               secretKeyRef:
                 name: api-token
@@ -159,21 +129,6 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
-          - name: COGNITO_AUTH_CLIENT_DOMAIN
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_DOMAIN
-          - name: COGNITO_AUTH_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_ID
-          - name: COGNITO_AUTH_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_SECRET
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
@@ -192,7 +147,7 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: {{ .Values.saname }}-aws-secrets
-{{- with .Values.authenticationService.affinity }}
+{{- with .Values.userTenantService.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -200,25 +155,25 @@ spec:
 ---
 #HPA
 
-{{- if .Values.authenticationService.autoscaling.enabled }}
+{{- if .Values.userTenantService.autoscaling.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "helm.fullname" . }}-authentication-service
+  name: {{ include "helm.fullname" . }}-user-tenant-service
   labels:
     app: {{ include "helm.fullname" . }}
-    component: authentication-service
+    component: user-tenant-service
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "helm.fullname" . }}-authentication-service
-  minReplicas: {{ .Values.authenticationService.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.authenticationService.autoscaling.maxReplicas }}
+    name: {{ include "helm.fullname" . }}-user-tenant-service
+  minReplicas: {{ .Values.userTenantService.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.userTenantService.autoscaling.maxReplicas }}
   metrics:
-  {{- with .Values.authenticationService.autoscaling.targetCPUUtilizationPercentage }}
+  {{- with .Values.userTenantService.autoscaling.targetCPUUtilizationPercentage }}
   - type: Resource
     resource:
       name: cpu
@@ -226,7 +181,7 @@ spec:
         type: Utilization
         averageUtilization: {{ . }}
   {{- end }}
-  {{- with .Values.authenticationService.autoscaling.targetMemoryUtilizationPercentage }}
+  {{- with .Values.userTenantService.autoscaling.targetMemoryUtilizationPercentage }}
   - type: Resource
     resource:
       name: memory
@@ -240,20 +195,20 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helm.fullname" . }}-authentication-service
+  name: {{ include "helm.fullname" . }}-user-tenant-service
   labels:
     app: {{ include "helm.fullname" . }}
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
 spec:
-  type: {{ .Values.authenticationService.service.type }}
+  type: {{ .Values.userTenantService.service.type }}
   ports:
-    - port: {{ .Values.authenticationService.service.port }}
-      targetPort: {{ .Values.authenticationService.service.targetPort }}
-      protocol: {{ .Values.authenticationService.service.protocol }}
+    - port: {{ .Values.userTenantService.service.port }}
+      targetPort: {{ .Values.userTenantService.service.targetPort }}
+      protocol: {{ .Values.userTenantService.service.protocol }}
       name: web
   selector:
     app: {{ include "helm.fullname" . }}
-    component: authentication-service
+    component: user-tenant-service
 ---
 {{- end }}

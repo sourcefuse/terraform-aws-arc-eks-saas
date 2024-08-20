@@ -203,7 +203,7 @@ userTenantService:
     targetMemoryUtilizationPercentage: 80
   base_path: /user-tenant-service
 
-videoConfrencingService:
+videoConferencingService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-video-conferencing-service
   pullPolicy: Always
@@ -336,7 +336,6 @@ tenantEmail: ${TENANT_EMAIL}
 cognitoUser: ${COGNITO_USER}
 cognitoSub: ${COGNITO_USER_SUB}
 adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
-#userCallbackSecret: "yugeyifgweyfgy"
 userCallbackSecret: ${USER_CALLBACK_SECRET}
 
 # Frontend variable

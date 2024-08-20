@@ -1,0 +1,19 @@
+{{- if .Values.notificationService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-notification-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+data:
+      PORT: '{{ .Values.notificationService.port }}'
+      NODE_ENV: '{{ .Values.notificationService.node_env }}'
+      LOG_LEVEL: '{{ .Values.notificationService.log_level }}'
+      BASE_PATH: '{{ .Values.notificationService.base_path }}'
+      DB_SSL: '{{ .Values.notificationService.db_ssl }}'
+      PUBNUB_SUBSCRIBE_KEY: 'sub-c-a25ab89d-9084-4397-90d0-3321c1c92625'
+      PUBNUB_PUBLISH_KEY: 'pub-c-96e4412b-8b7b-4ed3-9f34-00bd4389f34b'
+      PUBNUB_SECRET_KEY: 'sec-c-ZGJiODhiZTMtYjY3My00YTQ0LWJhYjQtMmU4ODAxOGRhMGU5'
+{{- end}}
