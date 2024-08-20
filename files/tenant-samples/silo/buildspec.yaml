@@ -42,6 +42,7 @@ phases:
     on-failure: ABORT
     commands:
     # Extracting tenant variables
+      - export SECRET=${secret}
       - export TENANT_ID=$(echo $tenant | jq -r '.id')
       - export TENANT_NAME=$(echo $tenant | jq -r '.name')
       - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')

@@ -13,4 +13,7 @@ data:
       LOG_LEVEL: '{{ .Values.featureService.log_level }}'
       BASE_PATH: '{{ .Values.featureService.base_path }}'
       DB_SSL: '{{ .Values.featureService.db_ssl}}'
+      USER_CALLBACK_SECRET: '{{ .Values.userCallbackSecret }}'
+      TIMESTAMP_TOLERANCE: '{{ .Values.featureService.timestamp_tolerance}}'
+      ADMIN_USER_TENANT_ID: '{{ .Values.adminUserTenantId }}'
 {{- end}}

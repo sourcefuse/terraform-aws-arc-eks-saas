@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-ui
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.4"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
@@ -63,12 +63,13 @@ featureService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-feature-toggle-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.4"
   replicaCount: 1
   port: 3000
   node_env: "production"
   log_level: "info"
   db_ssl: false
+  timestamp_tolerance: 300
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -99,7 +100,7 @@ authenticationService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-silo-authentication-service
   pullPolicy: Always
-  tag: "0.0.2"
+  tag: "0.0.3"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -171,7 +172,7 @@ userTenantService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-user-tenant-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -243,7 +244,7 @@ migrationJob:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-migration
   pullPolicy: Always
-  tag: "0.0.2"
+  tag: "0.0.3"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -338,7 +339,7 @@ adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
 userCallbackSecret: ${USER_CALLBACK_SECRET}
 
 # Frontend variable
-clientId: "webapp"
+clientId: ${TENANT_CLIENT_ID}
 publicKey: ${TENANT_CLIENT_SECRET}
 
 namespace: ${NAMESPACE}
