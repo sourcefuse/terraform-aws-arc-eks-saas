@@ -181,14 +181,14 @@ module "db_ssm_parameters" {
       description = "Authentication Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/notificationdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/notificationdbdatabase"
       value       = var.notificationdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Notification Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/videoconfrencingdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/videoconfrencingdbdatabase"
       value       = var.videoconfrencingdbdatabase
       type        = "SecureString"
       overwrite   = "true"
