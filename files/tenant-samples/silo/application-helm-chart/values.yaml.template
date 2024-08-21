@@ -29,7 +29,7 @@ frontend:
   pullPolicy: Always
   tag: "0.0.4"
   log_level: "info"
-  home_path: "/main/home"
+  home_path: "/home"
   replicaCount: 1
   affinity: {}
   resources:
