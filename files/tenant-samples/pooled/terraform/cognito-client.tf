@@ -57,21 +57,21 @@ module "cognito_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/cognito_id"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_id"
       value       = resource.aws_cognito_user_pool_client.app_client.id
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain ID"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/cognito_secret"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_secret"
       value       = resource.aws_cognito_user_pool_client.app_client.client_secret
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain Secret"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/${var.user_name}/user_sub"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/${var.user_name}/user_sub"
       value       = aws_cognito_user.cognito_user.sub
       type        = "SecureString"
       overwrite   = "true"

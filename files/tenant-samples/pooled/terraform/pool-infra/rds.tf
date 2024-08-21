@@ -10,6 +10,7 @@ module "tags" {
 
   extra_tags = {
     Tenant = "pooled"
+    Tier = var.tenant_tier
   }
 
 }
@@ -28,14 +29,14 @@ module "aurora" {
   version = "2.0.3"
 
 
-  environment = "${var.environment}-pooled"
+  environment = "${var.environment}-${var.tenant_tier}"
   namespace   = var.namespace
   region      = var.region
   vpc_id      = data.aws_vpc.vpc.id
 
   aurora_cluster_enabled                    = var.aurora_cluster_enabled
   aurora_cluster_name                       = "aurora"
-  enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-pooled-enhanced-monitoring"
+  enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-${var.tenant_tier}-enhanced-monitoring"
   aurora_db_admin_username                  = "dbpooleduser"
   aurora_db_admin_password                  = module.db_password.result
   aurora_db_name                            = var.aurora_db_name
@@ -120,70 +121,70 @@ module "db_ssm_parameters" {
   source = "../../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/db_user"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_user"
       value       = "dbpooleduser"
       type        = "String"
       overwrite   = "true"
       description = "Database User Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/db_password"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_password"
       value       = module.db_password.result
       type        = "SecureString"
       overwrite   = "true"
       description = "Database Password"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/db_host"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_host"
       value       = module.aurora.aurora_endpoint
       type        = "String"
       overwrite   = "true"
       description = "Database Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/db_port"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_port"
       value       = var.aurora_db_port
       type        = "SecureString"
       overwrite   = "true"
       description = "Database Port"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/db_database"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_database"
       value       = var.aurora_db_name
       type        = "SecureString"
       overwrite   = "true"
       description = "Default Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/db_schema"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_schema"
       value       = "main"
       type        = "SecureString"
       overwrite   = "true"
       description = "Default Database Schema"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/featuredbdatabase"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/featuredbdatabase"
       value       = var.featuredbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Feature Toggle Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/authenticationdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/authenticationdbdatabase"
       value       = var.authenticationdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Authentication Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/notificationdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/notificationdbdatabase"
       value       = var.notificationdbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Notification Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/videoconfrencingdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/videoconfrencingdbdatabase"
       value       = var.videoconfrencingdbdatabase
       type        = "SecureString"
       overwrite   = "true"

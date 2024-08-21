@@ -4,8 +4,8 @@
 module "ec_security_group" {
   source = "../../modules/security-group"
 
-  security_group_name        = "${var.namespace}-${var.environment}-pooled-redis-security-group"
-  security_group_description = "Elasticache Redis Security Group for pooled tenants"
+  security_group_name        = "${var.namespace}-${var.environment}-${var.tenant_tier}-redis-security-group"
+  security_group_description = "Elasticache Redis Security Group for ${var.tenant_tier} tenants"
   vpc_id                     = data.aws_vpc.vpc.id
   ingress_rules = {
     rule1 = {
@@ -34,7 +34,7 @@ module "redis" {
 
   namespace                        = var.namespace
   environment                      = var.environment
-  name                             = "pooled-redis"
+  name                             = "${var.tenant_tier}-redis"
   vpc_id                           = data.aws_vpc.vpc.id
   associated_security_group_ids    = module.ec_security_group.id
   create_security_group            = false
@@ -53,7 +53,7 @@ module "redis" {
   snapshot_retention_limit         = var.snapshot_retention_limit
   automatic_failover_enabled       = var.automatic_failover_enabled
   multi_az_enabled                 = var.multi_az_enabled
-  description                      = "Elasticache Redis instance for ${var.namespace}-${var.environment}-pooled-tenants"
+  description                      = "Elasticache Redis instance for ${var.namespace}-${var.environment}-${var.tenant_tier}-tenants"
   cloudwatch_metric_alarms_enabled = var.cloudwatch_metric_alarms_enabled
   depends_on                       = [module.ec_security_group]
   tags                             = module.tags.tags
@@ -67,21 +67,21 @@ module "redis_ssm_parameters" {
   source = "../../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/redis_host"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis_host"
       value       = module.redis.endpoint
       type        = "SecureString"
       overwrite   = "true"
       description = "Redis Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/redis_port"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis_port"
       value       = var.redis_port
       type        = "SecureString"
       overwrite   = "true"
       description = "Redis Port"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/redis-database"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis-database"
       value       = var.redis_database
       type        = "SecureString"
       overwrite   = "true"

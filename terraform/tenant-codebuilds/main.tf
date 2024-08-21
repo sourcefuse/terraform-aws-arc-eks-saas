@@ -170,22 +170,22 @@ resource "aws_codecommit_repository" "premium_repo" {
   }
 }
 
-# standard
-module "standard_plan_codebuild_project" {
-  count       = var.create_standard_codebuild ? 1 : 0
+# basic
+module "basic_plan_codebuild_project" {
+  count       = var.create_basic_codebuild ? 1 : 0
   source      = "../../modules/codebuild"
-  name        = "${var.namespace}-${var.environment}-standard-codebuild-project"
-  description = "Standard plan codebuild project"
+  name        = "${var.namespace}-${var.environment}-basic-codebuild-project"
+  description = "Basic plan codebuild project"
 
   concurrent_build_limit = var.concurrent_build_limit
   service_role           = module.tenant_codebuild_iam_role.arn
   build_timeout          = var.build_timeout
   queued_timeout         = var.queued_timeout
 
-  source_version  = var.standard_source_version
+  source_version  = var.basic_source_version
   source_type     = var.source_type
-  buildspec       = var.standard_buildspec
-  source_location = aws_codecommit_repository.standard_repo.clone_url_http
+  buildspec       = var.basic_buildspec
+  source_location = aws_codecommit_repository.basic_repo.clone_url_http
 
   vpc_id             = data.aws_vpc.vpc.id
   subnets            = data.aws_subnets.private.ids
@@ -211,18 +211,18 @@ module "standard_plan_codebuild_project" {
     }
   ]
 
-  cloudwatch_log_group_name  = var.standard_cloudwatch_log_group_name
+  cloudwatch_log_group_name  = var.basic_cloudwatch_log_group_name
   cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
 
   enable_codebuild_authentication = false
 
   tags       = module.tags.tags
-  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.standard_repo]
+  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.basic_repo]
 }
 
-resource "aws_codecommit_repository" "standard_repo" {
-  repository_name = "${var.namespace}-${var.environment}-standard-plan-repository"
-  description     = "${var.namespace}-${var.environment}-standard-repository."
+resource "aws_codecommit_repository" "basic_repo" {
+  repository_name = "${var.namespace}-${var.environment}-basic-plan-repository"
+  description     = "${var.namespace}-${var.environment}-basic-repository."
   default_branch  = "main"
 
   lifecycle {

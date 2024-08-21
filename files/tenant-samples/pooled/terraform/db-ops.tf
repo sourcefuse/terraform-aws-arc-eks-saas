@@ -32,14 +32,14 @@ module "db_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/pooled-${var.tenant}/db_user"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_user"
       value       = "${var.tenant}"
       type        = "String"
       overwrite   = "true"
       description = "Database User Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled-${var.tenant}/db_password"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_password"
       value       = module.tenant_db_password.result
       type        = "SecureString"
       overwrite   = "true"

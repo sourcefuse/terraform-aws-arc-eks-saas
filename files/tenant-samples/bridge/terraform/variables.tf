@@ -95,6 +95,10 @@ variable "alb_url" {
   description = "ALB DNS Record"
 }
 
+variable "tenant_tier" {
+  type = string
+  description = "Tenant Tier"
+}
 #################################################################
 ## Canary Variables
 #################################################################

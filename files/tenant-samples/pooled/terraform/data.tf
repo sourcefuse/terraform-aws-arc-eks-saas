@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "ssm_policy" {
       "ssm:DescribeParameters",
       "ssm:DeleteParameters"
     ]
-    resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/pooled/*"]
+    resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/${var.tenant_tier}/*"]
   }
 }
 
@@ -74,74 +74,74 @@ data "aws_route53_zone" "selected" {
 }
 
 data "aws_ssm_parameter" "cognito_user_pool_id" {
-  name = "/${var.namespace}/${var.environment}/pooled/cognito_user_pool_id"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_user_pool_id"
 }
 
 data "aws_ssm_parameter" "cognito_domain" {
-  name = "/${var.namespace}/${var.environment}/pooled/cognito_domain"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_domain"
 }
 
 data "aws_ssm_parameter" "cognito_id" {
-  name       = "/${var.namespace}/${var.environment}/pooled/cognito_id"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_id"
   depends_on = [module.cognito_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "cognito_secret" {
-  name       = "/${var.namespace}/${var.environment}/pooled/cognito_secret"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_secret"
   depends_on = [module.cognito_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "db_user" {
-  name = "/${var.namespace}/${var.environment}/pooled/db_user"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_user"
 }
 
 data "aws_ssm_parameter" "db_password" {
-  name = "/${var.namespace}/${var.environment}/pooled/db_password"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_password"
 }
 
 data "aws_ssm_parameter" "db_host" {
-  name = "/${var.namespace}/${var.environment}/pooled/db_host"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_host"
 }
 
 data "aws_ssm_parameter" "db_port" {
-  name = "/${var.namespace}/${var.environment}/pooled/db_port"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_port"
 }
 
 data "aws_ssm_parameter" "db_schema" {
-  name = "/${var.namespace}/${var.environment}/pooled/db_schema"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_schema"
 }
 
 data "aws_ssm_parameter" "redis_host" {
-  name = "/${var.namespace}/${var.environment}/pooled/redis_host"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis_host"
 }
 
 data "aws_ssm_parameter" "redis_port" {
-  name = "/${var.namespace}/${var.environment}/pooled/redis_port"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis_port"
 }
 
 data "aws_ssm_parameter" "redis_database" {
-  name = "/${var.namespace}/${var.environment}/pooled/redis-database"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis-database"
 }
 
 data "aws_ssm_parameter" "authenticationdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/authenticationdbdatabase"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/authenticationdbdatabase"
 }
 
 data "aws_ssm_parameter" "featuredbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/featuredbdatabase"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/featuredbdatabase"
 }
 
 data "aws_ssm_parameter" "notificationdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/notificationdbdatabase"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/notificationdbdatabase"
 }
 
 
 data "aws_ssm_parameter" "videoconfrencingdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/pooled/videoconfrencingdbdatabase"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/videoconfrencingdbdatabase"
 }
 
 data "aws_ssm_parameter" "jwt_issuer" {
-  name       = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_issuer"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/jwt_issuer"
   depends_on = [module.jwt_ssm_parameters]
 }
 

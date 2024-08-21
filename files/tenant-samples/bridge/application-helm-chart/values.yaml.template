@@ -336,12 +336,14 @@ tenantEmail: ${TENANT_EMAIL}
 cognitoUser: ${COGNITO_USER}
 cognitoSub: ${COGNITO_USER_SUB}
 adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
+#userCallbackSecret: "yugeyifgweyfgy"
 userCallbackSecret: ${USER_CALLBACK_SECRET}
 
 # Frontend variable
 clientId: ${TENANT_CLIENT_ID}
 publicKey: ${TENANT_CLIENT_SECRET}
 
+tier: ${TIER}
 namespace: ${NAMESPACE}
 region: ${REGION}
 cognitodomain: ${COGNITO_DOMAIN}

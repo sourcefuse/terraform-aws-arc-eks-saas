@@ -12,20 +12,20 @@ cd ../../files/tenant-samples/ || { echo "Failed to change directory"; exit 1; }
 pip3 install git-remote-codecommit || { echo "Failed to install git-remote-codecommit"; exit 1; }
 
 # Clone codecommit repo
-git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to clone repository"; exit 1; }
+git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-basic-plan-repository || { echo "Failed to clone repository"; exit 1; }
 
 # Removing old content from the repository 
-rm -rf ${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository/*
+rm -rf ${NAMESPACE}-${ENVIRONMENT}-basic-plan-repository/*
 
 # Change directory 
-cd ${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to change directory"; exit 1; }
+cd ${NAMESPACE}-${ENVIRONMENT}-basic-plan-repository || { echo "Failed to change directory"; exit 1; }
 
 # Copy contents from ../pooled-tenant/ to current directory
 cp -r ../pooled/* . || { echo "Failed to copy files"; exit 1; }
 
 
 # Set origin URL
-git remote set-url origin codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-standard-plan-repository || { echo "Failed to set remote URL"; exit 1; }
+git remote set-url origin codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-basic-plan-repository || { echo "Failed to set remote URL"; exit 1; }
 
 # Check if main branch already exists
 if git show-ref --verify --quiet refs/heads/main; then

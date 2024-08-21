@@ -16,7 +16,7 @@ module "aws_cognito_user_pool" {
   source  = "lgallard/cognito-user-pool/aws"
   version = "0.24.0"
 
-  user_pool_name                                        = "${var.namespace}-${var.environment}-pooled-cognito-user-pool"
+  user_pool_name                                        = "${var.namespace}-${var.environment}-${var.tenant_tier}-cognito-user-pool"
   alias_attributes                                      = var.alias_attributes
   auto_verified_attributes                              = var.auto_verified_attributes
   sms_authentication_message                            = var.sms_authentication_message
@@ -45,7 +45,7 @@ module "aws_cognito_user_pool" {
   number_schemas = []
 
   # user_pool_domain
-  domain = "${var.namespace}-pooled-${module.cognito_domain_string.result}"
+  domain = "${var.namespace}-${var.tenant_tier}-${module.cognito_domain_string.result}"
 
 
   # user_group
@@ -69,14 +69,14 @@ module "cognito_ssm_parameters" {
   source = "../../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/cognito_domain"
-      value       = "https://${var.namespace}-pooled-${module.cognito_domain_string.result}.auth.${var.region}.amazoncognito.com"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_domain"
+      value       = "https://${var.namespace}-${var.tenant_tier}-${module.cognito_domain_string.result}.auth.${var.region}.amazoncognito.com"
       type        = "SecureString"
       overwrite   = "true"
       description = "Pooled Tenant Cognito Domain Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/cognito_user_pool_id"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_user_pool_id"
       value       = module.aws_cognito_user_pool.id
       type        = "SecureString"
       overwrite   = "true"

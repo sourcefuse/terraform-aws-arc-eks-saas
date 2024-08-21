@@ -11,6 +11,7 @@ module "tags" {
   extra_tags = {
     Tenant    = var.tenant
     Tenant_ID = var.tenant_id
+    Tier = var.tenant_tier
   }
 
 }
@@ -31,8 +32,8 @@ module "route53-record" {
 ###############################################################################
 module "tenant_iam_role" {
   source              = "../modules/iam-role"
-  role_name           = "${var.namespace}-${var.environment}-pooled-${var.tenant}-iam-role"
-  role_description    = "IAM role for pooled ${var.tenant} application"
+  role_name           = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-iam-role"
+  role_description    = "IAM role for ${var.tenant_tier} ${var.tenant} application"
   assume_role_actions = ["sts:AssumeRoleWithWebIdentity"]
   principals = {
     "Federated" : ["arn:aws:iam::${local.sts_caller_arn}:oidc-provider/${local.oidc_arn}"]
@@ -44,11 +45,11 @@ module "tenant_iam_role" {
     {
       test     = "StringEquals"
       variable = "${local.oidc_arn}:sub"
-      values   = ["system:serviceaccount:${local.kubernetes_ns}:pooled-${var.tenant}"]
+      values   = ["system:serviceaccount:${local.kubernetes_ns}:${var.tenant_tier}-${var.tenant}"]
     }
   ]
-  policy_name        = "${var.namespace}-${var.environment}-pooled-${var.tenant}-iam-policy"
-  policy_description = "IAM policy for pooled ${var.tenant} application"
+  policy_name        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-iam-policy"
+  policy_description = "IAM policy for ${var.tenant_tier} ${var.tenant} application"
   tags               = module.tags.tags
 }
 
@@ -65,18 +66,18 @@ module "jwt_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_issuer"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/jwt_issuer"
       value       = var.jwt_issuer
       type        = "SecureString"
       overwrite   = "true"
-      description = "pooled ${var.tenant} JWT Issuer"
+      description = "${var.tenant_tier} ${var.tenant} JWT Issuer"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_secret"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/jwt_secret"
       value       = module.jwt_secret.result
       type        = "SecureString"
       overwrite   = "true"
-      description = "pooled ${var.tenant} JWT Secret"
+      description = "${var.tenant_tier} ${var.tenant} JWT Secret"
     }
   ]
   tags = module.tags.tags
@@ -155,14 +156,14 @@ resource "local_file" "argocd_application" {
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: pooled-${var.tenant}
+  name: ${var.tenant_tier}-${var.tenant}
   namespace: argocd
   labels:
     Tenant: ${var.tenant} 
     Tenant_ID: ${var.tenant_id}
 spec:
   destination:
-    namespace: pooled-${var.tenant}
+    namespace: ${var.tenant_tier}-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
     path: pooled/application
@@ -196,7 +197,7 @@ resource "local_file" "pooled_argo_workflow" {
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: pooled-terraform-workflow
+  name: ${var.tenant_tier}-terraform-workflow
   namespace: argo-workflows
 spec:
   entrypoint: terraform-apply
@@ -236,7 +237,7 @@ spec:
             /bin/terraform plan --var-file=pooled.tfvars --refresh=false --lock=false
             /bin/terraform apply --var-file=pooled.tfvars --auto-approve --lock=false
     EOT
-  filename = "${path.module}/pooled-argo-workflow.yaml"
+  filename = "${path.module}/${var.tenant_tier}-argo-workflow.yaml"
 }
 
 #######################################################################################
@@ -247,7 +248,7 @@ resource "local_file" "argo_workflow" {
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: pooled-${var.tenant}-terraform-workflow
+  name: ${var.tenant_tier}-${var.tenant}-terraform-workflow
   namespace: argo-workflows
 spec:
   entrypoint: terraform-apply

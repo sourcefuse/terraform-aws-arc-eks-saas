@@ -16,6 +16,11 @@ variable "namespace" {
   description = "Namespace for the resources."
 }
 
+variable "tenant_tier" {
+  type = string
+  description = "Tenant Tier"
+}
+
 ##################################################################################
 ## database
 ##################################################################################

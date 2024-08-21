@@ -26,9 +26,9 @@ variable "create_premium_codebuild" {
   default     = true
 }
 
-variable "create_standard_codebuild" {
+variable "create_basic_codebuild" {
   type        = bool
-  description = "Enable or Disable to create premium codebuild project"
+  description = "Enable or Disable to create basic codebuild project"
   default     = true
 }
 
@@ -68,7 +68,7 @@ variable "premium_source_version" {
   description = "A version of the Premium build input to be built for this project. If not specified, the latest version is used."
 }
 
-variable "standard_source_version" {
+variable "basic_source_version" {
   type        = string
   default     = ""
   description = "A version of the Premium build input to be built for this project. If not specified, the latest version is used."
@@ -86,7 +86,7 @@ variable "premium_buildspec" {
   description = "Optional buildspec declaration to use for building the project"
 }
 
-variable "standard_buildspec" {
+variable "basic_buildspec" {
   type        = string
   default     = ""
   description = "Optional buildspec declaration to use for building the project"
@@ -98,7 +98,7 @@ variable "premium_source_location" {
   description = "The location of the source code from git or s3"
 }
 
-variable "standard_source_location" {
+variable "basic_source_location" {
   type        = string
   default     = ""
   description = "The location of the source code from git or s3"
@@ -151,9 +151,9 @@ variable "premium_cloudwatch_log_group_name" {
   description = "Group name of the logs in CloudWatch Logs"
 }
 
-variable "standard_cloudwatch_log_group_name" {
+variable "basic_cloudwatch_log_group_name" {
   type        = string
-  default     = "standard-codebuild-log-group"
+  default     = "basic-codebuild-log-group"
   description = "Group name of the logs in CloudWatch Logs"
 }
 

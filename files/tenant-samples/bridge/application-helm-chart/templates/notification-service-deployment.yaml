@@ -135,7 +135,7 @@ spec:
 {{- end }}
 
       nodeSelector:
-        pooled-node: "pooled"
+        pooled-node: {{ .Values.tier }}
 {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}

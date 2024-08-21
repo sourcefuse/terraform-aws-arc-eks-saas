@@ -42,7 +42,7 @@ data "aws_security_groups" "aurora" {
   depends_on = [module.aurora]
   filter {
     name   = "tag:Name"
-    values = ["${var.namespace}-${var.environment}-pooled-aurora"]
+    values = ["${var.namespace}-${var.environment}-${var.tenant_tier}-aurora"]
   }
 
   filter {

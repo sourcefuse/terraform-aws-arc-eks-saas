@@ -47,6 +47,7 @@ phases:
       - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
       - export USERNAME=$(echo $tenant | jq -r '.key')
       - export KEY=$(echo $tenant | jq -r '.key')
+      - export TIER=$(echo "${tier}" | tr '[:upper:]' '[:lower:]')
       
       # Webhook Envs
       - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
@@ -72,7 +73,7 @@ phases:
       - export TF_VAR_tenant_secret="${secret}"
       - export TF_VAR_user_callback_secret="${secret}"
       - export TF_VAR_tenant_id="${TENANT_ID}"
-      - export TF_VAR_tenant_tier=$(echo "${tier}" | tr '[:upper:]' '[:lower:]')
+      - export TF_VAR_tenant_tier="${TIER}"
       - export TF_VAR_cluster_name="${EKS_CLUSTER_NAME}"
       - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"
       - export TF_VAR_tenant_host_domain="${KEY}.${DOMAIN_NAME}"
@@ -82,7 +83,7 @@ phases:
       - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
       - export TF_VAR_alb_url="${ALB_DNS}"
       # check if bootstrap need to be run or not
-      - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/pooled/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
+      - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${TIER}/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
       - if [ -z "$PARAMETER_VALUE" ]; then 
            is_bootstrap_creation=1;
         else
@@ -96,14 +97,14 @@ phases:
       - cd ..
 
       # Configuing S3 backend
-      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/pooled/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
-      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/pooled/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${TIER}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${TIER}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - cd pool-infra
-      - export TF_INFRA_KEY=pooled.tfstate
-      - envsubst < config.txt > config.pooled.hcl
-      - envsubst <tfvariables.txt> pooled.tfvars
-      # Run Terraform to create infra 
-      - terraform init --backend-config=config.pooled.hcl
+      - export TF_INFRA_KEY=${TIER}.tfstate
+      - envsubst < config.txt > config.${TIER}.hcl
+      - envsubst <tfvariables.txt> ${TIER}.tfvars
+      # Run Terraform to create pooled infra 
+      - terraform init --backend-config=config.${TIER}.hcl
       - terraform apply -auto-approve
       - cd ..
 
@@ -116,7 +117,7 @@ phases:
       # Push value to tenant management gitops repository
       - chmod +x push-values.sh
       - ./push-values.sh
-      - kubectl apply -f pooled-argo-workflow.yaml --namespace argo-workflows || true 
+      - kubectl apply -f ${TIER}-argo-workflow.yaml --namespace argo-workflows || true 
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
       - sleep 220 # waiting time to spin up tenant pods 
       - terraform apply -auto-approve --refresh=false  # refresh is false to avoid unnecessary API hitting

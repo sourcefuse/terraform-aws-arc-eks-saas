@@ -36,6 +36,7 @@ module "tags" {
 
   extra_tags = {
     Tenant = "pooled"
+    Tier = var.tenant_tier
   }
 }
 
@@ -54,12 +55,12 @@ module "bootstrap" {
   source  = "sourcefuse/arc-bootstrap/aws"
   version = "1.1.3"
 
-  bucket_name   = "${var.namespace}-${var.environment}-pooled-terraform-state-${module.bucket_suffix.result}"
-  dynamodb_name = "${var.namespace}-${var.environment}-pooled-terraform-state-lock"
+  bucket_name   = "${var.namespace}-${var.environment}-${var.tenant_tier}-terraform-state-${module.bucket_suffix.result}"
+  dynamodb_name = "${var.namespace}-${var.environment}-${var.tenant_tier}-terraform-state-lock"
 
   tags = merge(module.tags.tags, tomap({
-    Name         = "${var.namespace}-${var.environment}-pooled-terraform-state-${module.bucket_suffix.result}"
-    DynamoDBName = "${var.namespace}-${var.environment}-pooled-terraform-state-lock"
+    Name         = "${var.namespace}-${var.environment}-${var.tenant_tier}-terraform-state-${module.bucket_suffix.result}"
+    DynamoDBName = "${var.namespace}-${var.environment}-${var.tenant_tier}-terraform-state-lock"
   }))
 }
 
@@ -72,14 +73,14 @@ module "bootstrap_ssm_parameters" {
   source = "../../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/terraform-state-bucket"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/terraform-state-bucket"
       value       = module.bootstrap.bucket_name
       type        = "String"
       overwrite   = "true"
       description = "Terraform State Bucket Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/pooled/terraform-state-dynamodb-table"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/terraform-state-dynamodb-table"
       value       = module.bootstrap.dynamodb_name
       type        = "String"
       overwrite   = "true"
