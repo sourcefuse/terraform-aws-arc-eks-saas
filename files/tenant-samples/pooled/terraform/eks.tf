@@ -113,6 +113,7 @@ data "template_file" "helm_values_template" {
     COGNITO_USER     = var.user_name
     COGNITO_USER_SUB = aws_cognito_user.cognito_user.sub
 
+    TIER = var.tenant_tier
     TENANT_CLIENT_ID      = var.tenant_client_id
     TENANT_CLIENT_SECRET  = var.tenant_client_secret
     REGION                = var.region

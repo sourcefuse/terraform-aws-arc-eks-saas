@@ -86,7 +86,7 @@ phases:
       - export TF_VAR_alb_url="${ALB_DNS}"
 
       # check if bootstrap need to be run or not
-      - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
+      - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${tier}/${KEY}/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
       - if [ -z "$PARAMETER_VALUE" ]; then 
            is_bootstrap_creation=1;
         else
@@ -100,8 +100,8 @@ phases:
       - cd ..
 
       # Creating terraform backend config and tfvars at run time
-      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
-      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${tier}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${tier}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
       - export TF_KEY=${KEY}/${KEY}.tfstate
       - envsubst < config.txt > config.${KEY}.hcl
       - envsubst <tfvariables.txt> ${KEY}.tfvars
@@ -117,7 +117,7 @@ phases:
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
       
       # fetching cognito user sub as it will be created once terraform will be applied successfully
-      - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
+      - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${tier}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
     finally:
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
      

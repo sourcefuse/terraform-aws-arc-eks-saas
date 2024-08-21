@@ -343,6 +343,7 @@ userCallbackSecret: ${USER_CALLBACK_SECRET}
 clientId: ${TENANT_CLIENT_ID}
 publicKey: ${TENANT_CLIENT_SECRET}
 
+tier: ${TIER}
 namespace: ${NAMESPACE}
 region: ${REGION}
 cognitodomain: ${COGNITO_DOMAIN}
