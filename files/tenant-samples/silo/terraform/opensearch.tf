@@ -57,14 +57,14 @@ resource "opensearch_roles_mapping" "user_role_mapping1" {
   depends_on = [opensearch_user.tenant_user]
 
   role_name = "opensearch_dashboards_user"
-  users     = [var.tenant]
+  users     = ["${var.tenant_tier}-${var.tenant}"]
 }
 
 resource "opensearch_roles_mapping" "user_role_mapping2" {
   depends_on = [opensearch_user.tenant_user]
 
   role_name = "index_management_read_access"
-  users     = [var.tenant]
+  users     = ["${var.tenant_tier}-${var.tenant}"]
 }
 
 resource "opensearch_dashboard_object" "test_index_pattern_v7" {
@@ -87,14 +87,14 @@ module "tenant_opensearch_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/opensearch_user"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/opensearch_user"
       value       = var.tenant
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Opensearch Username"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/opensearch_password"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/opensearch_password"
       value       = module.tenant_opensearch_password.result
       type        = "SecureString"
       overwrite   = "true"

@@ -11,6 +11,7 @@ module "tags" {
   extra_tags = {
     Tenant    = var.tenant
     Tenant_ID = var.tenant_id
+    Tier = var.tenant_tier
   }
 
 }
@@ -34,7 +35,7 @@ module "route53-record" {
 ###############################################################################
 module "tenant_iam_role" {
   source              = "../modules/iam-role"
-  role_name           = "${var.namespace}-${var.environment}-${var.tenant}-iam-role"
+  role_name           = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-iam-role"
   role_description    = "IAM role for ${var.tenant} application"
   assume_role_actions = ["sts:AssumeRoleWithWebIdentity"]
   principals = {
@@ -50,7 +51,7 @@ module "tenant_iam_role" {
       values   = ["system:serviceaccount:${local.kubernetes_ns}:${var.tenant}"]
     }
   ]
-  policy_name        = "${var.namespace}-${var.environment}-${var.tenant}-iam-policy"
+  policy_name        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-iam-policy"
   policy_description = "IAM policy for ${var.tenant} application"
   tags               = module.tags.tags
 }
@@ -68,14 +69,14 @@ module "jwt_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_issuer"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/jwt_issuer"
       value       = var.jwt_issuer
       type        = "SecureString"
       overwrite   = "true"
       description = "${var.tenant} JWT Issuer"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_secret"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/jwt_secret"
       value       = module.jwt_secret.result
       type        = "SecureString"
       overwrite   = "true"
@@ -116,6 +117,7 @@ data "template_file" "helm_values_template" {
     COGNITO_USER     = var.user_name
     COGNITO_USER_SUB = aws_cognito_user.cognito_user.sub
 
+    TIER = var.tenant_tier
     TENANT_CLIENT_ID      = var.tenant_client_id
     TENANT_CLIENT_SECRET  = var.tenant_client_secret
     REGION                = var.region
@@ -159,14 +161,14 @@ resource "local_file" "argocd_application" {
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ${var.tenant}
+  name: ${var.tenant_tier}-${var.tenant}
   namespace: argocd
   labels:
     Tenant: ${var.tenant} 
     Tenant_ID: ${var.tenant_id}
 spec:
   destination:
-    namespace: ${var.tenant}
+    namespace: ${var.tenant_tier}-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
     path: silo/application
@@ -200,7 +202,7 @@ resource "local_file" "argo_workflow" {
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: ${var.tenant}-terraform-workflow
+  name: ${var.tenant_tier}-${var.tenant}-terraform-workflow
   namespace: argo-workflows
 spec:
   entrypoint: terraform-apply

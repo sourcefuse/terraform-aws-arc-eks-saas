@@ -22,3 +22,8 @@ variable "tenant_id" {
   type        = string
   description = "Tenat unique ID"
 }
+
+variable "tenant_tier" {
+  type = string
+  description = "Tenant Tier"
+}

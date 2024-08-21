@@ -4,7 +4,7 @@
 module "ec_security_group" {
   source = "../modules/security-group"
 
-  security_group_name        = "${var.namespace}-${var.environment}-${var.tenant}-redis-security-group"
+  security_group_name        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-redis-security-group"
   security_group_description = "Elasticache Redis Security Group for ${var.tenant}"
   vpc_id                     = data.aws_vpc.vpc.id
   ingress_rules = {
@@ -34,7 +34,7 @@ module "redis" {
 
   namespace                        = var.namespace
   environment                      = var.environment
-  name                             = "${var.tenant}-redis"
+  name                             = "${var.tenant_tier}-${var.tenant}-redis"
   vpc_id                           = data.aws_vpc.vpc.id
   associated_security_group_ids    = module.ec_security_group.id
   create_security_group            = false
@@ -67,21 +67,21 @@ module "redis_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/redis_host"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/redis_host"
       value       = module.redis.endpoint
       type        = "SecureString"
       overwrite   = "true"
       description = "Redis Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/redis_port"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/redis_port"
       value       = var.redis_port
       type        = "SecureString"
       overwrite   = "true"
       description = "Redis Port"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/redis-database"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/redis-database"
       value       = var.redis_database
       type        = "SecureString"
       overwrite   = "true"

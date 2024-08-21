@@ -63,7 +63,7 @@ featureService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-feature-toggle-service
   pullPolicy: Always
-  tag: "0.0.4"
+  tag: "0.0.5"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -244,7 +244,7 @@ migrationJob:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-migration
   pullPolicy: Always
-  tag: "0.0.3"
+  tag: "0.0.4"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -342,6 +342,7 @@ userCallbackSecret: ${USER_CALLBACK_SECRET}
 clientId: ${TENANT_CLIENT_ID}
 publicKey: ${TENANT_CLIENT_SECRET}
 
+tier: ${TIER}
 namespace: ${NAMESPACE}
 region: ${REGION}
 cognitodomain: ${COGNITO_DOMAIN}

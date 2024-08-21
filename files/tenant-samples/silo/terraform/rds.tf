@@ -13,7 +13,7 @@ module "rds_postgres" {
   source      = "sourcefuse/arc-db/aws"
   version     = "3.1.5"
   
-  environment = "${var.environment}-${var.tenant}"
+  environment = "${var.environment}-${var.tenant_tier}-${var.tenant}"
   namespace   = var.namespace
   region      = var.region
   vpc_id      = data.aws_vpc.vpc.id

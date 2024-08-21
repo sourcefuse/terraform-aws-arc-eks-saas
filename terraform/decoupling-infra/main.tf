@@ -42,6 +42,31 @@ resource "aws_dynamodb_table" "tier_mapping" {
   }))
 }
 
+resource "aws_dynamodb_table" "orchestrator_data_store" {
+  name           = "${var.namespace}-${var.environment}-orchestrator-service-data-store"
+  hash_key       = "tenantId"
+  read_capacity  = 5
+  write_capacity = 5
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = local.dynamo_kms_master_key_id
+  }
+
+  attribute {
+    name = "tenantId"
+    type = "S"
+  }
+
+  point_in_time_recovery {
+    enabled = var.enable_dynamodb_point_in_time_recovery
+  }
+
+  tags = merge(module.tags.tags, tomap({
+    Name = "${var.namespace}-${var.environment}-orchestrator-service-data-store",
+  }))
+}
+
 ## Store details in the mapping dynamodb table
 
 resource "aws_dynamodb_table_item" "basic" {
@@ -148,6 +173,8 @@ module "lambda_function_container_image" {
     TIER_DETAILS_TABLE = "${var.namespace}-${var.environment}-decoupling-tier-map-table"
     EVENT_BUS_AWS_REGION = "${var.region}"
     EVENT_BUS_NAME = "${var.namespace}-${var.environment}-DecouplingEventBus"
+    DATA_STORE_TABLE="${var.namespace}-${var.environment}-orchestrator-service-data-store"
+    DYNAMO_DB_REGION="${var.region}"
   }
 
   publish = true

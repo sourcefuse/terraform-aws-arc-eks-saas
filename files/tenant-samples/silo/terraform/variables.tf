@@ -759,6 +759,11 @@ variable "karpenter_instance_category" {
   type = string
   description = "karpenter instance category"
 }
+
+variable "tenant_tier" {
+  type = string
+  description = "Tenant Tier Category"
+}
 #################################################################
 ## Canary Variables
 #################################################################
