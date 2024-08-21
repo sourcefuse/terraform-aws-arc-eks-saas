@@ -1,7 +1,7 @@
 apiVersion: karpenter.sh/v1beta1
 kind: NodePool
 metadata:
-  name: {{ .Values.tenant }}
+  name: {{ .Values.tier }}-{{ .Values.tenant }}
   annotations:
     kubernetes.io/description: "NodePool to restrict the number of cpus provisioned to 100"
   labels:
@@ -11,7 +11,7 @@ spec:
   template:
     metadata:
       labels:
-        silo-node: {{ .Values.tenant }}
+        silo-node: {{ .Values.tier }}-{{ .Values.tenant }}
     spec:
       requirements:
         - key: kubernetes.io/arch
@@ -44,7 +44,7 @@ spec:
 apiVersion: karpenter.k8s.aws/v1beta1
 kind: EC2NodeClass
 metadata:
-  name: {{ .Values.tenant }}
+  name: {{ .Values.tier }}-{{ .Values.tenant }}
   annotations:
     kubernetes.io/description: "General purpose EC2NodeClass for running Amazon Linux 2 nodes"
 spec:

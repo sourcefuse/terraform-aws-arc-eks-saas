@@ -135,7 +135,7 @@ spec:
 {{- end }}
 
       nodeSelector:
-        silo-node: {{ .Values.tenant }}
+        silo-node: {{ .Values.tier }}-{{ .Values.tenant }}
 {{- with .Values.tolerations }}
       tolerations:
 {{ toYaml . | indent 8 }}

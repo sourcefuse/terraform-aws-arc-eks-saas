@@ -1,7 +1,7 @@
 region                     = "us-west-2"
 namespace                  = "sf-arc-saas"
 environment                = "dev"
-concurrent_build_limit     = 2
+concurrent_build_limit     = 10
 premium_source_version     = "refs/heads/main"
 standard_source_version    = "refs/heads/main"
 premium_buildspec          = "buildspec.yaml"

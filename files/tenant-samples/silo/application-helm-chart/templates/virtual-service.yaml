@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: {{ .Values.tenant }}
+  name: {{ .Values.tier }}-{{ .Values.tenant }}
   labels:
     app: {{ include "helm.name" . }}
     Tenant: {{ .Values.tenant }} 
@@ -11,7 +11,7 @@ spec:
   hosts:
     - {{ .Values.hostname }}
   gateways:
-    - {{ .Values.tenant }} #create gateway with name as tenant name
+    - {{ .Values.tier }}-{{ .Values.tenant }} #create gateway with name as tenant name
   http:
     - match:
       - uri:
