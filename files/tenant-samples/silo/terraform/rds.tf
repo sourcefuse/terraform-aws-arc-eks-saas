@@ -58,43 +58,6 @@ module "rds_postgres" {
   )
 }
 
-# module "aurora" {
-#   source  = "sourcefuse/arc-db/aws"
-#   version = "2.0.3"
-
-
-#   environment = "${var.environment}-${var.tenant}"
-#   namespace   = var.namespace
-#   region      = var.region
-#   vpc_id      = data.aws_vpc.vpc.id
-
-#   aurora_cluster_enabled                    = var.aurora_cluster_enabled
-#   aurora_cluster_name                       = "aurora"
-#   enhanced_monitoring_name                  = "${var.namespace}-${var.environment}-${var.tenant}-enhanced-monitoring"
-#   aurora_db_admin_username                  = var.tenant
-#   aurora_db_admin_password                  = module.db_password.result
-#   aurora_db_name                            = var.aurora_db_name
-#   aurora_db_port                            = var.aurora_db_port
-#   aurora_cluster_family                     = var.aurora_cluster_family
-#   aurora_engine                             = var.aurora_engine
-#   aurora_engine_mode                        = var.aurora_engine_mode
-#   aurora_storage_type                       = var.aurora_storage_type
-#   aurora_engine_version                     = var.aurora_engine_version
-#   aurora_allow_major_version_upgrade        = var.aurora_allow_major_version_upgrade
-#   aurora_auto_minor_version_upgrade         = var.aurora_auto_minor_version_upgrade
-#   aurora_instance_type                      = var.aurora_instance_type
-#   aurora_cluster_size                       = var.aurora_cluster_size
-#   aurora_subnets                            = data.aws_subnets.private.ids
-#   aurora_allowed_cidr_blocks                = [data.aws_vpc.vpc.cidr_block]
-#   aurora_serverlessv2_scaling_configuration = var.aurora_serverlessv2_scaling_configuration
-#   performance_insights_enabled              = var.performance_insights_enabled
-#   performance_insights_retention_period     = var.performance_insights_retention_period
-#   iam_database_authentication_enabled       = var.iam_database_authentication_enabled
-
-#   tags = merge(
-#     module.tags.tags
-#   )
-# }
 
 #######################################################################
 ## Security Group ingress rules
@@ -155,63 +118,63 @@ module "db_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_user"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_user"
       value       = var.tenant
       type        = "String"
       overwrite   = "true"
       description = "Database User Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_password"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_password"
       value       = module.db_password.result
       type        = "SecureString"
       overwrite   = "true"
       description = "Database Password"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_host"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_host"
       value       = trim("${module.rds_postgres.rds_instance_endpoint}", ":5432")
       type        = "String"
       overwrite   = "true"
       description = "Database Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_port"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_port"
       value       = var.rds_instance_database_port
       type        = "SecureString"
       overwrite   = "true"
       description = "Database Port"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_database"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_database"
       value       = var.rds_instance_database_name
       type        = "SecureString"
       overwrite   = "true"
       description = "Default Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_schema"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_schema"
       value       = "main"
       type        = "SecureString"
       overwrite   = "true"
       description = "Default Database Schema"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/db_arn"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_arn"
       value       = module.rds_postgres.rds_instance_arn
       type        = "SecureString"
       overwrite   = "true"
       description = "Database ARN"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/featuredbdatabase"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/featuredbdatabase"
       value       = var.featuredbdatabase
       type        = "SecureString"
       overwrite   = "true"
       description = "Feature Toggle Database Name"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/authenticationdbdatabase"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/authenticationdbdatabase"
       value       = var.authenticationdbdatabase
       type        = "SecureString"
       overwrite   = "true"
