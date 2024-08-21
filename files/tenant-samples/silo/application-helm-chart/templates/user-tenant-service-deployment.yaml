@@ -34,7 +34,7 @@ spec:
         Tenant: {{ .Values.tenant }}
         Tenant_ID: {{ .Values.tenantID }}
     spec:
-      serviceAccountName: {{ .Values.saname }}
+      serviceAccountName: {{ .Values.tier }}-{{ .Values.tenant }}
       containers:
         - imagePullPolicy: {{ .Values.userTenantService.pullPolicy }}
           resources:
@@ -146,7 +146,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: {{ .Values.saname }}-aws-secrets
+              secretProviderClass: {{ .Values.tier }}-{{ .Values.tenant }}-aws-secrets
 {{- with .Values.userTenantService.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}

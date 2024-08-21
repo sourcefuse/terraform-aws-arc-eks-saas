@@ -16,14 +16,14 @@ spec:
       annotations:
         sidecar.istio.io/inject: "false"
     spec:
-      serviceAccountName: {{ .Values.saname }}
+      serviceAccountName: {{ .Values.tier }}-{{ .Values.tenant }}
       volumes:
         - name: my-api-token
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: {{ .Values.saname }}-aws-secrets
+              secretProviderClass: {{ .Values.tier }}-{{ .Values.tenant }}-aws-secrets
       restartPolicy: 'OnFailure'
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}

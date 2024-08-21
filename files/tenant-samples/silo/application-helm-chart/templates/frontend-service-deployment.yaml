@@ -32,7 +32,7 @@ spec:
         Tenant: {{ .Values.tenant }}
         Tenant_ID: {{ .Values.tenantID }}
     spec:
-      serviceAccountName: {{ .Values.saname }}
+      serviceAccountName: {{ .Values.tier }}-{{ .Values.tenant }}
       containers:
         - imagePullPolicy: {{ .Values.frontend.pullPolicy }}
           resources:
