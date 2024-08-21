@@ -146,7 +146,7 @@ data "aws_ssm_parameter" "jwt_issuer" {
 }
 
 data "aws_ssm_parameter" "jwt_secret" {
-  name       = "/${var.namespace}/${var.environment}/pooled/${var.tenant}/jwt_secret"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/jwt_secret"
   depends_on = [module.jwt_ssm_parameters]
 }
 

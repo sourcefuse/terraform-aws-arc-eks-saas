@@ -352,7 +352,6 @@ karpenterRoleName: ${KARPENTER_ROLE}
 eksClusterName: ${EKS_CLUSTER_NAME}
 hostname: ${TENANT_HOST_NAME}
 tenant: ${TENANT_KEY}
-saname: ${TENANT_KEY}
 arn: ${WEB_IDENTITY_ROLE_ARN}
 dbhost: ${DB_HOST}
 dbport: ${DB_PORT}

@@ -48,7 +48,7 @@ module "tenant_iam_role" {
     {
       test     = "StringEquals"
       variable = "${local.oidc_arn}:sub"
-      values   = ["system:serviceaccount:${local.kubernetes_ns}:${var.tenant}"]
+      values   = ["system:serviceaccount:${local.kubernetes_ns}:${var.tenant_tier}-${var.tenant}"]
     }
   ]
   policy_name        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-iam-policy"
