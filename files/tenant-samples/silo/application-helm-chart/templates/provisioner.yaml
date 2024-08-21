@@ -31,7 +31,7 @@ spec:
           operator: Gt
           values: ["2"]
       nodeClassRef:
-        name: {{ .Values.tenant }}
+        name: {{ .Values.tier }}-{{ .Values.tenant }}
       taints:
         - key: silo-node
           value: {{ .Values.tenant }}

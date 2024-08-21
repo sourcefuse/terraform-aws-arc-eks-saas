@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: {{ .Values.tenant }}
+  name: {{ .Values.tier }}-{{ .Values.tenant }}
   labels:
     app: {{ include "helm.name" . }}
     Tenant: {{ .Values.tenant }}

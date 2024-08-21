@@ -48,13 +48,14 @@ phases:
       - export TF_VAR_region="${AWS_REGION}"
       - export TF_VAR_tenant="${KEY}"
       - export TF_VAR_tenant_id="${TENANT_ID}"
+      - export TF_VAR_tenant_tier=$(echo "${tier}" | tr '[:upper:]' '[:lower:]')
 
       - pip3 install git-remote-codecommit
       - git clone codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository
       - cp ${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository/silo/infra/terraform/${KEY}.tfvars terraform/
       
-      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
-      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${tier}/${KEY}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${tier}/${KEY}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
 
 
       # Create Tenant Backup Using Terraform

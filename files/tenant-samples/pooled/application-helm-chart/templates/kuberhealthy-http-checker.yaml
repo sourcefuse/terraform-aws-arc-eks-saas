@@ -1,7 +1,7 @@
 apiVersion: comcast.github.io/v1
 kind: KuberhealthyCheck
 metadata:
-  name: {{ .Values.tenant }}-http-check
+  name: {{ .Values.tier }}-{{ .Values.tenant }}-http-check
   namespace: kuberhealthy
   labels:
     Tenant: {{ .Values.tenant }}
