@@ -157,6 +157,7 @@ variable "rds_instance_instance_class" {
 variable "rds_instance_allocated_storage" {
   description = "The amount of allocated storage in gigabytes for the RDS instance."
   type        = number
+  default = 20
 }
 
 variable "rds_instance_storage_encrypted" {

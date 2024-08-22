@@ -17,20 +17,20 @@ cd ${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Fa
 
 # Copy tenant values.yaml to pooled directory
 if [ -d "../output" ]; then
-    cp -r ../output/* pooled/application/ || { echo "Failed to copy files"; exit 1; }
+    cp -r ../output/* bridge/application/ || { echo "Failed to copy files"; exit 1; }
 else
     echo "'output' folder does not exist. Skipping file copy."
 fi
 
 # Copy tenant specific tfvars and config file to codecommit repository
-cp -r ../*.tfvars pooled/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../*.tfvars bridge/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 
-cp -r ../*.hcl pooled/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../*.hcl bridge/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 
 # Copy Pooled tfvars and config file to codecommit repository
-cp -r ../pool-infra/*.hcl pooled/infra/terraform/pool-infra/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../pool-infra/*.hcl bridge/infra/terraform/pool-infra/ || { echo "Failed to copy files"; exit 1; }
 
-cp -r ../pool-infra/*.tfvars pooled/infra/terraform/pool-infra/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../pool-infra/*.tfvars bridge/infra/terraform/pool-infra/ || { echo "Failed to copy files"; exit 1; }
 
 # Set origin URL
 git remote set-url origin codecommit::${AWS_REGION}://${NAMESPACE}-${ENVIRONMENT}-tenant-management-gitops-repository || { echo "Failed to set remote URL"; exit 1; }

@@ -31,6 +31,7 @@ create_directory() {
 create_directory "control-plane"
 create_directory "silo"
 create_directory "pooled"
+create_directory "bridge"
 
 # Function to create application and infra directories inside silo and pooled
 create_subdirectories() {
@@ -42,6 +43,7 @@ create_subdirectories() {
 # Create application and infra directories inside silo and pooled if they don't exist
 create_subdirectories "silo"
 create_subdirectories "pooled"
+create_subdirectories "bridge"
 
 #Copy Control-Plane Application Helm Chart to control-plane directory
 cp -r ../../control-plane/control-plane-helm-chart/* control-plane/  || { echo "Failed to copy files"; exit 1; }
@@ -67,6 +69,15 @@ cp -r ../pooled/terraform                pooled/infra/
 
 # removing the values.yaml as will push tenant values.yaml on tenant on-boarding
 rm -rf pooled/application/values.yaml
+
+# Copy pooled base helm chart & terraform to pooled directory
+cp -r ../bridge/application-helm-chart/* bridge/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../bridge/application-helm-chart   bridge/infra/
+cp -r ../bridge/modules                  bridge/infra/
+cp -r ../bridge/terraform                bridge/infra/
+
+# removing the values.yaml as will push tenant values.yaml on tenant on-boarding
+rm -rf bridge/application/values.yaml
 
 
 # Set origin URL

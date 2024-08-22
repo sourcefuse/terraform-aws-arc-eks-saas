@@ -178,8 +178,6 @@ data "template_file" "helm_values_template" {
     TENANT_EMAIL              = var.tenant_email
     COGNITO_USER              = var.user_name
     COGNITO_USER_SUB          = aws_cognito_user.cognito_user.sub
-    SILO_PIPELINE             = "${var.namespace}-${var.environment}-premium-codebuild-project"
-    POOLED_PIPELINE           = "${var.namespace}-${var.environment}-basic-codebuild-project"
     REGION                    = var.region
     CONTROL_PLANE_HOST_DOMAIN = var.domain_name
     DOMAIN                    = var.domain_name

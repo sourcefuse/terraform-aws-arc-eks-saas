@@ -60,6 +60,20 @@ module "pooled_tenant_client_secret" {
   is_upper   = false
 }
 
+module "bridge_tenant_client_id" {
+  source     = "../../modules/random-password"
+  length     = 6
+  is_special = false
+  is_upper   = false
+}
+
+module "bridge_tenant_client_secret" {
+  source     = "../../modules/random-password"
+  length     = 6
+  is_special = false
+  is_upper   = false
+}
+
 module "tenant_ssm_parameters" {
   source = "../../modules/ssm-parameter"
   ssm_parameters = [
@@ -90,6 +104,20 @@ module "tenant_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Client Secret for pooled application plane"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/bridge/tenant_client_id"
+      value       = module.bridge_tenant_client_id.result
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Tenant Client ID for Bridge application plane"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/bridge/tenant_client_secret"
+      value       = module.bridge_tenant_client_secret.result
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Tenant Client Secret for bridge application plane"
     }
   ]
   tags = module.tags.tags
@@ -169,6 +197,66 @@ resource "aws_codecommit_repository" "premium_repo" {
     prevent_destroy = true
   }
 }
+#standard
+module "standard_plan_codebuild_project" {
+  count       = var.create_standard_codebuild ? 1 : 0
+  source      = "../../modules/codebuild"
+  name        = "${var.namespace}-${var.environment}-standard-codebuild-project"
+  description = "Standard plan codebuild project"
+
+  concurrent_build_limit = var.concurrent_build_limit
+  service_role           = module.tenant_codebuild_iam_role.arn
+  build_timeout          = var.build_timeout
+  queued_timeout         = var.queued_timeout
+
+  source_version  = var.standard_source_version
+  source_type     = var.source_type
+  buildspec       = var.standard_buildspec
+  source_location = aws_codecommit_repository.standard_repo.clone_url_http
+
+  vpc_id             = data.aws_vpc.vpc.id
+  subnets            = data.aws_subnets.private.ids
+  security_group_ids = [data.aws_security_groups.codebuild_db_access.ids[0]]
+
+  build_compute_type                = var.build_compute_type
+  build_image                       = var.build_image
+  build_type                        = var.build_type
+  build_image_pull_credentials_type = var.build_image_pull_credentials_type
+  privileged_mode                   = var.privileged_mode
+
+  environment_variables = [
+    
+    {
+      name  = "TENANT_CLIENT_ID"
+      value = "/${var.namespace}/${var.environment}/bridge/tenant_client_id"
+      type  = "PARAMETER_STORE"
+    },
+    {
+      name  = "TENANT_CLIENT_SECRET"
+      value = "/${var.namespace}/${var.environment}/bridge/tenant_client_secret"
+      type  = "PARAMETER_STORE"
+    }
+  ]
+
+  cloudwatch_log_group_name  = var.standard_cloudwatch_log_group_name
+  cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
+
+  enable_codebuild_authentication = false
+
+  tags       = module.tags.tags
+  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.standard_repo]
+}
+
+resource "aws_codecommit_repository" "standard_repo" {
+  repository_name = "${var.namespace}-${var.environment}-standard-plan-repository"
+  description     = "${var.namespace}-${var.environment}-standard-repository."
+  default_branch  = "main"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 
 # basic
 module "basic_plan_codebuild_project" {

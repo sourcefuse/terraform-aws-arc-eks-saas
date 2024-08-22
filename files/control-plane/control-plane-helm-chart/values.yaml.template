@@ -420,8 +420,6 @@ publicKey: "TrPbi0xJT"
           
 
 saname: "control-plane"
-siloPipeline: ${SILO_PIPELINE}
-pooledPipeline: ${POOLED_PIPELINE}
 region: ${REGION}
 environment: ${ENVIRONMENT}
 controlPlaneHost: ${CONTROL_PLANE_HOST_DOMAIN}

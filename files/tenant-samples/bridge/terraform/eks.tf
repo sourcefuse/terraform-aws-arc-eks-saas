@@ -166,7 +166,7 @@ spec:
     namespace: ${var.tenant_tier}-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: pooled/application
+    path: bridge/application
     repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
     targetRevision: main
     helm:
@@ -231,11 +231,11 @@ spec:
             export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
             export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-            cp -r /home/terraform/pooled/infra/* /home/myuser/
+            cp -r /home/terraform/bridge/infra/* /home/myuser/
             cd terraform/pool-infra
-            /bin/terraform init --backend-config=config.pooled.hcl
-            /bin/terraform plan --var-file=pooled.tfvars --refresh=false --lock=false
-            /bin/terraform apply --var-file=pooled.tfvars --auto-approve --lock=false
+            /bin/terraform init --backend-config=config.${var.tenant_tier}.hcl
+            /bin/terraform plan --var-file=${var.tenant_tier}.tfvars --refresh=false --lock=false
+            /bin/terraform apply --var-file=${var.tenant_tier}.tfvars --auto-approve --lock=false
     EOT
   filename = "${path.module}/${var.tenant_tier}-argo-workflow.yaml"
 }
@@ -282,7 +282,7 @@ spec:
             export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
             export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-            cp -r /home/terraform/pooled/infra/* /home/myuser/
+            cp -r /home/terraform/bridge/infra/* /home/myuser/
             cd terraform
             /bin/terraform init --backend-config=config.${var.tenant}.hcl
             /bin/terraform plan --var-file=${var.tenant}.tfvars --refresh=false

@@ -18,6 +18,11 @@ data "aws_vpc" "vpc" {
     name   = "tag:Name"
     values = ["${var.namespace}-${var.environment}-vpc"]
   }
+  filter {
+    name = "tag:Environment"
+
+    values = ["${var.environment}"]
+  }
 }
 
 data "aws_subnets" "private" {
@@ -92,52 +97,63 @@ data "aws_ssm_parameter" "cognito_secret" {
 }
 
 data "aws_ssm_parameter" "db_user" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_user"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_user"
+  depends_on = [module.db_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "db_password" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_password"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_password"
+  depends_on = [module.db_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "db_host" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_host"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_host"
+  depends_on = [module.db_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "db_port" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_port"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_port"
+  depends_on = [module.db_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "db_schema" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/db_schema"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_schema"
+  depends_on = [module.db_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "redis_host" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis_host"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/redis_host"
+  depends_on = [module.redis_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "redis_port" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis_port"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/redis_port"
+  depends_on = [module.redis_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "redis_database" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/redis-database"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/redis-database"
+  depends_on = [module.redis_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "authenticationdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/authenticationdbdatabase"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/authenticationdbdatabase"
+  depends_on = [module.db_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "featuredbdatabase" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/featuredbdatabase"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/featuredbdatabase"
+  depends_on = [module.db_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "notificationdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/notificationdbdatabase"
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/notificationdbdatabase"
+  depends_on = [module.db_ssm_parameters]
 }
 
-
 data "aws_ssm_parameter" "videoconfrencingdbdatabase" {
-  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/videoconfrencingdbdatabase"
+  name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/videoconfrencingdbdatabase"
+  depends_on = [module.db_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "jwt_issuer" {

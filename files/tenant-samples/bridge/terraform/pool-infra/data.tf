@@ -10,6 +10,11 @@ data "aws_vpc" "vpc" {
     name   = "tag:Name"
     values = ["${var.namespace}-${var.environment}-vpc"]
   }
+  filter {
+    name = "tag:Environment"
+
+    values = ["${var.environment}"]
+  }
 }
 
 data "aws_subnets" "private" {
