@@ -51,6 +51,19 @@ data "aws_subnets" "public" {
   }
 }
 
+data "aws_security_groups" "rds_postgres" {
+  depends_on = [module.rds_postgres]
+  filter {
+    name   = "tag:Name"
+    values = ["${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-postgres"]
+  }
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.vpc.id]
+  }
+}
+
 data "aws_iam_policy_document" "ssm_policy" {
 
   statement {
