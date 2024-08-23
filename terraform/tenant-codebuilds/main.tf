@@ -118,6 +118,13 @@ module "tenant_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Client Secret for bridge application plane"
+    },
+    {
+      name        = "/github_saas_repo"
+      value       = module.saas_management_github_repository.github_repository_http_clone_url
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "SaaS Github Repository"
     }
   ]
   tags = module.tags.tags
