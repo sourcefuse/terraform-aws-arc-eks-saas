@@ -172,7 +172,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: onboarded-tenants/silo/application
-    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git'
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
     targetRevision: main
     helm:
       valueFiles:
@@ -213,7 +213,7 @@ spec:
           - name: terraform
             path: /home/terraform
             git:
-              repo: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
+              repo: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git
               depth: 1
               usernameSecret:
                 name: github-secret

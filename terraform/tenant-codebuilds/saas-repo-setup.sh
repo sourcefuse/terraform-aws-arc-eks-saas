@@ -23,8 +23,15 @@ if [ -z "$GITHUB_TOKEN" ]; then
   exit 1
 fi
 
+# Retrieve GitHub Repo from SSM Parameter Store
+GITHUB_REPO=$(aws ssm get-parameter --name "/github_saas_repo" --with-decryption --region "${AWS_REGION}" --query "Parameter.Value" --output text)
+if [ -z "$GITHUB_REPO" ]; then
+  echo "Failed to retrieve GitHub repo from SSM Parameter Store"
+  exit 1
+fi
+
 # Construct the GitHub repository URL
-GITHUB_REPO_URL="https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${NAMESPACE}-saas-management-repository.git"
+GITHUB_REPO_URL="https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_REPO}.git"
 
 # Change directory
 cd ../../files/ || { echo "Failed to change directory"; exit 1; }
