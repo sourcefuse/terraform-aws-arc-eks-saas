@@ -336,8 +336,8 @@ spec:
     namespace: ${local.kubernetes_ns}
     server: 'https://kubernetes.default.svc'
   source:
-    path: control-plane
-    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
+    path: onboarded-tenants/control-plane
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
     targetRevision: main
     helm:
       valueFiles:
