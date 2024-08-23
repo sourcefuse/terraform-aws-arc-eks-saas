@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    WEBHOOK_PATH: webhook.js
+    WEBHOOK_PATH: tenant-samples/silo/webhook.js
 
 phases:
   install:
@@ -95,7 +95,7 @@ phases:
         fi
 
       # Run Bootstrap folder to create terraform state s3 bucket
-      - cd terraform/bootstrap
+      - cd tenant-samples/silo/terraform/bootstrap
       - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
       - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
       - cd ..
