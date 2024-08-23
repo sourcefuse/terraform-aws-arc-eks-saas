@@ -172,7 +172,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: onboarded-tenants/silo/application
-    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}:${data.aws_ssm_parameter.github_token.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git'
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git'
     targetRevision: main
     helm:
       valueFiles:
@@ -213,13 +213,13 @@ spec:
           - name: terraform
             path: /home/terraform
             git:
-              repo: https://${data.aws_ssm_parameter.github_user.value}:${data.aws_ssm_parameter.github_token.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
+              repo: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
               depth: 1
               usernameSecret:
-                name: codecommit-secret
+                name: github-secret
                 key: username
               passwordSecret:
-                name: codecommit-secret
+                name: github-secret
                 key: password
       container:
         imagePullPolicy: "Always"

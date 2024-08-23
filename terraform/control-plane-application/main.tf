@@ -270,7 +270,7 @@ resource "kubectl_manifest" "argocd_reposiotry_secret" {
     labels:
       argocd.argoproj.io/secret-type: repository
   stringData:
-    url: https://${data.aws_ssm_parameter.github_user.value}:${data.aws_ssm_parameter.github_token.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
+    url: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
     password: ${data.aws_ssm_parameter.github_token.value}
     username: ${data.aws_ssm_parameter.github_user.value}
     insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
@@ -309,7 +309,7 @@ resource "kubectl_manifest" "argo_workflow_repository_secret" {
     labels:
       argocd.argoproj.io/secret-type: repository
   stringData:
-    url: https://${data.aws_ssm_parameter.github_user.value}:${data.aws_ssm_parameter.github_token.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
+    url: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
     password: ${data.aws_ssm_parameter.github_token.value}
     username: ${data.aws_ssm_parameter.github_user.value}
     insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
