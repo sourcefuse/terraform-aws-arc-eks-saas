@@ -103,7 +103,7 @@ resource "kubernetes_namespace" "my_namespace" {
 # generate tenant specific helm values.yaml
 
 data "template_file" "helm_values_template" {
-  template = file("${path.module}/../application-helm-chart/values.yaml.template")
+  template = file("${path.module}/../tenant-helm-chart/values.yaml.template")
   vars = {
     NAMESPACE        = local.kubernetes_ns
     TENANT_NAME      = var.tenant_name

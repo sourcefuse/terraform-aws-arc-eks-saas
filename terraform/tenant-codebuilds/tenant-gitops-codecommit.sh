@@ -52,8 +52,8 @@ rm -rf control-plane/values.yaml.template
 
 
 # Copy silo base helm chart & terraform to silo directory
-cp -r ../silo/application-helm-chart/* silo/application/ || { echo "Failed to copy files"; exit 1; }
-cp -r ../silo/application-helm-chart   silo/infra/       || { echo "Failed to copy files"; exit 1; }
+cp -r ../silo/tenat-helm-chart/* silo/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../silo/tenat-helm-chart   silo/infra/       || { echo "Failed to copy files"; exit 1; }
 cp -r ../silo/modules                  silo/infra/       || { echo "Failed to copy files"; exit 1; }
 cp -r ../silo/terraform                silo/infra/       || { echo "Failed to copy files"; exit 1; }
               
@@ -62,8 +62,8 @@ rm -rf silo/application/values.yaml
 
 
 # Copy pooled base helm chart & terraform to pooled directory
-cp -r ../pooled/application-helm-chart/* pooled/application/ || { echo "Failed to copy files"; exit 1; }
-cp -r ../pooled/application-helm-chart   pooled/infra/
+cp -r ../pooled/tenat-helm-chart/* pooled/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../pooled/tenat-helm-chart   pooled/infra/
 cp -r ../pooled/modules                  pooled/infra/
 cp -r ../pooled/terraform                pooled/infra/
 
@@ -71,8 +71,8 @@ cp -r ../pooled/terraform                pooled/infra/
 rm -rf pooled/application/values.yaml
 
 # Copy pooled base helm chart & terraform to pooled directory
-cp -r ../bridge/application-helm-chart/* bridge/application/ || { echo "Failed to copy files"; exit 1; }
-cp -r ../bridge/application-helm-chart   bridge/infra/
+cp -r ../bridge/tenat-helm-chart/* bridge/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../bridge/tenat-helm-chart   bridge/infra/
 cp -r ../bridge/modules                  bridge/infra/
 cp -r ../bridge/terraform                bridge/infra/
 

@@ -7,6 +7,10 @@ data "aws_ssm_parameter" "github_token" {
    name = "/github_token"
 }
 
+data "aws_ssm_parameter" "github_user" {
+   name = "/github_user"
+}
+
 data "aws_ssm_parameter" "terraform_state_bucket" {
   name = "/${var.namespace}/${var.environment}/terraform-state-bucket"
 }

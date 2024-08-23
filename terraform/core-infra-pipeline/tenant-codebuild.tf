@@ -69,6 +69,8 @@ module "tenant_codebuild_module_build_step_codebuild_project" {
           "./bridge-codecommit.sh",
           "chmod +x tenant-gitops-codecommit.sh",
           "./tenant-gitops-codecommit.sh",
+          "chmod +x saas-repo-setup.sh",
+          "./saas-repo-setup.sh",
         ]
       }
     }

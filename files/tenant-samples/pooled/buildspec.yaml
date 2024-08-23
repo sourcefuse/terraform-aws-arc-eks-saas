@@ -52,7 +52,7 @@ phases:
       # Webhook Envs
       - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
       - export REDIRECT_URL="${CONTROL_PLANE_HOST}/main/home"
-      - export APP_PLANE_REDIRECT_URL="https://${KEY}.${DOMAIN_NAME}/main/home"
+      - export APP_PLANE_REDIRECT_URL="https://${KEY}.${DOMAIN_NAME}/home"
       - export USER_CALLBACK_ENDPOINT="https://${KEY}.${DOMAIN_NAME}/user-tenant-service/user-callback"
       - export APP_PLANE_ENDPOINT_FEATURE_SERVICE="https://${KEY}.${DOMAIN_NAME}/feature-service"
       - export CLIENT_ID="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
@@ -119,7 +119,7 @@ phases:
       - ./push-values.sh
       - kubectl apply -f ${TIER}-argo-workflow.yaml --namespace argo-workflows || true 
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
-      - sleep 220 # waiting time to spin up tenant pods 
+      - sleep 240 # waiting time to spin up tenant pods 
       - terraform apply -auto-approve --refresh=false  # refresh is false to avoid unnecessary API hitting
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
       # fetching cognito user sub as it will be created once terraform will be applied successfully
