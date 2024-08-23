@@ -105,7 +105,7 @@ rm -rf onboarded-tenants/silo/application/values.yaml.template
 # Configure Git with user details
 git config --global credential.helper 'cache --timeout=900'
 git config --global user.email 'devops@sourcefuse.com' || { echo "Failed to configure user email"; exit 1; }
-git config --global user.name 'sfdevops' || { echo "Failed to configure user name"; exit 1; }
+git config --global user.name 'HarshitSF' || { echo "Failed to configure user name"; exit 1; }
 
 # Add and commit changes
 if [ -n "$(git status --porcelain)" ]; then
