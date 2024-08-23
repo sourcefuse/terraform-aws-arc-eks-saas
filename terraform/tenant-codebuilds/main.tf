@@ -149,9 +149,11 @@ module "premium_plan_codebuild_project" {
   queued_timeout         = var.queued_timeout
 
   source_version  = var.premium_source_version
-  source_type     = var.source_type
+  #source_type     = var.source_type
+  source_type = "GITHUB"
   buildspec       = var.premium_buildspec
-  source_location = aws_codecommit_repository.premium_repo.clone_url_http
+  #source_location = aws_codecommit_repository.premium_repo.clone_url_http
+  source_location = module.saas_management_github_repository.github_repository_http_clone_url
 
   vpc_id             = data.aws_vpc.vpc.id
   subnets            = data.aws_subnets.private.ids
@@ -179,10 +181,10 @@ module "premium_plan_codebuild_project" {
   cloudwatch_log_group_name  = var.premium_cloudwatch_log_group_name
   cloudwatch_log_stream_name = var.cloudwatch_log_stream_name
 
-  enable_codebuild_authentication = false
-  # source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
-  # source_credential_server_type   = "GITHUB"
-  # source_credential_token         = data.aws_ssm_parameter.github_token.value
+  enable_codebuild_authentication = true
+  source_credential_auth_type     = "PERSONAL_ACCESS_TOKEN"
+  source_credential_server_type   = "GITHUB"
+  source_credential_token         = data.aws_ssm_parameter.github_token.value
 
   tags       = module.tags.tags
   depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.premium_repo]

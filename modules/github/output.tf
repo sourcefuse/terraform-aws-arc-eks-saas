@@ -3,7 +3,7 @@ output "github_repository_name" {
     description = "Github Repository Name"
 }
 
-output "github_repository_htlm_url" {
+output "github_repository_html_url" {
     value = "${github_repository.main.html_url}"
     description = "URL to the repository on the web"
 }
