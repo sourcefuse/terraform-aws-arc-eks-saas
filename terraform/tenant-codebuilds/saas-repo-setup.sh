@@ -111,7 +111,7 @@ git config --global user.name 'sfdevops' || { echo "Failed to configure user nam
 if [ -n "$(git status --porcelain)" ]; then
     git add . || { echo "Failed to add files"; exit 1; }
     git commit -m 'Initial Commit' || { echo "Failed to commit changes"; exit 1; }
-    git push origin main || { echo "Failed to push changes"; exit 1; }
+    git push ${GITHUB_REPO_URL} main || { echo "Failed to push changes"; exit 1; }
     echo "Changes committed and pushed successfully"
 else
     echo "Nothing to commit, working tree clean. Exiting..."
