@@ -24,6 +24,7 @@ phases:
       - npm i @aws-sdk/client-eventbridge
       - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
     finally:
+      - ls -la
       - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH 
   pre_build:
     on-failure: ABORT  
