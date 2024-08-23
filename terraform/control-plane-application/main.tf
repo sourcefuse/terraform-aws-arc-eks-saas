@@ -260,6 +260,25 @@ resource "kubectl_manifest" "argocd_repo_secret" {
 YAML
 }
 
+resource "kubectl_manifest" "argocd_reposiotry_secret" {
+  yaml_body = <<YAML
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: tenant-helm-github-secret
+    namespace: argocd
+    labels:
+      argocd.argoproj.io/secret-type: repository
+  stringData:
+    url: https://${data.aws_ssm_parameter.github_user.value}:${data.aws_ssm_parameter.github_token.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
+    password: ${data.aws_ssm_parameter.github_token.value}
+    username: ${data.aws_ssm_parameter.github_user.value}
+    insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
+    forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
+    enableLfs: "true"
+YAML
+}
+
 #argo-workflow
 resource "kubectl_manifest" "argo_workflow_repo_secret" {
   yaml_body = <<YAML
@@ -280,6 +299,24 @@ resource "kubectl_manifest" "argo_workflow_repo_secret" {
 YAML
 }
 
+resource "kubectl_manifest" "argo_workflow_repository_secret" {
+  yaml_body = <<YAML
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: github-secret
+    namespace: argo-workflows
+    labels:
+      argocd.argoproj.io/secret-type: repository
+  stringData:
+    url: https://${data.aws_ssm_parameter.github_user.value}:${data.aws_ssm_parameter.github_token.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
+    password: ${data.aws_ssm_parameter.github_token.value}
+    username: ${data.aws_ssm_parameter.github_user.value}
+    insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
+    forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
+    enableLfs: "true"
+YAML
+}
 ###############################################################################################
 ## Register control plane Helm App on ArgoCD
 ###############################################################################################

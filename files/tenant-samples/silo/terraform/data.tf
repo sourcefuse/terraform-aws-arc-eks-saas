@@ -3,6 +3,14 @@
 #############################################################################
 data "aws_partition" "this" {}
 
+data "aws_ssm_parameter" "github_token" {
+   name = "/github_token"
+}
+
+data "aws_ssm_parameter" "github_user" {
+   name = "/github_user"
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_eks_cluster" "EKScluster" {

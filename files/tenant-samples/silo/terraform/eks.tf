@@ -171,8 +171,8 @@ spec:
     namespace: ${var.tenant_tier}-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: silo/application
-    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
+    path: onboarded-tenants/silo/application
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}:${data.aws_ssm_parameter.github_token.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git'
     targetRevision: main
     helm:
       valueFiles:
@@ -213,7 +213,7 @@ spec:
           - name: terraform
             path: /home/terraform
             git:
-              repo: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+              repo: https://${data.aws_ssm_parameter.github_user.value}:${data.aws_ssm_parameter.github_token.value}@github.com/${data.aws_ssm_parameter.github_user.value}/${var.namespace}-saas-management-repository.git
               depth: 1
               usernameSecret:
                 name: codecommit-secret
@@ -236,7 +236,7 @@ spec:
             export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
             export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-            cp -r /home/terraform/silo/infra/* /home/myuser/
+            cp -r /home/terraform/onboarded_tenants/silo/infra/* /home/myuser/
             cd terraform
             /bin/terraform init --backend-config=config.${var.tenant}.hcl
             /bin/terraform plan --var-file=${var.tenant}.tfvars --refresh=false
