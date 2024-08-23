@@ -121,7 +121,7 @@ module "tenant_ssm_parameters" {
     },
     {
       name        = "/github_saas_repo"
-      value       = module.saas_management_github_repository.github_repository_http_clone_url
+      value       = module.saas_management_github_repository.github_repository_name
       type        = "SecureString"
       overwrite   = "true"
       description = "SaaS Github Repository"
