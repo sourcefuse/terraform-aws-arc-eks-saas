@@ -44,7 +44,7 @@ cd "${NAMESPACE}-saas-management-repository" || { echo "Failed to change directo
 
 # Copy control-plane values.yaml to control-plane directory
 if [ -d "../output" ]; then
-    cp -r ../output/* onboarded-tenants/control-plane/ || { echo "Failed to copy files"; exit 1; }
+    cp -r ../output/* control-plane/ || { echo "Failed to copy files"; exit 1; }
 else
     echo "'output' folder does not exist. Skipping file copy."
 fi

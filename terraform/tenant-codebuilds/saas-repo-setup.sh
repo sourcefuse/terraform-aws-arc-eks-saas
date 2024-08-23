@@ -65,7 +65,7 @@ create_directory "tenant-templates/pooled"
 create_directory "tenant-templates/bridge"
 
 create_directory "onboarded-tenants"
-create_directory "onboarded-tenants/control-plane"
+create_directory "control-plane"
 create_directory "onboarded-tenants/pooled"
 create_directory "onboarded-tenants/pooled/application"
 create_directory "onboarded-tenants/pooled/infra"
@@ -87,8 +87,8 @@ cp -r ../tenant-samples/bridge/* tenant-templates/bridge/ || { echo "Failed to c
 cp -r ../tenant-samples/silo/* tenant-templates/silo/ || { echo "Failed to copy files"; exit 1; }
 
 # Copy contents for tenant management and control plane management to the cloned repository
-cp -r ../control-plane/control-plane-helm-chart/* onboarded-tenants/control-plane/ || { echo "Failed to copy files"; exit 1; }
-rm -rf onboarded-tenants/control-plane/values.yaml.template
+cp -r ../control-plane/control-plane-helm-chart/* control-plane/ || { echo "Failed to copy files"; exit 1; }
+rm -rf control-plane/values.yaml.template
 
 cp -r ../tenant-samples/pooled/tenant-helm-chart/* onboarded-tenants/pooled/application/ || { echo "Failed to copy files"; exit 1; }
 cp -r ../tenant-samples/pooled/tenant-helm-chart onboarded-tenants/pooled/infra/ || { echo "Failed to copy files"; exit 1; }

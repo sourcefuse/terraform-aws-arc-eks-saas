@@ -336,7 +336,7 @@ spec:
     namespace: ${local.kubernetes_ns}
     server: 'https://kubernetes.default.svc'
   source:
-    path: onboarded-tenants/control-plane
+    path: control-plane
     repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
     targetRevision: main
     helm:
