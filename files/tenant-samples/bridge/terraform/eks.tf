@@ -166,8 +166,8 @@ spec:
     namespace: ${var.tenant_tier}-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: bridge/application
-    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
+    path: onboarded-tenants/bridge/application
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
     targetRevision: main
     helm:
       valueFiles:
@@ -208,13 +208,13 @@ spec:
           - name: terraform
             path: /home/terraform
             git:
-              repo: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+              repo: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git
               depth: 1
               usernameSecret:
-                name: codecommit-secret
+                name: github-secret
                 key: username
               passwordSecret:
-                name: codecommit-secret
+                name: github-secret
                 key: password
       container:
         imagePullPolicy: "Always"
@@ -231,7 +231,7 @@ spec:
             export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
             export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-            cp -r /home/terraform/bridge/infra/* /home/myuser/
+            cp -r /home/terraform/onboarded-tenants/bridge/infra/* /home/myuser/
             cd terraform/pool-infra
             /bin/terraform init --backend-config=config.${var.tenant_tier}.hcl
             /bin/terraform plan --var-file=${var.tenant_tier}.tfvars --refresh=false --lock=false
@@ -259,13 +259,13 @@ spec:
           - name: terraform
             path: /home/terraform
             git:
-              repo: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+              repo: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git
               depth: 1
               usernameSecret:
-                name: codecommit-secret
+                name: github-secret
                 key: username
               passwordSecret:
-                name: codecommit-secret
+                name: github-secret
                 key: password
       container:
         imagePullPolicy: "Always"
@@ -282,7 +282,7 @@ spec:
             export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
             export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-            cp -r /home/terraform/bridge/infra/* /home/myuser/
+            cp -r /home/terraform/onboarded-tenants/bridge/infra/* /home/myuser/
             cd terraform
             /bin/terraform init --backend-config=config.${var.tenant}.hcl
             /bin/terraform plan --var-file=${var.tenant}.tfvars --refresh=false

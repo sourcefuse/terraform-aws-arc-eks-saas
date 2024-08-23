@@ -1,8 +1,8 @@
 version: 0.2
 
-env:
-  variables:
-    WEBHOOK_PATH: offboard-webhook.js
+# env:
+#   variables:
+#     WEBHOOK_PATH: offboard-webhook.js
 
 phases:
   install:
@@ -11,6 +11,8 @@ phases:
     on-failure: ABORT
     commands:
       # install dependencies 
+      - cd $CODEBUILD_SRC_DIR/tenant-templates/silo
+      - export WEBHOOK_PATH="$CODEBUILD_SRC_DIR/tenant-templates/silo/webhook.js"
       - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
       - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
       - chmod +x ./kubectl ./aws-iam-authenticator
@@ -21,9 +23,9 @@ phases:
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
       - pip install boto3
-      - ln -sf $CODEBUILD_SRC_DIR/$WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
+      - ln -sf $WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
     finally:
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH 
+      - node $WEBHOOK_PATH 
   pre_build:
     on-failure: ABORT  
     commands:
@@ -36,7 +38,7 @@ phases:
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
     finally:
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+      - node $WEBHOOK_PATH
   build:
     on-failure: ABORT
     commands:
@@ -79,12 +81,12 @@ phases:
       - kubectl delete workflow ${KEY}-terraform-workflow --namespace argo-workflows || true
       
     finally:
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+      - node $WEBHOOK_PATH
      
 
   post_build:
     commands:
-      - node $CODEBUILD_SRC_DIR/$WEBHOOK_PATH
+      - node $WEBHOOK_PATH
 
 
 

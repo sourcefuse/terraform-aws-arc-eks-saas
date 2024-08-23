@@ -241,24 +241,24 @@ resource "helm_release" "fluent_bit" {
 ##################################################################################
 # Connect using SSH please follow this https://argo-cd.readthedocs.io/en/stable/operator-manual/argocd-repositories-yaml/
 # argocd
-resource "kubectl_manifest" "argocd_repo_secret" {
-  yaml_body = <<YAML
-  apiVersion: v1
-  kind: Secret
-  metadata:
-    name: tenant-helm-repo
-    namespace: argocd
-    labels:
-      argocd.argoproj.io/secret-type: repository
-  stringData:
-    url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
-    password: ${data.aws_ssm_parameter.https_connection_password.value}
-    username: ${data.aws_ssm_parameter.https_connection_user.value}
-    insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
-    forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
-    enableLfs: "true"
-YAML
-}
+# resource "kubectl_manifest" "argocd_repo_secret" {
+#   yaml_body = <<YAML
+#   apiVersion: v1
+#   kind: Secret
+#   metadata:
+#     name: tenant-helm-repo
+#     namespace: argocd
+#     labels:
+#       argocd.argoproj.io/secret-type: repository
+#   stringData:
+#     url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+#     password: ${data.aws_ssm_parameter.https_connection_password.value}
+#     username: ${data.aws_ssm_parameter.https_connection_user.value}
+#     insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
+#     forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
+#     enableLfs: "true"
+# YAML
+# }
 
 resource "kubectl_manifest" "argocd_reposiotry_secret" {
   yaml_body = <<YAML
@@ -280,24 +280,24 @@ YAML
 }
 
 #argo-workflow
-resource "kubectl_manifest" "argo_workflow_repo_secret" {
-  yaml_body = <<YAML
-  apiVersion: v1
-  kind: Secret
-  metadata:
-    name: codecommit-secret
-    namespace: argo-workflows
-    labels:
-      argocd.argoproj.io/secret-type: repository
-  stringData:
-    url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
-    password: ${data.aws_ssm_parameter.https_connection_password.value}
-    username: ${data.aws_ssm_parameter.https_connection_user.value}
-    insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
-    forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
-    enableLfs: "true"
-YAML
-}
+# resource "kubectl_manifest" "argo_workflow_repo_secret" {
+#   yaml_body = <<YAML
+#   apiVersion: v1
+#   kind: Secret
+#   metadata:
+#     name: codecommit-secret
+#     namespace: argo-workflows
+#     labels:
+#       argocd.argoproj.io/secret-type: repository
+#   stringData:
+#     url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+#     password: ${data.aws_ssm_parameter.https_connection_password.value}
+#     username: ${data.aws_ssm_parameter.https_connection_user.value}
+#     insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
+#     forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
+#     enableLfs: "true"
+# YAML
+# }
 
 resource "kubectl_manifest" "argo_workflow_repository_secret" {
   yaml_body = <<YAML

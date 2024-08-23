@@ -89,7 +89,7 @@ variable "basic_source_version" {
 
 variable "source_type" {
   type        = string
-  default     = "CODECOMMIT"
+  default     = "GITHUB"
   description = "The type of repository that contains the source code to be built. Valid values for this parameter are: CODECOMMIT, CODEPIPELINE, GITHUB, GITHUB_ENTERPRISE, BITBUCKET or S3"
 }
 
