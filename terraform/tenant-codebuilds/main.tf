@@ -190,15 +190,15 @@ module "premium_plan_codebuild_project" {
   depends_on = [module.tenant_ssm_parameters]
 }
 
-# resource "aws_codecommit_repository" "premium_repo" {
-#   repository_name = "${var.namespace}-${var.environment}-premium-plan-repository"
-#   description     = "${var.namespace}-${var.environment}-premium-repository."
-#   default_branch  = "main"
+resource "aws_codecommit_repository" "premium_repo" {
+  repository_name = "${var.namespace}-${var.environment}-premium-plan-repository"
+  description     = "${var.namespace}-${var.environment}-premium-repository."
+  default_branch  = "main"
 
-#   lifecycle {
-#     prevent_destroy = true
-#   }
-# }
+  lifecycle {
+    prevent_destroy = true
+  }
+}
 #standard
 module "standard_plan_codebuild_project" {
   count       = var.create_standard_codebuild ? 1 : 0
