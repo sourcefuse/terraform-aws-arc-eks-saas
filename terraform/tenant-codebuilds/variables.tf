@@ -18,6 +18,20 @@ variable "namespace" {
 }
 
 ################################################################################
+## github
+################################################################################
+variable "is_organization" {
+  type = bool
+  description = "Enable or Disable based on if github repository is part of organization or not "
+  default = false
+}
+
+variable "organization" {
+  type = string
+  description = "Github organization Name"
+  default = "sourcefuse"
+}
+################################################################################
 ## codebuild
 ################################################################################
 variable "create_premium_codebuild" {
