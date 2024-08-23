@@ -187,7 +187,7 @@ module "premium_plan_codebuild_project" {
   source_credential_token         = data.aws_ssm_parameter.github_token.value
 
   tags       = module.tags.tags
-  depends_on = [module.tenant_ssm_parameters, aws_codecommit_repository.premium_repo]
+  depends_on = [module.tenant_ssm_parameters]
 }
 
 # resource "aws_codecommit_repository" "premium_repo" {
