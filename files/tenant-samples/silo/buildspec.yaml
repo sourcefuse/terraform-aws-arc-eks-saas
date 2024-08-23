@@ -12,7 +12,7 @@ phases:
     commands:
       # install dependencies 
       - cd $CODEBUILD_SRC_DIR/tenant-templates/silo
-      - export WEBHOOK_PATH = '$CODEBUILD_SRC_DIR/tenant-templates/silo/webhook.js'
+      - export WEBHOOK_PATH="$CODEBUILD_SRC_DIR/tenant-templates/silo/webhook.js"
       - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
       - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
       - chmod +x ./kubectl ./aws-iam-authenticator
