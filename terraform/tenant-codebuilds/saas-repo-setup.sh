@@ -24,8 +24,7 @@ if [ -z "$GITHUB_TOKEN" ]; then
 fi
 
 # Construct the GitHub repository URL
-GITHUB_REPO_URL="https://github.com/${GITHUB_USERNAME}/${NAMESPACE}-saas-management-repository.git"
-
+GITHUB_REPO_URL="https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/${NAMESPACE}-saas-management-repository.git"
 
 # Change directory
 cd ../../files/ || { echo "Failed to change directory"; exit 1; }
