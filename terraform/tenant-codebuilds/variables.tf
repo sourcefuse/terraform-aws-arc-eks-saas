@@ -26,7 +26,7 @@ variable "is_organization" {
   default = false
 }
 
-variable "organization" {
+variable "organization_name" {
   type = string
   description = "Github organization Name"
   default = "sourcefuse"
