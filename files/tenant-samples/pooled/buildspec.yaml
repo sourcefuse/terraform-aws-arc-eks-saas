@@ -106,8 +106,8 @@ phases:
       - envsubst < config.txt > config.${TIER}.hcl
       - envsubst <tfvariables.txt> ${TIER}.tfvars
       # Run Terraform to create pooled infra 
-      #- terraform init --backend-config=config.${TIER}.hcl
-      #- terraform apply -auto-approve
+      - terraform init --backend-config=config.${TIER}.hcl
+      - terraform apply -auto-approve
       - cd ..
 
       # Creating terraform backend config and tfvars at run time and Run terraform to create resources for tenant
@@ -115,15 +115,15 @@ phases:
       - envsubst < config.txt > config.${KEY}.hcl
       - envsubst <tfvariables.txt> ${KEY}.tfvars
       - terraform init --backend-config=config.${KEY}.hcl
-      #- terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
+      - terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
       # Push value to tenant management gitops repository
       - chmod +x push-values.sh
-      #- ./push-values.sh
-      #- kubectl apply -f ${TIER}-argo-workflow.yaml --namespace argo-workflows || true 
-      #- kubectl apply -f argocd-application.yaml --namespace argocd || true
-      #- sleep 240 # waiting time to spin up tenant pods 
-      - terraform destroy -auto-approve --refresh=false  # refresh is false to avoid unnecessary API hitting
-      #- kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
+      - ./push-values.sh
+      - kubectl apply -f ${TIER}-argo-workflow.yaml --namespace argo-workflows || true 
+      - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      - sleep 240 # waiting time to spin up tenant pods 
+      - terraform apply -auto-approve --refresh=false  # refresh is false to avoid unnecessary API hitting
+      - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
       # fetching cognito user sub as it will be created once terraform will be applied successfully
       - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${TIER}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
     
@@ -136,7 +136,7 @@ phases:
       - export CREATE_USER=1
       # To run the webhook which will send notification and create tenant first admin user in pooled database
       - node $WEBHOOK_PATH
-      #- python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
+      - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
   
       
 
