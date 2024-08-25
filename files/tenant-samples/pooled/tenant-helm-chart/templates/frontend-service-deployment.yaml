@@ -63,6 +63,20 @@ spec:
           - name: env-var
             mountPath: /usr/share/nginx/html/config.json
             subPath: config.json
+          - name: my-api-token
+            mountPath: /mnt/api-token
+            readOnly: true
+          env:
+          - name: pubnubPublishKey
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBNUB_PUB_KEY
+          - name: pubnubSubscribeKey
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBNUB_SUB_KEY
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
@@ -81,6 +95,12 @@ spec:
             items:
             - key: env
               path: config.json
+        - name: my-api-token
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ .Values.tier }}-{{ .Values.tenant }}-aws-secrets
 {{- with .Values.frontend.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}

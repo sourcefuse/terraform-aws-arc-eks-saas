@@ -13,7 +13,4 @@ data:
       LOG_LEVEL: '{{ .Values.notificationService.log_level }}'
       BASE_PATH: '{{ .Values.notificationService.base_path }}'
       DB_SSL: '{{ .Values.notificationService.db_ssl }}'
-      PUBNUB_SUBSCRIBE_KEY: ''
-      PUBNUB_PUBLISH_KEY: ''
-      PUBNUB_SECRET_KEY: ''
 {{- end}}

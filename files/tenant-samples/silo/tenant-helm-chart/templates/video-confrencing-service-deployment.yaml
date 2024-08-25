@@ -129,6 +129,11 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
+          - name: VONAGE_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: VONAGE_API_KEY_SECRET
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}

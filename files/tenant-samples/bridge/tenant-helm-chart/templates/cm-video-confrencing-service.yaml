@@ -14,5 +14,4 @@ data:
       BASE_PATH: '{{ .Values.videoConfrencingService.base_path }}'
       DB_SSL: '{{ .Values.videoConfrencingService.db_ssl }}'
       VONAGE_API_KEY: '47793071'
-      VONAGE_API_SECRET: ''
 {{- end}}

@@ -61,9 +61,9 @@ frontend:
 #featureService
 featureService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-feature-toggle-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-feature-toggle-service
   pullPolicy: Always
-  tag: "0.0.5"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -98,9 +98,9 @@ featureService:
 #authenticationService
 authenticationService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-silo-authentication-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-authentication-service
   pullPolicy: Always
-  tag: "0.0.3"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -134,9 +134,9 @@ authenticationService:
 #notificationService
 notificationService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-notification-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-notification-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -205,7 +205,7 @@ userTenantService:
 
 videoConfrencingService:
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-video-conferencing-service
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-video-conferencing-service
   pullPolicy: Always
   tag: "0.0.1"
   replicaCount: 1
@@ -242,9 +242,9 @@ videoConfrencingService:
 migrationJob:
 #enable it when correct image has been provided
   enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-silo-application-plane-migration
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-migration
   pullPolicy: Always
-  tag: "0.0.4"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -368,3 +368,9 @@ featuredbdatabase: ${FEATURE_DATABASE}
 notificationdbdatabase: ${NOTIFICATION_DATABASE}
 videoconfrencingdbdatabase: ${VIDEO_CONFRENCING_DATABASE}
 instance_category: ${INSTANCE_CATEGORY}
+
+# pubnub config 
+vonageSecret: "/pubnub/vonage-api-key-secret"
+pubnubPubKey: "/pubnub/public-key"
+pubnubSubKey: "/pubnub/subscribe-key"
+pubnubSecretKey: /pubnub/secret-key"

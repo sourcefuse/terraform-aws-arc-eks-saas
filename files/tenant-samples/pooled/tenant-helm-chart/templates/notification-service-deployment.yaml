@@ -129,6 +129,21 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
+          - name: PUBNUB_PUBLISH_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBNUB_PUB_KEY
+          - name: PUBNUB_SUBSCRIBE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBNUB_SUB_KEY
+          - name: PUBNUB_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBNUB_SECRET_KEY
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}

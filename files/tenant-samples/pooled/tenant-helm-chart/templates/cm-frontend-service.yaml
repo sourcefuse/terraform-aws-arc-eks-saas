@@ -15,8 +15,6 @@ data:
         "notificationApiBaseUrl" :"https://{{ .Values.hostname }}/notification-service",
         "homePath": "{{ .Values.frontend.home_path }}",
         "videoApiBaseUrl": "https://{{ .Values.hostname }}/video-confrencing-service",
-        "pubnubPublishKey": "",
-        "pubnubSubscribeKey": "",
         "notificationChannelUuid": "9f7360f6-5c1a-4354-ad68-0e62b2a1200b",
         "chatChannelUuid": "ad0cac27-972e-4b69-9188-3685f7eeb8bb",
         "vonageApiKey": "47793071",
