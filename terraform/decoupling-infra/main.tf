@@ -168,6 +168,7 @@ module "lambda_function_container_image" {
   ephemeral_storage_size = var.ephemeral_storage_size
   package_type = "Image"
   architectures = var.compatible_architectures 
+  maximum_retry_attempts = var.maximum_retry_attempts
 
   environment_variables = {
     TIER_DETAILS_TABLE = "${var.namespace}-${var.environment}-decoupling-tier-map-table"
