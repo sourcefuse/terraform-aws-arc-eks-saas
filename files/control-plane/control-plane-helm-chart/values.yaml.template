@@ -317,7 +317,7 @@ migrationJob:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-migration
   pullPolicy: Always
-  tag: "0.0.2"
+  tag: "0.0.2-test"
   replicaCount: 1
   affinity: {}
   allowed_origins: "*"
