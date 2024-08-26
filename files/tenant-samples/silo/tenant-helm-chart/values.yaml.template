@@ -370,7 +370,7 @@ videoconfrencingdbdatabase: ${VIDEO_CONFRENCING_DATABASE}
 instance_category: ${INSTANCE_CATEGORY}
 
 # pubnub config 
-vonageSecret: "/pubnub/vonage-api-key-secret"
-pubnubPubKey: "/pubnub/public-key"
-pubnubSubKey: "/pubnub/subscribe-key"
-pubnubSecretKey: /pubnub/secret-key"
+vonageSecret: /pubnub/vonage-api-key-secret
+pubnubPubKey: /pubnub/public-key
+pubnubSubKey: /pubnub/subscribe-key
+pubnubSecretKey: /pubnub/secret-key

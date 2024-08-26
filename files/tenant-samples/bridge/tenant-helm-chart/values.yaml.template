@@ -370,7 +370,7 @@ notificationdbdatabase: ${NOTIFICATION_DATABASE}
 videoconfrencingdbdatabase: ${VIDEO_CONFRENCING_DATABASE}
 
 # pubnub config 
-vonageSecret: "/pubnub/vonage-api-key-secret"
-pubnubPubKey: "/pubnub/public-key"
-pubnubSubKey: "/pubnub/subscribe-key"
-pubnubSecretKey: /pubnub/secret-key"
+vonageSecret: /pubnub/vonage-api-key-secret
+pubnubPubKey: /pubnub/public-key
+pubnubSubKey: /pubnub/subscribe-key
+pubnubSecretKey: /pubnub/secret-key
