@@ -16,7 +16,7 @@ module "aws_cognito_user_pool" {
   source  = "lgallard/cognito-user-pool/aws"
   version = "0.24.0"
 
-  user_pool_name                                        = "${var.namespace}-${var.environment}-${var.tenant}-cognito-user-pool"
+  user_pool_name                                        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-cognito-user-pool"
   alias_attributes                                      = var.alias_attributes
   auto_verified_attributes                              = var.auto_verified_attributes
   sms_authentication_message                            = var.sms_authentication_message
@@ -118,28 +118,28 @@ module "cognito_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/cognito_domain"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_domain"
       value       = "https://${var.tenant}-${module.cognito_domain_string.result}.auth.${var.region}.amazoncognito.com"
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/cognito_id"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_id"
       value       = module.aws_cognito_user_pool.client_ids[0]
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain ID"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/cognito_secret"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_secret"
       value       = module.aws_cognito_user_pool.client_secrets[0]
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain Secret"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/${var.user_name}/user_sub"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/${var.user_name}/user_sub"
       value       = aws_cognito_user.cognito_user.sub
       type        = "SecureString"
       overwrite   = "true"

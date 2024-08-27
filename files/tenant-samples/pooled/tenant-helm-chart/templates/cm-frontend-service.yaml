@@ -1,0 +1,25 @@
+{{- if .Values.frontend.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-frontend
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+data:
+  env: |-
+      {
+        "baseApiUrl": "https://{{ .Values.hostname }}",
+        "authApiBaseUrl": "https://{{ .Values.hostname }}/authentication-service",
+        "notificationApiBaseUrl" :"https://{{ .Values.hostname }}/notification-service",
+        "homePath": "{{ .Values.frontend.home_path }}",
+        "videoApiBaseUrl": "https://{{ .Values.hostname }}/video-confrencing-service",
+        "notificationChannelUuid": "9f7360f6-5c1a-4354-ad68-0e62b2a1200b",
+        "chatChannelUuid": "ad0cac27-972e-4b69-9188-3685f7eeb8bb",
+        "vonageApiKey": "47793071",
+        "logLevel": "{{ .Values.frontend.log_level }}",
+        "clientId": "{{ .Values.clientId }}",
+        "loginTitle": "Welcome to the Telemed App"
+      }
+{{- end}}

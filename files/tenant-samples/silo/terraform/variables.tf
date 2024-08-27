@@ -43,127 +43,193 @@ variable "timeouts" {
   }
 }
 
-variable "aurora_cluster_enabled" {
+#######################################################################
+## RDS
+#######################################################################
+variable "rds_instance_enabled" {
+  description = "Flag to enable or disable the RDS instance."
   type        = bool
-  description = "Enable creation of an Aurora Cluster"
   default     = true
 }
 
-variable "deletion_protection" {
-  description = "Protect the instance from being deleted"
-  type        = bool
-  default     = false
-}
-
-variable "aurora_db_name" {
+variable "rds_instance_name" {
+  description = "The name of the RDS instance."
   type        = string
-  default     = "auroradb"
-  description = "Database name."
+  default     = "postgres"
 }
 
-variable "aurora_db_port" {
+variable "enhanced_monitoring_name" {
+  description = "Name for enhanced monitoring."
+  type        = string
+  default     = "postgres"
+}
+
+variable "rds_instance_database_name" {
+  description = "The name of the initial database on the RDS instance."
+  type        = string
+  default     = "postgres"
+}
+
+variable "rds_instance_database_port" {
+  description = "The port on which the RDS instance accepts connections."
   type        = number
-  description = "Port for the Aurora DB instance to use."
   default     = 5432
 }
 
-variable "aurora_cluster_family" {
+variable "rds_instance_engine" {
+  description = "The name of the database engine to be used for the RDS instance."
   type        = string
-  default     = "aurora-postgresql15"
-  description = "The family of the DB cluster parameter group"
+  default     = "postgres"
 }
 
-variable "aurora_engine" {
+variable "rds_instance_engine_version" {
+  description = "The version of the database engine to be used for the RDS instance."
   type        = string
-  default     = "aurora-postgresql"
-  description = "The name of the database engine to be used for this DB cluster. Valid values: `aurora`, `aurora-mysql`, `aurora-postgresql`"
+  default     = "16.1"
 }
 
-variable "aurora_engine_mode" {
+variable "rds_instance_major_engine_version" {
+  description = "The major version of the database engine to be used for the RDS instance."
   type        = string
-  default     = "provisioned"
-  description = "The database engine mode. Valid values: `parallelquery`, `provisioned`, `serverless`"
+  default     = "16"
 }
 
-variable "aurora_storage_type" {
+variable "rds_instance_db_parameter_group" {
+  description = "The name of the DB parameter group to associate with the RDS instance."
   type        = string
-  description = "One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD) or aurora-iopt1"
-  default     = "aurora-iopt1"
+  default     = "postgres16"
 }
 
-variable "aurora_engine_version" {
-  description = "The version of the database engine tocl use. See `aws rds describe-db-engine-versions` "
-  type        = string
-  default     = "15.4"
+variable "rds_instance_db_parameter" {
+  description = "List of DB parameters for the RDS instance."
+  type        = list(any)
+  default = [
+    {
+      apply_method = "immediate"
+      name         = "rds.force_ssl"
+      value        = "0"
+    }
+  ]
 }
 
-variable "aurora_allow_major_version_upgrade" {
+variable "rds_instance_db_options" {
+  description = "List of DB options for the RDS instance."
+  type        = list(any)
+  default     = []
+}
+
+variable "rds_enable_custom_option_group" {
+  description = "Flag to enable custom option group for the RDS instance."
   type        = bool
   default     = false
-  description = "Enable to allow major engine version upgrades when changing engine versions. Defaults to false."
 }
 
-variable "aurora_auto_minor_version_upgrade" {
-  type        = bool
-  default     = true
-  description = "Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window"
-}
-
-variable "aurora_instance_type" {
+variable "rds_instance_ca_cert_identifier" {
+  description = "The identifier of the CA certificate for the RDS instance."
   type        = string
-  default     = "db.t3.medium"
-  description = "Instance type to use"
+  default     = "rds-ca-rsa2048-g1"
 }
 
-variable "aurora_cluster_size" {
-  type        = number
-  default     = 1
-  description = "Number of DB instances to create in the cluster"
-}
-
-variable "aurora_serverlessv2_scaling_configuration" {
-  description = "serverlessv2 scaling properties"
-  type = object({
-    min_capacity = number
-    max_capacity = number
-  })
-  default = null
-}
-
-variable "performance_insights_enabled" {
+variable "rds_instance_publicly_accessible" {
+  description = "Flag to make the RDS instance publicly accessible."
   type        = bool
-  default     = true
-  description = "Whether to enable Performance Insights"
-}
-
-variable "performance_insights_retention_period" {
-  description = "Amount of time in days to retain Performance Insights data. Either 7 (7 days) or 731 (2 years)"
-  type        = number
-  default     = 7
-}
-
-variable "iam_database_authentication_enabled" {
-  type        = bool
-  description = "Specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled"
   default     = false
 }
 
-variable "aurora_iops" {
+variable "rds_instance_multi_az" {
+  description = "Flag to enable multi-AZ deployment for the RDS instance."
+  type        = bool
+  default     = false
+}
+
+variable "rds_instance_storage_type" {
+  description = "The storage type for the RDS instance."
+  type        = string
+  default     = "gp2"
+}
+
+variable "rds_instance_instance_class" {
+  description = "The instance class for the RDS instance."
+  type        = string
+  default     = "db.t3.small"
+}
+
+variable "rds_instance_allocated_storage" {
+  description = "The amount of allocated storage in gigabytes for the RDS instance."
   type        = number
-  description = "The amount of provisioned IOPS. Setting this implies a storage_type of 'io1'. This setting is required to create a Multi-AZ DB cluster. Check TF docs for values based on db engine"
+  default     = 20
+}
+
+variable "rds_instance_storage_encrypted" {
+  description = "Flag to enable storage encryption for the RDS instance."
+  type        = bool
+  default     = false
+}
+
+variable "rds_instance_snapshot_identifier" {
+  description = "The identifier for the RDS instance snapshot to be used for restoring the instance."
+  type        = string
   default     = null
 }
 
+variable "rds_instance_auto_minor_version_upgrade" {
+  description = "Flag to enable automatic minor version upgrades for the RDS instance."
+  type        = bool
+  default     = true
+}
+
+variable "rds_instance_allow_major_version_upgrade" {
+  description = "Flag to allow major version upgrades for the RDS instance."
+  type        = bool
+  default     = false
+}
+
+variable "rds_instance_apply_immediately" {
+  description = "Flag to apply changes immediately or during the next maintenance window for the RDS instance."
+  type        = bool
+  default     = true
+}
+
+variable "rds_instance_maintenance_window" {
+  description = "The maintenance window for the RDS instance."
+  type        = string
+  default     = "Mon:00:00-Mon:02:00"
+}
+
+variable "rds_instance_skip_final_snapshot" {
+  description = "Flag to skip the final DB snapshot when deleting the RDS instance."
+  type        = bool
+  default     = true
+}
+
+variable "rds_instance_copy_tags_to_snapshot" {
+  description = "Flag to copy tags to the final DB snapshot when deleting the RDS instance."
+  type        = bool
+  default     = true
+}
+
+variable "rds_instance_backup_retention_period" {
+  description = "The number of days to retain automated backups for the RDS instance."
+  type        = number
+  default     = 0
+}
+
+variable "rds_instance_backup_window" {
+  description = "The daily time range during which automated backups are created for the RDS instance."
+  type        = string
+  default     = "22:00-23:59"
+}
+
+
 variable "additional_inbound_rules" {
   type = list(object({
-    description       = string
-    from_port         = number
-    to_port           = number
-    protocol          = string
-    cidr_blocks       = list(string)
-    security_group_id = optional(list(string))
-    ipv6_cidr_blocks  = optional(list(string))
-
+    name        = string
+    description = string
+    type        = string
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string)
   }))
   default = []
 }
@@ -171,9 +237,9 @@ variable "additional_inbound_rules" {
 ##################################################################################
 ## Postgres DBs
 ##################################################################################
-variable "auditdbdatabase" {
+variable "featuredbdatabase" {
   type    = string
-  default = "audit"
+  default = "feature"
 }
 
 variable "authenticationdbdatabase" {
@@ -186,9 +252,9 @@ variable "notificationdbdatabase" {
   default = "notification"
 }
 
-variable "userdbdatabase" {
+variable "videoconfrencingdbdatabase" {
   type    = string
-  default = "user"
+  default = "video"
 }
 ###################################################################################
 ## Redis Elasticache
@@ -580,6 +646,15 @@ variable "alb_url" {
   description = "ALB DNS Record"
 }
 
+variable "karpenter_instance_category" {
+  type        = string
+  description = "karpenter instance category"
+}
+
+variable "tenant_tier" {
+  type        = string
+  description = "Tenant Tier Category"
+}
 #################################################################
 ## Canary Variables
 #################################################################

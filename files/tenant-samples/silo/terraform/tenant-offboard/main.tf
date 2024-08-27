@@ -11,6 +11,7 @@ module "tags" {
   extra_tags = {
     Tenant    = var.tenant
     Tenant_ID = var.tenant_id
+    Tier      = var.tenant_tier
   }
 
 }
@@ -26,9 +27,9 @@ module "backup" {
     kms_key_admin_arns              = []
   }
 
-  backup_plan = null
-  create_role = true
-  role_name   = local.backup_role_name
+  backup_plan           = null
+  create_role           = true
+  role_name             = local.backup_role_name
   backup_selection_data = null
 
   tags = module.tags.tags

@@ -1,0 +1,17 @@
+{{- if .Values.videoConfrencingService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-video-confrencing-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+data:
+      PORT: '{{ .Values.videoConfrencingService.port }}'
+      NODE_ENV: '{{ .Values.videoConfrencingService.node_env }}'
+      LOG_LEVEL: '{{ .Values.videoConfrencingService.log_level }}'
+      BASE_PATH: '{{ .Values.videoConfrencingService.base_path }}'
+      DB_SSL: '{{ .Values.videoConfrencingService.db_ssl }}'
+      VONAGE_API_KEY: '47793071'
+{{- end}}

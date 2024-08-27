@@ -1,0 +1,164 @@
+{{- if .Values.migrationJob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ template "helm.fullname" . }}-migration-job"
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+spec:
+  backoffLimit: 20
+  activeDeadlineSeconds: 600
+  ttlSecondsAfterFinished: 3600
+  parallelism: 1
+  completions: 1
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: {{ .Values.tier }}-{{ .Values.tenant }}
+      volumes:
+        - name: my-api-token
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ .Values.tier }}-{{ .Values.tenant }}-aws-secrets
+      restartPolicy: 'OnFailure'
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret.name }}
+      containers:
+      - name: init
+        image: {{ .Values.migrationJob.repository }}:{{ .Values.migrationJob.tag }}
+        imagePullPolicy: {{ .Values.migrationJob.pullPolicy }}
+        resources:
+{{ toYaml .Values.migrationJob.resources | indent 10 }}
+        command: ["/bin/sh", "-c"]
+        args: ["cd packages/migrations; npm run db:migrate"]
+        volumeMounts:
+          - name: my-api-token
+            mountPath: /mnt/api-token
+            readOnly: true
+        env:
+          - name: AUTH_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: AUTH_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: AUTH_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: AUTH_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: AUTH_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUTHENTICATION_SERVICE_DB_DATABASE
+          - name: FEATURE_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: FEATURE_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: FEATURE_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: FEATURE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: FEATURE_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: FEATURE_DB_DATABASE
+          - name: NOTIF_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: NOTIF_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: NOTIF_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: NOTIF_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: NOTIF_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: NOTIFICATION_SERVICE_DB_DATABASE
+          - name: VIDEO_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: VIDEO_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: VIDEO_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: VIDEO_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: VIDEO_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: VIDEO_CONFRENCING_SERVICE_DB_DATABASE
+          
+          - name: TENANT_NAME
+            value: {{ .Values.tenantName }}
+          - name: TENANT_KEY
+            value: {{ .Values.tenantKey }}
+          - name: SECRET
+            value: {{ .Values.tenantSecret }}
+          - name: TENANT_EMAIL
+            value: {{ .Values.tenantEmail }}
+          - name: CLIENT_ID
+            value: {{ .Values.clientId }}
+          - name: CLIENT_SECRET
+            value: {{ .Values.publicKey }}
+          - name: ADMIN_USER_TENANT_ID
+            value: {{ .Values.adminUserTenantId }}
+          - name: REDIRECT_URL
+            value: "https://{{ .Values.hostname }}{{ .Values.frontend.home_path }}"
+          - name: USERNAME
+            value: {{ .Values.cognitoUser }}
+          - name: USER_SUB
+            value: {{ .Values.cognitoSub }}
+{{- end }}

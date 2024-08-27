@@ -42,9 +42,11 @@ For more details, you can go through the [eks saas architecture documentation](d
 1. If you don't have registered domain in Route53 then [register domain in Route53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-register.html). (If you have domain registered with 3rd party registrars then [create hosted zone on route53](https://medium.com/weekly-webtips/how-to-integrate-3rd-party-domain-names-with-aws-route-53-for-your-website-webapp-7f6cd8ff36b6) for your domain.)
 2. Generate Public Certificate for the domain using [AWS ACM](https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html). (please ensure to give both wildcard and root domain in Fully qualified domain name while generating ACM, e.g. if domain name is xyz.com then use both xyz.com & *.xyz.com in ACM)
 3. SES account should be setup in production mode and `domain` should be verified. [Generate smtp credentials](https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html) and store them in ssm parameter store as `SecureString`. (using parameter name - /{namespace}/ses_access_key & /{namespace}/ses_secret_access_key where `namespace` is project name)
-4. [Generate http credentials](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html#setting-up-gc-iam) for your IAM user and store them in ssm parameter as `SecureString`. (using parameter name - /{namespace}/https_connection_user & /{namespace}/https_connection_password where `namespace` is project name)
+4. [Generate Github Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)and store them in ssm parameter as `SecureString`. (using parameter name - /github_user & /github_token)
+> **_NOTE:_** If you are using organization github account then create github token with organization scope and provide necessary permission to create, manage repository & merge into the repository. Otherwise you can create github token for your personal user. Update the `.tfvars` file of `terraform/tenant-codebuilds` folder.
+
 5. Create a [codepipeline connection for github](https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html) with your github account and repository.
-6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in `.tfvars` file of client-vpn folder. [follow [doc](doc/client-vpn-connection.md) to connect with VPN ]
+6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in `.tfvars` file of `terraform/client-vpn` folder. [follow [doc](doc/client-vpn-connection.md) to connect with VPN ]
 
 
 ## Setting up the environment

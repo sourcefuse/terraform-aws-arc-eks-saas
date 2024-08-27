@@ -12,12 +12,12 @@ data "aws_ssm_parameter" "codebuild_role" {
 }
 
 data "aws_ssm_parameter" "api_gw_url" {
-    name = "/${var.namespace}/${var.environment}/api_gw_arn"
-    depends_on = [module.api_gw_ssm_parameters]
-} 
+  name       = "/${var.namespace}/${var.environment}/api_gw_arn"
+  depends_on = [module.api_gw_ssm_parameters]
+}
 
 data "aws_ssm_parameter" "orchestrator_ecr_image" {
-    name = "/${var.namespace}/${var.environment}/orchestration-ecr-image-uri"
+  name = "/${var.namespace}/${var.environment}/orchestration-ecr-image-uri"
 }
 
 

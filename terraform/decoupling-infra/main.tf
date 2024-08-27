@@ -42,6 +42,31 @@ resource "aws_dynamodb_table" "tier_mapping" {
   }))
 }
 
+resource "aws_dynamodb_table" "orchestrator_data_store" {
+  name           = "${var.namespace}-${var.environment}-orchestrator-service-data-store"
+  hash_key       = "tenantId"
+  read_capacity  = 5
+  write_capacity = 5
+
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = local.dynamo_kms_master_key_id
+  }
+
+  attribute {
+    name = "tenantId"
+    type = "S"
+  }
+
+  point_in_time_recovery {
+    enabled = var.enable_dynamodb_point_in_time_recovery
+  }
+
+  tags = merge(module.tags.tags, tomap({
+    Name = "${var.namespace}-${var.environment}-orchestrator-service-data-store",
+  }))
+}
+
 ## Store details in the mapping dynamodb table
 
 resource "aws_dynamodb_table_item" "basic" {
@@ -129,7 +154,7 @@ ITEM
 ## Lambda & API GW for Decoupling
 ##################################################################################
 module "lambda_function_container_image" {
-  source = "terraform-aws-modules/lambda/aws"
+  source  = "terraform-aws-modules/lambda/aws"
   version = "7.6.0"
 
   function_name = "${var.namespace}-${var.environment}-decoupling-orchestrator-function"
@@ -137,22 +162,27 @@ module "lambda_function_container_image" {
 
   create_package = false
 
-  image_uri    = data.aws_ssm_parameter.orchestrator_ecr_image.value
-  timeout = var.timeout
-  memory_size = var.memory_size
+  image_uri              = data.aws_ssm_parameter.orchestrator_ecr_image.value
+  timeout                = var.timeout
+  memory_size            = var.memory_size
   ephemeral_storage_size = var.ephemeral_storage_size
-  package_type = "Image"
-  architectures = var.compatible_architectures 
+  package_type           = "Image"
+  architectures          = var.compatible_architectures
+  maximum_retry_attempts = var.maximum_retry_attempts
 
   environment_variables = {
-    TIER_DETAILS_TABLE = "${var.namespace}-${var.environment}-decoupling-tier-map-table"
+    TIER_DETAILS_TABLE   = "${var.namespace}-${var.environment}-decoupling-tier-map-table"
+    EVENT_BUS_AWS_REGION = "${var.region}"
+    EVENT_BUS_NAME       = "${var.namespace}-${var.environment}-DecouplingEventBus"
+    DATA_STORE_TABLE     = "${var.namespace}-${var.environment}-orchestrator-service-data-store"
+    DYNAMO_DB_REGION     = "${var.region}"
   }
 
-  publish = true
+  publish            = true
   attach_policies    = true
   number_of_policies = 4
-  policies           = ["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess","arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess","arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator","arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess"]
-  tags = module.tags.tags  
+  policies           = ["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess", "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess", "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator", "arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess"]
+  tags               = module.tags.tags
 
   allowed_triggers = {
     APIGatewayAny = {
@@ -164,11 +194,11 @@ module "lambda_function_container_image" {
 
 ## Api Gateway
 module "api_gateway" {
-  source  = "cloudposse/api-gateway/aws"
-  version = "0.7.0"
-  name = "${var.namespace}-${var.environment}-decoupling-api-gw"
-  stage_name = "${var.environment}"
-  
+  source     = "cloudposse/api-gateway/aws"
+  version    = "0.7.0"
+  name       = "${var.namespace}-${var.environment}-decoupling-api-gw"
+  stage_name = var.environment
+
   openapi_config = {
     openapi = "3.0.1"
     info = {
@@ -179,28 +209,28 @@ module "api_gateway" {
     paths = {
       "/events/{eventType}" = {
         post = {
-          "x-amazon-apigateway-auth": {
-          "type": "AWS_IAM"
-           },
+          "x-amazon-apigateway-auth" : {
+            "type" : "AWS_IAM"
+          },
           "x-amazon-apigateway-integration" = {
-               "responses" = {
-                  "default" = {
-                     "statusCode" = "200"
-                  }
-               },
-               "uri" = module.lambda_function_container_image.lambda_function_invoke_arn,
-               "passthroughBehavior" = "when_no_match",
-               "httpMethod" = "POST",
-               "type": "aws_proxy"              
-            }
+            "responses" = {
+              "default" = {
+                "statusCode" = "200"
+              }
+            },
+            "uri"                 = module.lambda_function_container_image.lambda_function_invoke_arn,
+            "passthroughBehavior" = "when_no_match",
+            "httpMethod"          = "POST",
+            "type" : "aws_proxy"
+          }
         }
 
       }
     }
   }
   logging_level = var.logging_level
-  tags = module.tags.tags
-  depends_on = [module.lambda_function_container_image]
+  tags          = module.tags.tags
+  depends_on    = [module.lambda_function_container_image]
 }
 
 ## Store API gateway ARN to SSM Parameter
@@ -229,7 +259,7 @@ module "eventbridge_role" {
   role_description = "terraform eventbridge role"
   principals = {
     "Service" : ["events.amazonaws.com",
-                "delivery.logs.amazonaws.com"]
+    "delivery.logs.amazonaws.com"]
   }
   policy_documents = [
     join("", data.aws_iam_policy_document.resource_full_access.*.json)
@@ -246,25 +276,25 @@ resource "aws_cloudwatch_log_group" "decoupling_log_group" {
 }
 
 module "eventbridge" {
-  source = "terraform-aws-modules/eventbridge/aws"
-  version = "3.7.1"
-  bus_name = "${var.namespace}-${var.environment}-DecouplingEventBus"
+  source                   = "terraform-aws-modules/eventbridge/aws"
+  version                  = "3.7.1"
+  bus_name                 = "${var.namespace}-${var.environment}-DecouplingEventBus"
   attach_cloudwatch_policy = true
   rules = {
     Decoupling-Event = {
       description   = "Decoupling Event Rule"
-      event_pattern = jsonencode({ "detail-type": ["TENANT_PROVISIONING", "TENANT_DEPROVISIONING", "TENANT_PROVISIONING_SUCCESS","TENANT_PROVISIONING_FAILURE"] })
+      event_pattern = jsonencode({ "detail-type" : ["TENANT_PROVISIONING", "TENANT_DEPROVISIONING", "TENANT_PROVISIONING_SUCCESS", "TENANT_PROVISIONING_FAILURE", "TENANT_DEPLOYMENT", "TENANT_DEPLOYMENT_SUCCESS", "TENANT_DEPLOYMENT_FAILURE"] })
       enabled       = true
     }
   }
 
   targets = {
     Decoupling-Event = [
-        {
-          name =   "send-logs-to-cloudwatch"
-          arn       = aws_cloudwatch_log_group.decoupling_log_group.arn
-    
-        }
+      {
+        name = "send-logs-to-cloudwatch"
+        arn  = aws_cloudwatch_log_group.decoupling_log_group.arn
+
+      }
     ]
   }
   cloudwatch_target_arns = ["${aws_cloudwatch_log_group.decoupling_log_group.arn}"]
@@ -274,11 +304,11 @@ module "eventbridge" {
 
 
 resource "aws_cloudwatch_event_target" "api_gateway_target" {
-  target_id = "APIGatewayTarget"
-  rule      = "Decoupling-Event-rule"
-  arn       = join("/",["${data.aws_ssm_parameter.api_gw_url.value}","${var.environment}","POST","events","*"])
+  target_id      = "APIGatewayTarget"
+  rule           = "Decoupling-Event-rule"
+  arn            = join("/", ["${data.aws_ssm_parameter.api_gw_url.value}", "${var.environment}", "POST", "events", "*"])
   event_bus_name = "${var.namespace}-${var.environment}-DecouplingEventBus"
-  role_arn  = module.eventbridge_role.arn
+  role_arn       = module.eventbridge_role.arn
   http_target {
     path_parameter_values = ["$.detail-type"]
   }
