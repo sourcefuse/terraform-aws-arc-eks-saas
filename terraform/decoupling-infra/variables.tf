@@ -91,6 +91,11 @@ variable "reserved_concurrent_executions" {
   default     = -1
 }
 
+variable "maximum_retry_attempts" {
+  description = "Maximum number of times to retry when the function returns an error. Valid values between 0 and 2. Defaults to 2."
+  type        = number
+  default     = 0
+}
 ############################################################################
 ## API Gateway
 ############################################################################

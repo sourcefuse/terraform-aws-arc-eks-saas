@@ -1,0 +1,139 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    on-failure: ABORT
+    commands:
+      - cd $CODEBUILD_SRC_DIR/tenant-templates/bridge
+      - export WEBHOOK_PATH="$CODEBUILD_SRC_DIR/tenant-templates/bridge/webhook.js"
+      - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
+      - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl ./aws-iam-authenticator
+      - curl -o /usr/local/bin/terraform.zip https://releases.hashicorp.com/terraform/1.7.1/terraform_1.7.1_linux_amd64.zip
+      - unzip /usr/local/bin/terraform.zip -d /usr/local/bin/
+      - terraform --version
+      - export PATH=$PWD/:$PATH
+      - apt-get update -y && apt-get install -y jq unzip
+      - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
+      - npm i @aws-sdk/client-eventbridge
+      - ln -sf $WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
+    finally:
+      - node $WEBHOOK_PATH
+  pre_build:
+    on-failure: ABORT  
+    commands:
+     # authenticating cluster with codebuild using IAM role session
+      - export KUBECONFIG=$HOME/.kube/config
+      - CREDENTIALS=$(aws sts assume-role --role-arn $CB_ROLE --role-session-name codebuild-kubectl --duration-seconds 3600)
+      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
+    finally:
+      - node $WEBHOOK_PATH
+  build:
+    on-failure: ABORT
+    commands:
+
+      # Extracting tenant variables
+      - export SECRET=${secret}
+      - export TENANT_ID=$(echo $tenant | jq -r '.id')
+      - export TENANT_NAME=$(echo $tenant | jq -r '.name')
+      - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
+      - export USERNAME=$(echo $tenant | jq -r '.key')
+      - export KEY=$(echo $tenant | jq -r '.key')
+      - export TIER=$(echo "${tier}" | tr '[:upper:]' '[:lower:]')
+      
+      # Webhook Envs
+      - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
+      - export REDIRECT_URL="${CONTROL_PLANE_HOST}/main/home"
+      - export APP_PLANE_REDIRECT_URL="https://${KEY}.${DOMAIN_NAME}/home"
+      - export USER_CALLBACK_ENDPOINT="https://${KEY}.${DOMAIN_NAME}/user-tenant-service/user-callback"
+      - export APP_PLANE_ENDPOINT_FEATURE_SERVICE="https://${KEY}.${DOMAIN_NAME}/feature-service"
+      - export CLIENT_ID="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
+      - export CLIENT_SECRET=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
+      - export RANDOM_SECRET="${secret}"
+
+     
+
+      # Export Terraform Env Variable 
+      - export TF_VAR_namespace="${NAMESPACE}"
+      - export TF_VAR_environment="${ENVIRONMENT}"
+      - export TF_VAR_region="${AWS_REGION}"
+      - export TF_VAR_tenant="${KEY}"
+      - export TF_VAR_tenant_email="${TENANT_ADMIN_EMAIL}"
+      - export TF_VAR_domain_name="${DOMAIN_NAME}"
+      - export TF_VAR_tenant_name="${TENANT_NAME}"
+      - export TF_VAR_tenant_secret="${secret}"
+      - export TF_VAR_user_callback_secret="${secret}"
+      - export TF_VAR_tenant_id="${TENANT_ID}"
+      - export TF_VAR_tenant_tier="${TIER}"
+      - export TF_VAR_cluster_name="${EKS_CLUSTER_NAME}"
+      - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"
+      - export TF_VAR_tenant_host_domain="${KEY}.${DOMAIN_NAME}"
+      - export TF_VAR_jwt_issuer="${KEY}"
+      - export TF_VAR_rds_instance_allocated_storage="${POSTGRES_SIZE}"
+      - export TF_VAR_tenant_client_id="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
+      - export TF_VAR_tenant_client_secret=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
+      - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
+      - export TF_VAR_alb_url="${ALB_DNS}"
+      # check if bootstrap need to be run or not
+      - PARAMETER_VALUE=$(aws ssm get-parameter --name "/${NAMESPACE}/${ENVIRONMENT}/${TIER}/terraform-state-bucket" --query 'Parameter.Value' --region "$AWS_REGION" --output text 2>/dev/null || echo "")
+      - if [ -z "$PARAMETER_VALUE" ]; then 
+           is_bootstrap_creation=1;
+        else
+           is_bootstrap_creation=0;
+        fi
+
+      # Run Bootstrap to create terraform state s3 bucket
+      - cd terraform/bootstrap
+      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform init; else  echo "Skipping terraform init"; fi
+      - if [ "${is_bootstrap_creation}" = "1" ]; then terraform apply -auto-approve; else  echo "Skipping terraform apply"; fi
+      - cd ..
+
+      # Configuing S3 backend
+      - export TF_STATE_BUCKET=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${TIER}/terraform-state-bucket --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - export TF_STATE_TABLE=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${TIER}/terraform-state-dynamodb-table --region ${AWS_REGION} --query "Parameter.Value" --output text)
+      - cd pool-infra
+      - export TF_INFRA_KEY=${TIER}.tfstate
+      - envsubst < config.txt > config.${TIER}.hcl
+      - envsubst <tfvariables.txt> ${TIER}.tfvars
+      # Run Terraform to create pooled infra 
+      - terraform init --backend-config=config.${TIER}.hcl
+      - terraform apply -auto-approve
+      - cd ..
+
+      # Creating terraform backend config and tfvars at run time and Run terraform to create resources for tenant
+      - export TF_KEY=${KEY}/${KEY}.tfstate
+      - envsubst < config.txt > config.${KEY}.hcl
+      - envsubst <tfvariables.txt> ${KEY}.tfvars
+      - terraform init --backend-config=config.${KEY}.hcl
+      - terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
+      # Push value to tenant management gitops repository
+      - chmod +x push-values.sh
+      - ./push-values.sh
+      - kubectl apply -f ${TIER}-argo-workflow.yaml --namespace argo-workflows || true 
+      - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      - sleep 240 # waiting time to spin up tenant pods 
+      - terraform apply -auto-approve --refresh=false  # refresh is false to avoid unnecessary API hitting
+      - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
+    
+    finally:
+      - node $WEBHOOK_PATH
+
+  post_build:
+    commands:
+      - export CODEBUILD_BUILD_POSTBUILD=1
+      - export CREATE_USER=1
+      # To run the webhook which will send notification and create tenant first admin user in pooled database
+      - node $WEBHOOK_PATH
+      - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
+  
+      
+
+
+
+

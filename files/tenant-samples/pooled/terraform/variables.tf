@@ -40,11 +40,6 @@ variable "tenant_email" {
   description = "tenant Email"
 }
 
-variable "user_name" {
-  type        = string
-  description = "cognito user"
-}
-
 variable "tenant_name" {
   type        = string
   description = "Tenant Name"
@@ -93,6 +88,11 @@ variable "jwt_issuer" {
 variable "alb_url" {
   type        = string
   description = "ALB DNS Record"
+}
+
+variable "tenant_tier" {
+  type        = string
+  description = "Tenant Tier"
 }
 
 #################################################################

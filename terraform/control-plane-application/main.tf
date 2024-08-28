@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 ## tag
 ################################################################################
 module "tags" {
@@ -9,6 +9,7 @@ module "tags" {
   project     = var.namespace
 
 }
+
 
 ################################################################################
 ## Control Plane Role
@@ -125,15 +126,13 @@ data "template_file" "fluentbit_helm_value_template" {
 data "template_file" "helm_values_template" {
   template = file("${path.module}/../../files/control-plane/control-plane-helm-chart/values.yaml.template")
   vars = {
-    NAMESPACE                 = local.kubernetes_ns // This is kubernetes namespace
-    namespace                 = var.namespace       // This is project namespace
+    NAMESPACE                 = local.kubernetes_ns
+    namespace                 = var.namespace
     ENVIRONMENT               = var.environment
     TENANT_NAME               = var.tenant_name
     TENANT_EMAIL              = var.tenant_email
     COGNITO_USER              = var.user_name
     COGNITO_USER_SUB          = aws_cognito_user.cognito_user.sub
-    SILO_PIPELINE             = "${var.namespace}-${var.environment}-premium-codebuild-project"
-    POOLED_PIPELINE           = "${var.namespace}-${var.environment}-standard-codebuild-project"
     REGION                    = var.region
     CONTROL_PLANE_HOST_DOMAIN = var.domain_name
     DOMAIN                    = var.domain_name
@@ -167,7 +166,6 @@ resource "local_file" "helm_values" {
   content  = data.template_file.helm_values_template.rendered
 }
 
-
 resource "helm_release" "fluent_bit" {
   count            = 1
   name             = "aws-for-fluent-bits"
@@ -182,47 +180,43 @@ resource "helm_release" "fluent_bit" {
 ##################################################################################
 ## Create ARGOCD Repository Secret to connect tenant gitops repository 
 ##################################################################################
-# Connect using SSH please follow this https://argo-cd.readthedocs.io/en/stable/operator-manual/argocd-repositories-yaml/
-# argocd
-resource "kubectl_manifest" "argocd_repo_secret" {
+resource "kubectl_manifest" "argocd_reposiotry_secret" {
   yaml_body = <<YAML
   apiVersion: v1
   kind: Secret
   metadata:
-    name: tenant-helm-repo
+    name: tenant-helm-github-secret
     namespace: argocd
     labels:
       argocd.argoproj.io/secret-type: repository
   stringData:
-    url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
-    password: ${data.aws_ssm_parameter.https_connection_password.value}
-    username: ${data.aws_ssm_parameter.https_connection_user.value}
+    url: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git
+    password: ${data.aws_ssm_parameter.github_token.value}
+    username: ${data.aws_ssm_parameter.github_user.value}
     insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
     forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
     enableLfs: "true"
 YAML
 }
 
-#argo-workflow
-resource "kubectl_manifest" "argo_workflow_repo_secret" {
+resource "kubectl_manifest" "argo_workflow_repository_secret" {
   yaml_body = <<YAML
   apiVersion: v1
   kind: Secret
   metadata:
-    name: codecommit-secret
+    name: github-secret
     namespace: argo-workflows
     labels:
       argocd.argoproj.io/secret-type: repository
   stringData:
-    url: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
-    password: ${data.aws_ssm_parameter.https_connection_password.value}
-    username: ${data.aws_ssm_parameter.https_connection_user.value}
+    url: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git
+    password: ${data.aws_ssm_parameter.github_token.value}
+    username: ${data.aws_ssm_parameter.github_user.value}
     insecure: "true" # Ignore validity of server's TLS certificate. Defaults to "false"
     forceHttpBasicAuth: "true" # Skip auth method negotiation and force usage of HTTP basic auth. Defaults to "false"
     enableLfs: "true"
 YAML
 }
-
 ###############################################################################################
 ## Register control plane Helm App on ArgoCD
 ###############################################################################################
@@ -231,11 +225,11 @@ resource "local_file" "argocd_application" {
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: control-plane-application
+  name: control-plane-app
   namespace: argocd
   labels:
     project: ${var.namespace}
-    name: control-plane-application
+    name: control-plane
     environment: ${var.environment}
 spec:
   destination:
@@ -243,7 +237,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: control-plane
-    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
     targetRevision: main
     helm:
       valueFiles:

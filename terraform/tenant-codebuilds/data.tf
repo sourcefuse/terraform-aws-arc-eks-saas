@@ -3,6 +3,14 @@
 ################################################################################
 data "aws_caller_identity" "this" {}
 
+data "aws_ssm_parameter" "github_token" {
+  name = "/github_token"
+}
+
+data "aws_ssm_parameter" "github_user" {
+  name = "/github_user"
+}
+
 data "aws_ssm_parameter" "terraform_state_bucket" {
   name = "/${var.namespace}/${var.environment}/terraform-state-bucket"
 }
@@ -14,19 +22,7 @@ data "aws_ssm_parameter" "codebuild_role" {
 data "aws_ssm_parameter" "karpenter_role" {
   name = "/${var.namespace}/${var.environment}/karpenter_role"
 }
-################################################################################
-## remote state
-################################################################################
-data "terraform_remote_state" "eks" {
-  backend = "s3"
 
-  config = {
-    region = var.region
-    key    = "eks-cluster/terraform.tfstate"
-    bucket = data.aws_ssm_parameter.terraform_state_bucket.value
-  }
-
-}
 ################################################################################
 ## network data
 ################################################################################
@@ -103,8 +99,7 @@ data "aws_iam_policy_document" "tenant_codebuild_policy" {
       "ec2:CreateNetworkInterfacePermission",
       "kms:*",
       "s3:*",
-      "ssm:*",
-      "events:*"
+      "ssm:*"
     ]
     resources = ["*"]
   }

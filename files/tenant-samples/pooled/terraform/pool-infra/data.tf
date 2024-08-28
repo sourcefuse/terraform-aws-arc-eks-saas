@@ -10,6 +10,11 @@ data "aws_vpc" "vpc" {
     name   = "tag:Name"
     values = ["${var.namespace}-${var.environment}-vpc"]
   }
+  filter {
+    name = "tag:Environment"
+
+    values = ["${var.environment}"]
+  }
 }
 
 data "aws_subnets" "private" {
@@ -42,7 +47,7 @@ data "aws_security_groups" "aurora" {
   depends_on = [module.aurora]
   filter {
     name   = "tag:Name"
-    values = ["${var.namespace}-${var.environment}-pooled-aurora"]
+    values = ["${var.namespace}-${var.environment}-${var.tenant_tier}-aurora"]
   }
 
   filter {

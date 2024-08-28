@@ -16,7 +16,7 @@ module "aws_cognito_user_pool" {
   source  = "lgallard/cognito-user-pool/aws"
   version = "0.24.0"
 
-  user_pool_name                                        = "${var.namespace}-${var.environment}-${var.tenant}-cognito-user-pool"
+  user_pool_name                                        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-cognito-user-pool"
   alias_attributes                                      = var.alias_attributes
   auto_verified_attributes                              = var.auto_verified_attributes
   sms_authentication_message                            = var.sms_authentication_message
@@ -86,64 +86,38 @@ module "aws_cognito_user_pool" {
 }
 
 ######################################################################
-## Create Cognito User
-######################################################################
-module "cognito_password" {
-  source      = "../modules/random-password"
-  length      = 12
-  is_special  = true
-  min_upper   = 1
-  min_numeric = 1
-  min_special = 1
-  min_lower   = 1
-}
-
-resource "aws_cognito_user" "cognito_user" {
-  user_pool_id = module.aws_cognito_user_pool.id
-  username     = var.user_name
-
-  attributes = {
-    email          = var.tenant_email
-    email_verified = true
-  }
-  temporary_password = module.cognito_password.result
-
-  depends_on = [module.aws_cognito_user_pool]
-}
-
-######################################################################
 ## Store Congito output to SSM parameneter store
 ######################################################################
 module "cognito_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/cognito_domain"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_domain"
       value       = "https://${var.tenant}-${module.cognito_domain_string.result}.auth.${var.region}.amazoncognito.com"
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain Host"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/cognito_id"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_id"
       value       = module.aws_cognito_user_pool.client_ids[0]
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain ID"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/cognito_secret"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_secret"
       value       = module.aws_cognito_user_pool.client_secrets[0]
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain Secret"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/${var.user_name}/user_sub"
-      value       = aws_cognito_user.cognito_user.sub
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id"
+      value       = module.aws_cognito_user_pool.id
       type        = "SecureString"
       overwrite   = "true"
-      description = "${var.tenant} User Cognito Sub"
+      description = "Cognito User Pool ID"
     }
   ]
   tags = module.tags.tags

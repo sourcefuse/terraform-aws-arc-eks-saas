@@ -4,6 +4,21 @@
 data "aws_caller_identity" "current" {}
 
 ############################################################################
+## github data
+############################################################################
+data "aws_ssm_parameter" "github_token" {
+  name = "/github_token"
+}
+
+data "aws_ssm_parameter" "github_user" {
+  name = "/github_user"
+}
+
+data "aws_ssm_parameter" "github_repo" {
+  name = "/github_saas_repo"
+}
+
+############################################################################
 ## EKS data
 ############################################################################
 data "aws_eks_cluster" "EKScluster" {
@@ -146,7 +161,7 @@ data "aws_iam_policy_document" "ssm_policy" {
       "events:PutEvents"
     ]
     resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/*",
-                 "arn:aws:events:${var.region}:${local.sts_caller_arn}:event-bus/${var.namespace}-${var.environment}-DecouplingEventBus"]
+    "arn:aws:events:${var.region}:${local.sts_caller_arn}:event-bus/${var.namespace}-${var.environment}-DecouplingEventBus"]
   }
 }
 

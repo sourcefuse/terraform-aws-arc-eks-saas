@@ -17,6 +17,21 @@ variable "namespace" {
   description = "Namespace for the resources."
 }
 
+###############################################################################
+## github
+################################################################################
+variable "is_organization" {
+  type        = bool
+  description = "Enable or Disable based on if github repository is part of organization or not "
+  default     = false
+}
+
+variable "organization_name" {
+  type        = string
+  description = "Github organization Name"
+  default     = "sourcefuse"
+}
+
 ################################################################################
 ## codebuild
 ################################################################################
@@ -28,7 +43,14 @@ variable "create_premium_codebuild" {
 
 variable "create_standard_codebuild" {
   type        = bool
-  description = "Enable or Disable to create premium codebuild project"
+  description = "Enable or Disable to create standard codebuild project"
+  default     = true
+}
+
+
+variable "create_basic_codebuild" {
+  type        = bool
+  description = "Enable or Disable to create basic codebuild project"
   default     = true
 }
 
@@ -71,12 +93,18 @@ variable "premium_source_version" {
 variable "standard_source_version" {
   type        = string
   default     = ""
-  description = "A version of the Premium build input to be built for this project. If not specified, the latest version is used."
+  description = "A version of the Standard build input to be built for this project. If not specified, the latest version is used."
+}
+
+variable "basic_source_version" {
+  type        = string
+  default     = ""
+  description = "A version of the Basic build input to be built for this project. If not specified, the latest version is used."
 }
 
 variable "source_type" {
   type        = string
-  default     = "CODECOMMIT"
+  default     = "GITHUB"
   description = "The type of repository that contains the source code to be built. Valid values for this parameter are: CODECOMMIT, CODEPIPELINE, GITHUB, GITHUB_ENTERPRISE, BITBUCKET or S3"
 }
 
@@ -92,6 +120,12 @@ variable "standard_buildspec" {
   description = "Optional buildspec declaration to use for building the project"
 }
 
+variable "basic_buildspec" {
+  type        = string
+  default     = ""
+  description = "Optional buildspec declaration to use for building the project"
+}
+
 variable "premium_source_location" {
   type        = string
   default     = ""
@@ -99,6 +133,12 @@ variable "premium_source_location" {
 }
 
 variable "standard_source_location" {
+  type        = string
+  default     = ""
+  description = "The location of the source code from git or s3"
+}
+
+variable "basic_source_location" {
   type        = string
   default     = ""
   description = "The location of the source code from git or s3"
@@ -134,6 +174,12 @@ variable "privileged_mode" {
   description = "(Optional) If set to true, enables running the Docker daemon inside a Docker container on the CodeBuild instance. Used when building Docker images"
 }
 
+variable "domain_name" {
+  type        = string
+  default     = ""
+  description = "Domain name of the control plane"
+}
+
 variable "control_plane_host" {
   type        = string
   description = "Host Name of the control plane"
@@ -151,9 +197,14 @@ variable "standard_cloudwatch_log_group_name" {
   description = "Group name of the logs in CloudWatch Logs"
 }
 
+variable "basic_cloudwatch_log_group_name" {
+  type        = string
+  default     = "basic-codebuild-log-group"
+  description = "Group name of the logs in CloudWatch Logs"
+}
+
 variable "cloudwatch_log_stream_name" {
   type        = string
   default     = "log-stream"
   description = "Stream name of the logs in CloudWatch Logs."
 }
-

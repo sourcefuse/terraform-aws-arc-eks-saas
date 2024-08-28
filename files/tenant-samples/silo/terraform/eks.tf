@@ -11,6 +11,7 @@ module "tags" {
   extra_tags = {
     Tenant    = var.tenant
     Tenant_ID = var.tenant_id
+    Tier      = var.tenant_tier
   }
 
 }
@@ -34,7 +35,7 @@ module "route53-record" {
 ###############################################################################
 module "tenant_iam_role" {
   source              = "../modules/iam-role"
-  role_name           = "${var.namespace}-${var.environment}-${var.tenant}-iam-role"
+  role_name           = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-iam-role"
   role_description    = "IAM role for ${var.tenant} application"
   assume_role_actions = ["sts:AssumeRoleWithWebIdentity"]
   principals = {
@@ -47,10 +48,10 @@ module "tenant_iam_role" {
     {
       test     = "StringEquals"
       variable = "${local.oidc_arn}:sub"
-      values   = ["system:serviceaccount:${local.kubernetes_ns}:${var.tenant}"]
+      values   = ["system:serviceaccount:${local.kubernetes_ns}:${var.tenant_tier}-${var.tenant}"]
     }
   ]
-  policy_name        = "${var.namespace}-${var.environment}-${var.tenant}-iam-policy"
+  policy_name        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-iam-policy"
   policy_description = "IAM policy for ${var.tenant} application"
   tags               = module.tags.tags
 }
@@ -68,14 +69,14 @@ module "jwt_ssm_parameters" {
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_issuer"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/jwt_issuer"
       value       = var.jwt_issuer
       type        = "SecureString"
       overwrite   = "true"
       description = "${var.tenant} JWT Issuer"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant}/jwt_secret"
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/jwt_secret"
       value       = module.jwt_secret.result
       type        = "SecureString"
       overwrite   = "true"
@@ -105,42 +106,42 @@ resource "kubernetes_namespace" "my_namespace" {
 # generate tenant specific helm values.yaml file
 
 data "template_file" "helm_values_template" {
-  template = file("${path.module}/../application-helm-chart/values.yaml.template")
+  template = file("${path.module}/../tenant-helm-chart/values.yaml.template")
   vars = {
-    NAMESPACE        = local.kubernetes_ns
-    TENANT_NAME      = var.tenant_name
-    TENANT_KEY       = var.tenant
-    TENANT_EMAIL     = var.tenant_email
-    TENANT_SECRET    = var.tenant_secret
-    TENANT_ID        = var.tenant_id
-    COGNITO_USER     = var.user_name
-    COGNITO_USER_SUB = aws_cognito_user.cognito_user.sub
-
-    TENANT_CLIENT_ID      = var.tenant_client_id
-    TENANT_CLIENT_SECRET  = var.tenant_client_secret
-    REGION                = var.region
-    COGNITO_DOMAIN        = data.aws_ssm_parameter.cognito_domain.name
-    COGNITO_ID            = data.aws_ssm_parameter.cognito_id.name
-    COGNITO_SECRET        = data.aws_ssm_parameter.cognito_secret.name
-    KARPENTER_ROLE        = var.karpenter_role
-    EKS_CLUSTER_NAME      = var.cluster_name
-    TENANT_HOST_NAME      = var.tenant_host_domain
-    USER_CALLBACK_SECRET  = var.user_callback_secret
-    WEB_IDENTITY_ROLE_ARN = module.tenant_iam_role.arn
-    DB_HOST               = data.aws_ssm_parameter.db_host.name
-    DB_PORT               = data.aws_ssm_parameter.db_port.name
-    DB_USER               = data.aws_ssm_parameter.db_user.name
-    DB_PASSWORD           = data.aws_ssm_parameter.db_password.name
-    DB_SCHEMA             = data.aws_ssm_parameter.db_schema.name
-    REDIS_HOST            = data.aws_ssm_parameter.redis_host.name
-    REDIS_PORT            = data.aws_ssm_parameter.redis_port.name
-    REDIS_DATABASE        = data.aws_ssm_parameter.redis_database.name
-    JWT_SECRET            = data.aws_ssm_parameter.jwt_secret.name
-    JWT_ISSUER            = data.aws_ssm_parameter.jwt_issuer.name
-    AUTH_DATABASE         = data.aws_ssm_parameter.authenticationdbdatabase.name
-    AUDIT_DATABASE        = data.aws_ssm_parameter.auditdbdatabase.name
-    NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
-    USER_DATABASE         = data.aws_ssm_parameter.userdbdatabase.name
+    NAMESPACE                  = local.kubernetes_ns
+    TENANT_NAME                = var.tenant_name
+    TENANT_KEY                 = var.tenant
+    TENANT_EMAIL               = var.tenant_email
+    TENANT_SECRET              = var.tenant_secret
+    TENANT_ID                  = var.tenant_id
+    TIER                       = var.tenant_tier
+    TENANT_CLIENT_ID           = var.tenant_client_id
+    TENANT_CLIENT_SECRET       = var.tenant_client_secret
+    REGION                     = var.region
+    COGNITO_DOMAIN             = data.aws_ssm_parameter.cognito_domain.name
+    COGNITO_ID                 = data.aws_ssm_parameter.cognito_id.name
+    COGNITO_SECRET             = data.aws_ssm_parameter.cognito_secret.name
+    KARPENTER_ROLE             = var.karpenter_role
+    EKS_CLUSTER_NAME           = var.cluster_name
+    TENANT_HOST_NAME           = var.tenant_host_domain
+    USER_CALLBACK_SECRET       = var.user_callback_secret
+    WEB_IDENTITY_ROLE_ARN      = module.tenant_iam_role.arn
+    DB_HOST                    = data.aws_ssm_parameter.db_host.name
+    DB_PORT                    = data.aws_ssm_parameter.db_port.name
+    DB_USER                    = data.aws_ssm_parameter.db_user.name
+    DB_PASSWORD                = data.aws_ssm_parameter.db_password.name
+    DB_SCHEMA                  = data.aws_ssm_parameter.db_schema.name
+    REDIS_HOST                 = data.aws_ssm_parameter.redis_host.name
+    REDIS_PORT                 = data.aws_ssm_parameter.redis_port.name
+    REDIS_DATABASE             = data.aws_ssm_parameter.redis_database.name
+    JWT_SECRET                 = data.aws_ssm_parameter.jwt_secret.name
+    JWT_ISSUER                 = data.aws_ssm_parameter.jwt_issuer.name
+    AUTH_DATABASE              = data.aws_ssm_parameter.authenticationdbdatabase.name
+    FEATURE_DATABASE           = data.aws_ssm_parameter.featuredbdatabase.name
+    NOTIFICATION_DATABASE      = data.aws_ssm_parameter.notificationdbdatabase.name
+    VIDEO_CONFRENCING_DATABASE = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
+    INSTANCE_CATEGORY          = var.karpenter_instance_category
+    COGNITO_USER_POOL_ID       = data.aws_ssm_parameter.cognito_user_pool_id.name
   }
 }
 
@@ -158,18 +159,18 @@ resource "local_file" "argocd_application" {
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ${var.tenant}
+  name: ${var.tenant_tier}-${var.tenant}
   namespace: argocd
   labels:
     Tenant: ${var.tenant} 
     Tenant_ID: ${var.tenant_id}
 spec:
   destination:
-    namespace: ${var.tenant}
+    namespace: ${var.tenant_tier}-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: silo/application
-    repoURL: 'https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository'
+    path: onboarded-tenants/silo/application
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
     targetRevision: main
     helm:
       valueFiles:
@@ -199,7 +200,7 @@ resource "local_file" "argo_workflow" {
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: ${var.tenant}-terraform-workflow
+  name: ${var.tenant_tier}-${var.tenant}-terraform-workflow
   namespace: argo-workflows
 spec:
   entrypoint: terraform-apply
@@ -210,13 +211,13 @@ spec:
           - name: terraform
             path: /home/terraform
             git:
-              repo: https://git-codecommit.${var.region}.amazonaws.com/v1/repos/${var.namespace}-${var.environment}-tenant-management-gitops-repository
+              repo: https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git
               depth: 1
               usernameSecret:
-                name: codecommit-secret
+                name: github-secret
                 key: username
               passwordSecret:
-                name: codecommit-secret
+                name: github-secret
                 key: password
       container:
         imagePullPolicy: "Always"
@@ -233,7 +234,7 @@ spec:
             export AWS_SESSION_TOKEN=$(echo "$CREDENTIALS" | jq -r '.Credentials.SessionToken')
             export AWS_EXPIRATION=$(echo "$CREDENTIALS" | jq -r '.Credentials.Expiration')
             aws eks update-kubeconfig --name ${var.cluster_name} --region ${var.region}
-            cp -r /home/terraform/silo/infra/* /home/myuser/
+            cp -r /home/terraform/onboarded-tenants/silo/infra/* /home/myuser/
             cd terraform
             /bin/terraform init --backend-config=config.${var.tenant}.hcl
             /bin/terraform plan --var-file=${var.tenant}.tfvars --refresh=false

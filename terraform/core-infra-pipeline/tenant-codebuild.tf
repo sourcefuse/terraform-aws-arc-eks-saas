@@ -61,12 +61,8 @@ module "tenant_codebuild_module_build_step_codebuild_project" {
           "terraform init --backend-config=config.${var.environment}.hcl",
           "terraform plan",
           "terraform apply -auto-approve",
-          "chmod +x silo-codecommit.sh",
-          "./silo-codecommit.sh",
-          "chmod +x pooled-codecommit.sh",
-          "./pooled-codecommit.sh",
-          "chmod +x tenant-gitops-codecommit.sh",
-          "./tenant-gitops-codecommit.sh",
+          "chmod +x saas-repo-setup.sh",
+          "./saas-repo-setup.sh",
         ]
       }
     }

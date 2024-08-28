@@ -1,0 +1,30 @@
+namespace            = "${TF_VAR_namespace}"
+environment          = "${TF_VAR_environment}"
+region               = "${TF_VAR_region}"
+tenant               = "${TF_VAR_tenant}"
+tenant_email         = "${TF_VAR_tenant_email}"
+domain_name          = "${TF_VAR_domain_name}"
+tenant_name          = "${TF_VAR_tenant_name}"
+tenant_secret        = "${TF_VAR_tenant_secret}"
+tenant_id            = "${TF_VAR_tenant_id}"
+cluster_name         = "${TF_VAR_cluster_name}"
+karpenter_role       = "${TF_VAR_karpenter_role}"
+tenant_host_domain   = "${TF_VAR_tenant_host_domain}"
+jwt_issuer           = "${TF_VAR_jwt_issuer}"
+tenant_client_id     = "${TF_VAR_tenant_client_id}"
+tenant_client_secret = "${TF_VAR_tenant_client_secret}"
+alb_url              = "${TF_VAR_alb_url}"
+user_callback_secret = "${TF_VAR_user_callback_secret}"
+rds_instance_allocated_storage = "${TF_VAR_rds_instance_allocated_storage}"
+tenant_tier = "${TF_VAR_tenant_tier}"
+
+
+
+
+
+
+
+
+
+
+

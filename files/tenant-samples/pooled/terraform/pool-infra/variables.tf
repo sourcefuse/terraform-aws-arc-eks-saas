@@ -16,6 +16,11 @@ variable "namespace" {
   description = "Namespace for the resources."
 }
 
+variable "tenant_tier" {
+  type        = string
+  description = "Tenant Tier"
+}
+
 ##################################################################################
 ## database
 ##################################################################################
@@ -161,9 +166,9 @@ variable "additional_inbound_rules" {
 ##################################################################################
 ## Postgres DBs
 ##################################################################################
-variable "auditdbdatabase" {
+variable "featuredbdatabase" {
   type    = string
-  default = "audit"
+  default = "feature"
 }
 
 variable "authenticationdbdatabase" {
@@ -176,14 +181,9 @@ variable "notificationdbdatabase" {
   default = "notification"
 }
 
-variable "userdbdatabase" {
+variable "videoconfrencingdbdatabase" {
   type    = string
-  default = "user"
-}
-
-variable "productdbdatabase" {
-  type    = string
-  default = "product"
+  default = "video"
 }
 
 ###################################################################################

@@ -1,0 +1,375 @@
+# Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+strategy:
+  type: RollingUpdate
+  maxUnavailable: 0
+  maxSurge: 1
+app:
+  url: ""
+  basePath: ""
+livenessProbe:
+  enabled: false
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 7
+readinessProbe:
+  enabled: false
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+  successThreshold: 1
+  failureThreshold: 5
+
+frontend:
+  enabled: true
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-ui
+  pullPolicy: Always
+  tag: "0.0.5"
+  log_level: "info"
+  home_path: "/home"
+  replicaCount: 1
+  affinity: {}
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "2"
+  Service:
+    type: NodePort
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  extraAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+    sidecar.istio.io/inject: "false"
+    enabled: "1"
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+
+
+#Services
+#featureService
+featureService:
+  enabled: true
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-feature-toggle-service
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  db_ssl: false
+  timestamp_tolerance: 300
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /feature-service
+
+#authenticationService
+authenticationService:
+  enabled: true
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-authentication-service
+  pullPolicy: Always
+  tag: "0.0.2"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  db_ssl: false
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /authentication-service
+
+#notificationService
+notificationService:
+  enabled: true
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-notification-service
+  pullPolicy: Always
+  tag: "0.0.2"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  db_ssl: false
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /notification-service
+
+#userTenantService
+userTenantService:
+  enabled: true
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-user-tenant-service
+  pullPolicy: Always
+  tag: "0.0.3"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  db_ssl: false
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /user-tenant-service
+
+videoConfrencingService:
+  enabled: true
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-video-conferencing-service
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  db_ssl: false
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: "2048Mi"
+      cpu: "1"
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPUUtilizationPercentage: 75
+    targetMemoryUtilizationPercentage: 80
+  base_path: /video-confrencing-service
+
+#migrationJob
+migrationJob:
+#enable it when correct image has been provided
+  enabled: true
+  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-migration
+  pullPolicy: Always
+  tag: "0.0.1"
+  replicaCount: 1
+  port: 3000
+  node_env: "production"
+  log_level: "info"
+  affinity: {}
+  allowed_origins: "*"
+  imagePullPolicy:
+    enabled: "yes"
+    name: regcred
+  service:
+    type: NodePort
+    port: 3000
+    targetPort: 3000
+    protocol: TCP
+
+##Common env's
+
+#Common URL'S
+
+imagePullSecret:
+#enable it and pass the correct parameters below
+  enabled: false
+  name: regcred
+  registry: https://index.docker.io/v1/
+  username: ''
+  password: ''
+  email: sfdevops@sourcefuse.com
+
+nameOverride: ""
+
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+# fsGroup: 2000
+
+securityContext: {}
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
+
+resources: {}
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+# limits:
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
+
+extraAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "3000"
+  sidecar.istio.io/inject: "true"
+  enabled: "1"
+
+nodeSelector: {}
+
+tolerations:
+  - effect: NoSchedule
+    key: silo-node
+    operator: Equal
+    value: ${TENANT_KEY}
+
+affinity: {}
+
+#Migration Job Variable
+tenantKey: ${TENANT_KEY}
+tenantName: ${TENANT_NAME}
+tenantSecret: ${TENANT_SECRET}
+tenantID: ${TENANT_ID}
+tenantEmail: ${TENANT_EMAIL}
+adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
+userCallbackSecret: ${USER_CALLBACK_SECRET}
+
+# Frontend variable
+clientId: ${TENANT_CLIENT_ID}
+publicKey: ${TENANT_CLIENT_SECRET}
+
+tier: ${TIER}
+namespace: ${NAMESPACE}
+region: ${REGION}
+cognitodomain: ${COGNITO_DOMAIN}
+cognitoid: ${COGNITO_ID}
+cognitosecret: ${COGNITO_SECRET}
+karpenterRoleName: ${KARPENTER_ROLE}
+eksClusterName: ${EKS_CLUSTER_NAME}
+hostname: ${TENANT_HOST_NAME}
+tenant: ${TENANT_KEY}
+arn: ${WEB_IDENTITY_ROLE_ARN}
+dbhost: ${DB_HOST}
+dbport: ${DB_PORT}
+dbuser: ${DB_USER}
+dbpassword: ${DB_PASSWORD}
+dbschema: ${DB_SCHEMA}
+redishost: ${REDIS_HOST}
+redisport: ${REDIS_PORT}
+redisdatabase: ${REDIS_DATABASE}
+jwtsecret: ${JWT_SECRET}
+jwtissuer: ${JWT_ISSUER}
+authenticationdbdatabase: ${AUTH_DATABASE}
+featuredbdatabase: ${FEATURE_DATABASE}
+notificationdbdatabase: ${NOTIFICATION_DATABASE}
+videoconfrencingdbdatabase: ${VIDEO_CONFRENCING_DATABASE}
+instance_category: ${INSTANCE_CATEGORY}
+cognitoUserPoolID: ${COGNITO_USER_POOL_ID}
+
+# pubnub config 
+vonageSecret: /pubnub/vonage-api-key-secret
+pubnubPubKey: /pubnub/public-key
+pubnubSubKey: /pubnub/subscribe-key
+pubnubSecretKey: /pubnub/secret-key
