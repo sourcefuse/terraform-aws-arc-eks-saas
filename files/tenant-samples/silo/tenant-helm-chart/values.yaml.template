@@ -333,8 +333,6 @@ tenantName: ${TENANT_NAME}
 tenantSecret: ${TENANT_SECRET}
 tenantID: ${TENANT_ID}
 tenantEmail: ${TENANT_EMAIL}
-#cognitoUser: ${COGNITO_USER}
-#cognitoSub: ${COGNITO_USER_SUB}
 adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
 userCallbackSecret: ${USER_CALLBACK_SECRET}
 
