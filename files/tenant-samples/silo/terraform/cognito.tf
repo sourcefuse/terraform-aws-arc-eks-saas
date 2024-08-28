@@ -88,28 +88,28 @@ module "aws_cognito_user_pool" {
 ######################################################################
 ## Create Cognito User
 ######################################################################
-module "cognito_password" {
-  source      = "../modules/random-password"
-  length      = 12
-  is_special  = true
-  min_upper   = 1
-  min_numeric = 1
-  min_special = 1
-  min_lower   = 1
-}
+# module "cognito_password" {
+#   source      = "../modules/random-password"
+#   length      = 12
+#   is_special  = true
+#   min_upper   = 1
+#   min_numeric = 1
+#   min_special = 1
+#   min_lower   = 1
+# }
 
-resource "aws_cognito_user" "cognito_user" {
-  user_pool_id = module.aws_cognito_user_pool.id
-  username     = var.user_name
+# resource "aws_cognito_user" "cognito_user" {
+#   user_pool_id = module.aws_cognito_user_pool.id
+#   username     = var.user_name
 
-  attributes = {
-    email          = var.tenant_email
-    email_verified = true
-  }
-  temporary_password = module.cognito_password.result
+#   attributes = {
+#     email          = var.tenant_email
+#     email_verified = true
+#   }
+#   temporary_password = module.cognito_password.result
 
-  depends_on = [module.aws_cognito_user_pool]
-}
+#   depends_on = [module.aws_cognito_user_pool]
+# }
 
 ######################################################################
 ## Store Congito output to SSM parameneter store
@@ -139,12 +139,19 @@ module "cognito_ssm_parameters" {
       description = "Tenant Cognito Domain Secret"
     },
     {
-      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/${var.user_name}/user_sub"
-      value       = aws_cognito_user.cognito_user.sub
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id"
+      value       = module.aws_cognito_user_pool.id
       type        = "SecureString"
       overwrite   = "true"
-      description = "${var.tenant} User Cognito Sub"
+      description = "Cognito User Pool ID"
     }
+    # {
+    #   name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/${var.user_name}/user_sub"
+    #   value       = aws_cognito_user.cognito_user.sub
+    #   type        = "SecureString"
+    #   overwrite   = "true"
+    #   description = "${var.tenant} User Cognito Sub"
+    # }
   ]
   tags = module.tags.tags
 }

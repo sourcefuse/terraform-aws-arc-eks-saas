@@ -701,10 +701,10 @@ variable "tenant_email" {
   description = "tenant Email"
 }
 
-variable "user_name" {
-  type        = string
-  description = "cognito user"
-}
+# variable "user_name" {
+#   type        = string
+#   description = "cognito user"
+# }
 
 variable "tenant_name" {
   type        = string

@@ -120,6 +120,11 @@ data "aws_ssm_parameter" "cognito_secret" {
   depends_on = [module.cognito_ssm_parameters]
 }
 
+data "aws_ssm_parameter" "cognito_user_pool_id" {
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id"
+  depends_on = [module.cognito_ssm_parameters]
+}
+
 data "aws_ssm_parameter" "db_user" {
   name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/db_user"
   depends_on = [module.db_ssm_parameters]

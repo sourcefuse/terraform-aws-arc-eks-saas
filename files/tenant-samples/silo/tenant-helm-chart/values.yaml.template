@@ -333,8 +333,8 @@ tenantName: ${TENANT_NAME}
 tenantSecret: ${TENANT_SECRET}
 tenantID: ${TENANT_ID}
 tenantEmail: ${TENANT_EMAIL}
-cognitoUser: ${COGNITO_USER}
-cognitoSub: ${COGNITO_USER_SUB}
+#cognitoUser: ${COGNITO_USER}
+#cognitoSub: ${COGNITO_USER_SUB}
 adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
 userCallbackSecret: ${USER_CALLBACK_SECRET}
 
@@ -368,6 +368,7 @@ featuredbdatabase: ${FEATURE_DATABASE}
 notificationdbdatabase: ${NOTIFICATION_DATABASE}
 videoconfrencingdbdatabase: ${VIDEO_CONFRENCING_DATABASE}
 instance_category: ${INSTANCE_CATEGORY}
+cognitoUserPoolID: ${COGNITO_USER_POOL_ID}
 
 # pubnub config 
 vonageSecret: /pubnub/vonage-api-key-secret

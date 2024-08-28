@@ -114,8 +114,8 @@ data "template_file" "helm_values_template" {
     TENANT_EMAIL     = var.tenant_email
     TENANT_SECRET    = var.tenant_secret
     TENANT_ID        = var.tenant_id
-    COGNITO_USER     = var.user_name
-    COGNITO_USER_SUB = aws_cognito_user.cognito_user.sub
+    # COGNITO_USER     = var.user_name
+    # COGNITO_USER_SUB = aws_cognito_user.cognito_user.sub
 
     TIER = var.tenant_tier
     TENANT_CLIENT_ID      = var.tenant_client_id
@@ -144,6 +144,7 @@ data "template_file" "helm_values_template" {
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
     VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
     INSTANCE_CATEGORY     = var.karpenter_instance_category
+    COGNITO_USER_POOL_ID = data.aws_ssm_parameter.cognito_user_pool_id.name
   }
 }
 
