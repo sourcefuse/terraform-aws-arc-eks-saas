@@ -89,7 +89,8 @@ data "aws_iam_policy_document" "ssm_policy" {
       "ssm:GetParameters",
       "ssm:GetParameter",
       "ssm:DescribeParameters",
-      "ssm:DeleteParameters"
+      "ssm:DeleteParameters",
+      "cognito-idp:*"
     ]
     resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/*",
       "arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/pubnub/*",
@@ -112,6 +113,11 @@ data "aws_ssm_parameter" "cognito_domain" {
 
 data "aws_ssm_parameter" "cognito_id" {
   name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_id"
+  depends_on = [module.cognito_ssm_parameters]
+}
+
+data "aws_ssm_parameter" "cognito_user_pool_id" {
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id"
   depends_on = [module.cognito_ssm_parameters]
 }
 

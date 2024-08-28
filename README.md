@@ -48,6 +48,8 @@ For more details, you can go through the [eks saas architecture documentation](d
 5. Create a [codepipeline connection for github](https://docs.aws.amazon.com/codepipeline/latest/userguide/connections-github.html) with your github account and repository.
 6. If you want to use client-vpn to access opensearch dashboard then enable it using variable defined in `.tfvars` file of `terraform/client-vpn` folder. [follow [doc](doc/client-vpn-connection.md) to connect with VPN ]
 
+6. We are using pubnub and vonage credentials for the application plane and we have stored them in parameter store so if you want to use the same application plane then create your own credentials and store them in parameter store. Please check application helm chart and values.yaml.template file stored in `files/tenant-samples` folder for pubnub configuration.
+
 
 ## Setting up the environment
 
