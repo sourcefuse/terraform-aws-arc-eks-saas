@@ -1,8 +1,5 @@
 version: 0.2
 
-# env:
-#   variables:
-#     WEBHOOK_PATH: tenant-templates/silo/webhook.js
 
 phases:
   install:
@@ -70,7 +67,6 @@ phases:
       - export TF_VAR_environment="${ENVIRONMENT}"
       - export TF_VAR_region="${AWS_REGION}"
       - export TF_VAR_tenant="${KEY}"
-      # - export TF_VAR_user_name="${USERNAME}"
       - export TF_VAR_tenant_email="${TENANT_ADMIN_EMAIL}"
       - export TF_VAR_domain_name="${DOMAIN_NAME}"
       - export TF_VAR_tenant_name="${TENANT_NAME}"
@@ -112,16 +108,13 @@ phases:
 
       # Run Terraform to create infra and apply helm  
       - terraform init --backend-config=config.${KEY}.hcl
-      #- terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
-      #- chmod +x push-values.sh 
-      #- ./push-values.sh # push values to tenant management gitops repository
-      #- kubectl apply -f argocd-application.yaml --namespace argocd || true
-      #- sleep 240 # waiting time to spin up tenant pods 
-      - terraform destroy -auto-approve --refresh=false  # refresh is false to avoid API hitting
-      #- kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
-      
-      # fetching cognito user sub as it will be created once terraform will be applied successfully
-      # - export COGNITO_AUTH_ID=$(aws ssm get-parameter --name /${NAMESPACE}/${ENVIRONMENT}/${TIER}/${KEY}/${USERNAME}/user_sub --region ${AWS_REGION} --query "Parameter.Value" --output text --with-decryption)
+      - terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
+      - chmod +x push-values.sh 
+      - ./push-values.sh # push values to tenant management gitops repository
+      - kubectl apply -f argocd-application.yaml --namespace argocd || true
+      - sleep 240 # waiting time to spin up tenant pods 
+      - terraform apply -auto-approve --refresh=false  # refresh is false to avoid API hitting
+      - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     finally:
       - node $WEBHOOK_PATH
      
@@ -130,8 +123,8 @@ phases:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=0
-      #- node $WEBHOOK_PATH
-      #- python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
+      - node $WEBHOOK_PATH
+      - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
 
 
 
