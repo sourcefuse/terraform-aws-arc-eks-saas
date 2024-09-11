@@ -34,7 +34,7 @@ resource "opensearch_role" "tenant_index_role" {
   cluster_permissions = ["cluster_composite_ops_ro"]
 
   index_permissions {
-    index_patterns = ["${each.value}*", "logs-pooled-${each.value}*"]
+    index_patterns = ["${each.value}*", "logs-${each.value}*"]
     allowed_actions = [
       "get",
       "search",
@@ -76,7 +76,7 @@ resource "opensearch_dashboard_object" "test_index_pattern_v7" {
     "_source" : {
       "type" : "index-pattern",
       "index-pattern" : {
-        "title" : "logs-pooled-${each.value}*",
+        "title" : "logs-${each.value}*",
         "timeFieldName" : "timestamp"
       }
     }
