@@ -128,6 +128,36 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
+          - name: AUTH_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: AUTH_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: AUTH_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: AUTH_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: AUTH_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUTHENTICATION-SERVICE_DB_DATABASE
+          - name: AUTH_DB_SCHEMA
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_SCHEMA
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
