@@ -183,8 +183,8 @@ spec:
             value: {{ .Values.cognitoSub }}
 {{- if .Values.marketPlaceIntegration.enabled }}
           - name: MARKETPLACE_USER_NAME
-            value: {{ .Values.marketplaceUser }}
+            value: {{ .Values.marketPlaceIntegration.marketplaceUser }}
           - name: MARKETPLACE_USER_EMAIL
-            value: {{ .Values.marketplaceUserEmail }}
+            value: {{ .Values.marketPlaceIntegration.marketplaceUserEmail }}
 {{- end }}
 {{- end }}
