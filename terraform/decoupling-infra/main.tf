@@ -176,6 +176,8 @@ module "lambda_function_container_image" {
     EVENT_BUS_NAME = "${var.namespace}-${var.environment}-DecouplingEventBus"
     DATA_STORE_TABLE="${var.namespace}-${var.environment}-orchestrator-service-data-store"
     DYNAMO_DB_REGION="${var.region}"
+    TENANT_FACADE_BASE = "${var.control_plane_host}/tenant-mgmt-facade"
+    PRIVATE_KEY = "${data.aws_ssm_parameter.marketplace_private_key.value}"
   }
 
   publish = true
@@ -283,7 +285,7 @@ module "eventbridge" {
   rules = {
     Decoupling-Event = {
       description   = "Decoupling Event Rule"
-      event_pattern = jsonencode({ "detail-type": ["TENANT_PROVISIONING", "TENANT_DEPROVISIONING", "TENANT_PROVISIONING_SUCCESS","TENANT_PROVISIONING_FAILURE","TENANT_DEPLOYMENT","TENANT_DEPLOYMENT_SUCCESS","TENANT_DEPLOYMENT_FAILURE"] })
+      event_pattern = jsonencode({ "detail-type": ["TENANT_PROVISIONING", "TENANT_DEPROVISIONING", "TENANT_PROVISIONING_SUCCESS","TENANT_PROVISIONING_FAILURE","TENANT_DEPLOYMENT","TENANT_DEPLOYMENT_SUCCESS","TENANT_DEPLOYMENT_FAILURE","TENANT_REGISTRATION"] })
       enabled       = true
     }
   }

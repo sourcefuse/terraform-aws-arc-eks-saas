@@ -56,49 +56,13 @@ frontend:
     targetCPUUtilizationPercentage: 75
     targetMemoryUtilizationPercentage: 80
 
-#tenantMgmtMktPlaceFacade
-tenantMgmtMktPlaceFacade:
-  enabled: true
-  repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-facade
-  pullPolicy: Always
-  tag: "0.0.3-marketplace"
-  replicaCount: 1
-  port: 3000
-  node_env: "production"
-  log_level: "info"
-  from_email: ${FROM_EMAIL}
-  csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
-  affinity: {}
-  allowed_origins: "*"
-  imagePullPolicy:
-    enabled: "yes"
-    name: regcred
-  resources:
-    requests:
-      memory: "128Mi"
-      cpu: "100m"
-    limits:
-      memory: "2048Mi"
-      cpu: "1"
-  service:
-    type: NodePort
-    port: 3000
-    targetPort: 3000
-    protocol: TCP
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 1
-    targetCPUUtilizationPercentage: 75
-    targetMemoryUtilizationPercentage: 80
-  base_path: /tenant-mgmt-mktplace-facade
 
 #tenantMgmtFacade
 tenantMgmtFacade:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-facade
   pullPolicy: Always
-  tag: "0.0.3"
+  tag: "0.0.3-marketplace"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -354,7 +318,7 @@ migrationJob:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-migration
   pullPolicy: Always
-  tag: "0.0.2"
+  tag: "0.0.2-marketplace"
   replicaCount: 1
   affinity: {}
   allowed_origins: "*"
@@ -374,6 +338,10 @@ migrationJob:
     targetPort: 3000
     protocol: TCP
 
+marketPlaceIntegration:
+  enabled: true
+  marketplaceUser: 'awsmarketplace'
+  marketplaceUserEmail: 'sfdevops@sourcefuse.com'
 
 imagePullSecret:
 #enable it and pass the correct parameters below

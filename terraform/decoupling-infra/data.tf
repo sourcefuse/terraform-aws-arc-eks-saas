@@ -11,6 +11,10 @@ data "aws_ssm_parameter" "codebuild_role" {
   name = "/${var.namespace}/${var.environment}/codebuild_role"
 }
 
+data "aws_ssm_parameter" "marketplace_private_key" {
+  name = "/${var.namespace}/${var.environment}/marketplace_private_key"
+}
+
 data "aws_ssm_parameter" "api_gw_url" {
     name = "/${var.namespace}/${var.environment}/api_gw_arn"
     depends_on = [module.api_gw_ssm_parameters]
