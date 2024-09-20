@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-ui
   pullPolicy: Always
-  tag: "0.0.5"
+  tag: "0.0.6"
   log_level: "info"
   home_path: "/main/home"
   replicaCount: 1
@@ -135,7 +135,7 @@ authenticationService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-authentication-service
   pullPolicy: Always
-  tag: "0.0.2"
+  tag: "0.0.1"
   replicaCount: 1
   port: 3000
   node_env: "production"
