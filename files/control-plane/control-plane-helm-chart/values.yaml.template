@@ -68,6 +68,7 @@ tenantMgmtFacade:
   node_env: "production"
   log_level: "info"
   from_email: ${FROM_EMAIL}
+  gateway_id: "gw_AzZixbUOpHyVCAJM"
   csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
   affinity: {}
   allowed_origins: "*"
@@ -213,6 +214,8 @@ subscriptionService:
   port: 3000
   node_env: "production"
   log_level: "info"
+  site: "sunnytyagiplus6-test"
+  api_key: "test_dw4pcuXuEqQ1cufcdg6GfeRUZpCSRHxOW37"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
