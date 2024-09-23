@@ -26,6 +26,10 @@ variable "tenant_id" {
   description = "Tenat unique ID"
 }
 
+variable "IdP" {
+  type = string
+  description = "Tenant Identity Provider"
+}
 ##################################################################################
 ## database
 ##################################################################################
