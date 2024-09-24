@@ -158,6 +158,16 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: DB_SCHEMA
+          - name: PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PRIVATE_KEY
+          - name: PUBLIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBLIC_KEY
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}

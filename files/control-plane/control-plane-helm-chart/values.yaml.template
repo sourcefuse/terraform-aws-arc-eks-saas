@@ -458,3 +458,5 @@ tenantmgmtdbdatabase: ${TENANT_MGMT_DATABASE}
 cognitodomain: ${COGNITO_DOMAIN}
 cognitoid: ${COGNITO_ID}
 cognitosecret: ${COGNITO_SECRET}
+privateKey: ${PRIVATE_KEY}
+publicKey: ${PUBLIC_KEY}

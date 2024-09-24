@@ -18,6 +18,13 @@ data "aws_ssm_parameter" "github_repo" {
    name = "/github_saas_repo"
 }
 
+data "aws_ssm_parameter" "private_key" {
+  name = "/sf-arc-saas/dev/private-key"
+}
+
+data "aws_ssm_parameter" "public_key" {
+  name = "/sf-arc-saas/dev/public-key"
+}
 ############################################################################
 ## EKS data
 ############################################################################
