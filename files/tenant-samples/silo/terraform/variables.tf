@@ -29,6 +29,11 @@ variable "tenant_id" {
 variable "IdP" {
   type = string
   description = "Tenant Identity Provider"
+  default = "cognito"
+  validation {
+    condition     = contains(["cognito", "auth0", "keycloak"], var.idp)
+    error_message = "The idp must be either 'cognito', 'auth0', or 'keycloak'."
+  }
 }
 ##################################################################################
 ## database

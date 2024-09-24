@@ -103,21 +103,19 @@ resource "kubernetes_namespace" "my_namespace" {
   }
 }
 
-# generate tenant specific helm values.yaml file
+# generate tenant specific helm values.yaml file based on IdP configuration
 
 data "template_file" "helm_values_template" {
-  template = file("${path.module}/../tenant-helm-chart/values.yaml.template")
+  count = var.IdP == "cognito" ? 1 : 0
+  template = file("${path.module}/../tenant-helm-chart/cognito/values.yaml.template")
   vars = {
-    NAMESPACE        = local.kubernetes_ns
-    TENANT_NAME      = var.tenant_name
-    TENANT_KEY       = var.tenant
-    TENANT_EMAIL     = var.tenant_email
-    TENANT_SECRET    = var.tenant_secret
-    TENANT_ID        = var.tenant_id
-    # COGNITO_USER     = var.user_name
-    # COGNITO_USER_SUB = aws_cognito_user.cognito_user.sub
-
-    TIER = var.tenant_tier
+    NAMESPACE             = local.kubernetes_ns
+    TENANT_NAME           = var.tenant_name
+    TENANT_KEY            = var.tenant
+    TENANT_EMAIL          = var.tenant_email
+    TENANT_SECRET         = var.tenant_secret
+    TENANT_ID             = var.tenant_id
+    TIER                  = var.tenant_tier
     TENANT_CLIENT_ID      = var.tenant_client_id
     TENANT_CLIENT_SECRET  = var.tenant_client_secret
     REGION                = var.region
@@ -148,6 +146,42 @@ data "template_file" "helm_values_template" {
   }
 }
 
+data "template_file" "helm_values_template" {
+  count = var.IdP == "auth0" ? 1 : 0
+  template = file("${path.module}/../tenant-helm-chart/auth0/values.yaml.template")
+  vars = {
+    NAMESPACE                       = local.kubernetes_ns
+    TENANT_NAME                     = var.tenant_name
+    TENANT_KEY                      = var.tenant
+    TENANT_EMAIL                    = var.tenant_email
+    TENANT_SECRET                   = var.tenant_secret
+    TENANT_ID                       = var.tenant_id
+    TIER                            = var.tenant_tier
+    TENANT_CLIENT_ID                = var.tenant_client_id
+    TENANT_CLIENT_SECRET            = var.tenant_client_secret
+    REGION                          = var.region
+    KARPENTER_ROLE                  = var.karpenter_role
+    EKS_CLUSTER_NAME                = var.cluster_name
+    TENANT_HOST_NAME                = var.tenant_host_domain
+    USER_CALLBACK_SECRET            = var.user_callback_secret
+    WEB_IDENTITY_ROLE_ARN           = module.tenant_iam_role.arn
+    DB_HOST                         = data.aws_ssm_parameter.db_host.name
+    DB_PORT                         = data.aws_ssm_parameter.db_port.name
+    DB_USER                         = data.aws_ssm_parameter.db_user.name
+    DB_PASSWORD                     = data.aws_ssm_parameter.db_password.name
+    DB_SCHEMA                       = data.aws_ssm_parameter.db_schema.name
+    REDIS_HOST                      = data.aws_ssm_parameter.redis_host.name
+    REDIS_PORT                      = data.aws_ssm_parameter.redis_port.name
+    REDIS_DATABASE                  = data.aws_ssm_parameter.redis_database.name
+    JWT_SECRET                      = data.aws_ssm_parameter.jwt_secret.name
+    JWT_ISSUER                      = data.aws_ssm_parameter.jwt_issuer.name
+    AUTH_DATABASE                   = data.aws_ssm_parameter.authenticationdbdatabase.name
+    FEATURE_DATABASE                = data.aws_ssm_parameter.featuredbdatabase.name
+    NOTIFICATION_DATABASE           = data.aws_ssm_parameter.notificationdbdatabase.name
+    VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
+    INSTANCE_CATEGORY               = var.karpenter_instance_category
+  }
+}
 
 resource "local_file" "helm_values" {
   filename = "${path.module}/output/${var.tenant}-values.yaml"
@@ -158,6 +192,7 @@ resource "local_file" "helm_values" {
 ## Register Tenant Helm App on ArgoCD
 ###############################################################################################
 resource "local_file" "argocd_application" {
+  count = var.IdP == "cognito" ? 1 : 0
   content  = <<-EOT
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -172,7 +207,7 @@ spec:
     namespace: ${var.tenant_tier}-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: onboarded-tenants/silo/application
+    path: onboarded-tenants/silo/application/cognito
     repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
     targetRevision: main
     helm:
@@ -195,6 +230,44 @@ spec:
   filename = "${path.module}/argocd-application.yaml"
 }
 
+resource "local_file" "argocd_application" {
+  count = var.IdP == "auth0" ? 1 : 0
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${var.tenant_tier}-${var.tenant}
+  namespace: argocd
+  labels:
+    Tenant: ${var.tenant} 
+    Tenant_ID: ${var.tenant_id}
+spec:
+  destination:
+    namespace: ${var.tenant_tier}-${var.tenant}
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: onboarded-tenants/silo/application/auth0
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
+    targetRevision: main
+    helm:
+      valueFiles:
+        - ${var.tenant}-values.yaml
+  project: default  
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        maxDuration: 3m0s
+        factor: 2
+    automated:
+      prune: false
+      selfHeal: true
+    EOT
+  filename = "${path.module}/argocd-application.yaml"
+}
 #######################################################################################
 ## Register Tenant Terraform Workflow on Argo
 #######################################################################################

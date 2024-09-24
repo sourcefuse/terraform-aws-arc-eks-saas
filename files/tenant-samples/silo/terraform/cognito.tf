@@ -2,6 +2,7 @@
 ## random string
 ######################################################################
 module "cognito_domain_string" {
+  count = var.IdP == "cognito" ? 1 : 0
   source     = "../modules/random-password"
   length     = 6
   is_special = false
@@ -12,10 +13,9 @@ module "cognito_domain_string" {
 ## Cognito User Pool
 ######################################################################
 module "aws_cognito_user_pool" {
-
+  count = var.IdP == "cognito" ? 1 : 0
   source  = "lgallard/cognito-user-pool/aws"
   version = "0.24.0"
-
   user_pool_name                                        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-cognito-user-pool"
   alias_attributes                                      = var.alias_attributes
   auto_verified_attributes                              = var.auto_verified_attributes
@@ -115,6 +115,7 @@ module "aws_cognito_user_pool" {
 ## Store Congito output to SSM parameneter store
 ######################################################################
 module "cognito_ssm_parameters" {
+  count = var.IdP == "cognito" ? 1 : 0
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {

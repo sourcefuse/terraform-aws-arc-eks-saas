@@ -74,6 +74,8 @@ create_directory "onboarded-tenants/bridge/application"
 create_directory "onboarded-tenants/bridge/infra"
 create_directory "onboarded-tenants/silo"
 create_directory "onboarded-tenants/silo/application"
+create_directory "onboarded-tenants/silo/application/cognito"
+create_directory "onboarded-tenants/silo/application/auth0"
 create_directory "onboarded-tenants/silo/infra"
 
 
@@ -102,7 +104,8 @@ cp -r ../tenant-samples/bridge/modules onboarded-tenants/bridge/infra/ || { echo
 cp -r ../tenant-samples/bridge/terraform onboarded-tenants/bridge/infra/ || { echo "Failed to copy files"; exit 1; }
 rm -rf onboarded-tenants/bridge/application/values.yaml.template
 
-cp -r ../tenant-samples/silo/tenant-helm-chart/* onboarded-tenants/silo/application/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../tenant-samples/silo/tenant-helm-chart/cognito/* onboarded-tenants/silo/application/cognito/ || { echo "Failed to copy files"; exit 1; }
+cp -r ../tenant-samples/silo/tenant-helm-chart/auth0/* onboarded-tenants/silo/application/auth0/ || { echo "Failed to copy files"; exit 1; }
 cp -r ../tenant-samples/silo/tenant-helm-chart onboarded-tenants/silo/infra/ || { echo "Failed to copy files"; exit 1; }
 cp -r ../tenant-samples/silo/modules onboarded-tenants/silo/infra/ || { echo "Failed to copy files"; exit 1; }
 cp -r ../tenant-samples/silo/terraform onboarded-tenants/silo/infra/ || { echo "Failed to copy files"; exit 1; }
