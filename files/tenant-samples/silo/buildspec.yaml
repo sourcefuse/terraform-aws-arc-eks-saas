@@ -49,7 +49,7 @@ phases:
       - export USERNAME=$(echo $tenant | jq -r '.key')
       - export KEY=$(echo $tenant | jq -r '.key')
       #- export IdP=$(echo $tenant | jq -r '.IdPKey')
-      - export IdP="cognito"
+      - export IdP="auth0"
       - export TIER=$(echo "${tier}" | tr '[:upper:]' '[:lower:]')
       
       # Exporting Webhook Envs
