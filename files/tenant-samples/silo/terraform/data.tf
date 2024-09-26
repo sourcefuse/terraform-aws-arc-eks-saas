@@ -112,20 +112,17 @@ data "aws_ssm_parameter" "cognito_domain" {
 }
 
 data "aws_ssm_parameter" "cognito_id" {
-  count = var.IdP == "cognito" ? 1 : 0
-  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_id"
+  name       = var.IdP == "cognito" ? "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_id": null
   depends_on = [module.cognito_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "cognito_secret" {
-  count = var.IdP == "cognito" ? 1 : 0
-  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_secret"
+  name       = var.IdP == "cognito" ?  "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_secret": null
   depends_on = [module.cognito_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "cognito_user_pool_id" {
-  count = var.IdP == "cognito" ? 1 : 0
-  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id"
+  name       = var.IdP == "cognito" ? "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id": null
   depends_on = [module.cognito_ssm_parameters]
 }
 
