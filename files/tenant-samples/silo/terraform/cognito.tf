@@ -13,7 +13,7 @@ module "cognito_domain_string" {
 ## Cognito User Pool
 ######################################################################
 module "aws_cognito_user_pool" {
-  count = var.IdP == "cognito" ? 1 : 0
+  enabled = var.IdP == "cognito" ? true : false
   source  = "lgallard/cognito-user-pool/aws"
   version = "0.24.0"
   user_pool_name                                        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-cognito-user-pool"
