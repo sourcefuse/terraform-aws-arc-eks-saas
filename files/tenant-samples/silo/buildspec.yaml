@@ -83,7 +83,6 @@ phases:
       - export TF_VAR_rds_instance_allocated_storage="${POSTGRES_SIZE}"
       - export TF_VAR_karpenter_instance_category="${INSTANCE_CATEGORY}"
       - export TF_VAR_IdP="${IdP}"
-      - echo "${TF_VAR_IdP}"
       - export TF_VAR_tenant_client_id="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
       - export TF_VAR_tenant_client_secret=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
       - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
@@ -109,16 +108,15 @@ phases:
       - export TF_KEY=${KEY}/${KEY}.tfstate
       - envsubst < config.txt > config.${KEY}.hcl
       - envsubst <tfvariables.txt> ${KEY}.tfvars
-      - cat ${KEY}.tfvars
       # Run Terraform to create infra and apply helm  
       - terraform init --backend-config=config.${KEY}.hcl
-      - terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
-      - chmod +x push-values.sh 
-      - ./push-values.sh # push values to tenant management gitops repository
-      - kubectl apply -f argocd-application.yaml --namespace argocd || true
-      - sleep 240 # waiting time to spin up tenant pods 
-      - terraform apply -auto-approve --refresh=false  # refresh is false to avoid API hitting
-      - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
+      #- terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
+      #- chmod +x push-values.sh 
+      #- ./push-values.sh # push values to tenant management gitops repository
+      #- kubectl apply -f argocd-application.yaml --namespace argocd || true
+      #- sleep 240 # waiting time to spin up tenant pods 
+      - terraform destroy -auto-approve --refresh=false  # refresh is false to avoid API hitting
+      #- kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     finally:
       - node $WEBHOOK_PATH
      
@@ -127,8 +125,8 @@ phases:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=0
-      - node $WEBHOOK_PATH
-      - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
+      #- node $WEBHOOK_PATH
+      #- python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
 
 
 
