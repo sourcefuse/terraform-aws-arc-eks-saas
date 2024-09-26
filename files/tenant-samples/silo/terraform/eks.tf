@@ -118,9 +118,9 @@ data "template_file" "cognito_helm_values_template" {
     TENANT_CLIENT_ID      = var.tenant_client_id
     TENANT_CLIENT_SECRET  = var.tenant_client_secret
     REGION                = var.region
-    COGNITO_DOMAIN        = var.IdP == "cognito" ? data.aws_ssm_parameter.cognito_domain[0].name : null
-    COGNITO_ID            = var.IdP == "cognito" ? data.aws_ssm_parameter.cognito_id.name[0] : null
-    COGNITO_SECRET        = var.IdP == "cognito" ? data.aws_ssm_parameter.cognito_secret.name[0] : null
+    COGNITO_DOMAIN        = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_domain) > 0 ? data.aws_ssm_parameter.cognito_domain[0].name : null
+    COGNITO_ID            = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_id) > 0 ? data.aws_ssm_parameter.cognito_id[0].name : null
+    COGNITO_SECRET        = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_secret) > 0 ? data.aws_ssm_parameter.cognito_secret[0].name : null
     KARPENTER_ROLE        = var.karpenter_role
     EKS_CLUSTER_NAME      = var.cluster_name
     TENANT_HOST_NAME      = var.tenant_host_domain
@@ -141,7 +141,7 @@ data "template_file" "cognito_helm_values_template" {
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
     VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
     INSTANCE_CATEGORY               = var.karpenter_instance_category
-    COGNITO_USER_POOL_ID          = var.IdP == "cognito" ? data.aws_ssm_parameter.cognito_user_pool_id.name[0] : null
+    COGNITO_USER_POOL_ID  = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_user_pool_id) > 0 ? data.aws_ssm_parameter.cognito_user_pool_id[0].name : null
   }
 }
 
