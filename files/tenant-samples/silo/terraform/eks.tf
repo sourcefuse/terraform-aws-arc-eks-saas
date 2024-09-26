@@ -105,7 +105,7 @@ resource "kubernetes_namespace" "my_namespace" {
 
 # generate tenant specific helm values.yaml file based on IdP configuration
 
-data "template_file" "helm_values_template" {
+data "template_file" "cognito_helm_values_template" {
   count = var.IdP == "cognito" ? 1 : 0
   template = file("${path.module}/../tenant-helm-chart/cognito/values.yaml.template")
   vars = {
@@ -146,7 +146,7 @@ data "template_file" "helm_values_template" {
   }
 }
 
-data "template_file" "helm_values_template" {
+data "template_file" "auth0_helm_values_template" {
   count = var.IdP == "auth0" ? 1 : 0
   template = file("${path.module}/../tenant-helm-chart/auth0/values.yaml.template")
   vars = {
@@ -186,20 +186,20 @@ data "template_file" "helm_values_template" {
 resource "local_file" "helm_values" {
   count = var.IdP == "cognito" ? 1 : 0
   filename = "${path.module}/output/cognito/${var.tenant}-values.yaml"
-  content  = data.template_file.helm_values_template.rendered
+  content  = data.template_file.cognito_helm_values_template.rendered
 }
 
 resource "local_file" "helm_values" {
   count = var.IdP == "auth0" ? 1 : 0
   filename = "${path.module}/output/auth0/${var.tenant}-values.yaml"
-  content  = data.template_file.helm_values_template.rendered
+  content  = data.template_file.auth0_helm_values_template.rendered
 }
 
 
 ###############################################################################################
 ## Register Tenant Helm App on ArgoCD
 ###############################################################################################
-resource "local_file" "argocd_application" {
+resource "local_file" "cognito_argocd_application" {
   count = var.IdP == "cognito" ? 1 : 0
   content  = <<-EOT
 apiVersion: argoproj.io/v1alpha1
@@ -238,7 +238,7 @@ spec:
   filename = "${path.module}/argocd-application.yaml"
 }
 
-resource "local_file" "argocd_application" {
+resource "local_file" "auth0_argocd_application" {
   count = var.IdP == "auth0" ? 1 : 0
   content  = <<-EOT
 apiVersion: argoproj.io/v1alpha1
