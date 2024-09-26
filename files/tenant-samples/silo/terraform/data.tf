@@ -107,8 +107,7 @@ data "aws_route53_zone" "selected" {
 }
 
 data "aws_ssm_parameter" "cognito_domain" {
-  count = var.IdP == "cognito" ? 1 : 0
-  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_domain"
+  name       = var.IdP == "cognito" ? "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_domain": null
   depends_on = [module.cognito_ssm_parameters]
 }
 

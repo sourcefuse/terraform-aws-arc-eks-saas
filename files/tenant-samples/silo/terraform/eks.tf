@@ -141,7 +141,7 @@ data "template_file" "cognito_helm_values_template" {
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
     VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
     INSTANCE_CATEGORY               = var.karpenter_instance_category
-    COGNITO_USER_POOL_ID            = var.IdP == "cognito" ? data.aws_ssm_parameter.cognito_user_pool_id.name : null
+    COGNITO_USER_POOL_ID          = var.IdP == "cognito" ? data.aws_ssm_parameter.cognito_user_pool_id.name : null
   }
 }
 
