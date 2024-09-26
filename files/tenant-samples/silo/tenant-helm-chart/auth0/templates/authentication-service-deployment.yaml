@@ -159,21 +159,6 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
-          - name: COGNITO_AUTH_CLIENT_DOMAIN
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_DOMAIN
-          - name: COGNITO_AUTH_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_ID
-          - name: COGNITO_AUTH_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_AUTH_CLIENT_SECRET
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}

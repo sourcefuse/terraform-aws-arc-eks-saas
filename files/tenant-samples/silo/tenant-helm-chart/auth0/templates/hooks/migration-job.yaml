@@ -157,8 +157,4 @@ spec:
             value: {{ .Values.adminUserTenantId }}
           - name: REDIRECT_URL
             value: "https://{{ .Values.hostname }}/{{ .Values.frontend.home_path }}"
-          # - name: USERNAME
-          #   value: {{ .Values.cognitoUser }}
-          # - name: USER_SUB
-          #   value: {{ .Values.cognitoSub }}
 {{- end }}

@@ -343,9 +343,6 @@ publicKey: ${TENANT_CLIENT_SECRET}
 tier: ${TIER}
 namespace: ${NAMESPACE}
 region: ${REGION}
-cognitodomain: ${COGNITO_DOMAIN}
-cognitoid: ${COGNITO_ID}
-cognitosecret: ${COGNITO_SECRET}
 karpenterRoleName: ${KARPENTER_ROLE}
 eksClusterName: ${EKS_CLUSTER_NAME}
 hostname: ${TENANT_HOST_NAME}
@@ -366,7 +363,6 @@ featuredbdatabase: ${FEATURE_DATABASE}
 notificationdbdatabase: ${NOTIFICATION_DATABASE}
 videoconfrencingdbdatabase: ${VIDEO_CONFRENCING_DATABASE}
 instance_category: ${INSTANCE_CATEGORY}
-cognitoUserPoolID: ${COGNITO_USER_POOL_ID}
 
 # pubnub config 
 vonageSecret: /pubnub/vonage-api-key-secret

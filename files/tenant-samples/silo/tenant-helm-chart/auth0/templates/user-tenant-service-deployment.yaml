@@ -129,11 +129,6 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
-          - name: COGNITO_USER_POOL_ID
-            valueFrom:
-              secretKeyRef:
-                name: api-token
-                key: COGNITO_USER_POOL_ID
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
