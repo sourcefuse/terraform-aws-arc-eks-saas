@@ -83,6 +83,7 @@ phases:
       - export TF_VAR_rds_instance_allocated_storage="${POSTGRES_SIZE}"
       - export TF_VAR_karpenter_instance_category="${INSTANCE_CATEGORY}"
       - export TF_VAR_IdP="${IdP}"
+      - echo "${TF_VAR_IdP}"
       - export TF_VAR_tenant_client_id="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
       - export TF_VAR_tenant_client_secret=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
       - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
@@ -108,7 +109,7 @@ phases:
       - export TF_KEY=${KEY}/${KEY}.tfstate
       - envsubst < config.txt > config.${KEY}.hcl
       - envsubst <tfvariables.txt> ${KEY}.tfvars
-
+      - cat ${KEY}.tfvars
       # Run Terraform to create infra and apply helm  
       - terraform init --backend-config=config.${KEY}.hcl
       - terraform apply --var=canary_enabled=false -auto-approve # as tenant application is not up so canary will be run afterwards
