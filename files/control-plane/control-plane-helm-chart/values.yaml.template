@@ -69,6 +69,8 @@ tenantMgmtFacade:
   log_level: "info"
   from_email: ${FROM_EMAIL}
   gateway_id: "gw_AzZixbUOpHyVCAJM"
+  webhook_user: "sourcefuse"
+  webhook_password: "test@123"
   csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
   affinity: {}
   allowed_origins: "*"
@@ -456,3 +458,5 @@ tenantmgmtdbdatabase: ${TENANT_MGMT_DATABASE}
 cognitodomain: ${COGNITO_DOMAIN}
 cognitoid: ${COGNITO_ID}
 cognitosecret: ${COGNITO_SECRET}
+privateKey: ${PRIVATE_KEY}
+publicKey: ${PUBLIC_KEY}
