@@ -2,7 +2,6 @@
 ## random string
 ######################################################################
 module "cognito_domain_string" {
-  count = var.IdP == "cognito" ? 1 : 0
   source     = "../modules/random-password"
   length     = 6
   is_special = false
