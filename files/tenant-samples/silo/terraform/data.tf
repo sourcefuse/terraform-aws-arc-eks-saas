@@ -107,22 +107,26 @@ data "aws_route53_zone" "selected" {
 }
 
 data "aws_ssm_parameter" "cognito_domain" {
-  name       = var.IdP == "cognito" ? "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_domain": null
+  count = var.IdP == "cognito" ? 1 : 0
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_domain"
   depends_on = [module.cognito_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "cognito_id" {
-  name       = var.IdP == "cognito" ? "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_id": null
+  count = var.IdP == "cognito" ? 1 : 0
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_id"
   depends_on = [module.cognito_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "cognito_secret" {
-  name       = var.IdP == "cognito" ?  "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_secret": null
+  count = var.IdP == "cognito" ? 1 : 0
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_secret"
   depends_on = [module.cognito_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "cognito_user_pool_id" {
-  name       = var.IdP == "cognito" ? "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id": null
+  count = var.IdP == "cognito" ? 1 : 0
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id"
   depends_on = [module.cognito_ssm_parameters]
 }
 
