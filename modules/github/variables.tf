@@ -22,7 +22,7 @@ variable "homepage_url" {
 
 variable "visibility" {
   type        = string
-  default     = "public"
+  default     = "private"
   description = "(Optional) Visibility of the repository. Can be public, private or internal"
 
   validation {
