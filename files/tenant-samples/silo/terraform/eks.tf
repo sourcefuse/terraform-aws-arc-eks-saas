@@ -106,6 +106,7 @@ resource "kubernetes_namespace" "my_namespace" {
 # generate tenant specific helm values.yaml file based on IdP configuration
 
 data "template_file" "cognito_helm_values_template" {
+  count = var.IdP == "cognito" ? 1 : 0
   template = file("${path.module}/../tenant-helm-chart/cognito/values.yaml.template")
   vars = {
     NAMESPACE             = local.kubernetes_ns
@@ -118,9 +119,9 @@ data "template_file" "cognito_helm_values_template" {
     TENANT_CLIENT_ID      = var.tenant_client_id
     TENANT_CLIENT_SECRET  = var.tenant_client_secret
     REGION                = var.region
-    COGNITO_DOMAIN        = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_domain) > 0 ? data.aws_ssm_parameter.cognito_domain[0].name : null
-    COGNITO_ID            = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_id) > 0 ? data.aws_ssm_parameter.cognito_id[0].name : null
-    COGNITO_SECRET        = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_secret) > 0 ? data.aws_ssm_parameter.cognito_secret[0].name : null
+    COGNITO_DOMAIN        = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_domain) > 0 ? data.aws_ssm_parameter.cognito_domain[count.index].name : null
+    COGNITO_ID            = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_id) > 0 ? data.aws_ssm_parameter.cognito_id[count.index].name : null
+    COGNITO_SECRET        = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_secret) > 0 ? data.aws_ssm_parameter.cognito_secret[count.index].name : null
     KARPENTER_ROLE        = var.karpenter_role
     EKS_CLUSTER_NAME      = var.cluster_name
     TENANT_HOST_NAME      = var.tenant_host_domain
@@ -141,11 +142,12 @@ data "template_file" "cognito_helm_values_template" {
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
     VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
     INSTANCE_CATEGORY               = var.karpenter_instance_category
-    COGNITO_USER_POOL_ID  = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_user_pool_id) > 0 ? data.aws_ssm_parameter.cognito_user_pool_id[0].name : null
+    COGNITO_USER_POOL_ID  = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_user_pool_id) > 0 ? data.aws_ssm_parameter.cognito_user_pool_id[count.index].name : null
   }
 }
 
 data "template_file" "auth0_helm_values_template" {
+  count = var.IdP == "auth0" ? 1 : 0
   template = file("${path.module}/../tenant-helm-chart/auth0/values.yaml.template")
   vars = {
     NAMESPACE                       = local.kubernetes_ns
@@ -184,13 +186,13 @@ data "template_file" "auth0_helm_values_template" {
 resource "local_file" "cognito_helm_values" {
   count = var.IdP == "cognito" ? 1 : 0
   filename = "${path.module}/output/cognito/${var.tenant}-values.yaml"
-  content  = data.template_file.cognito_helm_values_template.rendered
+  content  = data.template_file.cognito_helm_values_template[count.index].rendered
 }
 
 resource "local_file" "auth0_helm_values" {
   count = var.IdP == "auth0" ? 1 : 0
   filename = "${path.module}/output/auth0/${var.tenant}-values.yaml"
-  content  = data.template_file.auth0_helm_values_template.rendered
+  content  = data.template_file.auth0_helm_values_template[count.index].rendered
 }
 
 
