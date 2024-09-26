@@ -184,9 +184,17 @@ data "template_file" "helm_values_template" {
 }
 
 resource "local_file" "helm_values" {
-  filename = "${path.module}/output/${var.tenant}-values.yaml"
+  count = var.IdP == "cognito" ? 1 : 0
+  filename = "${path.module}/output/cognito/${var.tenant}-values.yaml"
   content  = data.template_file.helm_values_template.rendered
 }
+
+resource "local_file" "helm_values" {
+  count = var.IdP == "auth0" ? 1 : 0
+  filename = "${path.module}/output/auth0/${var.tenant}-values.yaml"
+  content  = data.template_file.helm_values_template.rendered
+}
+
 
 ###############################################################################################
 ## Register Tenant Helm App on ArgoCD
