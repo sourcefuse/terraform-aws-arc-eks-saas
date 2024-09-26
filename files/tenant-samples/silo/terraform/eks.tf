@@ -183,13 +183,13 @@ data "template_file" "auth0_helm_values_template" {
   }
 }
 
-resource "local_file" "helm_values" {
+resource "local_file" "cognito_helm_values" {
   count = var.IdP == "cognito" ? 1 : 0
   filename = "${path.module}/output/cognito/${var.tenant}-values.yaml"
   content  = data.template_file.cognito_helm_values_template.rendered
 }
 
-resource "local_file" "helm_values" {
+resource "local_file" "auth0_helm_values" {
   count = var.IdP == "auth0" ? 1 : 0
   filename = "${path.module}/output/auth0/${var.tenant}-values.yaml"
   content  = data.template_file.auth0_helm_values_template.rendered
