@@ -16,6 +16,16 @@ variable "namespace" {
   description = "Namespace for the resources."
 }
 
+variable "IdP" {
+  type = string
+  description = "Tenant Identity Provider"
+  default = "cognito"
+  validation {
+    condition     = contains(["cognito", "auth0", "keycloak"], var.IdP)
+    error_message = "The idp must be either 'cognito', 'auth0', or 'keycloak'."
+  }
+}
+
 variable "tenant_tier" {
   type = string
   description = "Tenant Tier"

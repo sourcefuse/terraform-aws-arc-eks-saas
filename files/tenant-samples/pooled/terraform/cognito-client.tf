@@ -15,6 +15,7 @@
 ## Cognito App Client
 #####################################################################################
 resource "aws_cognito_user_pool_client" "app_client" {
+  count = var.IdP == "cognito" ? 1 : 0
   name                                 = var.tenant
   user_pool_id                         = data.aws_ssm_parameter.cognito_user_pool_id.value
   allowed_oauth_flows                  = ["code"]
@@ -54,6 +55,7 @@ resource "aws_cognito_user_pool_client" "app_client" {
 ## Store Congito output to SSM parameneter store
 ######################################################################
 module "cognito_ssm_parameters" {
+  count = var.IdP == "cognito" ? 1 : 0
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {

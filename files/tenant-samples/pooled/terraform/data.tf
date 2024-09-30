@@ -94,19 +94,23 @@ data "aws_route53_zone" "selected" {
 }
 
 data "aws_ssm_parameter" "cognito_user_pool_id" {
+  count = var.IdP == "cognito" ? 1 : 0
   name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_user_pool_id"
 }
 
 data "aws_ssm_parameter" "cognito_domain" {
+  count = var.IdP == "cognito" ? 1 : 0
   name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_domain"
 }
 
 data "aws_ssm_parameter" "cognito_id" {
+  count = var.IdP == "cognito" ? 1 : 0
   name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_id"
   depends_on = [module.cognito_ssm_parameters]
 }
 
 data "aws_ssm_parameter" "cognito_secret" {
+  count = var.IdP == "cognito" ? 1 : 0
   name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_secret"
   depends_on = [module.cognito_ssm_parameters]
 }

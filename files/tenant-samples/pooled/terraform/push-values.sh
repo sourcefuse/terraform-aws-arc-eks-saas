@@ -43,12 +43,23 @@ git clone "${GITHUB_REPO_URL}" || { echo "Failed to clone GitHub repository"; ex
 cd "${NAMESPACE}-saas-management-repository" || { echo "Failed to change directory to cloned repository"; exit 1; }
 
 # Copy tenant values.yaml to silo directory
-if [ -d "../output" ]; then
-    cp -r ../output/* onboarded-tenants/pooled/application/ || { echo "Failed to copy files"; exit 1; }
+# if [ -d "../output" ]; then
+#     cp -r ../output/* onboarded-tenants/pooled/application/ || { echo "Failed to copy files"; exit 1; }
+# else
+#     echo "'output' folder does not exist. Skipping file copy."
+# fi
+
+if [ -d "../output/cognito" ]; then
+    cp -r ../output/cognito/* onboarded-tenants/pooled/application/cognito/ || { echo "Failed to copy cognito files"; exit 1; }
 else
-    echo "'output' folder does not exist. Skipping file copy."
+    echo "'cognito' folder does not exist. Skipping cognito file copy."
 fi
 
+if [ -d "../output/auth0" ]; then
+    cp -r ../output/auth0/* onboarded-tenants/pooled/application/auth0/ || { echo "Failed to copy auth0 files"; exit 1; }
+else
+    echo "'auth0' folder does not exist. Skipping auth0 file copy."
+fi
 # Copy tenant specific tfvars and config file to repository
 cp -r ../*.tfvars onboarded-tenants/pooled/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 
