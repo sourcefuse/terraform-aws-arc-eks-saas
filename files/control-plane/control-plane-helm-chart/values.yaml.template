@@ -27,9 +27,11 @@ frontend:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-ui
   pullPolicy: Always
-  tag: "0.0.6"
+  tag: "0.0.7"
   log_level: "info"
   home_path: "/main/home"
+  subscribe_path: "https://3cw3b6ngc1.execute-api.us-east-1.amazonaws.com/dev/subscribe"
+  apiKey: "W3eOL4KxNg4OI9KY357z67nZ3LfnPZ4Q9o3r575L"
   replicaCount: 1
   affinity: {}
   resources:

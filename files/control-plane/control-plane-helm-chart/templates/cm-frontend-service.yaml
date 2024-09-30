@@ -18,5 +18,7 @@ data:
         "tenantMgmtFacadeUrl": "{{ .Values.tenantMgmtFacade.base_path }}",
         "tenantmgmtServiceUrl": "{{ .Values.tenantMgmtService.base_path }}",
         "subscriptionServiceUrl": "{{ .Values.subscriptionService.base_path }}"
+        "subscribePath": "{{ .Values.frontend.subscribe_path }}"
+        "apiKey": "{{ .Values.frontend.apiKey }}"
       }
 {{- end}}
