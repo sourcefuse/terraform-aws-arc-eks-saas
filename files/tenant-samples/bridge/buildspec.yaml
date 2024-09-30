@@ -51,6 +51,7 @@ phases:
       - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
       - export REDIRECT_URL="${CONTROL_PLANE_HOST}/main/home"
       - export APP_PLANE_REDIRECT_URL="https://${KEY}.${DOMAIN_NAME}/home"
+      - export TENANT_MGMT_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-service"
       - export USER_CALLBACK_ENDPOINT="https://${KEY}.${DOMAIN_NAME}/user-tenant-service/user-callback"
       - export APP_PLANE_ENDPOINT_FEATURE_SERVICE="https://${KEY}.${DOMAIN_NAME}/feature-service"
       - export CLIENT_ID="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
