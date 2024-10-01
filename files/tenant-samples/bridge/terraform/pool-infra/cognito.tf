@@ -28,7 +28,7 @@ module "cognito_domain_string" {
 ## Cognito User Pool
 ######################################################################
 module "aws_cognito_user_pool" {
-
+  
   source  = "lgallard/cognito-user-pool/aws"
   version = "0.24.0"
 

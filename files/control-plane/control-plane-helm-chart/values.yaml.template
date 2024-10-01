@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-ui
   pullPolicy: Always
-  tag: "0.0.7"
+  tag: "0.0.9"
   log_level: "info"
   home_path: "/main/home"
   subscribe_path: "https://3cw3b6ngc1.execute-api.us-east-1.amazonaws.com/dev/subscribe"
@@ -64,7 +64,7 @@ tenantMgmtFacade:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-facade
   pullPolicy: Always
-  tag: "0.0.4"
+  tag: "0.0.5"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -140,7 +140,7 @@ authenticationService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-authentication-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.3"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -213,7 +213,7 @@ subscriptionService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-subscription-service
   pullPolicy: Always
-  tag: "0.0.3"
+  tag: "0.0.4"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -285,7 +285,7 @@ tenantMgmtService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-service
   pullPolicy: Always
-  tag: "0.0.4"
+  tag: "0.0.5"
   replicaCount: 1
   port: 3000
   node_env: "production"
