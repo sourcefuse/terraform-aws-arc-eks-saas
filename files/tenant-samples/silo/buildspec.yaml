@@ -48,8 +48,7 @@ phases:
       - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
       - export USERNAME=$(echo $tenant | jq -r '.key')
       - export KEY=$(echo $tenant | jq -r '.key')
-      #- export IdP=$(echo $tenant | jq -r '.IdPKey')
-      - export IdP="cognito"
+      - export IdP=$(echo $tenant | jq -r '.identityProvider')
       - export TIER=$(echo "${tier}" | tr '[:upper:]' '[:lower:]')
       
       # Exporting Webhook Envs
