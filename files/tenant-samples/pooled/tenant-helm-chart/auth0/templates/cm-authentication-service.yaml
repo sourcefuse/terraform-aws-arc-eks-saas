@@ -1,0 +1,19 @@
+{{- if .Values.authenticationService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-authentication-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+data:
+      PORT: '{{ .Values.authenticationService.port }}'
+      NODE_ENV: '{{ .Values.authenticationService.node_env }}'
+      LOG_LEVEL: '{{ .Values.authenticationService.log_level }}'
+      BASE_PATH: '{{ .Values.authenticationService.base_path }}'
+      DB_SSL: '{{ .Values.authenticationService.db_ssl }}'
+      PRIVATE_DECRYPTION_KEY: ''
+      JWT_PRIVATE_KEY: ''
+      JWT_PUBLIC_KEY: ''
+{{- end}}

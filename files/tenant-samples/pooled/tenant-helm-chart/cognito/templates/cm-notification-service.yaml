@@ -1,0 +1,16 @@
+{{- if .Values.notificationService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-notification-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+data:
+      PORT: '{{ .Values.notificationService.port }}'
+      NODE_ENV: '{{ .Values.notificationService.node_env }}'
+      LOG_LEVEL: '{{ .Values.notificationService.log_level }}'
+      BASE_PATH: '{{ .Values.notificationService.base_path }}'
+      DB_SSL: '{{ .Values.notificationService.db_ssl }}'
+{{- end}}
