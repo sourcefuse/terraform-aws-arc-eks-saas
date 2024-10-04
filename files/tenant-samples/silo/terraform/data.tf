@@ -94,6 +94,7 @@ data "aws_iam_policy_document" "ssm_policy" {
     ]
     resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/*",
                  "arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/pubnub/*",
+                 "arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/auth0-client-secret"
                  "arn:aws:cognito-idp:${var.region}:${local.sts_caller_arn}:*"]
   }
 }
