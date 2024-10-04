@@ -218,7 +218,7 @@ subscriptionService:
   log_level: "info"
   site: "sunnytyagius-test"
   api_key: "test_iUcCGYbbDuzFjRCEp3pPBullSKtvs6ln"
-  payment_gateway_id="gw_AzZixqUPYLFzJTgu"
+  payment_gateway_id: "gw_AzZixqUPYLFzJTgu"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -292,6 +292,8 @@ tenantMgmtService:
   from_email: ${FROM_EMAIL}
   system_user_id: ""
   app_login_url: ""
+  auth0_domain: "dev-db7dz4wg6ccbguer.us.auth0.com"
+  auth0_client_id: "pluqd6RqaLilAn7p1kUFkNo20bxuwUK5"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -461,3 +463,4 @@ cognitoid: ${COGNITO_ID}
 cognitosecret: ${COGNITO_SECRET}
 privateKey: ${PRIVATE_KEY}
 publicKey: ${PUBLIC_KEY}
+auth0ClientSecret: ${AUTH0_CLIENT_SECRET}

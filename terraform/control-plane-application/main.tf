@@ -205,6 +205,7 @@ data "template_file" "helm_values_template" {
     FROM_EMAIL                = var.from_email
     PRIVATE_KEY               = data.aws_ssm_parameter.private_key.name
     PUBLIC_KEY               = data.aws_ssm_parameter.public_key.name
+    AUTH0_CLIENT_SECRET      = data.aws_ssm_parameter.auth0_client_secret.name
   }
 }
 

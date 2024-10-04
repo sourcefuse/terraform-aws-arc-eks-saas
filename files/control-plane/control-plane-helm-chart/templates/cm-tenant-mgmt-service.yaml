@@ -20,4 +20,6 @@ data:
       SYSTEM_USER_ID: '{{ .Values.adminUserTenantId }}'
       EVENT_BUS_NAME: '{{ .Values.projectName }}-{{ .Values.environment }}-DecouplingEventBus'
       EVENT_BUS_REGION: '{{ .Values.region }}'
+      AUTH0_DOMAIN: '{{ .Values.tenantMgmtService.auth0_domain }}'
+      AUTH0_CLIENT_ID: '{{ .Values.tenantMgmtService.auth0_client_id }}'
 {{- end}}

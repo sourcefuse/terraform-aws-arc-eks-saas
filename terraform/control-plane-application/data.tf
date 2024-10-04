@@ -25,6 +25,10 @@ data "aws_ssm_parameter" "private_key" {
 data "aws_ssm_parameter" "public_key" {
   name = "/sf-arc-saas/dev/public-key"
 }
+
+data "aws_ssm_parameter" "auth0_client_secret" {
+  name = "/sf-arc-saas/dev/auth0-client-secret"
+}
 ############################################################################
 ## EKS data
 ############################################################################
