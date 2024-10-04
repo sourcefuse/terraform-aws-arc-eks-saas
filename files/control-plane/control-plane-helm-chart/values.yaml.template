@@ -216,8 +216,9 @@ subscriptionService:
   port: 3000
   node_env: "production"
   log_level: "info"
-  site: "sunnytyagiplus6-test"
-  api_key: "test_dw4pcuXuEqQ1cufcdg6GfeRUZpCSRHxOW37"
+  site: "sunnytyagius-test"
+  api_key: "test_iUcCGYbbDuzFjRCEp3pPBullSKtvs6ln"
+  payment_gateway_id="gw_AzZixqUPYLFzJTgu"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -323,7 +324,7 @@ migrationJob:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-migration
   pullPolicy: Always
-  tag: "0.0.3"
+  tag: "0.0.4"
   replicaCount: 1
   affinity: {}
   allowed_origins: "*"

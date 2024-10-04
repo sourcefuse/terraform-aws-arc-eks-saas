@@ -12,6 +12,7 @@ data:
       BASE_PATH: '{{ .Values.subscriptionService.base_path }}'
       SITE: '{{ .Values.subscriptionService.site }}'
       API_KEY: '{{ .Values.subscriptionService.api_key }}'
+      PAYMENT_GATEWAY_ID: '{{ .Values.subscriptionService.payment_gateway_id }}'
       WEBHOOK_USERNAME: '{{ .Values.tenantMgmtFacade.webhook_user }}'
       WEBHOOK_PASSWORD: '{{ .Values.tenantMgmtFacade.webhook_password }}'
 {{- end}}
