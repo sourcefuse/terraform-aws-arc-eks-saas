@@ -20,4 +20,6 @@ data:
       GATEWAY_ACCOUNT_ID: '{{ .Values.tenantMgmtFacade.gateway_id }}'
       WEBHOOK_USERNAME: '{{ .Values.tenantMgmtFacade.webhook_user }}'
       WEBHOOK_PASSWORD: '{{ .Values.tenantMgmtFacade.webhook_password }}'
+      AUTH0_DOMAIN: '{{ .Values.tenantMgmtService.auth0_domain }}'
+      AUTH0_CLIENT_ID: '{{ .Values.tenantMgmtService.auth0_client_id }}'
 {{- end}}

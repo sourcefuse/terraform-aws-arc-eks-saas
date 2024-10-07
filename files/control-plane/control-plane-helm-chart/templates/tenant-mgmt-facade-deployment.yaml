@@ -168,6 +168,11 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: PUBLIC_KEY
+          - name: AUTH0_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUTH0_CLIENT_SECRET
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
