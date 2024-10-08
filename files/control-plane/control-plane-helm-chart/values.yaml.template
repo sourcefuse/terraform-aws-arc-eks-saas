@@ -294,7 +294,7 @@ tenantMgmtService:
   app_login_url: ""
   auth0_domain: "dev-db7dz4wg6ccbguer.us.auth0.com"
   auth0_client_id: "pluqd6RqaLilAn7p1kUFkNo20bxuwUK5"
-  webhookSecretExpiry: "86400"
+  webhookSecretExpiry: "86400000"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
