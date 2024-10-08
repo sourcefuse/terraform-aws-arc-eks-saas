@@ -22,4 +22,5 @@ data:
       EVENT_BUS_REGION: '{{ .Values.region }}'
       AUTH0_DOMAIN: '{{ .Values.tenantMgmtService.auth0_domain }}'
       AUTH0_CLIENT_ID: '{{ .Values.tenantMgmtService.auth0_client_id }}'
+      WEBHOOK_SECRET_EXPIRY: '{{ .Values.tenantMgmtService.webhookSecretExpiry }}'
 {{- end}}
