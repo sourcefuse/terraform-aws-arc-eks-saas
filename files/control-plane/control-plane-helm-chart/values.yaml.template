@@ -300,13 +300,6 @@ tenantMgmtService:
   imagePullPolicy:
     enabled: "yes"
     name: regcred
-  resources:
-    requests:
-      memory: "128Mi"
-      cpu: "100m"
-    limits:
-      memory: "2048Mi"
-      cpu: "1"
   service:
     type: NodePort
     port: 3000
