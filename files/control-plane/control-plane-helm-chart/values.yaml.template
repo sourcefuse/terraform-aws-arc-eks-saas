@@ -216,9 +216,9 @@ subscriptionService:
   port: 3000
   node_env: "production"
   log_level: "info"
-  site: "sunnytyagius-test"
-  api_key: "test_iUcCGYbbDuzFjRCEp3pPBullSKtvs6ln"
-  payment_gateway_id: "gw_AzZixqUPYLFzJTgu"
+  site: "sourcefuse-arc-test"
+  api_key: "test_U3Ac7r41QHHc54O7SZucdndPmaJVBFcuNn"
+  payment_gateway_id: "gw_16CcLPUQmL1KGV41"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
