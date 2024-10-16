@@ -342,6 +342,7 @@ publicKey: ${TENANT_CLIENT_SECRET}
 
 tier: ${TIER}
 namespace: ${NAMESPACE}
+project: ${PROJECT}
 region: ${REGION}
 cognitodomain: ${COGNITO_DOMAIN}
 cognitoid: ${COGNITO_ID}

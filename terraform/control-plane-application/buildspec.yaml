@@ -45,6 +45,15 @@ phases:
       - chmod +x push-helm-values.sh 
       - ./push-helm-values.sh # push control-plane values yaml to tenant management gitops repository
       - kubectl apply -f control-plane-argocd-application.yaml --namespace argocd || true
+      - cd ..
+      # To run keycloak
+      - cd keycloak
+      - rm config.hcl
+      - sed -i 's/aws_region/${var.region}/g' config.txt
+      - envsubst < config.txt > config.${var.environment}.hcl
+      - terraform init --backend-config=config.${var.environment}.hcl
+      - terraform plan
+      - terraform apply --auto-approve
 
   post_build:
     commands:

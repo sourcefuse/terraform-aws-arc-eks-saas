@@ -22,6 +22,7 @@ resource "aws_synthetics_canary" "main" {
   schedule {
     expression = "rate(6 minutes)"
   }
+  tags = module.tags.tags
 
 }
 

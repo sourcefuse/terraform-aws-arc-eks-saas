@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  hosts:
+    - "keycloak.arc-saas.net"
+  gateways:
+    - keycloak
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: keycloak
+            port:
+              number: 80

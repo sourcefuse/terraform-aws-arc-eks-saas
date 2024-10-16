@@ -22,7 +22,7 @@ resource "aws_synthetics_canary" "main" {
   schedule {
     expression = "rate(6 minutes)"
   }
-
+  tags = module.tags.tags
 }
 
 data "archive_file" "canary_zip_inline" {

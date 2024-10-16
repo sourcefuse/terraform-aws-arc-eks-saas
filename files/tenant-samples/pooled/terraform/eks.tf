@@ -107,6 +107,7 @@ data "template_file" "cognito_helm_values_template" {
   template = file("${path.module}/../tenant-helm-chart/cognito/values.yaml.template")
   vars = {
     NAMESPACE        = local.kubernetes_ns
+    PROJECT          = var.namespace
     TENANT_NAME      = var.tenant_name
     TENANT_KEY       = var.tenant
     TENANT_EMAIL     = var.tenant_email
@@ -148,6 +149,7 @@ data "template_file" "auth0_helm_values_template" {
   template = file("${path.module}/../tenant-helm-chart/auth0/values.yaml.template")
   vars = {
     NAMESPACE        = local.kubernetes_ns
+    PROJECT          = var.namespace
     TENANT_NAME      = var.tenant_name
     TENANT_KEY       = var.tenant
     TENANT_EMAIL     = var.tenant_email

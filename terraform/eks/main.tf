@@ -107,6 +107,7 @@ module "eks_cluster" {
   ]
   map_additional_iam_users = var.map_additional_iam_users
   allowed_cidr_blocks      = [data.aws_vpc.vpc.cidr_block]
+  tags = module.tags.tags
 }
 
 #################################################################################

@@ -77,6 +77,10 @@ module "postgresql_provider" {
     "feature_db" = {
       db_name           = var.featuretoggledbdatabase
       allow_connections = true
+    },
+    "keycloak_db" = {
+      db_name           = var.keycloakdbdatabase
+      allow_connections = true
     }
 
   }
@@ -147,6 +151,13 @@ module "db_ops_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Feature Toggle Database Name"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/keycloakdbdatabase"
+      value       = var.keycloakdbdatabase
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Keycloak Database Name"
     }
   ]
   tags = module.tags.tags

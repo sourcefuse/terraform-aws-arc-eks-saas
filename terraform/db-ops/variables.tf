@@ -70,3 +70,8 @@ variable "featuretoggledbdatabase" {
   type    = string
   default = "feature"
 }
+
+variable "keycloakdbdatabase" {
+  type    = string
+  default = "keycloak"
+}

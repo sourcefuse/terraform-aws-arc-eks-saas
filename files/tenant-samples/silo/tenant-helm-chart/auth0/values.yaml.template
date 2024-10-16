@@ -342,6 +342,7 @@ publicKey: ${TENANT_CLIENT_SECRET}
 
 tier: ${TIER}
 namespace: ${NAMESPACE}
+project: ${PROJECT}
 region: ${REGION}
 karpenterRoleName: ${KARPENTER_ROLE}
 eksClusterName: ${EKS_CLUSTER_NAME}

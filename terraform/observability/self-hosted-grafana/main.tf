@@ -114,6 +114,7 @@ module "prometheus" {
   source                   = "../../../modules/eks-monitoring"
   service_account_role_arn = module.prometheus_service_account_role.arn
   eks_cluster_id           = "${var.namespace}-${var.environment}-eks-cluster"
+  tags = module.tags.tags
 }
 
 

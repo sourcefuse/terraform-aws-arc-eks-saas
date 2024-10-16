@@ -59,6 +59,7 @@ spec:
   tags:
     Tenant: {{ .Values.tenant }}
     Tenant_ID: {{ .Values.tenantID }}
+    Project: {{ .Values.project }}
 
 
 
