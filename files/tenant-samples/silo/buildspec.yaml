@@ -114,7 +114,7 @@ phases:
       - chmod +x push-values.sh 
       - ./push-values.sh # push values to tenant management gitops repository
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
-      - sleep 240 # waiting time to spin up tenant pods 
+      - sleep 300 # waiting time to spin up tenant pods 
       #- terraform apply -auto-approve --refresh=false  # refresh is false to avoid API hitting
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     finally:
