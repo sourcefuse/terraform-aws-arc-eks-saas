@@ -17,7 +17,7 @@
 resource "aws_cognito_user_pool_client" "app_client" {
   count = var.IdP == "cognito" ? 1 : 0
   name                                 = var.tenant
-  user_pool_id                         = data.aws_ssm_parameter.cognito_user_pool_id.value
+  user_pool_id                         = data.aws_ssm_parameter.cognito_user_pool_id[0].value
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes                 = ["phone", "email", "openid", "aws.cognito.signin.user.admin"]

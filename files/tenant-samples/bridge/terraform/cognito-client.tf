@@ -1,23 +1,10 @@
-######################################################################
-## Create Cognito User
-######################################################################
-# module "cognito_password" {
-#   source      = "../modules/random-password"
-#   length      = 12
-#   is_special  = true
-#   min_upper   = 1
-#   min_numeric = 1
-#   min_special = 1
-#   min_lower   = 1
-# }
-
 #####################################################################################
 ## Cognito App Client
 #####################################################################################
 resource "aws_cognito_user_pool_client" "app_client" {
   count = var.IdP == "cognito" ? 1 : 0
   name                                 = var.tenant
-  user_pool_id                         = data.aws_ssm_parameter.cognito_user_pool_id.value
+  user_pool_id                         = data.aws_ssm_parameter.cognito_user_pool_id[0].value
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes                 = ["phone", "email", "openid", "aws.cognito.signin.user.admin"]
@@ -38,18 +25,6 @@ resource "aws_cognito_user_pool_client" "app_client" {
     refresh_token = "days"
   }
 }
-
-# resource "aws_cognito_user" "cognito_user" {
-#   user_pool_id = data.aws_ssm_parameter.cognito_user_pool_id.value
-#   username     = var.user_name
-
-#   attributes = {
-#     email          = var.tenant_email
-#     email_verified = true
-#   }
-#   temporary_password = module.cognito_password.result
-
-# }
 
 ######################################################################
 ## Store Congito output to SSM parameneter store
@@ -72,13 +47,7 @@ module "cognito_ssm_parameters" {
       overwrite   = "true"
       description = "Tenant Cognito Domain Secret"
     }
-    # {
-    #   name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/${var.user_name}/user_sub"
-    #   value       = aws_cognito_user.cognito_user.sub
-    #   type        = "SecureString"
-    #   overwrite   = "true"
-    #   description = "${var.tenant} User Cognito Sub"
-    # }
+
   ]
   tags = module.tags.tags
 }
