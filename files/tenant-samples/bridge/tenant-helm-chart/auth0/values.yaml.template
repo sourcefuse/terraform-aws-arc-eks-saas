@@ -370,3 +370,4 @@ vonageSecret: /pubnub/vonage-api-key-secret
 pubnubPubKey: /pubnub/public-key
 pubnubSubKey: /pubnub/subscribe-key
 pubnubSecretKey: /pubnub/secret-key
+auth0ClientSecret: /sf-arc-saas/dev/auth0-client-secret

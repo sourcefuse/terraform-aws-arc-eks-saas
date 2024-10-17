@@ -159,6 +159,11 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
+          - name: AUTH0_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUTH0_CLIENT_SECRET
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
