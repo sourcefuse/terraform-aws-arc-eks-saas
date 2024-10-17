@@ -140,7 +140,6 @@ data "template_file" "cognito_helm_values_template" {
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
     VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
     COGNITO_USER_POOL_ID  = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_user_pool_id) > 0 ? data.aws_ssm_parameter.cognito_user_pool_id[count.index].name : null
-
   }
 }
 

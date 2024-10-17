@@ -94,7 +94,7 @@ data "aws_route53_zone" "selected" {
 }
 
 data "aws_ssm_parameter" "cognito_user_pool_id" {
-  count = var.IdP == "cognito" ? 1 : 0
+  //count = var.IdP == "cognito" ? 1 : 0
   name = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_user_pool_id"
 }
 
