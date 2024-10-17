@@ -145,6 +145,8 @@ module "cognito_ssm_parameters" {
       overwrite   = "true"
       description = "Cognito User Pool ID"
     }
+
+
     # {
     #   name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/${var.user_name}/user_sub"
     #   value       = aws_cognito_user.cognito_user.sub
