@@ -35,14 +35,14 @@ module "cognito_ssm_parameters" {
   ssm_parameters = [
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_id"
-      value       = resource.aws_cognito_user_pool_client.app_client.id
+      value       = resource.aws_cognito_user_pool_client.app_client.id[0]
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain ID"
     },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/cognito_secret"
-      value       = resource.aws_cognito_user_pool_client.app_client.client_secret
+      value       = resource.aws_cognito_user_pool_client.app_client.client_secret[0]
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Cognito Domain Secret"
