@@ -50,8 +50,8 @@ phases:
       - cd keycloak
       - rm config.hcl
       - sed -i 's/aws_region/'"$aws_region"'/g' config.txt
-      - envsubst < config.txt > config.${var.environment}.hcl
-      - terraform init --backend-config=config.${var.environment}.hcl
+      - envsubst < config.txt > config.${environment}.hcl
+      - terraform init --backend-config=config.${environment}.hcl
       - terraform plan
       - terraform apply --auto-approve
 
