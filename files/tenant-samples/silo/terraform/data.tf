@@ -95,6 +95,7 @@ data "aws_iam_policy_document" "ssm_policy" {
     resources = ["arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/*",
                  "arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/pubnub/*",
                  "arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/auth0-client-secret",
+                 "arn:aws:ssm:${var.region}:${local.sts_caller_arn}:parameter/${var.namespace}/${var.environment}/keycloak_host",
                  "arn:aws:cognito-idp:${var.region}:${local.sts_caller_arn}:*"]
   }
 }
@@ -129,6 +130,17 @@ data "aws_ssm_parameter" "cognito_user_pool_id" {
   count = var.IdP == "cognito" ? 1 : 0
   name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/cognito_user_pool_id"
   depends_on = [module.cognito_ssm_parameters]
+}
+
+data "aws_ssm_parameter" "keycloak_client_secret" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  name       = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/keycloak-client-secret"
+  depends_on = [module.keycloak_ssm_parameters]
+}
+
+data "aws_ssm_parameter" "keycloak_host" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  name = "/${var.namespace}/${var.environment}/keycloak_host"
 }
 
 data "aws_ssm_parameter" "db_user" {

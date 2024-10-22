@@ -22,4 +22,12 @@ data:
       WEBHOOK_PASSWORD: '{{ .Values.tenantMgmtFacade.webhook_password }}'
       AUTH0_DOMAIN: '{{ .Values.tenantMgmtService.auth0_domain }}'
       AUTH0_CLIENT_ID: '{{ .Values.tenantMgmtService.auth0_client_id }}'
+      KEYCLOAK_HOST: 'https://keycloak.{{ .Values.domain }}'
+      KEYCLOAK_ADMIN_USERNAME: '{{ .Values.keycloakUser }}'
+      AWS_REGION: '{{ .Values.region }}'
+      DOMAIN_NAME: '{{ .Values.domain }}'
+      AWS_SES_SMTP_HOST: 'email-smtp.{{ .Values.region }}.amazonaws.com'
+      AWS_SES_SMTP_PORT: '{{ .Values.notificationService.smtp_port }}'
+      SMTP_FROM_EMAIL: '{{ .Values.tenantMgmtService.from_email }}'
+      SMTP_FROM_DISPLAY_NAME: '{{ .Values.notificationService.smtp_display_name }}'
 {{- end}}

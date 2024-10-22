@@ -19,15 +19,19 @@ data "aws_ssm_parameter" "github_repo" {
 }
 
 data "aws_ssm_parameter" "private_key" {
-  name = "/sf-arc-saas/dev/private-key"
+  name = "/${var.namespace}/${var.environment}/private-key"
 }
 
 data "aws_ssm_parameter" "public_key" {
-  name = "/sf-arc-saas/dev/public-key"
+  name = "/${var.namespace}/${var.environment}/public-key"
 }
 
 data "aws_ssm_parameter" "auth0_client_secret" {
-  name = "/sf-arc-saas/dev/auth0-client-secret"
+  name = "/${var.namespace}/${var.environment}/auth0-client-secret"
+}
+
+data "aws_ssm_parameter" "keycloak_password" {
+  name = "/${var.namespace}/${var.environment}/keycloak_password"
 }
 ############################################################################
 ## EKS data

@@ -1,0 +1,19 @@
+{{- if .Values.featureService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-feature-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+data:
+      PORT: '{{ .Values.featureService.port }}'
+      NODE_ENV: '{{ .Values.featureService.node_env }}'
+      LOG_LEVEL: '{{ .Values.featureService.log_level }}'
+      BASE_PATH: '{{ .Values.featureService.base_path }}'
+      DB_SSL: '{{ .Values.featureService.db_ssl}}'
+      USER_CALLBACK_SECRET: '{{ .Values.userCallbackSecret }}'
+      TIMESTAMP_TOLERANCE: '{{ .Values.featureService.timestamp_tolerance}}'
+      ADMIN_USER_TENANT_ID: '{{ .Values.adminUserTenantId }}'
+{{- end}}

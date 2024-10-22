@@ -181,6 +181,7 @@ notificationService:
   node_env: "production"
   log_level: "info"
   smtp_port: "587"
+  smtp_display_name: "IDP"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -425,7 +426,8 @@ cognitoSub: ${COGNITO_USER_SUB}
 clientId: "tata-elxsi-control-plane"
 publicKey: "TrPbi0xJT"
           
-
+keycloakUser: "admin"
+keycloakPassword: ${KEYCLOAK_PASSWORD}
 saname: "control-plane"
 region: ${REGION}
 environment: ${ENVIRONMENT}

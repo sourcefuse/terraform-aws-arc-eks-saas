@@ -60,6 +60,12 @@ else
     echo "'auth0' folder does not exist. Skipping auth0 file copy."
 fi
 
+if [ -d "../output/keycloak" ]; then
+    cp -r ../output/keycloak/* onboarded-tenants/silo/application/keycloak/ || { echo "Failed to copy keycloak files"; exit 1; }
+else
+    echo "'keycloak' folder does not exist. Skipping keycloak file copy."
+fi
+
 # Copy tenant specific terraform tfvars and config file to repository
 cp -r ../*.tfvars onboarded-tenants/silo/infra/terraform/ || { echo "Failed to copy files"; exit 1; }
 

@@ -51,3 +51,41 @@ module "cognito_ssm_parameters" {
   ]
   tags = module.tags.tags
 }
+
+
+module "keycloak_client_secret" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  source     = "../modules/random-password"
+  length     = 8
+  is_special = false
+  is_upper   = true
+}
+
+module "keycloak_ssm_parameters" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  source = "../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/keycloak-client-id"
+      value       = "client-${var.tenant_tier}-${var.tenant}"
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Tenant Keycloak Client ID"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/keycloak-client-secret"
+      value       = module.keycloak_client_secret[0].result
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Tenant Keycloak Client Secret"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/keycloak-client-realm"
+      value       = "${var.tenant_tier}-${var.tenant}"
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Tenant Keycloak Client Realm"
+    }
+  ]
+  tags = module.tags.tags
+}

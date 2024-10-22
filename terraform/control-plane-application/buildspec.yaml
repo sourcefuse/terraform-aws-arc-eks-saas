@@ -49,7 +49,7 @@ phases:
       # To run keycloak
       - cd keycloak
       - rm config.hcl
-      - sed -i 's/aws_region/${var.region}/g' config.txt
+      - sed -i 's/aws_region/'"$aws_region"'/g' config.txt
       - envsubst < config.txt > config.${var.environment}.hcl
       - terraform init --backend-config=config.${var.environment}.hcl
       - terraform plan
