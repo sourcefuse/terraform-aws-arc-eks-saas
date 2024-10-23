@@ -27,6 +27,7 @@ data:
       AWS_REGION: '{{ .Values.region }}'
       DOMAIN_NAME: '{{ .Values.domain }}'
       NAMESPACE: '{{ .Values.projectName }}'
+      ENVIRONMENT: '{{ .Values.environment }}'
       AWS_SES_SMTP_HOST: 'email-smtp.{{ .Values.region }}.amazonaws.com'
       AWS_SES_SMTP_PORT: '{{ .Values.notificationService.smtp_port }}'
       SMTP_FROM_EMAIL: '{{ .Values.tenantMgmtService.from_email }}'
