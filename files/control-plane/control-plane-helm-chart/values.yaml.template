@@ -68,7 +68,7 @@ tenantMgmtFacade:
   node_env: "production"
   log_level: "info"
   from_email: ${FROM_EMAIL}
-  gateway_id: "gw_AzZixbUOpHyVCAJM"
+  gateway_id: "gw_AzZj65US1j8xP9ue"
   webhook_user: "sourcefuse"
   webhook_password: "test@123"
   csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
@@ -217,9 +217,8 @@ subscriptionService:
   port: 3000
   node_env: "production"
   log_level: "info"
-  site: "sourcefuse-arc-test"
-  api_key: "test_U3Ac7r41QHHc54O7SZucdndPmaJVBFcuNn"
-  payment_gateway_id: "gw_16CcLPUQmL1KGV41"
+  site: "sunnytyagikeycloak-test"
+  api_key: "test_kWTcGSKnJCi4y504Ges40UQHq1mfCOmG"
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
