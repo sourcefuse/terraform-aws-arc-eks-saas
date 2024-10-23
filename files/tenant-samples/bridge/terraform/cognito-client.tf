@@ -80,7 +80,7 @@ module "keycloak_ssm_parameters" {
     },
     {
       name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/keycloak-client-realm"
-      value       = "${var.tenant_tier}-${var.tenant}"
+      value       = "${var.tenant_tier}"
       type        = "SecureString"
       overwrite   = "true"
       description = "Tenant Keycloak Client Realm"

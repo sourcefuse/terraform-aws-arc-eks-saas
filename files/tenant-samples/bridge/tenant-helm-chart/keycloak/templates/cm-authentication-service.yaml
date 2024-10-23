@@ -14,7 +14,7 @@ data:
       BASE_PATH: '{{ .Values.authenticationService.base_path }}'
       DB_SSL: '{{ .Values.authenticationService.db_ssl }}'
       KEYCLOAK_HOST: '{{ .Values.keycloakHost }}'
-      KEYCLOAK_REALM: '{{ .Values.tier }}-{{ .Values.tenant }}'
+      KEYCLOAK_REALM: '{{ .Values.tier }}'
       KEYCLOAK_CLIENT_ID: 'client-{{ .Values.tier }}-{{ .Values.tenant }}'
       KEYCLOAK_CALLBACK_URL: "https://{{ .Values.hostname }}/authentication-service/auth/keycloak-auth-redirect"
 {{- end}}
