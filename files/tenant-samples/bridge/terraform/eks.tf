@@ -215,7 +215,7 @@ data "template_file" "keycloak_helm_values_template" {
     FEATURE_DATABASE        = data.aws_ssm_parameter.featuredbdatabase.name
     NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
     VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
-    KEYCLOAK_HOST                   = var.IdP == "keycloak" && length(data.aws_ssm_parameter.keycloak_host) > 0 ? data.aws_ssm_parameter.keycloak_host[count.index].name : null
+    KEYCLOAK_HOST                   = var.IdP == "keycloak" && length(data.aws_ssm_parameter.keycloak_host) > 0 ? data.aws_ssm_parameter.keycloak_host[count.index].value : null
     KEYCLOAK_CLIENT_SECRET  = var.IdP == "keycloak" && length(data.aws_ssm_parameter.keycloak_client_secret) > 0 ? data.aws_ssm_parameter.keycloak_client_secret[count.index].name : null
   }
 }

@@ -122,7 +122,7 @@ module "keycloak_ssm_parameters" {
   ssm_parameters = [
     {
       name        = "/${var.namespace}/${var.environment}/keycloak_host"
-      value       = "keycloak.${var.domain_name}"
+      value       = "https://keycloak.${var.domain_name}"
       type        = "SecureString"
       overwrite   = "true"
       description = "Keycloak Host"
