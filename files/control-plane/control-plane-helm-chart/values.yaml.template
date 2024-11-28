@@ -460,3 +460,5 @@ cognitosecret: ${COGNITO_SECRET}
 privateKey: ${PRIVATE_KEY}
 publicKey: ${PUBLIC_KEY}
 auth0ClientSecret: ${AUTH0_CLIENT_SECRET}
+stripeSecret: ${STRIPE_SECRET}
+stripeWebhookSecret: ${STRIPE_WEBHOOK_SECRET}

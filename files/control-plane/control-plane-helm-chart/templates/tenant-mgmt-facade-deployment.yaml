@@ -178,6 +178,16 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: KEYCLOAK_ADMIN_PASSWORD
+          - name: STRIPE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: STRIPE_SECRET
+          - name: STRIPE_WEBHOOK_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: STRIPE_WEBHOOK_SECRET
 {{- if .Values.ses.enabled }}
           - name: SMTP_USER
             valueFrom:
