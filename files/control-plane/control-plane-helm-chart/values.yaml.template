@@ -27,9 +27,10 @@ frontend:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-ui
   pullPolicy: Always
-  tag: "0.0.12"
+  tag: "0.0.13"
   log_level: "info"
   home_path: "/main/home"
+  stripePublicKey: "pk_test_51Pab3LKxH99wEJoTHtEFXb03dZVTYz8Kmk6u2WRdjVEx3j6tL7CKbWsF0BTPn4BphZfoUjNx8gaqn5TwjItMVtrb00VnWdC4rB"
   replicaCount: 1
   affinity: {}
   resources:
@@ -62,7 +63,7 @@ tenantMgmtFacade:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-facade
   pullPolicy: Always
-  tag: "0.0.7"
+  tag: "0.0.8"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -212,7 +213,7 @@ subscriptionService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-subscription-service
   pullPolicy: Always
-  tag: "0.0.4"
+  tag: "0.0.5"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -284,7 +285,7 @@ tenantMgmtService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-service
   pullPolicy: Always
-  tag: "0.0.7"
+  tag: "0.0.8"
   replicaCount: 1
   port: 3000
   node_env: "production"
