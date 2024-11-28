@@ -32,5 +32,4 @@ data:
       AWS_SES_SMTP_PORT: '{{ .Values.notificationService.smtp_port }}'
       SMTP_FROM_EMAIL: '{{ .Values.tenantMgmtService.from_email }}'
       SMTP_FROM_DISPLAY_NAME: '{{ .Values.notificationService.smtp_display_name }}'
-      STRIPE_SECRET: 'sk_test_51Pab3LKxH99wEJoTKBIoEWMdmTBXdtGCfGLmbrwvtSY7BBh140V0K5jgwcpiZwjkJfybK4RIx5rPeuK54J7CUgXJ00r0XUMPsj'
 {{- end}}
