@@ -33,6 +33,10 @@ data "aws_ssm_parameter" "auth0_client_secret" {
 data "aws_ssm_parameter" "keycloak_password" {
   name = "/${var.namespace}/${var.environment}/keycloak_password"
 }
+
+data "aws_ssm_parameter" "stripe_secret" {
+  name = "/sf-arc-saas/dev/stripe_webhook_secret"
+}
 ############################################################################
 ## EKS data
 ############################################################################
