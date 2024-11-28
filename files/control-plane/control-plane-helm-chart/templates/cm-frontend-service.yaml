@@ -17,7 +17,7 @@ data:
         "publicKey": "{{ .Values.publicKey }}",
         "tenantMgmtFacadeUrl": "{{ .Values.tenantMgmtFacade.base_path }}",
         "tenantmgmtServiceUrl": "{{ .Values.tenantMgmtService.base_path }}",
-        "subscriptionServiceUrl": "{{ .Values.subscriptionService.base_path }}"
+        "subscriptionServiceUrl": "{{ .Values.subscriptionService.base_path }}",
         "stripePublicKey": "{{ .Values.frontend.stripePublicKey }}"
       }
 {{- end}}
