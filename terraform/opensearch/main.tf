@@ -47,7 +47,7 @@ module "opensearch" {
   source  = "sourcefuse/arc-opensearch/aws"
   version = "0.1.8"
 
-  name           = "${var.namespace}-${var.environment}-opensearch"
+  name           = "${var.namespace}-${var.environment}-os"
   environment    = var.environment
   namespace      = var.namespace
   admin_username = var.admin_username
