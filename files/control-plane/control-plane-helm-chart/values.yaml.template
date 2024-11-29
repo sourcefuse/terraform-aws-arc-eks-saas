@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-ui
   pullPolicy: Always
-  tag: "0.0.13"
+  tag: "0.0.14"
   log_level: "info"
   home_path: "/main/home"
   stripePublicKey: "pk_test_51Pab3LKxH99wEJoTHtEFXb03dZVTYz8Kmk6u2WRdjVEx3j6tL7CKbWsF0BTPn4BphZfoUjNx8gaqn5TwjItMVtrb00VnWdC4rB"
