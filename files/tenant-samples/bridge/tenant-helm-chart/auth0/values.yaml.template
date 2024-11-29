@@ -27,7 +27,7 @@ frontend:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-application-plane-ui
   pullPolicy: Always
-  tag: "0.0.6"
+  tag: "0.0.7"
   log_level: "info"
   home_path: "/home"
   replicaCount: 1
