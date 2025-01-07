@@ -20,6 +20,10 @@ terraform {
       source  = "tls"
       version = "~> 3.1.0"
     }
+     keycloak = {
+      source = "lucdew/keycloak"
+      version = "4.7.0"
+    }
   }
 
   backend "s3" {}

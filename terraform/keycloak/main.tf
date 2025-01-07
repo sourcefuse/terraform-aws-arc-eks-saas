@@ -113,6 +113,61 @@ EOF
 
   depends_on = [resource.kubernetes_namespace.keycloak_namespace]
 }
+########################################################################
+## Configure Control Plane Keycloak Identity
+########################################################################
+provider "keycloak" {
+    client_id     = "admin-cli"
+    username      = "admin"
+    password      = "${module.keycloak_password.result}"
+    url           = "https://keycloak.arc-saas.net/"
+}
+
+resource "keycloak_realm" "control_plane_realm" {
+  realm             = "control-plane"
+  enabled           = true
+  depends_on = [helm_release.keycloak]
+}
+
+module "keycloak_control_plane_client_secret" {
+  source           = "../../modules/random-password"
+  length           = 10
+  is_special       = true
+  override_special = "!#$%&*=+"
+}
+
+resource "keycloak_openid_client" "control_plane_openid_client" {
+   realm_id = keycloak_realm.control_plane_realm.id
+   client_id           = "control-plane"
+   client_secret       = "${module.keycloak_control_plane_client_secret.result}"
+   name                = "control-plane"
+   enabled             = true
+   access_type         = "CONFIDENTIAL"
+   login_theme        = "keycloak"
+
+}
+
+module "keycloak_control_plane_admin_password" {
+  source           = "../../modules/random-password"
+  length           = 10
+  is_special       = true
+  override_special = "!#$%&*=+"
+}
+
+resource "keycloak_user" "control_plane_user" {
+  realm_id = keycloak_realm.control_plane_realm.id
+  username = "superadmin"
+  enabled  = true
+
+  email      = "harshit.kumar@sourcefuse.com"
+  initial_password {
+    value     = "${module.keycloak_control_plane_admin_password.result}"
+    temporary = true
+  }
+  email_verified = true
+  first_name = "SourceFuse"
+  last_name  = "Technologies"
+}
 
 ########################################################################
 ## Store keycloak in Parameter Store
@@ -140,6 +195,27 @@ module "keycloak_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Keycloak Password"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/control_plane_keycloak_client_id"
+      value       = "control-plane"
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Control Plan Keycloak Client ID"
+    },
+     {
+      name        = "/${var.namespace}/${var.environment}/control_plane_keycloak_client_secret"
+      value       = "${module.keycloak_control_plane_client_secret.result}"
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Control Plan Keycloak Client secret"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/control_plane_keycloak_admin_password"
+      value       = "${module.keycloak_control_plane_admin_password.result}"
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Control Plan Keycloak admin password"
     }
   ]
   tags       = module.tags.tags
