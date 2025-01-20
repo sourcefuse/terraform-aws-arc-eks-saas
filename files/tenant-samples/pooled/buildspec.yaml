@@ -18,7 +18,7 @@ phases:
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
       - npm i @aws-sdk/client-eventbridge
-      - ln -sf $EVENT_FILE_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
+      - ln -sf $EVENT_FILE_PATH /usr/local/bin/event #create symlink and will execute event.js at every phase to send event to eventbridge
     finally:
       - node $EVENT_FILE_PATH
   pre_build:
@@ -130,7 +130,7 @@ phases:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=1
-      # To run the webhook which will send notification and create tenant first admin user in pooled database
+      # To run the event.js which will  event to eventbridge
       - node $EVENT_FILE_PATH
       - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
   

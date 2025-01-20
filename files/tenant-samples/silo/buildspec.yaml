@@ -21,7 +21,7 @@ phases:
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
       - pip install boto3
       - npm i @aws-sdk/client-eventbridge
-      - ln -sf $EVENT_FILE_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
+      - ln -sf $EVENT_FILE_PATH /usr/local/bin/event #create symlink and will execute event.js at every phase to send event to eventbridge
     finally:
       - ls -la
       - node $EVENT_FILE_PATH 
