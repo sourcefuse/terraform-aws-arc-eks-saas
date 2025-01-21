@@ -176,6 +176,8 @@ serviceAccount:
 grafana.ini:
   auth:
     sigv4_auth_enabled: true
+  security:
+    allow_embedding: true
 additionalDataSources:
   - name: prometheus-amp
     editable: true
