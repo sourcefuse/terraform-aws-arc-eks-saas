@@ -178,7 +178,6 @@ grafana.ini:
     sigv4_auth_enabled: true
   security:
     allow_embedding: true
-    cookie_samesite: none
 additionalDataSources:
   - name: prometheus-amp
     editable: true
