@@ -1,5 +1,5 @@
-region         = "us-west-2"
+region         = "${REGION}"
 key            = "codepipeline/terraform.tfstate"
-bucket         = "sf-arc-saas-dev-terraform-state-ot6cv1"
-dynamodb_table = "sf-arc-saas-dev-terraform-state-lock"
+bucket         = "${TF_STATE_BUCKET}"
+dynamodb_table = "${TF_STATE_TABLE}"
 encrypt        = true
