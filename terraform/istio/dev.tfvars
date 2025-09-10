@@ -1,6 +1,6 @@
-region = "us-west-2"
+region = "us-east-1"
 environment = "dev"
-namespace = "sf-arc-saas"
+namespace = "demo-saas"
 min_pods            = 1
 max_pods            = 9
 common_name         = "arc-saas.net" #domain name supplied as common name.

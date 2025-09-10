@@ -2,6 +2,9 @@
 name: Apply - CodePipeline
 
 on:
+  push:
+    branches:
+      - feature/saas-demo
   pull_request:
     types: [closed]
     branches:
@@ -11,10 +14,7 @@ on:
       - 'terraform/core-infra-pipeline/**'
       - '.github/workflows/apply-pipeline.yaml'
       - '.github/workflows/reusable-cd-workflow.yaml'
-  workflow_run:
-    workflows: ["Apply - Bootstrap"]
-    types:
-      - completed
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

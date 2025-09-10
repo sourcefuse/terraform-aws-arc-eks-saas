@@ -1,5 +1,5 @@
-region = "us-west-2"
+region = "us-east-1"
 environment = "dev"
-namespace = "sf-arc-saas"
+namespace = "demo-saas"
 enabled     = true
 

@@ -2,17 +2,17 @@
 
 
 # Define new variable values
-NEW_AWS_REGION="us-west-2"
-NEW_NAMESPACE="sf-arc-saas"
-NEW_ENVIRONMENT="dev"
+NEW_AWS_REGION=us-east-1
+NEW_NAMESPACE=demo-saas
+NEW_ENVIRONMENT=dev
 DOMAIN="arc-saas.net"
 
 
 # Update .sh files (skip this script itself)
-find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i '' "s/AWS_REGION=.*/AWS_REGION=$NEW_AWS_REGION/g" {} +
-find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i '' "s/NAMESPACE=.*/NAMESPACE=$NEW_NAMESPACE/g" {} +
-find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i '' "s/ENVIRONMENT=.*/ENVIRONMENT=$NEW_ENVIRONMENT/g" {} +
-find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i '' "s/REGION=.*/REGION=$NEW_AWS_REGION/g" {} +
+find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i '' "s/AWS_REGION=us-east-1
+find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i '' "s/NAMESPACE=demo-saas
+find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i '' "s/ENVIRONMENT=dev
+find . -type f -name "*.sh" ! -name "$(basename "$0")" -exec sed -i '' "s/REGION=us-east-1
 
 
 # Update .tfvars files

@@ -5,8 +5,8 @@
 #!/bin/bash
 
 # Set environment variables
-export AWS_REGION=us-west-2
-export NAMESPACE=sf-arc-saas
+export AWS_REGION=us-east-1
+export NAMESPACE=demo-saas
 export ENVIRONMENT=dev
 
 # Retrieve GitHub username from SSM Parameter Store
