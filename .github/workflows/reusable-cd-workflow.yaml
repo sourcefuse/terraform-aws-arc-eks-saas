@@ -67,7 +67,7 @@ jobs:
 
       # Download tfplan artifact
       - name: Download tfplan
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: "${{ inputs.environment }}-${{ inputs.working_directory }}-${{ inputs.plan_id }}.tfplan"
           path: "terraform/${{ inputs.working_directory }}/"
