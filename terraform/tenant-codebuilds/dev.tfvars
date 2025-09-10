@@ -1,6 +1,6 @@
-region                     = "us-west-2"
-namespace                  = "sf-arc-saas"
-environment                = "dev"
+region = "us-east-1"
+namespace = "saas-demo"
+environment = "dev"
 concurrent_build_limit     = 10
 is_organization            = true         // If you are creating github repository as part of organization then set it to true.
 organization_name          = "sourcefuse" // github organization name
@@ -12,5 +12,5 @@ standard_buildspec         = "tenant-templates/bridge/buildspec.yaml"
 basic_buildspec            = "tenant-templates/pooled/buildspec.yaml"
 premium_offboard_buildspec = "tenant-templates/silo/offboard-buildspec.yaml"
 
-domain_name        = "arc-saas.net"
+domain_name = "arc-saas.net"
 control_plane_host = "https://arc-saas.net"

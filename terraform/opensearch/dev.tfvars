@@ -1,6 +1,6 @@
-region                         = "us-west-2"
-environment                    = "dev"
-namespace                      = "sf-arc-saas"
+region = "us-east-1"
+environment = "dev"
+namespace = "saas-demo"
 elasticsearch_version          = "OpenSearch_2.11"
 instance_count                 = 2
 ebs_volume_size                = 20

@@ -1,4 +1,4 @@
-region                       = "us-west-2"
-environment                  = "dev"
-namespace                    = "sf-arc-saas"
-domain_name                  = "arc-saas.net"
+region = "us-east-1"
+environment = "dev"
+namespace = "saas-demo"
+domain_name = "arc-saas.net"

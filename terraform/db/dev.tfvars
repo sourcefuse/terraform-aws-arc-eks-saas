@@ -1,6 +1,6 @@
-region      = "us-west-2"
+region = "us-east-1"
 environment = "dev"
-namespace   = "sf-arc-saas"
+namespace = "saas-demo"
 
 aurora_db_admin_username              = "arc_saas_root"
 aurora_cluster_size                   = 1
