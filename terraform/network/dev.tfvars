@@ -7,7 +7,7 @@ client_vpn_authorization_rules = []
 
 
 # specify availibility zones for default subnets 
-availability_zones = ["us-west-2a", "us-west-2b"]
+availability_zones = ["us-east-1a", "us-east-1b"]
 
 # If is_custom_subnet_enabled variable is true then define these variables
 is_custom_subnet_enabled  = false
