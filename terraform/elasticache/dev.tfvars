@@ -1,6 +1,6 @@
-namespace = "saas-demo"
+namespace = "sf-arc-saas"
 environment = "dev"
-region = "us-east-1"
+region = "us-west-2"
 instance_type              = "cache.t3.small"
 cluster_size               = 1
 family                     = "redis6.x"

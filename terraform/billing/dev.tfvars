@@ -1,6 +1,6 @@
-region = "us-east-1"
+region = "us-west-2"
 environment = "dev"
-namespace = "saas-demo"
+namespace = "sf-arc-saas"
 domain_name = "arc-saas.net"
 
 budgets = [

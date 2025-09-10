@@ -1,6 +1,6 @@
-region = "us-east-1"
+region = "us-west-2"
 environment = "dev"
-namespace = "saas-demo"
+namespace = "sf-arc-saas"
 service_account_name         = "grafana-sa"
 grafana_helm_release_version = "8.8.5" # Use the latest stable version
 grafana_volume_size          = "20Gi"

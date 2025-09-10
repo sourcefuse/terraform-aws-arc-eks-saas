@@ -1,6 +1,6 @@
-region = "us-east-1"
+region = "us-west-2"
 environment = "dev"
-namespace = "saas-demo"
+namespace = "sf-arc-saas"
 github_connection_pipeline = "pipeline-conn"
 github_FullRepositoryId    = "sourcefuse/terraform-aws-arc-eks-saas"
 github_BranchName          = "feature/saas-demo"

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define new variable values
-NEW_AWS_REGION="us-east-1"
-NEW_NAMESPACE="saas-demo"
+NEW_AWS_REGION="us-west-2"
+NEW_NAMESPACE="sf-arc-saas"
 NEW_ENVIRONMENT="dev"
 DOMAIN="arc-saas.net"
 

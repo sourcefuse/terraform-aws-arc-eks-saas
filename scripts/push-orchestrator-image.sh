@@ -1,7 +1,7 @@
 #!/bin/bash
-NAMESPACE=saas-demo
+NAMESPACE=sf-arc-saas
 ENVIRONMENT=dev
-REGION=us-east-1
+REGION=us-west-2
 
 REPO_NAME="$NAMESPACE-$ENVIRONMENT-orchestration-service-repository"
 IMAGE_URI="public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-orchestration-service:latest"

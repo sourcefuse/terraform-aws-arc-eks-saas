@@ -1,6 +1,6 @@
 environment = "dev"
-region = "us-east-1"
-namespace = "saas-demo"
+region = "us-west-2"
+namespace = "sf-arc-saas"
 vpc_ipv4_primary_cidr_block    = "10.0.0.0/16"
 client_vpn_enabled             = false
 client_vpn_authorization_rules = []

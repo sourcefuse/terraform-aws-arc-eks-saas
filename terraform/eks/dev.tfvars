@@ -1,5 +1,5 @@
-region = "us-east-1"
-namespace = "saas-demo"
+region = "us-west-2"
+namespace = "sf-arc-saas"
 environment = "dev"
 
 # oidc_provider_enabled is required to be true for VPC CNI addon

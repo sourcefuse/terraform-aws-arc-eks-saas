@@ -2,9 +2,6 @@
 name: Apply - CodePipeline
 
 on:
-  push:
-    branches:
-      - feature/saas-demo
   pull_request:
     types: [closed]
     branches:

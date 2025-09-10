@@ -2,9 +2,6 @@
 name: Apply - Bootstrap
 
 on:
-  push:
-    branches:
-      - feature/demo
   pull_request:
     types: [closed]
     branches:

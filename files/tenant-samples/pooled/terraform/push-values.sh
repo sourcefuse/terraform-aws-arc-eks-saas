@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set  environment variable
-export AWS_REGION=us-east-1
-export NAMESPACE=saas-demo
+export AWS_REGION=us-west-2
+export NAMESPACE=sf-arc-saas
 export ENVIRONMENT=dev
 
 

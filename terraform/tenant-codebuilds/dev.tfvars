@@ -1,5 +1,5 @@
-region = "us-east-1"
-namespace = "saas-demo"
+region = "us-west-2"
+namespace = "sf-arc-saas"
 environment = "dev"
 concurrent_build_limit     = 10
 is_organization            = true         // If you are creating github repository as part of organization then set it to true.
