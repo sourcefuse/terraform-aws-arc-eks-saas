@@ -4,7 +4,7 @@ name: Apply - Bootstrap
 on:
   push:
     branches:
-      - feature/saas-demo
+      - feature/demo
   pull_request:
     types: [closed]
     branches:
