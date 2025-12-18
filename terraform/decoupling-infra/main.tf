@@ -209,7 +209,7 @@ module "api_gateway" {
     }
 
     paths = {
-      "/events/{eventType}" = {
+      "/event-bridge/events/{eventType}" = {
         post = {
           "x-amazon-apigateway-auth": {
           "type": "AWS_IAM"
