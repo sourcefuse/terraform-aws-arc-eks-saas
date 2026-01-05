@@ -1,0 +1,14 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: deny-traffic-from-cross-namespace
+  namespace: {{ .Values.namespace }}
+  labels:
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+spec:
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+       namespaces: ["{{ .Values.namespace }}","kube-system","prometheus-node-exporter", "adot-collector-kubeprometheus","istio-system","karpenter","kubecost", "kuberhealthy", "argocd", "argo-workflows"]

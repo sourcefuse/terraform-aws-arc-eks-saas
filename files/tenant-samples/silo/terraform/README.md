@@ -17,7 +17,6 @@
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
 | <a name="provider_local"></a> [local](#provider\_local) | n/a |
-| <a name="provider_opensearch"></a> [opensearch](#provider\_opensearch) | 2.2.0 |
 | <a name="provider_postgresql"></a> [postgresql](#provider\_postgresql) | 1.12.0 |
 | <a name="provider_template"></a> [template](#provider\_template) | n/a |
 
@@ -33,14 +32,14 @@
 | <a name="module_ec_security_group"></a> [ec\_security\_group](#module\_ec\_security\_group) | ../modules/security-group | n/a |
 | <a name="module_jwt_secret"></a> [jwt\_secret](#module\_jwt\_secret) | ../modules/random-password | n/a |
 | <a name="module_jwt_ssm_parameters"></a> [jwt\_ssm\_parameters](#module\_jwt\_ssm\_parameters) | ../modules/ssm-parameter | n/a |
+| <a name="module_keycloak_client_secret"></a> [keycloak\_client\_secret](#module\_keycloak\_client\_secret) | ../modules/random-password | n/a |
+| <a name="module_keycloak_ssm_parameters"></a> [keycloak\_ssm\_parameters](#module\_keycloak\_ssm\_parameters) | ../modules/ssm-parameter | n/a |
 | <a name="module_rds_postgres"></a> [rds\_postgres](#module\_rds\_postgres) | sourcefuse/arc-db/aws | 3.1.5 |
 | <a name="module_redis"></a> [redis](#module\_redis) | cloudposse/elasticache-redis/aws | 1.2.0 |
 | <a name="module_redis_ssm_parameters"></a> [redis\_ssm\_parameters](#module\_redis\_ssm\_parameters) | ../modules/ssm-parameter | n/a |
 | <a name="module_route53-record"></a> [route53-record](#module\_route53-record) | clouddrove/route53-record/aws | 1.0.1 |
 | <a name="module_tags"></a> [tags](#module\_tags) | sourcefuse/arc-tags/aws | 1.2.5 |
 | <a name="module_tenant_iam_role"></a> [tenant\_iam\_role](#module\_tenant\_iam\_role) | ../modules/iam-role | n/a |
-| <a name="module_tenant_opensearch_parameters"></a> [tenant\_opensearch\_parameters](#module\_tenant\_opensearch\_parameters) | ../modules/ssm-parameter | n/a |
-| <a name="module_tenant_opensearch_password"></a> [tenant\_opensearch\_password](#module\_tenant\_opensearch\_password) | ../modules/random-password | n/a |
 
 ## Resources
 
@@ -50,14 +49,12 @@
 | [aws_synthetics_canary.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/synthetics_canary) | resource |
 | [kubernetes_namespace.my_namespace](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
 | [local_file.argo_workflow](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [local_file.argocd_application](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [local_file.helm_values](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [opensearch_dashboard_object.test_index_pattern_v7](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/dashboard_object) | resource |
-| [opensearch_role.tenant_index_role](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/role) | resource |
-| [opensearch_roles_mapping.user_role_mapping](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/roles_mapping) | resource |
-| [opensearch_roles_mapping.user_role_mapping1](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/roles_mapping) | resource |
-| [opensearch_roles_mapping.user_role_mapping2](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/roles_mapping) | resource |
-| [opensearch_user.tenant_user](https://registry.terraform.io/providers/opensearch-project/opensearch/2.2.0/docs/resources/user) | resource |
+| [local_file.auth0_argocd_application](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.auth0_helm_values](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.cognito_argocd_application](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.cognito_helm_values](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.keycloak_argocd_application](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
+| [local_file.keycloak_helm_values](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [postgresql_database.authentication_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.feature_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
 | [postgresql_database.notification_db](https://registry.terraform.io/providers/cyrilgdn/postgresql/1.12.0/docs/resources/database) | resource |
@@ -90,6 +87,8 @@
 | [aws_ssm_parameter.github_user](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.jwt_issuer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.jwt_secret](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
+| [aws_ssm_parameter.keycloak_client_secret](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
+| [aws_ssm_parameter.keycloak_host](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.notificationdbdatabase](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.opensearch_domain](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
 | [aws_ssm_parameter.opensearch_password](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter) | data source |
@@ -101,13 +100,16 @@
 | [aws_subnets.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
 | [aws_subnets.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
 | [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
-| [template_file.helm_values_template](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
+| [template_file.auth0_helm_values_template](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
+| [template_file.cognito_helm_values_template](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
+| [template_file.keycloak_helm_values_template](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_additional_inbound_rules"></a> [additional\_inbound\_rules](#input\_additional\_inbound\_rules) | n/a | <pre>list(object({<br>    name        = string<br>    description = string<br>    type        = string<br>    from_port   = number<br>    to_port     = number<br>    protocol    = string<br>    cidr_blocks = list(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_IdP"></a> [IdP](#input\_IdP) | Tenant Identity Provider | `string` | `"cognito"` | no |
+| <a name="input_additional_inbound_rules"></a> [additional\_inbound\_rules](#input\_additional\_inbound\_rules) | n/a | <pre>list(object({<br>   name        = string<br>    description = string<br>    type        = string<br>    from_port   = number<br>    to_port     = number<br>    protocol    = string<br>    cidr_blocks = list(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_admin_create_user_config"></a> [admin\_create\_user\_config](#input\_admin\_create\_user\_config) | The configuration for AdminCreateUser requests | `map(any)` | <pre>{<br>  "email_message": "Dear {username}, your temporary password is {####}.",<br>  "email_subject": "Here, your temporary password",<br>  "sms_message": "Your username is {username} and temporary password is {####}."<br>}</pre> | no |
 | <a name="input_admin_create_user_config_allow_admin_create_user_only"></a> [admin\_create\_user\_config\_allow\_admin\_create\_user\_only](#input\_admin\_create\_user\_config\_allow\_admin\_create\_user\_only) | Set to True if only the administrator is allowed to create user profiles. Set to False if users can sign themselves up via an app | `bool` | `false` | no |
 | <a name="input_alarm_actions"></a> [alarm\_actions](#input\_alarm\_actions) | Alarm action list | `list(string)` | `[]` | no |
@@ -171,7 +173,7 @@
 | <a name="input_rds_instance_db_parameter_group"></a> [rds\_instance\_db\_parameter\_group](#input\_rds\_instance\_db\_parameter\_group) | The name of the DB parameter group to associate with the RDS instance. | `string` | `"postgres16"` | no |
 | <a name="input_rds_instance_enabled"></a> [rds\_instance\_enabled](#input\_rds\_instance\_enabled) | Flag to enable or disable the RDS instance. | `bool` | `true` | no |
 | <a name="input_rds_instance_engine"></a> [rds\_instance\_engine](#input\_rds\_instance\_engine) | The name of the database engine to be used for the RDS instance. | `string` | `"postgres"` | no |
-| <a name="input_rds_instance_engine_version"></a> [rds\_instance\_engine\_version](#input\_rds\_instance\_engine\_version) | The version of the database engine to be used for the RDS instance. | `string` | `"16.1"` | no |
+| <a name="input_rds_instance_engine_version"></a> [rds\_instance\_engine\_version](#input\_rds\_instance\_engine\_version) | The version of the database engine to be used for the RDS instance. | `string` | `"16.8"` | no |
 | <a name="input_rds_instance_instance_class"></a> [rds\_instance\_instance\_class](#input\_rds\_instance\_instance\_class) | The instance class for the RDS instance. | `string` | `"db.t3.small"` | no |
 | <a name="input_rds_instance_maintenance_window"></a> [rds\_instance\_maintenance\_window](#input\_rds\_instance\_maintenance\_window) | The maintenance window for the RDS instance. | `string` | `"Mon:00:00-Mon:02:00"` | no |
 | <a name="input_rds_instance_major_engine_version"></a> [rds\_instance\_major\_engine\_version](#input\_rds\_instance\_major\_engine\_version) | The major version of the database engine to be used for the RDS instance. | `string` | `"16"` | no |

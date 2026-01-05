@@ -1,5 +1,9 @@
 version: 0.2
 
+# env:
+#   variables:
+#     WEBHOOK_PATH: offboard-webhook.js
+
 phases:
   install:
     runtime-versions:

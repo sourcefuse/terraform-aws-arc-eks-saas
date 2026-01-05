@@ -158,6 +158,14 @@ data "template_file" "helm_values_template" {
     COGNITO_ID                = data.aws_ssm_parameter.cognito_id.name
     COGNITO_SECRET            = data.aws_ssm_parameter.cognito_secret.name
     FROM_EMAIL                = var.from_email
+    PRIVATE_KEY_SSM           = data.aws_ssm_parameter.private_key_ssm.name
+    PUBLIC_KEY_SSM            = data.aws_ssm_parameter.public_key_ssm.name
+    AUTH0_CLIENT_SECRET_SSM   = data.aws_ssm_parameter.auth0_client_secret_ssm.name
+    STRIPE_SECRET_SSM         = data.aws_ssm_parameter.stripe_secret_ssm.name
+    STRIPE_WEBHOOK_SECRET_SSM = data.aws_ssm_parameter.stripe_webhook_secret_ssm.name
+    STRIPE_PUBLIC_KEY         = data.aws_ssm_parameter.stripe_public_key_ssm.name
+    WEBHOOK_PASSWORD          = data.aws_ssm_parameter.webhook_password_ssm.name
+    SUBSCRIPTION_SERVICE_API_KEY = data.aws_ssm_parameter.subscription_service_api_key_ssm.name
   }
 }
 

@@ -334,6 +334,7 @@ tenantSecret: ${TENANT_SECRET}
 tenantID: ${TENANT_ID}
 tenantEmail: ${TENANT_EMAIL}
 adminUserTenantId: "b439829b-57e7-49d8-bb23-8ccb2ca56435"
+#userCallbackSecret: "yugeyifgweyfgy"
 userCallbackSecret: ${USER_CALLBACK_SECRET}
 
 # Frontend variable

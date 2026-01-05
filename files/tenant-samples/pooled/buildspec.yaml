@@ -7,7 +7,7 @@ phases:
     on-failure: ABORT
     commands:
       - cd $CODEBUILD_SRC_DIR/tenant-templates/pooled
-      - export WEBHOOK_PATH="$CODEBUILD_SRC_DIR/tenant-templates/pooled/webhook.js"
+      - export EVENT_FILE_PATH="$CODEBUILD_SRC_DIR/tenant-templates/pooled/event.js"
       - curl -sS -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
       - curl -sS -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/kubectl
       - chmod +x ./kubectl ./aws-iam-authenticator
@@ -18,9 +18,9 @@ phases:
       - apt-get update -y && apt-get install -y jq unzip
       - curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 > get_helm.sh && chmod 700 get_helm.sh && ./get_helm.sh --version v3.12.3
       - npm i @aws-sdk/client-eventbridge
-      - ln -sf $WEBHOOK_PATH /usr/local/bin/webhook #create webhook symlink and will execute webhook at every phase to update status in control plane
+      - ln -sf $EVENT_FILE_PATH /usr/local/bin/event #create symlink and will execute event.js at every phase to send event to eventbridge
     finally:
-      - node $WEBHOOK_PATH
+      - node $EVENT_FILE_PATH
   pre_build:
     on-failure: ABORT  
     commands:
@@ -33,7 +33,7 @@ phases:
       - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
     finally:
-      - node $WEBHOOK_PATH
+      - node $EVENT_FILE_PATH
   build:
     on-failure: ABORT
     commands:
@@ -45,9 +45,11 @@ phases:
       - export TENANT_ADMIN_EMAIL=$(echo $tenant | jq -r '.contacts[] | select(.isPrimary == true) | .email')
       - export USERNAME=$(echo $tenant | jq -r '.key')
       - export KEY=$(echo $tenant | jq -r '.key')
+      - export IdP=$(echo $tenant | jq -r '.identityProvider')
+      #- export IdP="cognito"
       - export TIER=$(echo "${tier}" | tr '[:upper:]' '[:lower:]')
       
-      # Webhook Envs
+      # event.js Envs
       - export API_ENDPOINT="${CONTROL_PLANE_HOST}/tenant-mgmt-facade/webhook"
       - export REDIRECT_URL="${CONTROL_PLANE_HOST}/main/home"
       - export APP_PLANE_REDIRECT_URL="https://${KEY}.${DOMAIN_NAME}/home"
@@ -75,6 +77,7 @@ phases:
       - export TF_VAR_karpenter_role="${KARPENTER_ROLE}"
       - export TF_VAR_tenant_host_domain="${KEY}.${DOMAIN_NAME}"
       - export TF_VAR_jwt_issuer="${KEY}"
+      - export TF_VAR_IdP="${IdP}"
       - export TF_VAR_tenant_client_id="${KEY}"-$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_ID}"
       - export TF_VAR_tenant_client_secret=$(echo "$TENANT_ID" | cut -c 10-)-"${TENANT_CLIENT_SECRET}"
       - export ALB_DNS=$(aws elbv2 describe-load-balancers --query 'LoadBalancers[?Type==`application`] | [0].DNSName' --output text)
@@ -117,18 +120,18 @@ phases:
       - kubectl apply -f ${TIER}-argo-workflow.yaml --namespace argo-workflows || true 
       - kubectl apply -f argocd-application.yaml --namespace argocd || true
       - sleep 240 # waiting time to spin up tenant pods 
-      - terraform apply -auto-approve --refresh=false  # refresh is false to avoid unnecessary API hitting
+      #- terraform apply -auto-approve --refresh=false  # refresh is false to avoid unnecessary API hitting
       - kubectl apply -f argo-workflow.yaml --namespace argo-workflows || true
     
     finally:
-      - node $WEBHOOK_PATH
+      - node $EVENT_FILE_PATH
 
   post_build:
     commands:
       - export CODEBUILD_BUILD_POSTBUILD=1
       - export CREATE_USER=1
-      # To run the webhook which will send notification and create tenant first admin user in pooled database
-      - node $WEBHOOK_PATH
+      # To run the event.js which will  event to eventbridge
+      - node $EVENT_FILE_PATH
       - python push_to_dynamodb.py # pushing tenant config to dynamodb based on tenant_id mapping
   
       

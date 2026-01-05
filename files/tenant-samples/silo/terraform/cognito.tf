@@ -12,10 +12,9 @@ module "cognito_domain_string" {
 ## Cognito User Pool
 ######################################################################
 module "aws_cognito_user_pool" {
-
+  enabled = var.IdP == "cognito" ? true : false
   source  = "lgallard/cognito-user-pool/aws"
   version = "0.24.0"
-
   user_pool_name                                        = "${var.namespace}-${var.environment}-${var.tenant_tier}-${var.tenant}-cognito-user-pool"
   alias_attributes                                      = var.alias_attributes
   auto_verified_attributes                              = var.auto_verified_attributes
@@ -86,9 +85,38 @@ module "aws_cognito_user_pool" {
 }
 
 ######################################################################
+## Create Cognito User
+######################################################################
+# module "cognito_password" {
+#   source      = "../modules/random-password"
+#   length      = 12
+#   is_special  = true
+#   min_upper   = 1
+#   min_numeric = 1
+#   min_special = 1
+#   min_lower   = 1
+# }
+
+# resource "aws_cognito_user" "cognito_user" {
+#   user_pool_id = module.aws_cognito_user_pool.id
+#   username     = var.user_name
+
+#   attributes = {
+#     email          = var.tenant_email
+#     email_verified = true
+#   }
+#   temporary_password = module.cognito_password.result
+
+#   depends_on = [module.aws_cognito_user_pool]
+# }
+
+
+
+######################################################################
 ## Store Congito output to SSM parameneter store
 ######################################################################
 module "cognito_ssm_parameters" {
+  count = var.IdP == "cognito" ? 1 : 0
   source = "../modules/ssm-parameter"
   ssm_parameters = [
     {
@@ -118,6 +146,52 @@ module "cognito_ssm_parameters" {
       type        = "SecureString"
       overwrite   = "true"
       description = "Cognito User Pool ID"
+    }
+
+
+    # {
+    #   name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/${var.user_name}/user_sub"
+    #   value       = aws_cognito_user.cognito_user.sub
+    #   type        = "SecureString"
+    #   overwrite   = "true"
+    #   description = "${var.tenant} User Cognito Sub"
+    # }
+  ]
+  tags = module.tags.tags
+}
+
+module "keycloak_client_secret" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  source     = "../modules/random-password"
+  length     = 8
+  is_special = false
+  is_upper   = true
+}
+
+module "keycloak_ssm_parameters" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  source = "../modules/ssm-parameter"
+  ssm_parameters = [
+    {
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/keycloak-client-id"
+      value       = "client-${var.tenant_tier}-${var.tenant}"
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Tenant Keycloak Client ID"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/keycloak-client-secret"
+      value       = module.keycloak_client_secret[0].result
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Tenant Keycloak Client Secret"
+    },
+    {
+      name        = "/${var.namespace}/${var.environment}/${var.tenant_tier}/${var.tenant}/keycloak-client-realm"
+      value       = "${var.tenant_tier}-${var.tenant}"
+      type        = "SecureString"
+      overwrite   = "true"
+      description = "Tenant Keycloak Client Realm"
     }
   ]
   tags = module.tags.tags

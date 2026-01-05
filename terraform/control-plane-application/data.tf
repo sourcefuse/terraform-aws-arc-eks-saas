@@ -141,6 +141,40 @@ data "aws_ssm_parameter" "https_connection_user" {
 data "aws_ssm_parameter" "https_connection_password" {
   name = "/${var.namespace}/https_connection_password"
 }
+
+data "aws_ssm_parameter" "private_key_ssm" {
+  name = "/${var.namespace}/${var.environment}/private_key"
+}
+
+data "aws_ssm_parameter" "public_key_ssm" {
+  name = "/${var.namespace}/${var.environment}/public_key"
+}
+
+data "aws_ssm_parameter" "auth0_client_secret_ssm" {
+  name = "/${var.namespace}/${var.environment}/auth0_client_secret"
+}
+
+data "aws_ssm_parameter" "stripe_secret_ssm" {
+  name = "/${var.namespace}/${var.environment}/stripe_secret"
+}
+
+data "aws_ssm_parameter" "stripe_webhook_secret_ssm" {
+  name = "/${var.namespace}/${var.environment}/stripe_webhook_secret"
+}
+
+data "aws_ssm_parameter" "stripe_public_key_ssm" {
+  name = "/${var.namespace}/${var.environment}/stripe_public_key"
+}
+
+data "aws_ssm_parameter" "webhook_password_ssm" {
+  name = "/${var.namespace}/${var.environment}/webhook_password"
+}
+
+data "aws_ssm_parameter" "subscription_service_api_key_ssm" {
+  name = "/${var.namespace}/${var.environment}/subscription_service_api_key"
+}
+
+
 ################################################################################
 ## iam policy data
 ################################################################################

@@ -10,7 +10,7 @@ module "tags" {
 
   extra_tags = {
     Tenant = "pooled"
-    Tier   = var.tenant_tier
+    Tier = var.tenant_tier
   }
 
 }

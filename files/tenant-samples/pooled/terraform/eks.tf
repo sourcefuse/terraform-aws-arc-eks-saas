@@ -11,7 +11,7 @@ module "tags" {
   extra_tags = {
     Tenant    = var.tenant
     Tenant_ID = var.tenant_id
-    Tier      = var.tenant_tier
+    Tier = var.tenant_tier
   }
 
 }
@@ -102,54 +102,147 @@ resource "kubernetes_namespace" "my_namespace" {
 
 # generate tenant specific helm values.yaml
 
-data "template_file" "helm_values_template" {
-  template = file("${path.module}/../tenant-helm-chart/values.yaml.template")
+data "template_file" "cognito_helm_values_template" {
+  count = var.IdP == "cognito" ? 1 : 0
+  template = file("${path.module}/../tenant-helm-chart/cognito/values.yaml.template")
   vars = {
-    NAMESPACE                  = local.kubernetes_ns
-    TENANT_NAME                = var.tenant_name
-    TENANT_KEY                 = var.tenant
-    TENANT_EMAIL               = var.tenant_email
-    TENANT_SECRET              = var.tenant_secret
-    TENANT_ID                  = var.tenant_id
-    TIER                       = var.tenant_tier
-    TENANT_CLIENT_ID           = var.tenant_client_id
-    TENANT_CLIENT_SECRET       = var.tenant_client_secret
-    REGION                     = var.region
-    COGNITO_DOMAIN             = data.aws_ssm_parameter.cognito_domain.name
-    COGNITO_ID                 = data.aws_ssm_parameter.cognito_id.name
-    COGNITO_SECRET             = data.aws_ssm_parameter.cognito_secret.name
-    KARPENTER_ROLE             = var.karpenter_role
-    EKS_CLUSTER_NAME           = var.cluster_name
-    TENANT_HOST_NAME           = var.tenant_host_domain
-    USER_CALLBACK_SECRET       = var.user_callback_secret
-    WEB_IDENTITY_ROLE_ARN      = module.tenant_iam_role.arn
-    DB_HOST                    = data.aws_ssm_parameter.db_host.name
-    DB_PORT                    = data.aws_ssm_parameter.db_port.name
-    DB_USER                    = data.aws_ssm_parameter.db_user.name
-    DB_PASSWORD                = data.aws_ssm_parameter.db_password.name
-    DB_SCHEMA                  = data.aws_ssm_parameter.db_schema.name
-    REDIS_HOST                 = data.aws_ssm_parameter.redis_host.name
-    REDIS_PORT                 = data.aws_ssm_parameter.redis_port.name
-    REDIS_DATABASE             = data.aws_ssm_parameter.redis_database.name
-    JWT_SECRET                 = data.aws_ssm_parameter.jwt_secret.name
-    JWT_ISSUER                 = data.aws_ssm_parameter.jwt_issuer.name
-    AUTH_DATABASE              = data.aws_ssm_parameter.authenticationdbdatabase.name
-    FEATURE_DATABASE           = data.aws_ssm_parameter.featuredbdatabase.name
-    NOTIFICATION_DATABASE      = data.aws_ssm_parameter.notificationdbdatabase.name
-    VIDEO_CONFRENCING_DATABASE = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
-    COGNITO_USER_POOL_ID       = data.aws_ssm_parameter.cognito_user_pool_id.name
+    NAMESPACE        = local.kubernetes_ns
+    PROJECT          = var.namespace
+    TENANT_NAME      = var.tenant_name
+    TENANT_KEY       = var.tenant
+    TENANT_EMAIL     = var.tenant_email
+    TENANT_SECRET    = var.tenant_secret
+    TENANT_ID        = var.tenant_id
+    TIER = var.tenant_tier
+    TENANT_CLIENT_ID      = var.tenant_client_id
+    TENANT_CLIENT_SECRET  = var.tenant_client_secret
+    REGION                = var.region
+    COGNITO_DOMAIN        = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_domain) > 0 ? data.aws_ssm_parameter.cognito_domain[count.index].name : null
+    COGNITO_ID            = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_id) > 0 ? data.aws_ssm_parameter.cognito_id[count.index].name : null
+    COGNITO_SECRET        = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_secret) > 0 ? data.aws_ssm_parameter.cognito_secret[count.index].name : null
+    COGNITO_USER_POOL_ID  = var.IdP == "cognito" && length(data.aws_ssm_parameter.cognito_user_pool_id) > 0 ? data.aws_ssm_parameter.cognito_user_pool_id[count.index].name : null
+    KARPENTER_ROLE        = var.karpenter_role
+    EKS_CLUSTER_NAME      = var.cluster_name
+    TENANT_HOST_NAME      = var.tenant_host_domain
+    USER_CALLBACK_SECRET  = var.user_callback_secret
+    WEB_IDENTITY_ROLE_ARN = module.tenant_iam_role.arn
+    DB_HOST               = data.aws_ssm_parameter.db_host.name
+    DB_PORT               = data.aws_ssm_parameter.db_port.name
+    DB_USER               = data.aws_ssm_parameter.db_user.name
+    DB_PASSWORD           = data.aws_ssm_parameter.db_password.name
+    DB_SCHEMA             = data.aws_ssm_parameter.db_schema.name
+    REDIS_HOST            = data.aws_ssm_parameter.redis_host.name
+    REDIS_PORT            = data.aws_ssm_parameter.redis_port.name
+    REDIS_DATABASE        = data.aws_ssm_parameter.redis_database.name
+    JWT_SECRET            = data.aws_ssm_parameter.jwt_secret.name
+    JWT_ISSUER            = data.aws_ssm_parameter.jwt_issuer.name
+    AUTH_DATABASE         = data.aws_ssm_parameter.authenticationdbdatabase.name
+    FEATURE_DATABASE        = data.aws_ssm_parameter.featuredbdatabase.name
+    NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
+    VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
   }
 }
 
-resource "local_file" "helm_values" {
-  filename = "${path.module}/output/${var.tenant}-values.yaml"
-  content  = data.template_file.helm_values_template.rendered
+data "template_file" "auth0_helm_values_template" {
+  count = var.IdP == "auth0" ? 1 : 0
+  template = file("${path.module}/../tenant-helm-chart/auth0/values.yaml.template")
+  vars = {
+    NAMESPACE        = local.kubernetes_ns
+    PROJECT          = var.namespace
+    TENANT_NAME      = var.tenant_name
+    TENANT_KEY       = var.tenant
+    TENANT_EMAIL     = var.tenant_email
+    TENANT_SECRET    = var.tenant_secret
+    TENANT_ID        = var.tenant_id
+    TIER = var.tenant_tier
+    TENANT_CLIENT_ID      = var.tenant_client_id
+    TENANT_CLIENT_SECRET  = var.tenant_client_secret
+    REGION                = var.region
+    KARPENTER_ROLE        = var.karpenter_role
+    EKS_CLUSTER_NAME      = var.cluster_name
+    TENANT_HOST_NAME      = var.tenant_host_domain
+    USER_CALLBACK_SECRET  = var.user_callback_secret
+    WEB_IDENTITY_ROLE_ARN = module.tenant_iam_role.arn
+    DB_HOST               = data.aws_ssm_parameter.db_host.name
+    DB_PORT               = data.aws_ssm_parameter.db_port.name
+    DB_USER               = data.aws_ssm_parameter.db_user.name
+    DB_PASSWORD           = data.aws_ssm_parameter.db_password.name
+    DB_SCHEMA             = data.aws_ssm_parameter.db_schema.name
+    REDIS_HOST            = data.aws_ssm_parameter.redis_host.name
+    REDIS_PORT            = data.aws_ssm_parameter.redis_port.name
+    REDIS_DATABASE        = data.aws_ssm_parameter.redis_database.name
+    JWT_SECRET            = data.aws_ssm_parameter.jwt_secret.name
+    JWT_ISSUER            = data.aws_ssm_parameter.jwt_issuer.name
+    AUTH_DATABASE         = data.aws_ssm_parameter.authenticationdbdatabase.name
+    FEATURE_DATABASE        = data.aws_ssm_parameter.featuredbdatabase.name
+    NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
+    VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
+
+  }
+}
+
+data "template_file" "keycloak_helm_values_template" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  template = file("${path.module}/../tenant-helm-chart/keycloak/values.yaml.template")
+  vars = {
+    NAMESPACE        = local.kubernetes_ns
+    PROJECT          = var.namespace
+    TENANT_NAME      = var.tenant_name
+    TENANT_KEY       = var.tenant
+    TENANT_EMAIL     = var.tenant_email
+    TENANT_SECRET    = var.tenant_secret
+    TENANT_ID        = var.tenant_id
+    TIER = var.tenant_tier
+    TENANT_CLIENT_ID      = var.tenant_client_id
+    TENANT_CLIENT_SECRET  = var.tenant_client_secret
+    REGION                = var.region
+    KARPENTER_ROLE        = var.karpenter_role
+    EKS_CLUSTER_NAME      = var.cluster_name
+    TENANT_HOST_NAME      = var.tenant_host_domain
+    USER_CALLBACK_SECRET  = var.user_callback_secret
+    WEB_IDENTITY_ROLE_ARN = module.tenant_iam_role.arn
+    DB_HOST               = data.aws_ssm_parameter.db_host.name
+    DB_PORT               = data.aws_ssm_parameter.db_port.name
+    DB_USER               = data.aws_ssm_parameter.db_user.name
+    DB_PASSWORD           = data.aws_ssm_parameter.db_password.name
+    DB_SCHEMA             = data.aws_ssm_parameter.db_schema.name
+    REDIS_HOST            = data.aws_ssm_parameter.redis_host.name
+    REDIS_PORT            = data.aws_ssm_parameter.redis_port.name
+    REDIS_DATABASE        = data.aws_ssm_parameter.redis_database.name
+    JWT_SECRET            = data.aws_ssm_parameter.jwt_secret.name
+    JWT_ISSUER            = data.aws_ssm_parameter.jwt_issuer.name
+    AUTH_DATABASE         = data.aws_ssm_parameter.authenticationdbdatabase.name
+    FEATURE_DATABASE        = data.aws_ssm_parameter.featuredbdatabase.name
+    NOTIFICATION_DATABASE = data.aws_ssm_parameter.notificationdbdatabase.name
+    VIDEO_CONFRENCING_DATABASE      = data.aws_ssm_parameter.videoconfrencingdbdatabase.name
+    KEYCLOAK_HOST                   = var.IdP == "keycloak" && length(data.aws_ssm_parameter.keycloak_host) > 0 ? data.aws_ssm_parameter.keycloak_host[count.index].value : null
+    KEYCLOAK_CLIENT_SECRET  = var.IdP == "keycloak" && length(data.aws_ssm_parameter.keycloak_client_secret) > 0 ? data.aws_ssm_parameter.keycloak_client_secret[count.index].name : null
+  }
+}
+
+resource "local_file" "cognito_helm_values" {
+  count = var.IdP == "cognito" ? 1 : 0
+  filename = "${path.module}/output/cognito/${var.tenant}-values.yaml"
+  content  = data.template_file.cognito_helm_values_template[count.index].rendered
+}
+
+resource "local_file" "auth0_helm_values" {
+  count = var.IdP == "auth0" ? 1 : 0
+  filename = "${path.module}/output/auth0/${var.tenant}-values.yaml"
+  content  = data.template_file.auth0_helm_values_template[count.index].rendered
+}
+
+resource "local_file" "keycloak_helm_values" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  filename = "${path.module}/output/keycloak/${var.tenant}-values.yaml"
+  content  = data.template_file.keycloak_helm_values_template[count.index].rendered
 }
 
 ###############################################################################################
 ## Register Tenant Helm App on ArgoCD
 ###############################################################################################
-resource "local_file" "argocd_application" {
+resource "local_file" "cognito_argocd_application" {
+  count = var.IdP == "cognito" ? 1 : 0
   content  = <<-EOT
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -164,7 +257,7 @@ spec:
     namespace: ${var.tenant_tier}-${var.tenant}
     server: 'https://kubernetes.default.svc'
   source:
-    path: onboarded-tenants/pooled/application
+    path: onboarded-tenants/pooled/application/cognito
     repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
     targetRevision: main
     helm:
@@ -187,6 +280,83 @@ spec:
   filename = "${path.module}/argocd-application.yaml"
 }
 
+resource "local_file" "auth0_argocd_application" {
+  count = var.IdP == "auth0" ? 1 : 0
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${var.tenant_tier}-${var.tenant}
+  namespace: argocd
+  labels:
+    Tenant: ${var.tenant} 
+    Tenant_ID: ${var.tenant_id}
+spec:
+  destination:
+    namespace: ${var.tenant_tier}-${var.tenant}
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: onboarded-tenants/pooled/application/auth0
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
+    targetRevision: main
+    helm:
+      valueFiles:
+        - ${var.tenant}-values.yaml
+  project: default  
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        maxDuration: 3m0s
+        factor: 2
+    automated:
+      prune: false
+      selfHeal: true
+    EOT
+  filename = "${path.module}/argocd-application.yaml"
+}
+
+resource "local_file" "keycloak_argocd_application" {
+  count = var.IdP == "keycloak" ? 1 : 0
+  content  = <<-EOT
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${var.tenant_tier}-${var.tenant}
+  namespace: argocd
+  labels:
+    Tenant: ${var.tenant} 
+    Tenant_ID: ${var.tenant_id}
+spec:
+  destination:
+    namespace: ${var.tenant_tier}-${var.tenant}
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: onboarded-tenants/pooled/application/keycloak
+    repoURL: 'https://${data.aws_ssm_parameter.github_user.value}@github.com/${data.aws_ssm_parameter.github_repo.value}.git'
+    targetRevision: main
+    helm:
+      valueFiles:
+        - ${var.tenant}-values.yaml
+  project: default  
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+    retry:
+      limit: 2
+      backoff:
+        duration: 5s
+        maxDuration: 3m0s
+        factor: 2
+    automated:
+      prune: false
+      selfHeal: true
+    EOT
+  filename = "${path.module}/argocd-application.yaml"
+}
 #######################################################################################
 ## Register Pooled Terraform Workflow on Argo
 #######################################################################################

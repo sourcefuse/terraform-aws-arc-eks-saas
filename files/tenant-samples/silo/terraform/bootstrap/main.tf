@@ -37,7 +37,7 @@ module "tags" {
   extra_tags = {
     Tenant    = var.tenant
     Tenant_ID = var.tenant_id
-    Tier      = var.tenant_tier
+    Tier = var.tenant_tier
   }
 }
 

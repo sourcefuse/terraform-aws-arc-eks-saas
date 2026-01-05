@@ -49,6 +49,7 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_IdP"></a> [IdP](#input\_IdP) | Tenant Identity Provider | `string` | `"cognito"` | no |
 | <a name="input_additional_inbound_rules"></a> [additional\_inbound\_rules](#input\_additional\_inbound\_rules) | n/a | <pre>list(object({<br>    description       = string<br>    from_port         = number<br>    to_port           = number<br>    protocol          = string<br>    cidr_blocks       = list(string)<br>    security_group_id = optional(list(string))<br>    ipv6_cidr_blocks  = optional(list(string))<br><br>  }))</pre> | `[]` | no |
 | <a name="input_admin_create_user_config"></a> [admin\_create\_user\_config](#input\_admin\_create\_user\_config) | The configuration for AdminCreateUser requests | `map(any)` | <pre>{<br>  "email_message": "Dear {username}, your temporary password is {####}.",<br>  "email_subject": "Here, your temporary password",<br>  "sms_message": "Your username is {username} and temporary password is {####}."<br>}</pre> | no |
 | <a name="input_admin_create_user_config_allow_admin_create_user_only"></a> [admin\_create\_user\_config\_allow\_admin\_create\_user\_only](#input\_admin\_create\_user\_config\_allow\_admin\_create\_user\_only) | Set to True if only the administrator is allowed to create user profiles. Set to False if users can sign themselves up via an app | `bool` | `false` | no |

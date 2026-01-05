@@ -8,9 +8,21 @@ resource "aws_synthetics_canary" "main" {
   zip_file             = "/tmp/canary_zip_inline.zip"
   runtime_version      = "syn-nodejs-puppeteer-7.0"
 
+  # VPC Config
+  # vpc_config {
+  #   subnet_ids         = 
+  #   security_group_ids = 
+  # }
+
+  #   run_config {
+  #   active_tracing = true
+  #   timeout_in_seconds = 60
+  # }
+
   schedule {
     expression = "rate(6 minutes)"
   }
+  tags = module.tags.tags
 
 }
 

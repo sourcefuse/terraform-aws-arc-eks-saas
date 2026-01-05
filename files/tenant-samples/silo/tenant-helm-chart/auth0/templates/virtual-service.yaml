@@ -1,0 +1,63 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.tier }}-{{ .Values.tenant }}
+  labels:
+    app: {{ include "helm.name" . }}
+    Tenant: {{ .Values.tenant }} 
+    Tenant_ID: {{ .Values.tenantID }}
+spec:
+  hosts:
+    - {{ .Values.hostname }}
+  gateways:
+    - {{ .Values.tier }}-{{ .Values.tenant }} #create gateway with name as tenant name
+  http:
+    - match:
+      - uri:
+          prefix: {{ .Values.app.basePath }}/authentication-service
+      route:
+        - destination:
+            host: "{{ include "helm.fullname" . }}-authentication-service"
+            port:
+              number: 3000
+    - match:
+        - uri:
+            prefix: {{ .Values.app.basePath }}/feature-service
+      route:
+        - destination:
+            host: "{{ include "helm.fullname" . }}-feature-service"
+            port:
+              number: 3000
+    - match:
+        - uri:
+            prefix: {{ .Values.app.basePath }}/notification-service
+      route:
+        - destination:
+            host: "{{ include "helm.fullname" . }}-notification-service"
+            port:
+              number: 3000
+    - match:
+        - uri:
+            prefix: {{ .Values.app.basePath }}/user-tenant-service
+      route:
+        - destination:
+            host: "{{ include "helm.fullname" . }}-user-tenant-service"
+            port:
+              number: 3000
+    - match:
+        - uri:
+            prefix: {{ .Values.app.basePath }}/video-confrencing-service
+      route:
+        - destination:
+            host: "{{ include "helm.fullname" . }}-video-confrencing-service"
+            port:
+              number: 3000
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: "{{ include "helm.fullname" . }}-frontend"
+            port:
+              number: 80
