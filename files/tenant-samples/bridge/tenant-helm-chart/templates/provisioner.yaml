@@ -53,8 +53,7 @@ spec:
     - tags:
         "aws:eks:cluster-name": {{ .Values.eksClusterName }}
   tags:
-    Tenant: {{ .Values.tenant }}
-    Tenant_ID: {{ .Values.tenantID }}
+    Tenant: "pooled"
 
 
 

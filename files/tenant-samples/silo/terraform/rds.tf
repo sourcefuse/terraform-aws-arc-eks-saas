@@ -10,15 +10,15 @@ module "db_password" {
 
 
 module "rds_postgres" {
-  source  = "sourcefuse/arc-db/aws"
-  version = "3.1.5"
-
+  source      = "sourcefuse/arc-db/aws"
+  version     = "3.1.5"
+  
   environment = "${var.environment}-${var.tenant_tier}-${var.tenant}"
   namespace   = var.namespace
   region      = var.region
   vpc_id      = data.aws_vpc.vpc.id
 
-  account_id                               = data.aws_caller_identity.current.id
+  account_id                              = data.aws_caller_identity.current.id
   rds_instance_enabled                     = var.rds_instance_enabled
   rds_instance_name                        = var.rds_instance_name
   enhanced_monitoring_name                 = "${var.namespace}-${var.environment}-${var.tenant}-enhanced-monitoring"
@@ -71,7 +71,7 @@ resource "aws_security_group_rule" "additional_inbound_rules" {
   count             = length(var.additional_inbound_rules)
   security_group_id = data.aws_security_groups.rds_postgres.ids[0]
   description       = var.additional_inbound_rules[count.index].description
-  type              = var.additional_inbound_rules[count.index].type
+  type = var.additional_inbound_rules[count.index].type
   from_port         = var.additional_inbound_rules[count.index].from_port
   to_port           = var.additional_inbound_rules[count.index].to_port
   protocol          = var.additional_inbound_rules[count.index].protocol

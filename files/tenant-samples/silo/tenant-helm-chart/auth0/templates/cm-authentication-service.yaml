@@ -1,0 +1,19 @@
+{{- if .Values.authenticationService.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "helm.fullname" . }}-cm-authentication-service
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+data:
+      PORT: '{{ .Values.authenticationService.port }}'
+      NODE_ENV: '{{ .Values.authenticationService.node_env }}'
+      LOG_LEVEL: '{{ .Values.authenticationService.log_level }}'
+      BASE_PATH: '{{ .Values.authenticationService.base_path }}'
+      DB_SSL: '{{ .Values.authenticationService.db_ssl }}'
+      AUTH0_DOMAIN: "dev-db7dz4wg6ccbguer.us.auth0.com"
+      AUTH0_CLIENT_ID: "pluqd6RqaLilAn7p1kUFkNo20bxuwUK5"
+      AUTH0_CALLBACK_URL: "https://{{ .Values.hostname }}/authentication-service/auth/auth0-auth-redirect"
+{{- end}}

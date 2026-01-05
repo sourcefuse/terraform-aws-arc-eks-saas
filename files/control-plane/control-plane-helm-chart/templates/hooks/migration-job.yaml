@@ -140,31 +140,6 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: SUBSCRIPTION-SERVICE_DB_DATABASE
-          # - name: FEATURE-TOGGLE-SERVICE_DB_HOST
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: DB_HOST
-          # - name: FEATURE-TOGGLE-SERVICE_DB_PORT
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: DB_PORT
-          # - name: FEATURE-TOGGLE-SERVICE_DB_USER
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: DB_USER
-          # - name: FEATURE-TOGGLE-SERVICE_DB_PASSWORD
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: DB_PASSWORD
-          # - name: FEATURE-TOGGLE-SERVICE_DB_DATABASE
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: FEATURE-TOGGLE-SERVICE_DB_DATABASE
           - name: TENANT-MGMT-SERVICE_DB_HOST
             valueFrom:
               secretKeyRef:
@@ -190,31 +165,6 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: TENANT-MGMT-SERVICE_DB_DATABASE
-          # - name: PAYMENT-SERVICE_DB_HOST
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: DB_HOST
-          # - name: PAYMENT-SERVICE_DB_PORT
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: DB_PORT
-          # - name: PAYMENT-SERVICE_DB_USER
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: DB_USER
-          # - name: PAYMENT-SERVICE_DB_PASSWORD
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: DB_PASSWORD
-          # - name: PAYMENT-SERVICE_DB_DATABASE
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: api-token
-          #       key: PAYMENT-SERVICE_DB_DATABASE
           - name: TENANT_NAME
             value: {{ .Values.tenantName }}
           - name: TENANT_KEY
@@ -231,4 +181,10 @@ spec:
             value: {{ .Values.cognitoUser }}
           - name: USER_SUB
             value: {{ .Values.cognitoSub }}
+{{- if .Values.marketPlaceIntegration.enabled }}
+          - name: MARKETPLACE_USER_NAME
+            value: {{ .Values.marketPlaceIntegration.marketplaceUser }}
+          - name: MARKETPLACE_USER_EMAIL
+            value: {{ .Values.marketPlaceIntegration.marketplaceUserEmail }}
+{{- end }}
 {{- end }}

@@ -20,6 +20,7 @@ data:
         "vonageApiKey": "47793071",
         "logLevel": "{{ .Values.frontend.log_level }}",
         "clientId": "{{ .Values.clientId }}",
+        "clientSecret": "{{ .Values.publicKey }}",
         "loginTitle": "Welcome to the Telemed App"
       }
 {{- end}}

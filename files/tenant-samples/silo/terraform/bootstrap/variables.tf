@@ -24,6 +24,6 @@ variable "tenant_id" {
 }
 
 variable "tenant_tier" {
-  type        = string
+  type = string
   description = "Tenant Tier"
 }

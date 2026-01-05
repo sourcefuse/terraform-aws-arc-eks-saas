@@ -128,6 +128,78 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
+          - name: AUTH_DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_HOST
+          - name: AUTH_DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PORT
+          - name: AUTH_DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_USER
+          - name: AUTH_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_PASSWORD
+          - name: AUTH_DB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUTHENTICATION-SERVICE_DB_DATABASE
+          - name: AUTH_DB_SCHEMA
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: DB_SCHEMA
+          - name: PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PRIVATE_KEY
+          - name: PUBLIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBLIC_KEY
+          - name: AUTH0_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: AUTH0_CLIENT_SECRET
+          - name: KEYCLOAK_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: KEYCLOAK_ADMIN_PASSWORD
+          - name: STRIPE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: STRIPE_SECRET
+          - name: STRIPE_WEBHOOK_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: STRIPE_WEBHOOK_SECRET
+{{- if .Values.ses.enabled }}
+          - name: SMTP_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: SMTP_USER
+          - name: SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: SMTP_PASSWORD
+{{- end }}
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}

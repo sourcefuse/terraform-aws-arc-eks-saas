@@ -14,9 +14,10 @@ data:
         "homePath": "{{ .Values.frontend.home_path }}",
         "logLevel": "{{ .Values.frontend.log_level }}",
         "clientId": "{{ .Values.clientId }}",
-        "publicKey": "{{ .Values.publicKey }}",
+        "publicKey": "{{ .Values.frontendPublicKey }}",
         "tenantMgmtFacadeUrl": "{{ .Values.tenantMgmtFacade.base_path }}",
         "tenantmgmtServiceUrl": "{{ .Values.tenantMgmtService.base_path }}",
-        "subscriptionServiceUrl": "{{ .Values.subscriptionService.base_path }}"
+        "subscriptionServiceUrl": "{{ .Values.subscriptionService.base_path }}",
+        "stripePublicKey": "{{ .Values.frontend.stripePublicKey }}"
       }
 {{- end}}

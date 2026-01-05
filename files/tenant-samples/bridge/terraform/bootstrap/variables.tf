@@ -14,6 +14,6 @@ variable "environment" {
 }
 
 variable "tenant_tier" {
-  type        = string
+  type = string
   description = "Tenant Tier"
 }

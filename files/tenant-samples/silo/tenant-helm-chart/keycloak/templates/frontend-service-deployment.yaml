@@ -1,0 +1,129 @@
+---
+#Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm.fullname" . }}-frontend
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+    rollingUpdate:
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
+      maxSurge: {{ .Values.strategy.maxSurge }}
+  selector:
+    matchLabels:
+      app: {{ include "helm.fullname" . }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/cm-frontend-service.yaml") . | sha256sum }}
+        prometheus.io/path: {{ .Values.app.basePath }}/frontend/obf/metrics
+{{- if .Values.frontend.extraAnnotations }} 
+{{ toYaml .Values.frontend.extraAnnotations | indent 8 }} 
+{{- end }}
+      labels:
+        app: {{ include "helm.fullname" . }}
+        component: frontend
+        Tenant: {{ .Values.tenant }}
+        Tenant_ID: {{ .Values.tenantID }}
+    spec:
+      serviceAccountName: {{ .Values.tier }}-{{ .Values.tenant }}
+      containers:
+        - imagePullPolicy: {{ .Values.frontend.pullPolicy }}
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+{{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.app.basePath }}/frontend
+              port: 80
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+{{- end }}
+{{- if .Values.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.app.basePath }}/frontend
+              port: 80
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+{{- end }}
+          name: {{ include "helm.fullname" . }}-frontend
+          image: {{ .Values.frontend.repository }}:{{ .Values.frontend.tag }}
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: env-var
+            mountPath: /usr/share/nginx/html/config.json
+            subPath: config.json
+          - name: my-api-token
+            mountPath: /mnt/api-token
+            readOnly: true
+          env:
+          - name: pubnubPublishKey
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBNUB_PUB_KEY
+          - name: pubnubSubscribeKey
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: PUBNUB_SUB_KEY
+{{- if .Values.imagePullSecret.enabled }}            
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret.name }}
+{{- end }}
+
+      nodeSelector:
+        silo-node: {{ .Values.tier }}-{{ .Values.tenant }}
+{{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+{{- end }}
+      volumes:
+        - name: env-var
+          configMap:
+            name: {{ include "helm.fullname" . }}-cm-frontend
+            items:
+            - key: env
+              path: config.json
+        - name: my-api-token
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ .Values.tier }}-{{ .Values.tenant }}-aws-secrets
+{{- with .Values.frontend.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+{{- end }}
+  
+---
+#Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "helm.fullname" . }}-frontend
+  labels:
+    app: {{ include "helm.fullname" . }}
+    Tenant: {{ .Values.tenant }}
+    Tenant_ID: {{ .Values.tenantID }}
+spec:
+  type: {{ .Values.frontend.Service.type }}
+  ports:
+    - port: {{ .Values.frontend.Service.port }}
+      targetPort: {{ .Values.frontend.Service.targetPort }}
+      protocol: {{ .Values.frontend.Service.protocol }}
+      name: web
+  selector:
+    app: {{ include "helm.fullname" . }}
+    component: frontend
+---

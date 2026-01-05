@@ -35,7 +35,6 @@
 | <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | n/a | yes |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace the resource belongs in. | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | AWS Region | `string` | n/a | yes |
-| <a name="input_tenant_tier"></a> [tenant\_tier](#input\_tenant\_tier) | Tenant Tier | `string` | n/a | yes |
 
 ## Outputs
 

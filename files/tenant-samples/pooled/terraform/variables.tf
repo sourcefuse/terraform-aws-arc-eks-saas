@@ -26,6 +26,16 @@ variable "tenant_id" {
   description = "Tenat unique ID"
 }
 
+variable "IdP" {
+  type = string
+  description = "Tenant Identity Provider"
+  default = "cognito"
+  validation {
+    condition     = contains(["cognito", "auth0", "keycloak"], var.IdP)
+    error_message = "The idp must be either 'cognito', 'auth0', or 'keycloak'."
+  }
+}
+
 variable "domain_name" {
   description = "Enter Defeault Redirect URL"
   type        = string
@@ -39,6 +49,11 @@ variable "tenant_email" {
   type        = string
   description = "tenant Email"
 }
+
+# variable "user_name" {
+#   type        = string
+#   description = "cognito user"
+# }
 
 variable "tenant_name" {
   type        = string
@@ -91,10 +106,9 @@ variable "alb_url" {
 }
 
 variable "tenant_tier" {
-  type        = string
+  type = string
   description = "Tenant Tier"
 }
-
 #################################################################
 ## Canary Variables
 #################################################################

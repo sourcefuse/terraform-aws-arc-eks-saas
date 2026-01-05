@@ -10,4 +10,8 @@ data:
       NODE_ENV: '{{ .Values.subscriptionService.node_env }}'
       LOG_LEVEL: '{{ .Values.subscriptionService.log_level }}'
       BASE_PATH: '{{ .Values.subscriptionService.base_path }}'
+      SITE: '{{ .Values.subscriptionService.site }}'
+      API_KEY: '{{ .Values.subscriptionService.api_key }}'
+      WEBHOOK_USERNAME: '{{ .Values.tenantMgmtFacade.webhook_user }}'
+      WEBHOOK_PASSWORD: '{{ .Values.tenantMgmtFacade.webhook_password }}'
 {{- end}}

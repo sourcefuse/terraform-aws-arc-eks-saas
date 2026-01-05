@@ -30,6 +30,7 @@ frontend:
   tag: "0.015"
   log_level: "info"
   home_path: "/main/home"
+  stripePublicKey: ${STRIPE_PUBLIC_KEY}
   replicaCount: 1
   affinity: {}
   resources:
@@ -61,12 +62,15 @@ tenantMgmtFacade:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-facade
   pullPolicy: Always
-  tag: "0.0.3"
+  tag: "0.0.8"
   replicaCount: 1
   port: 3000
   node_env: "production"
   log_level: "info"
   from_email: ${FROM_EMAIL}
+  gateway_id: "gw_16BlxRUTKUzWr3v9"
+  webhook_user: "sourcefuse"
+  webhook_password: ${WEBHOOK_PASSWORD}
   csp_script_src_hash: 'sha256-DLbdWNBhwD1fyzUBjaE5Up3Y/4UCDB1OYv/c61qHL/I='
   affinity: {}
   allowed_origins: "*"
@@ -99,7 +103,7 @@ auditService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-audit-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -134,7 +138,7 @@ authenticationService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-authentication-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.3"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -171,7 +175,7 @@ notificationService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-notification-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -207,11 +211,13 @@ subscriptionService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-subscription-service
   pullPolicy: Always
-  tag: "0.0.2"
+  tag: "0.0.5"
   replicaCount: 1
   port: 3000
   node_env: "production"
   log_level: "info"
+  site: "sunnytyagi6nov-test"
+  api_key: ${SUBSCRIPTION_SERVICE_API_KEY}
   affinity: {}
   allowed_origins: "*"
   imagePullPolicy:
@@ -242,7 +248,7 @@ userTenantService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-user-tenant-service
   pullPolicy: Always
-  tag: "0.0.1"
+  tag: "0.0.2"
   replicaCount: 1
   port: 3000
   node_env: "production"
@@ -277,12 +283,15 @@ tenantMgmtService:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-tenant-management-service
   pullPolicy: Always
-  tag: "0.0.3"
+  tag: "0.0.8"
   replicaCount: 1
   port: 3000
   node_env: "production"
   log_level: "info"
   from_email: ${FROM_EMAIL}
+  auth0_domain: "dev-db7dz4wg6ccbguer.us.auth0.com"
+  auth0_client_id: "pluqd6RqaLilAn7p1kUFkNo20bxuwUK5"
+  webhookSecretExpiry: "86400000"
   system_user_id: ""
   app_login_url: ""
   affinity: {}
@@ -309,6 +318,9 @@ tenantMgmtService:
     targetCPUUtilizationPercentage: 75
     targetMemoryUtilizationPercentage: 80
   base_path: /tenant-mgmt-service
+  leadTokenExpiry: "360000"
+  leadTokenLength: "10"
+  validationTokenExpiry: "360000"
 
 
 #migrationJob
@@ -317,7 +329,7 @@ migrationJob:
   enabled: true
   repository: public.ecr.aws/p1a1c8p2/sourcefuse-arc-saas-control-plane-migration
   pullPolicy: Always
-  tag: "0.0.2"
+  tag: "0.0.4"
   replicaCount: 1
   affinity: {}
   allowed_origins: "*"
@@ -337,6 +349,11 @@ migrationJob:
     targetPort: 3000
     protocol: TCP
 
+
+marketPlaceIntegration:
+  enabled: true
+  marketplaceUser: 'awsmarketplace'
+  marketplaceUserEmail: 'sfdevops@sourcefuse.com'
 
 imagePullSecret:
 #enable it and pass the correct parameters below
@@ -416,8 +433,9 @@ cognitoUser: ${COGNITO_USER}
 cognitoSub: ${COGNITO_USER_SUB}
 
 clientId: "tata-elxsi-control-plane"
-publicKey: "TrPbi0xJT"
-          
+frontendPublicKey: "TrPbi0xJT"
+keycloakUser: "admin"
+keycloakPassword: /sf-arc-saas/dev/keycloak_password     
 
 saname: "control-plane"
 region: ${REGION}
@@ -448,3 +466,8 @@ tenantmgmtdbdatabase: ${TENANT_MGMT_DATABASE}
 cognitodomain: ${COGNITO_DOMAIN}
 cognitoid: ${COGNITO_ID}
 cognitosecret: ${COGNITO_SECRET}
+privateKey: ${PRIVATE_KEY_SSM}
+publicKey: ${PUBLIC_KEY_SSM}
+auth0ClientSecret: ${AUTH0_CLIENT_SECRET_SSM}
+stripeSecret: ${STRIPE_SECRET_SSM}
+stripeWebhookSecret: ${STRIPE_WEBHOOK_SECRET_SSM}

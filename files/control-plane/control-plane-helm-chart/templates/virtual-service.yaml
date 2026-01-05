@@ -61,6 +61,14 @@ spec:
               number: 3000
     - match:
         - uri:
+            prefix: {{ .Values.app.basePath }}/tenant-mgmt-mktplace-facade
+      route:
+        - destination:
+            host: "{{ include "helm.fullname" . }}-tenant-mgmt-mktplace-facade"
+            port:
+              number: 3000
+    - match:
+        - uri:
             prefix: {{ .Values.app.basePath }}/user-tenant-service
       route:
         - destination:

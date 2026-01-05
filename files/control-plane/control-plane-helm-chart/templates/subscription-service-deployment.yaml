@@ -123,6 +123,11 @@ spec:
               secretKeyRef:
                 name: api-token
                 key: JWT_ISSUER
+          - name: STRIPE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: api-token
+                key: STRIPE_SECRET
 {{- if .Values.imagePullSecret.enabled }}            
       imagePullSecrets:
       - name: {{ .Values.imagePullSecret.name }}
