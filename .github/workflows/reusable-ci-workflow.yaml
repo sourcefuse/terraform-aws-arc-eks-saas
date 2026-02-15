@@ -108,7 +108,7 @@ jobs:
       # publish plan to artifacts
       - name: Publish Terraform Plan
         if: ${{ inputs.publish_plan_artifact }} == true  &&  ${{ steps.environment_plan.outcome}}  == success()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "${{ inputs.environment }}-${{inputs.working_directory}}-${{ steps.workflow_vars.outputs.plan_id }}.tfplan"
           path: "terraform/${{ inputs.working_directory }}/${{ inputs.environment }}-${{ inputs.working_directory }}-${{ steps.workflow_vars.outputs.plan_id }}.tfplan"
